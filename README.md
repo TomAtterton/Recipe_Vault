@@ -25,4 +25,15 @@ Experience the joy of cooking and meal planning with Recipe Vault, where managin
 
 ## 👀 Preview
 
-![screenshot1](/assets/screenshots/home.webp) ![screenshot2](/assets/screenshots/search.webp) ![screenshot3](/assets/screenshots/detail.webp) ![screenshot4](/assets/screenshots/edit.webp)
+<p>
+  <img src="/assets/screenshots/home.webp" alt="screenshot1" width="200" style="margin: 20px;"/> 
+  <img src="/assets/screenshots/search.webp" alt="screenshot2" width="200" style="margin: 20px;"/> 
+  <img src="/assets/screenshots/detail.webp" alt="screenshot3" width="200" style="margin: 20px;"/> 
+  <img src="/assets/screenshots/edit.webp" alt="screenshot4" width="200" style="margin: 20px;"/>
+</p>
+
+
+
+
+
+
