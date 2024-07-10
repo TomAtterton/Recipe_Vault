@@ -1,0 +1,77 @@
+import { createStyleSheet } from 'react-native-unistyles';
+
+export const stylesheet = createStyleSheet((theme) => ({
+  filterButton: {
+    borderColor: theme.colors.onBackground,
+    borderWidth: 1,
+    borderRadius: 10,
+    height: 40,
+    width: 40,
+    marginLeft: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    marginLeft: 8,
+    height: 50,
+    width: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  counter: {
+    height: 20,
+    width: 20,
+    position: 'absolute',
+    right: -8,
+    top: -8,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rating: {
+    marginTop: 20,
+  },
+  selectedIcon: {
+    marginRight: 20,
+  },
+  selectItemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  selectItem: {
+    flex: 1,
+    height: 40,
+    justifyContent: 'center',
+  },
+  container: {
+    flex: 1,
+    marginHorizontal: 20,
+    marginVertical: 32,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: 20,
+  },
+  resetButtonHitSlop: {
+    top: 20,
+    left: 20,
+    bottom: 20,
+    right: 20,
+  },
+  content: {
+    flex: 1,
+  },
+  tagTitle: {
+    paddingTop: 20,
+  },
+  tagList: {
+    gap: 20,
+    paddingVertical: 20,
+  },
+  saveButton: {
+    marginVertical: 20,
+  },
+}));

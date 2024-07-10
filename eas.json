@@ -1,0 +1,22 @@
+{
+  "cli": {
+    "version": ">= 0.57.0",
+    "promptToConfigurePushNotifications": false,
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "production": {
+      "autoIncrement": true,
+      "channel": "production"
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "tom_9991@hotmail.com",
+        "ascAppId": "6476562251",
+        "appleTeamId": "8A2W9A8E46"
+      }
+    }
+  }
+}

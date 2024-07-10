@@ -1,0 +1,14 @@
+node_modules
+__tests__/
+.vscode/
+android/
+coverage/
+ios/
+.expo
+.expo-shared
+docs/
+cli/
+supabase/
+src/database/types/database.types.ts
+scripts/
+lint-staged.config.js

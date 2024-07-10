@@ -1,0 +1,37 @@
+import metrics from '@/theme/metrics';
+import { createStyleSheet } from 'react-native-unistyles';
+
+export const stylesheet = createStyleSheet(() => ({
+  container: {
+    flex: 1,
+    marginHorizontal: 20,
+  },
+  blur: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    opacity: 0.4,
+  },
+  titleContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 20,
+  },
+  title: {
+    textAlign: 'center',
+  },
+  loginButtonContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  loginButton: {
+    width: metrics.screenWidth / 1.5,
+    height: 50,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+}));

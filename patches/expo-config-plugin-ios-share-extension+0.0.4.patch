@@ -1,0 +1,127 @@
+diff --git a/node_modules/expo-config-plugin-ios-share-extension/build/withShareExtensionConfig.js b/node_modules/expo-config-plugin-ios-share-extension/build/withShareExtensionConfig.js
+index 2d299bc..5b5282e 100644
+--- a/node_modules/expo-config-plugin-ios-share-extension/build/withShareExtensionConfig.js
++++ b/node_modules/expo-config-plugin-ios-share-extension/build/withShareExtensionConfig.js
+@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.withShareExtensionConfig = void 0;
+ const constants_1 = require("./constants");
+ const writeShareExtensionFiles_1 = require("./writeShareExtensionFiles");
++const { stringify } = require('ts-jest');
+ const withShareExtensionConfig = (config) => {
+     var _a, _b, _c, _d, _e, _f;
+     const extName = constants_1.shareExtensionName;
+@@ -15,7 +16,7 @@ const withShareExtensionConfig = (config) => {
+     if (!config.extra) {
+         config.extra = {};
+     }
+-    if (!extConfigIndex) {
++    if (extConfigIndex === null) {
+         if (!config.extra.eas) {
+             config.extra.eas = {};
+         }
+diff --git a/node_modules/expo-config-plugin-ios-share-extension/build/withShareExtensionXcodeTarget.js b/node_modules/expo-config-plugin-ios-share-extension/build/withShareExtensionXcodeTarget.js
+index d5d454d..6439e76 100644
+--- a/node_modules/expo-config-plugin-ios-share-extension/build/withShareExtensionXcodeTarget.js
++++ b/node_modules/expo-config-plugin-ios-share-extension/build/withShareExtensionXcodeTarget.js
+@@ -8,6 +8,14 @@ const withShareExtensionXcodeTarget = (config) => {
+     return (0, config_plugins_1.withXcodeProject)(config, async (config) => {
+         var _a;
+         const extensionName = constants_1.shareExtensionName;
++        const pbxProject = config.modResults;
++
++        let target = pbxProject.getTarget('com.apple.product-type.app-extension');
++        if (target) {
++            console.log(`Found existing target with name: ${extensionName}`);
++            return config;
++        }
++
+         const platformProjectRoot = config.modRequest.platformProjectRoot;
+         const scheme = config.scheme;
+         const appIdentifier = (_a = config.ios) === null || _a === void 0 ? void 0 : _a.bundleIdentifier;
+@@ -18,9 +26,13 @@ const withShareExtensionXcodeTarget = (config) => {
+         const entitlementsFilePath = (0, writeShareExtensionFiles_1.getShareExtensionEntitlementsFilePath)(platformProjectRoot);
+         const viewControllerFilePath = (0, writeShareExtensionFiles_1.getShareExtensionViewControllerPath)(platformProjectRoot);
+         const storyboardFilePath = (0, writeShareExtensionFiles_1.getShareExtensionStoryboardFilePath)(platformProjectRoot);
++
+         await (0, writeShareExtensionFiles_1.writeShareExtensionFiles)(platformProjectRoot, scheme, appIdentifier);
+-        const pbxProject = config.modResults;
+-        const target = pbxProject.addTarget(extensionName, 'app_extension', extensionName);
++
++        if (!target) {
++            target = pbxProject.addTarget(extensionName, 'app_extension', extensionName);
++        }
++        // const target = pbxProject.addTarget(extensionName, 'app_extension', extensionName);
+         // Add a new PBXSourcesBuildPhase for our ShareViewController
+         // (we can't add it to the existing one because an extension is kind of an extra app)
+         pbxProject.addBuildPhase([], 'PBXSourcesBuildPhase', 'Sources', target.uuid);
+@@ -45,6 +57,7 @@ const withShareExtensionXcodeTarget = (config) => {
+                     buildSettingsObj['INFOPLIST_FILE'] = `"${infoPlistFilePath}"`;
+                     buildSettingsObj['CODE_SIGN_ENTITLEMENTS'] = `"${entitlementsFilePath}"`;
+                     buildSettingsObj['CODE_SIGN_STYLE'] = 'Automatic';
++                    buildSettingsObj['DEVELOPMENT_TEAM'] = config.extra?.ios?.teamId;
+                     buildSettingsObj['CURRENT_PROJECT_VERSION'] = `"${currentProjectVersion}"`;
+                     buildSettingsObj['GENERATE_INFOPLIST_FILE'] = 'YES';
+                     buildSettingsObj['MARKETING_VERSION'] = `"${marketingVersion}"`;
+diff --git a/node_modules/expo-config-plugin-ios-share-extension/src/index.ts b/node_modules/expo-config-plugin-ios-share-extension/src/index.ts
+index ece4ded..e8aff31 100644
+--- a/node_modules/expo-config-plugin-ios-share-extension/src/index.ts
++++ b/node_modules/expo-config-plugin-ios-share-extension/src/index.ts
+@@ -15,6 +15,10 @@ let pkg: { name: string; version?: string } = {
+ 
+ const withShareMenu: ConfigPlugin = createRunOncePlugin(
+   (config) => {
++
++
++    // const pbxProject = config.modResults;
++    // let target = pbxProject.getTarget('com.apple.product-type.app-extension');
+     return withPlugins(config, [
+       withAppEntitlements,
+       withShareExtensionConfig,
+diff --git a/node_modules/expo-config-plugin-ios-share-extension/src/withShareExtensionXcodeTarget.ts b/node_modules/expo-config-plugin-ios-share-extension/src/withShareExtensionXcodeTarget.ts
+index 4cbdfd2..0483206 100644
+--- a/node_modules/expo-config-plugin-ios-share-extension/src/withShareExtensionXcodeTarget.ts
++++ b/node_modules/expo-config-plugin-ios-share-extension/src/withShareExtensionXcodeTarget.ts
+@@ -13,6 +13,7 @@ export const withShareExtensionXcodeTarget: ConfigPlugin = (config) => {
+   return withXcodeProject(config, async (config) => {
+     const extensionName = shareExtensionName;
+     const platformProjectRoot = config.modRequest.platformProjectRoot;
++
+     const scheme = config.scheme!;
+     const appIdentifier = config.ios?.bundleIdentifier!;
+     const shareExtensionIdentifier = getShareExtensionBundledIdentifier(appIdentifier);
+@@ -28,7 +29,18 @@ export const withShareExtensionXcodeTarget: ConfigPlugin = (config) => {
+ 
+     const pbxProject = config.modResults;
+ 
+-    const target = pbxProject.addTarget(extensionName, 'app_extension', extensionName);
++
++    // const target = pbxProject.addTarget(extensionName, 'app_extension', extensionName);
++    // get target by target name
++    let target = pbxProject.getTarget(extensionName);
++    if (target) {
++      console.log(`Found existing target with name: ${extensionName}`);
++      return config;
++    }
++
++    if (!target) {
++      target = pbxProject.addTarget(extensionName, 'app_extension', extensionName);
++    }
+ 
+     // Add a new PBXSourcesBuildPhase for our ShareViewController
+     // (we can't add it to the existing one because an extension is kind of an extra app)
+@@ -51,6 +63,7 @@ export const withShareExtensionXcodeTarget: ConfigPlugin = (config) => {
+     pbxProject.addResourceFile(storyboardFilePath, { target: target.uuid }, pbxGroupKey);
+ 
+     var configurations = pbxProject.pbxXCBuildConfigurationSection();
++    console.log('configurations', config);
+     for (var key in configurations) {
+       if (typeof configurations[key].buildSettings !== 'undefined') {
+         var buildSettingsObj = configurations[key].buildSettings;
+@@ -62,6 +75,7 @@ export const withShareExtensionXcodeTarget: ConfigPlugin = (config) => {
+           buildSettingsObj['INFOPLIST_FILE'] = `"${infoPlistFilePath}"`;
+           buildSettingsObj['CODE_SIGN_ENTITLEMENTS'] = `"${entitlementsFilePath}"`;
+           buildSettingsObj['CODE_SIGN_STYLE'] = 'Automatic';
++          buildSettingsObj['DEVELOPMENT_TEAM'] = config.extra?.ios?.teamId;
+           buildSettingsObj['CURRENT_PROJECT_VERSION'] = `"${currentProjectVersion}"`;
+           buildSettingsObj['GENERATE_INFOPLIST_FILE'] = 'YES';
+           buildSettingsObj['MARKETING_VERSION'] = `"${marketingVersion}"`;

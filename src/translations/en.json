@@ -1,0 +1,25 @@
+{
+  "error_messages": {
+    "cancelled_sign_in": "Sign in was cancelled.",
+    "default": "An error occurred. Please try again later.",
+    "no_identity_token": "No identity token was returned."
+  },
+  "login": {
+    "test_login_title": "Test Login"
+  },
+  "settings": {
+    "about": "About",
+    "app_name": "App Name:",
+    "database": {
+      "clear_database": "Clear Database",
+      "last_synced": "Last Synced:",
+      "sync_now": "Sync Now",
+      "title": "Database Status"
+    },
+    "group_id": "Group ID:",
+    "group_name": "Group Name",
+    "logout": "Logout",
+    "user_id": "User ID:",
+    "version": "Version:"
+  }
+}
