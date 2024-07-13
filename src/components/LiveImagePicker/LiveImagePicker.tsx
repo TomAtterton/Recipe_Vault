@@ -1,5 +1,4 @@
 import React, { memo, useCallback } from 'react';
-import { MediaTypeOptions } from 'expo-image-picker';
 import { setScannedImage, useBoundStore } from '@/store';
 import ImagePicker from '@/components/ImagePicker';
 
@@ -21,17 +20,7 @@ const LiveImagePicker = ({ onFullScreen }: Props) => {
   );
 
   return (
-    <ImagePicker
-      imagePickerOptions={{
-        mediaTypes: MediaTypeOptions.Images,
-        allowsEditing: true,
-        allowsMultipleSelection: false,
-      }}
-      skipCropping
-      onSelectImage={handleSelectedImage}
-      onFullScreen={onFullScreen}
-      imageUri={image}
-    />
+    <ImagePicker onSelectImage={handleSelectedImage} onFullScreen={onFullScreen} imageUri={image} />
   );
 };
 
