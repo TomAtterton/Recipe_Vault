@@ -46,7 +46,7 @@ export const onOpenImageCropper = async (imageUri: string) => {
     });
     return await handleResult(result);
   } catch (e) {
-    showErrorMessage('Error cropping image');
+    return imageUri;
   }
 };
 
