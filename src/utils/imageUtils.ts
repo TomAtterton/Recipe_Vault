@@ -38,6 +38,18 @@ export const onPickImageFromLibrary = async () => {
   }
 };
 
+export const onOpenImageCropper = async (imageUri: string) => {
+  try {
+    const result = await RNImageCropPicker.openCropper({
+      ...defaultImageOptions,
+      path: imageUri,
+    });
+    return await handleResult(result);
+  } catch (e) {
+    showErrorMessage('Error cropping image');
+  }
+};
+
 export const onPickImageFromCamera = async () => {
   try {
     let result: Image = await RNImageCropPicker.openCamera(defaultImageOptions);
