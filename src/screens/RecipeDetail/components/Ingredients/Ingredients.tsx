@@ -5,11 +5,6 @@ import IngredientItem from '@/screens/RecipeDetail/components/Ingredients/compon
 
 import IngredientHeader from './components/IngredientsHeader';
 
-interface IngredientsProps {
-  recipeId: string;
-  data: Ingredient[];
-}
-
 import { Ingredient } from '@/types';
 import { useFocusEffect } from '@react-navigation/native';
 import { getRecipeServings } from '@/database/api/recipes';
@@ -17,11 +12,17 @@ import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './ingredients.style';
 
+interface IngredientsProps {
+  recipeId: string;
+  data: Ingredient[];
+}
+
 const keyExtractor = (_: string | Ingredient) => (typeof _ === 'string' ? _ : _?.id);
 
 const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data }: IngredientsProps) => {
   const [servings, setServings] = useState<number>(1);
   const initialServings = useRef(1);
+  const [isMetric, setIsMetric] = useState<boolean>(true);
 
   useFocusEffect(
     useCallback(() => {
@@ -34,8 +35,15 @@ const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data }: Ingredients
   );
 
   const handleRenderHeader = useMemo(
-    () => <IngredientHeader servings={servings} setServings={setServings} />,
-    [servings]
+    () => (
+      <IngredientHeader
+        servings={servings}
+        setServings={setServings}
+        isMetric={isMetric}
+        setIsMetric={setIsMetric}
+      />
+    ),
+    [isMetric, servings]
   );
   const { styles } = useStyles(stylesheet);
 
@@ -49,10 +57,15 @@ const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data }: Ingredients
         );
       }
       return (
-        <IngredientItem item={item} servings={servings} initialServings={initialServings.current} />
+        <IngredientItem
+          item={item}
+          servings={servings}
+          initialServings={initialServings.current}
+          isMetric={isMetric}
+        />
       );
     },
-    [servings, styles.sectionHeader]
+    [isMetric, servings, styles.sectionHeader]
   );
   const sections = useMemo(
     () =>

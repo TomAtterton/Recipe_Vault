@@ -1,19 +1,9 @@
 import convert from 'convert';
 import { parseIngredient } from 'parse-ingredient';
 
-export enum UnitOfMeasure {
-  Metric = 'metric',
-  Imperial = 'imperial',
-}
 const unitsSet = new Set(['tbsp', 'tsp', 'tablespoons', 'teaspoons', 'tablespoon', 'teaspoon']);
 
-export const parseMetrics = ({
-  note,
-  metric,
-}: {
-  note: string;
-  metric: UnitOfMeasure;
-}): any | {} => {
+export const parseMetrics = ({ note, isMetric }: { note: string; isMetric: boolean }): any | {} => {
   const trimmedNote = note?.replace(/\/(\d+fl oz|[^/ ]*)/g, '').trim();
   const parsedIngredient = trimmedNote ? parseIngredient(trimmedNote)[0] : null;
 
@@ -28,7 +18,10 @@ export const parseMetrics = ({
       };
 
       if (!unitsSet.has(unitOfMeasure)) {
-        value = convert(quantity, unitOfMeasure as any).to('best', metric);
+        value = convert(quantity, unitOfMeasure as any).to(
+          'best',
+          isMetric ? 'metric' : 'imperial'
+        );
       }
 
       if (unitOfMeasure === 'cup') {

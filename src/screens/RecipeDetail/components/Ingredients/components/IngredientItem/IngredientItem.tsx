@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 
-import { parseMetrics, scaleAmount, UnitOfMeasure } from '@/utils/igredientsUtil';
+import { parseMetrics, scaleAmount } from '@/utils/igredientsUtil';
 import { Ingredient } from '@/types';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
@@ -9,12 +9,12 @@ import { stylesheet } from '@/screens/RecipeDetail/components/Ingredients/compon
 
 const IngredientItem = ({
   item,
-  selectedMetric = UnitOfMeasure.Metric,
+  isMetric,
   servings,
   initialServings,
 }: {
   item: Ingredient;
-  selectedMetric?: UnitOfMeasure;
+  isMetric: boolean;
   servings: number;
   initialServings: number;
 }) => {
@@ -22,9 +22,9 @@ const IngredientItem = ({
     () =>
       parseMetrics({
         note: item?.text,
-        metric: selectedMetric,
+        isMetric: isMetric,
       }) || {},
-    [item, selectedMetric]
+    [item, isMetric]
   );
   const {
     styles,

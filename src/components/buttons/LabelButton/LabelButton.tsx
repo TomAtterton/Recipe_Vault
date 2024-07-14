@@ -1,15 +1,16 @@
 import React, { forwardRef } from 'react';
 import Typography from '@/components/Typography';
-import { Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
+import { Pressable, PressableProps, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './labelButton.style';
 
 interface Props extends PressableProps {
   style?: StyleProp<ViewStyle>;
+  labelStyle?: StyleProp<TextStyle>;
   title: string;
 }
 
-const LabelButton = forwardRef(({ style, title, ...props }: Props, ref) => {
+const LabelButton = forwardRef(({ style, labelStyle, title, ...props }: Props, ref) => {
   const { styles } = useStyles(stylesheet);
   const buttonOpacity = props?.disabled ? 0.5 : 1;
   return (
@@ -26,7 +27,7 @@ const LabelButton = forwardRef(({ style, title, ...props }: Props, ref) => {
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       {...props}
     >
-      <Typography style={styles.text}>{title}</Typography>
+      <Typography style={[styles.text, labelStyle]}>{title}</Typography>
     </Pressable>
   );
 });

@@ -4,8 +4,17 @@ export const stylesheet = createStyleSheet((theme) => ({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     marginTop: 8,
+  },
+  systemContainer: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  systemButton: {
+    borderRadius: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
   },
   servingsContainer: {
     flexDirection: 'row',
