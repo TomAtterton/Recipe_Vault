@@ -1,30 +1,39 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, TouchableOpacity } from 'react-native';
+import { fetchProducts } from '@/utils/purchaseUtils';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import Typography from '@/components/Typography';
+import { Image } from 'expo-image';
 
 const supportAppAmount = [
   {
-    name: 'Buy me a coffee',
+    name: '☕ Fuel my caffeine addiction',
     amount: 0.99,
   },
   {
-    name: 'Buy me a novel',
-    amount: 2.99,
+    name: "📚 Help me buy a book I'll never finish",
+    amount: 1.99,
   },
   {
-    name: 'Buy me a gourmet pizza',
-    amount: 4.99,
+    name: '🍕 Treat me to a slice of fancy pizza',
+    amount: 3.99,
   },
   {
-    name: 'Contribute to my new laptop fund',
+    name: '💻 Chip in for my dream laptop',
     amount: 9.99,
   },
-].sort((a, b) => a.amount - b.amount);
+];
 
 const SupportApp = () => {
   const [selectedOption, setSelectedOption] = useState<{ name: string; amount: number } | null>(
     null
   );
 
+  const { styles } = useStyles(stylesheet);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
   const handlePress = (option: { name: string; amount: number }) => {
     setSelectedOption(option);
   };
@@ -32,13 +41,24 @@ const SupportApp = () => {
   return (
     <View style={styles.container}>
       {selectedOption ? (
-        <Text style={styles.thankYouText}>Thank you for your support!</Text>
+        <View>
+          <Typography variant={'titleLarge'} style={styles.thankYouText}>
+            Thank you for your support!
+          </Typography>
+          <Image style={styles.thankYouGif} source={require('../../../assets/gif/thankyou.gif')} />
+        </View>
       ) : (
         supportAppAmount.map((option, index) => (
           <TouchableOpacity key={index} style={styles.button} onPress={() => handlePress(option)}>
-            <Text style={styles.buttonText}>
-              {option.name} - ${option.amount}
-            </Text>
+            <Typography
+              variant={'bodyMediumItalic'}
+              style={{
+                flex: 1,
+              }}
+            >
+              {option.name}
+            </Typography>
+            <Typography variant={'bodyLarge'}>€{option.amount}</Typography>
           </TouchableOpacity>
         ))
       )}
@@ -46,27 +66,31 @@ const SupportApp = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet(() => ({
   container: {
     flex: 1,
+    paddingHorizontal: 20,
+    gap: 8,
     justifyContent: 'center',
-    alignItems: 'center',
   },
+
   button: {
-    backgroundColor: '#4B0082',
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    borderRadius: 10,
   },
   thankYouText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#4B0082',
+    textAlign: 'center',
   },
-});
+  thankYouGif: {
+    width: 200,
+    height: 200,
+    alignSelf: 'center',
+    marginTop: 10,
+    borderRadius: 10,
+  },
+}));
 
 export default SupportApp;
