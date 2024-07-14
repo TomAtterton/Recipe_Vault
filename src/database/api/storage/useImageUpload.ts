@@ -1,5 +1,6 @@
 import { supabase } from '@/database/supabase';
 import { useBoundStore } from '@/store';
+import { Env } from '@/core/env';
 
 const onImageUpload = async (uri?: string | null) => {
   try {
@@ -23,7 +24,6 @@ const onImageUpload = async (uri?: string | null) => {
       name: `image.${imageType}`,
       type: `image/${imageType}`,
     });
-
     const filePath = `${Math.random()}.${imageType}`;
 
     const { error, data } = await supabase.storage
@@ -33,10 +33,7 @@ const onImageUpload = async (uri?: string | null) => {
       throw error;
     }
     //
-    return (
-      'https://cfzwkhnvjvfjfgazjlzh.supabase.co/storage/v1/object/public/photos/recipes/' +
-      data?.path
-    );
+    return Env.SUPABASE_STORAGE_URL + data?.path;
   } catch (error) {
     console.log('image error', error);
   }

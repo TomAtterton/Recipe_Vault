@@ -1,11 +1,14 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
 import { stylesheet } from './imagePicker.style';
-import { onPickImageFromCamera, onPickImageFromLibrary } from '@/utils/imageUtils';
+import {
+  onOpenImageCropper,
+  onPickImageFromCamera,
+  onPickImageFromLibrary,
+} from '@/utils/imageUtils';
 import { MenuView } from '@react-native-menu/menu';
 import { Image } from 'expo-image';
-import { ImagePickerOptions } from 'expo-image-picker';
 import { useStyles } from 'react-native-unistyles';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import Icon from '@/components/Icon';
@@ -14,22 +17,21 @@ interface Props {
   imageUri?: string | null | number;
   onSelectImage: (imageUri?: string | null) => void;
   children?: React.ReactNode;
-  imagePickerOptions?: ImagePickerOptions;
   skipCropping?: boolean;
   onFullScreen?: () => void;
 }
 
-const ImagePicker = ({
-  skipCropping,
-  imagePickerOptions,
-  children,
-  imageUri,
-  onSelectImage,
-  onFullScreen,
-}: Props) => {
+const ImagePicker = ({ children, imageUri, onSelectImage, onFullScreen }: Props) => {
   const { styles, theme } = useStyles(stylesheet);
 
-  const ImageContainer = onFullScreen ? TouchableOpacity : View;
+  const handleImageSelection = async () => {
+    if (onFullScreen) {
+      onFullScreen();
+      return;
+    }
+    onOpenImageCropper(imageUri as string).then(onSelectImage);
+  };
+
   return (
     <View
       style={[
@@ -41,8 +43,7 @@ const ImagePicker = ({
     >
       {imageUri ? (
         <>
-          {/*// @ts-ignore*/}
-          <ImageContainer style={styles.fullscreenImageContainer} onPress={onFullScreen}>
+          <TouchableOpacity style={styles.fullscreenImageContainer} onPress={handleImageSelection}>
             {/*// @ts-ignore*/}
             {children ? children : <Image source={{ uri: imageUri }} style={styles.image} />}
             {onFullScreen && (
@@ -50,7 +51,7 @@ const ImagePicker = ({
                 <Icon size={60} name={'expand'} color={theme.colors.onBackground} />
               </View>
             )}
-          </ImageContainer>
+          </TouchableOpacity>
           <NavBarButton
             style={styles.deleteButton}
             buttonSize={'medium'}
@@ -78,10 +79,10 @@ const ImagePicker = ({
 
             let eventImageUri;
             if (event === 'camera') {
-              eventImageUri = await onPickImageFromCamera({ imagePickerOptions, skipCropping });
+              eventImageUri = await onPickImageFromCamera();
             }
             if (event === 'library') {
-              eventImageUri = await onPickImageFromLibrary({ imagePickerOptions, skipCropping });
+              eventImageUri = await onPickImageFromLibrary();
             }
             onSelectImage(eventImageUri);
           }}
