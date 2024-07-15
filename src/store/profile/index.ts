@@ -26,7 +26,7 @@ const initialProfileState = {
     email: '',
     avatarId: '',
     groupId: 'initial-group',
-    groupName: '',
+    groupName: 'Local Vault',
   },
 };
 

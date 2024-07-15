@@ -21,6 +21,7 @@ import AppSettings from '@/screens/Settings/pages/AppSettings';
 import Privacy from '@/screens/Privacy';
 import Help from '@/screens/Help';
 import DatabaseEditor from '@/screens/Settings/pages/DatabaseSettings/DatabaseEditor';
+import AdvanceSyncSettings from '@/screens/Settings/pages/AdvanceSyncSettings';
 
 const Stack = createNativeStackNavigator();
 
@@ -41,6 +42,7 @@ export const RootNavigator = () => {
       <Stack.Screen name={Routes.TabStack} component={TabNavigator} />
       <Stack.Screen name={Routes.RecipeDetailStack} component={RecipeDetailNavigator} />
       <Stack.Screen name={Routes.DatabaseEditor} component={DatabaseEditor} />
+      <Stack.Screen name={Routes.AdvanceSyncSettings} component={AdvanceSyncSettings} />
       <Stack.Screen
         name={Routes.AddGroceries}
         component={AddGroceries}

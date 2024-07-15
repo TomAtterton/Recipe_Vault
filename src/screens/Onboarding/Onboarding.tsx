@@ -40,7 +40,7 @@ const onboardingData: {
   {
     icon: 'paper-plane',
     title:
-      'Coming Soon! Share your recipes & meal plans with friends through our new syncing feature.',
+      'Share your recipes & meal plans with friends through our syncing feature. Using a shared cloud vault!',
   },
 ];
 

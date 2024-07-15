@@ -20,4 +20,6 @@ export const Env = {
   BETA_KEY: process.env.EXPO_PUBLIC_BETA_KEY || process.env.BETA_KEY,
   PRIVACY_POLICY_URL:
     'https://gist.githubusercontent.com/TomAtterton/04e81636357761d62d0ad328b94dc046/raw/7830bbead7548b374416f6514c3451fd9f4891fe/recipe-vault-privacy-policy.md',
+  CLOUD_RECIPE_LIMIT: 5,
+  BETA_VAULTS: ['Tomilla'],
 };

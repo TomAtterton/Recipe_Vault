@@ -8,10 +8,11 @@ import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from '@/screens/Settings/settings.style';
 import SettingsButton from '@/components/buttons/SettingsButton';
 import { openURL } from 'expo-linking';
+import { Routes } from '@/navigation/Routes';
 
 const Help = () => {
   const { top } = useSafeAreaInsets();
-  const { goBack } = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const { styles } = useStyles(stylesheet);
 
   return (
@@ -31,7 +32,18 @@ const Help = () => {
         }}
       >
         <Typography variant={'titleItalicLarge'}>Help.</Typography>
-
+        <SettingsButton
+          title={'Privacy'}
+          onPress={() => navigate(Routes.Privacy)}
+          iconSource={'hand'}
+        />
+        <SettingsButton
+          title={'Terms and Conditions'}
+          onPress={() =>
+            openURL('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/')
+          }
+          iconSource={'info-border'}
+        />
         <SettingsButton
           title={'Contact Us'}
           onPress={() => openURL('mailto:tpatterton@gmail.com')}

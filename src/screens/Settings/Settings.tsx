@@ -8,7 +8,6 @@ import SettingsButton from '@/components/buttons/SettingsButton';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
 import Typography from '@/components/Typography';
-import { openURL } from 'expo-linking';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { requestReview } from 'expo-store-review';
 import SupportApp from '@/screens/SupportApp';
@@ -25,6 +24,9 @@ const Settings = () => {
 
   const handleSupportApp = () => {
     bottomSheetRef.current?.present();
+  };
+  const handleSyncDatabase = async () => {
+    navigate(Routes.SyncSettings);
   };
 
   return (
@@ -49,18 +51,8 @@ const Settings = () => {
           onPress={() => navigate(Routes.DatabaseSettings)}
           iconSource={'safe'}
         />
-        <SettingsButton
-          title={'Privacy'}
-          onPress={() => navigate(Routes.Privacy)}
-          iconSource={'hand'}
-        />
-        <SettingsButton
-          title={'Terms and Conditions'}
-          onPress={() =>
-            openURL('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/')
-          }
-          iconSource={'info-border'}
-        />
+        <SettingsButton title={'Cloud Sync'} onPress={handleSyncDatabase} iconSource={'cloud'} />
+
         <SettingsButton title={'Help'} onPress={() => navigate(Routes.Help)} iconSource={'more'} />
         <View
           style={{
@@ -79,7 +71,7 @@ const Settings = () => {
           <BottomSheet
             bottomSheetRef={bottomSheetRef}
             snapPoints={['50%']}
-            title={'Help support the app!'}
+            title={'Help the app development!'}
           >
             <SupportApp />
           </BottomSheet>

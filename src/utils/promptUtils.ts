@@ -11,12 +11,12 @@ export const showSuccessMessage = (message: string) => {
   });
 };
 
-export const showErrorMessage = (message: string) => {
+export const showErrorMessage = (message: string, duration?: number) => {
   showMessage({
     message: 'Error',
     description: message || translate('error_messages.default'),
     type: 'danger',
-    duration: 1000,
+    duration: duration || 1000,
     icon: 'danger',
   });
 };

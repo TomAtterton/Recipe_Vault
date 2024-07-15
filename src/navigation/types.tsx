@@ -16,6 +16,7 @@ export type RootStackParamList = RecipeDetailStackParamList &
     [Routes.DatabaseSettings]: undefined;
     [Routes.AppSettings]: undefined;
     [Routes.SyncSettings]: undefined;
+    [Routes.AdvanceSyncSettings]: undefined;
     [Routes.DatabaseEditor]: undefined;
     [Routes.AddGroceries]: {
       ingredients?: string[];

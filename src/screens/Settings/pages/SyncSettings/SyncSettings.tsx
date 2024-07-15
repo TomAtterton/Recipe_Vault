@@ -2,10 +2,8 @@ import { Share, SafeAreaView, View, Alert } from 'react-native';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import SettingsButton from '@/components/buttons/SettingsButton';
-import { syncPush } from '@/database/supabase/syncPush';
-import { syncPull } from '@/database/supabase/syncPull';
 import * as React from 'react';
-import { setLastSynced, setResetDatabase, setResetProfile, useBoundStore } from '@/store';
+import { setResetDatabase, setResetProfile, useBoundStore } from '@/store';
 import InfoLabelButton from '@/components/buttons/InfoLabelButton';
 import { translate } from '@/core';
 import NavBarButton from '@/components/buttons/NavBarButton';
@@ -21,10 +19,10 @@ import { supabase } from '@/database/supabase';
 
 const SyncSettings = () => {
   const { styles } = useStyles(stylesheet);
-  const lastSynced = useBoundStore((state) => state.lastSynced);
   const syncEnabled = useBoundStore((state) => state.shouldSync);
   const { goBack, navigate } = useNavigation();
   const profile = useBoundStore((state) => state.profile);
+  const setSyncEnabled = useBoundStore((state) => state.setShouldSync);
 
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -32,10 +30,10 @@ const SyncSettings = () => {
     try {
       setIsLoading(true);
       await onSignOut();
-
       setResetProfile();
       setResetDatabase();
       await openDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
+      setSyncEnabled(false);
     } catch (error) {
       showMessage({
         message: 'Error',
@@ -100,41 +98,22 @@ const SyncSettings = () => {
               title={translate('settings.group_id')}
               buttonTitle={profile?.groupId}
             />
-            <InfoLabelButton title={translate('settings.user_id')} buttonTitle={profile?.id} />
-            <InfoLabelButton
-              title={translate('settings.database.last_synced')}
-              buttonTitle={lastSynced || 'has not synced'}
-            />
           </>
         )}
-        {!syncEnabled && (
-          <SettingsButton
-            style={{
-              marginTop: 20,
-            }}
-            title={'Enable Sync'}
-            onPress={() => navigate(Routes.Login)}
-            iconSource={'cloud'}
-          />
-        )}
-        {syncEnabled && (
+
+        {syncEnabled ? (
           <>
             <SettingsButton
-              title={'Share Database'}
+              title={'Share Database Code'}
               onPress={handleShareDatabase}
-              iconSource={'cloud'}
-            />
-            <SettingsButton title={'Sync Push'} onPress={syncPush} iconSource={'cloud'} />
-            <SettingsButton
-              title={'Sync Pull'}
-              onPress={() => syncPull(true)}
-              iconSource={'cloud'}
+              iconSource={'paper-plane'}
             />
             <SettingsButton
-              title={'Reset last synced'}
-              onPress={() => setLastSynced(undefined)}
-              iconSource={'cloud'}
+              title={'Advanced Sync Settings'}
+              iconSource={'cog'}
+              onPress={() => navigate(Routes.AdvanceSyncSettings)}
             />
+
             <View style={styles.bottomContainer}>
               <OutlineButton
                 title={'Delete Account'}
@@ -148,6 +127,13 @@ const SyncSettings = () => {
               />
             </View>
           </>
+        ) : (
+          <SettingsButton
+            style={styles.enableSyncButton}
+            title={'Enable Sync'}
+            onPress={() => navigate(Routes.Login)}
+            iconSource={'cloud'}
+          />
         )}
       </View>
     </SafeAreaView>
