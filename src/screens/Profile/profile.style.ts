@@ -15,6 +15,9 @@ export const stylesheet = createStyleSheet(() => ({
   title: {
     textAlign: 'center',
   },
+  subtitle: {
+    textAlign: 'center',
+  },
   buttonContainer: {
     flex: 1,
     alignItems: 'center',
@@ -28,5 +31,7 @@ export const stylesheet = createStyleSheet(() => ({
   backButton: {
     alignSelf: 'flex-start',
   },
-  input: {},
+  input: {
+    marginTop: 40,
+  },
 }));

@@ -47,7 +47,7 @@ const Settings = () => {
           iconSource={'settings'}
         />
         <SettingsButton
-          title={'Database'}
+          title={'Vaults'}
           onPress={() => navigate(Routes.DatabaseSettings)}
           iconSource={'safe'}
         />

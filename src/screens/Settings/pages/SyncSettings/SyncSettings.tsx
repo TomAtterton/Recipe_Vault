@@ -13,7 +13,7 @@ import OutlineButton from '@/components/buttons/OutlineButton';
 import { onSignOut } from '@/database/api/auth';
 import { showMessage } from 'react-native-flash-message';
 import { Routes } from '@/navigation/Routes';
-import { openDatabase } from '@/database';
+import { database, openDatabase } from '@/database';
 import { Env } from '@/core/env';
 import { supabase } from '@/database/supabase';
 
@@ -58,15 +58,27 @@ const SyncSettings = () => {
         onPress: async () => {
           try {
             setIsLoading(true);
-            profile?.id && (await supabase.auth.admin.deleteUser(profile?.id));
+
+            const { error } = await supabase.functions.invoke('delete-user');
+
+            if (error) {
+              throw new Error('Contact customer support there was an issue deleting you account');
+            }
+
+            database?.closeSync();
             await onSignOut();
             setResetProfile();
             setResetDatabase();
-            await openDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
+
+            await openDatabase({
+              shouldClose: false,
+              currentDatabaseName: Env.SQLITE_DB_NAME,
+            });
           } catch (error) {
             showMessage({
               message: 'Error',
-              description: 'Something went wrong',
+              // @ts-ignore
+              description: error?.message || 'Something went wrong',
               type: 'danger',
               duration: 3000,
               icon: 'danger',

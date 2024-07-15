@@ -153,7 +153,7 @@ const DatabaseSettings = () => {
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
 
       <View style={styles.container}>
-        <Typography variant={'titleLarge'}>Database Settings.</Typography>
+        <Typography variant={'titleLarge'}>Vault Settings.</Typography>
         <InfoLabelButton
           title={isSyncEnabled ? 'Cloud Vault:' : 'Local Vault:'}
           buttonTitle={groupName || 'Local Vault'}
@@ -187,7 +187,7 @@ const DatabaseSettings = () => {
             iconSource={'bin'}
           />
           <SettingsButton
-            title={'Delete and Reset Database'}
+            title={'Delete and Reset Vault'}
             onPress={handleResetDatabase}
             iconSource={'bin'}
           />

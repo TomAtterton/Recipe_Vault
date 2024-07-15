@@ -16,7 +16,7 @@ import { IconName } from '@/components/Icon/types';
 import { SCREEN_WIDTH, stylesheet } from './onboarding.style';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
-import { setHasOnboarded } from '@/store';
+import { setHasOnboarded, useBoundStore } from '@/store';
 
 const onboardingData: {
   icon: IconName;
@@ -40,7 +40,7 @@ const onboardingData: {
   {
     icon: 'paper-plane',
     title:
-      'Share your recipes & meal plans with friends through our syncing feature. Using a shared cloud vault!',
+      'Share your recipes & meal plans with friends through our syncing feature. Using a shared cloud vault!\n\nCurrently in beta so limited to only 5 recipes!',
   },
 ];
 
@@ -56,7 +56,7 @@ const Onboarding = () => {
   };
   const scrollViewRef = useRef<ScrollView>(null);
   const { styles } = useStyles(stylesheet);
-
+  const hasOnboarded = useBoundStore((state) => state.hasOnboarded);
   const isFinalPage = currentPage === onboardingData.length - 1;
   const { navigate } = useNavigation();
 
@@ -103,7 +103,8 @@ const Onboarding = () => {
             if (isFinalPage) {
               /* Handle continue action */
               setHasOnboarded(true);
-              navigate(Routes.TabStack);
+
+              navigate(hasOnboarded ? Routes.TabStack : Routes.Login);
               return;
             }
             /* Handle skip action */

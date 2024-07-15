@@ -1,7 +1,7 @@
 import metrics from '@/theme/metrics';
 import { createStyleSheet } from 'react-native-unistyles';
 
-export const stylesheet = createStyleSheet(() => ({
+export const stylesheet = createStyleSheet((theme) => ({
   container: {
     flex: 1,
     marginHorizontal: 20,
@@ -21,10 +21,18 @@ export const stylesheet = createStyleSheet(() => ({
   title: {
     textAlign: 'center',
   },
+  subtitle: {
+    textAlign: 'center',
+  },
   loginButtonContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
+  },
+  footerText: {
+    textAlign: 'center',
+    color: theme.colors.primary,
+    paddingBottom: 20,
   },
   loginButton: {
     width: metrics.screenWidth / 1.5,

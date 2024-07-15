@@ -85,10 +85,10 @@ const usePostUpdateRecipes = () => {
   ) => {
     try {
       const isSyncEnabled = useBoundStore.getState().shouldSync;
-      const groupName = useBoundStore.getState().profile?.groupName;
+      const groupId = useBoundStore.getState().profile?.groupId;
       if (isSyncEnabled) {
         const recipeCount = await getRecipeCount();
-        if (!Env.BETA_VAULTS.includes(groupName || '') && recipeCount >= Env.CLOUD_RECIPE_LIMIT) {
+        if (!Env.BETA_VAULTS.includes(groupId || '') && recipeCount >= Env.CLOUD_RECIPE_LIMIT) {
           throw new Error('Cloud sync is enabled and you have reached the maximum recipe limit.');
         }
       }
