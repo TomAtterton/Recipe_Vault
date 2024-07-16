@@ -1,7 +1,7 @@
-import { FlatList, View } from 'react-native';
+import { FlatList, View, AppState } from 'react-native';
 import CheckBox from '@/components/CheckBox';
 import OutlineButton from '@/components/buttons/OutlineButton';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Reminder } from 'expo-calendar';
 import { getAllReminders } from '@/utils/reminderUtils';
 import { useStyles } from 'react-native-unistyles';
@@ -10,20 +10,16 @@ import { setGroceryId, useBoundStore } from '@/store';
 import Typography from '@/components/Typography';
 import { openURL } from 'expo-linking';
 
-const SelectGroceryList = ({ onSave }: { onSave: () => void }) => {
+interface Props {
+  onClose: () => void;
+}
+
+const SelectGroceryList = ({ onClose }: Props) => {
   const [allReminders, setAllReminders] = useState<Reminder[]>([]);
   const groceryListId = useBoundStore((state) => state.groceryId);
   const [selectedGroceryId, setSelectedReminder] = useState<string | null | undefined>(
     groceryListId
   );
-
-  useEffect(() => {
-    const fetch = async () => {
-      const reminders = await getAllReminders();
-      setAllReminders(reminders || []);
-    };
-    fetch();
-  }, []);
 
   const { styles } = useStyles(stylesheet);
 
@@ -40,8 +36,33 @@ const SelectGroceryList = ({ onSave }: { onSave: () => void }) => {
 
   const handleSave = () => {
     selectedGroceryId && setGroceryId(selectedGroceryId);
-    onSave();
+    onClose();
   };
+
+  const handleOpenSettings = async () => {
+    await openURL('x-apple-reminderkit://');
+  };
+  const appState = useRef(AppState.currentState);
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', async (nextAppState) => {
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        const reminders = await getAllReminders();
+        setAllReminders(reminders || []);
+      }
+
+      appState.current = nextAppState;
+    });
+
+    const fetchReminders = async () => {
+      const reminders = await getAllReminders();
+      setAllReminders(reminders || []);
+    };
+    fetchReminders();
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -53,10 +74,7 @@ const SelectGroceryList = ({ onSave }: { onSave: () => void }) => {
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
             <Typography variant={'titleMedium'}>No available reminder lists</Typography>
-            <OutlineButton
-              title={'Create a new list'}
-              onPress={() => openURL('x-apple-reminderkit://')}
-            />
+            <OutlineButton title={'Create a new list'} onPress={handleOpenSettings} />
           </View>
         )}
       />
@@ -69,5 +87,4 @@ const SelectGroceryList = ({ onSave }: { onSave: () => void }) => {
     </View>
   );
 };
-
 export default SelectGroceryList;

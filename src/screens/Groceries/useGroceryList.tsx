@@ -69,7 +69,7 @@ const useGroceryList = () => {
   const handleCompleted = async (details: Reminder) => {
     try {
       if (details.completed) {
-        await updateReminder(details);
+        await updateReminder(details, true);
         await handleRefresh(false);
       }
     } catch (e) {
