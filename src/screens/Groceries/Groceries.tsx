@@ -25,7 +25,12 @@ import metrics from '@/theme/metrics';
 
 const keyExtractor = (item: Reminder, index: number) => `${item?.id}` + index;
 
-const loadingArray = Array.from({ length: 8 });
+const mockReminder: Reminder = {
+  id: '',
+  title: '',
+};
+
+const loadingArray: Reminder[] = Array.from({ length: 8 }, () => mockReminder);
 
 const Groceries = () => {
   const { data, onAdd, onEdit, onRefresh, onCompleted, isLoading } = useGroceryList();
@@ -110,10 +115,8 @@ const Groceries = () => {
               paddingBottom: paddingBottom + 60,
             },
           ]}
-          // @ts-ignore
           data={listData}
           ListEmptyComponent={handleEmptyComponent}
-          // @ts-ignore
           refreshControl={<RefreshControl refreshing={false} onRefresh={onRefresh} />}
         />
       </View>
@@ -153,11 +156,7 @@ const Groceries = () => {
         snapPoints={['80%']}
         title={'Choose which reminders list you would like to link with'}
       >
-        <SelectGroceryList
-          onSave={() => {
-            bottomSheetRef.current?.dismiss();
-          }}
-        />
+        <SelectGroceryList onClose={() => bottomSheetRef.current?.dismiss()} />
       </BottomSheet>
     </View>
   );

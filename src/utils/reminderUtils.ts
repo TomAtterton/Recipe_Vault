@@ -39,13 +39,13 @@ export const getReminders = async () => {
   }
 };
 
-export const updateReminder = async (details: Reminder) => {
+export const updateReminder = async (details: Reminder, shouldComplete?: boolean) => {
   try {
     if (details?.id) {
       await Calendar.updateReminderAsync(details.id, {
         calendarId: details.calendarId,
         id: details.id,
-        completed: true,
+        completed: shouldComplete,
         completionDate: new Date(),
         title: details.title,
       });

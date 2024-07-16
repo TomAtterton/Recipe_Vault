@@ -22,7 +22,9 @@ const GroceryItem = ({
     <CheckBoxInput
       isSelected={isSelected}
       multiline={true}
-      onPressInput={() => onEdit(item)}
+      onPressInput={() => {
+        onEdit(item);
+      }}
       onPress={handleCompleted}
       label={item?.title || ''}
     />

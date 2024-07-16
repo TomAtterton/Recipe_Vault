@@ -13,7 +13,7 @@ export const stylesheet = createStyleSheet((theme) => ({
   },
   systemButton: {
     borderRadius: 16,
-    paddingVertical: 8,
+    height: 32,
     paddingHorizontal: 16,
   },
   servingsContainer: {
