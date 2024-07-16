@@ -5,8 +5,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   name: 'Recipe Vault',
   description: `Recipe Vault Mobile App`,
   slug: 'recipeapp',
-  version: '0.0.14',
-  runtimeVersion: '0.0.14',
+  version: '0.0.16',
+  runtimeVersion: '0.0.16',
   scheme: 'recipeapp',
   orientation: 'portrait',
   icon: './assets/icon.png',
@@ -21,12 +21,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     url: 'https://u.expo.dev/9d67c9e0-c046-4082-b3dc-37c5fcfd0932',
     fallbackToCacheTimeout: 0,
   },
-  assetBundlePatterns: ['**/*'],
   ios: {
     supportsTablet: false,
     bundleIdentifier: 'com.tomatterton.recipeapp',
     usesAppleSignIn: true,
-
+    icon: './assets/icon.png',
     config: {
       usesNonExemptEncryption: false,
     },
