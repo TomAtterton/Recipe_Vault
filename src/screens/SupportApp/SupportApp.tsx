@@ -1,72 +1,75 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-
-const supportAppAmount = [
-  {
-    name: 'Buy me a coffee',
-    amount: 0.99,
-  },
-  {
-    name: 'Buy me a novel',
-    amount: 2.99,
-  },
-  {
-    name: 'Buy me a gourmet pizza',
-    amount: 4.99,
-  },
-  {
-    name: 'Contribute to my new laptop fund',
-    amount: 9.99,
-  },
-].sort((a, b) => a.amount - b.amount);
+import React, { useEffect, useState } from 'react';
+import { View, TouchableOpacity } from 'react-native';
+import { fetchProducts, PurchaseProduct } from '@/utils/purchaseUtils';
+import { useStyles } from 'react-native-unistyles';
+import Typography from '@/components/Typography';
+import { Image } from 'expo-image';
+import Purchases from 'react-native-purchases';
+import { showErrorMessage } from '@/utils/errorUtils';
+import { stylesheet } from './supportApp.style';
 
 const SupportApp = () => {
-  const [selectedOption, setSelectedOption] = useState<{ name: string; amount: number } | null>(
-    null
-  );
+  const { styles } = useStyles(stylesheet);
+  const [products, setProducts] = useState<PurchaseProduct[]>([]);
+  const [purchaseMade, setPurchaseMade] = useState(false); // New state to track if a purchase has been made
 
-  const handlePress = (option: { name: string; amount: number }) => {
-    setSelectedOption(option);
+  useEffect(() => {
+    fetchProducts().then((purchaseProducts) => {
+      setProducts(purchaseProducts || []);
+    });
+    setPurchaseMade(false);
+  }, []);
+
+  const handlePurchase = async (option: PurchaseProduct) => {
+    try {
+      await Purchases.purchaseStoreProduct(option.product);
+      setPurchaseMade(true); // Set purchaseMade to true after a successful purchase
+    } catch (error) {
+      // @ts-ignore
+      if (error?.code !== Purchases.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
+        // @ts-ignore
+        showErrorMessage(error?.message || 'Something went wrong');
+      }
+    }
   };
 
-  return (
-    <View style={styles.container}>
-      {selectedOption ? (
-        <Text style={styles.thankYouText}>Thank you for your support!</Text>
-      ) : (
-        supportAppAmount.map((option, index) => (
-          <TouchableOpacity key={index} style={styles.button} onPress={() => handlePress(option)}>
-            <Text style={styles.buttonText}>
-              {option.name} - ${option.amount}
-            </Text>
-          </TouchableOpacity>
-        ))
-      )}
-    </View>
-  );
-};
+  // Determine which state to render
+  const renderContent = () => {
+    if (purchaseMade) {
+      return (
+        <View>
+          <Typography variant={'titleLarge'} style={styles.thankYouText}>
+            Thank you for your support!
+          </Typography>
+          <Image style={styles.thankYouGif} source={require('../../../assets/gif/thankyou.gif')} />
+        </View>
+      );
+    } else if (products.length > 90) {
+      return products.map((option) => (
+        <TouchableOpacity
+          key={option.id}
+          style={styles.button}
+          onPress={() => handlePurchase(option)}
+        >
+          <Typography variant={'bodyMediumItalic'} style={styles.name}>
+            {option.name}
+          </Typography>
+          <Typography variant={'bodyLarge'}>{option.amount}</Typography>
+        </TouchableOpacity>
+      ));
+    } else {
+      // Empty state
+      return (
+        <View>
+          <Typography variant={'titleLarge'} style={styles.thankYouText}>
+            Oops something went wrong!
+          </Typography>
+        </View>
+      );
+    }
+  };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  button: {
-    backgroundColor: '#4B0082',
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-  },
-  thankYouText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#4B0082',
-  },
-});
+  return <View style={styles.container}>{renderContent()}</View>;
+};
 
 export default SupportApp;
