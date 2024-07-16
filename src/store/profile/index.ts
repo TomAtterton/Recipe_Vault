@@ -1,6 +1,7 @@
 import { StateCreator } from 'zustand';
 import { Session } from '@supabase/supabase-js';
 import { sliceResetFns } from '@/store/helper';
+import { Env } from '@/core/env';
 
 export type ProfileSlice = {
   session: Session | null;
@@ -25,8 +26,8 @@ const initialProfileState = {
     name: '',
     email: '',
     avatarId: '',
-    groupId: 'initial-group',
-    groupName: '',
+    groupId: Env.TEST_GROUP_ID,
+    groupName: Env.SQLITE_DB_NAME,
   },
 };
 

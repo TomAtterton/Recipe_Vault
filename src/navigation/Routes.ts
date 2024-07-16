@@ -11,6 +11,7 @@ export enum Routes {
   DatabaseEditor = 'DatabaseEditor',
   AppSettings = 'AppSettings',
   SyncSettings = 'SyncSettings',
+  AdvanceSyncSettings = 'AdvanceSyncSettings',
   RecipeDetails = 'RecipeDetails',
   EditRecipe = 'EditRecipe',
   AddRecipe = 'AddRecipe',

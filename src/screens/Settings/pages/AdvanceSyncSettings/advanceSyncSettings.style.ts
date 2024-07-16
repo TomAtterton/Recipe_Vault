@@ -14,7 +14,4 @@ export const stylesheet = createStyleSheet({
     justifyContent: 'flex-end',
     gap: 16,
   },
-  enableSyncButton: {
-    marginTop: 20,
-  },
 });

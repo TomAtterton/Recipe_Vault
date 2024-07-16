@@ -1,5 +1,5 @@
 import { RecipeDetails } from '@/database/types/recipes';
-import { sqlDelete, sqlExecute, sqlGet, sqlInsert, sqlUpdate } from '@/database';
+import { database, sqlDelete, sqlExecute, sqlGet, sqlInsert, sqlUpdate } from '@/database';
 import { useBoundStore } from '@/store';
 import { TableNames } from '@/database/api/types';
 import { randomUUID } from 'expo-crypto';
@@ -14,6 +14,12 @@ export const SELECT_RECIPE_INSTRUCTIONS = `SELECT * FROM recipe_instructions WHE
 
 export const SELECT_RECIPE_CATEGORIES = `SELECT * FROM recipe_categories WHERE recipe_id = ?;`;
 export const SELECT_RECIPE_TAGS = `SELECT * FROM recipe_tags WHERE recipe_id = ?;`;
+
+export const getRecipeCount = async () => {
+  const result = await database?.getFirstAsync('SELECT count(*) as count FROM recipes');
+  // @ts-ignore
+  return result?.count || 0;
+};
 
 export const getRecipeServings = async (recipe_id: string) => {
   try {

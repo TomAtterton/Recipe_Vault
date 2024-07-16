@@ -84,11 +84,11 @@ const useHandleRecipeForm = ({
         updateValues: formattedObject,
       });
       setScannedImage('');
+      reset();
     } catch (e) {
       // @ts-ignore
-      showErrorMessage(e?.message || 'Something went wrong');
+      showErrorMessage(e?.message || 'Something went wrong', 3000);
     } finally {
-      reset();
       scrollViewRef.current?.scrollTo({ y: 0, animated: true });
     }
   };

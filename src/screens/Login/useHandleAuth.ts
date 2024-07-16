@@ -106,15 +106,18 @@ const useHandleAuth = () => {
         password: Env.TEST_LOGIN_PASSWORD,
       });
 
+      if (error) {
+        showErrorMessage(error?.message);
+        throw error;
+      }
+
       if (data) {
         await handleUpdateProfile(data);
       }
-
-      if (error) {
-        showErrorMessage(error?.message);
-      }
     } catch (e) {
-      showErrorMessage(translate('error_messages.default'));
+      // @ts-ignore
+      showErrorMessage(e?.message || translate('error_messages.default'));
+      throw e;
     }
   };
 

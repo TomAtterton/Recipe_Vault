@@ -36,12 +36,9 @@ export const useBoundStore = create<
           groceryId: state.groceryId,
           groceryList: state.groceryList,
           hasOnboarded: state.hasOnboarded,
-          //
           shouldSync: state.shouldSync,
           currentDatabaseName: state.currentDatabaseName,
-          //
           darkMode: state.darkMode,
-          isBetaMode: state.isBetaMode,
         }),
       }
     )
@@ -118,8 +115,6 @@ export const setHasOnboarded = (hasOnboarded: boolean) =>
   useBoundStore.getState().setHasOnboarded(hasOnboarded);
 
 export const setDarkMode = (darkMode: boolean) => useBoundStore.getState().setDarkMode(darkMode);
-export const setBetaMode = (isBetaMode: boolean) =>
-  useBoundStore.getState().setBetaMode(isBetaMode);
 
 /**
  * Database Actions
