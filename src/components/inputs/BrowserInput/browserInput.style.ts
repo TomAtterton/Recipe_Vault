@@ -30,16 +30,11 @@ export const stylesheet = createStyleSheet((theme) => ({
     flex: 1,
   },
   input: {
-    width: '50%',
     paddingLeft: 8,
     height: INPUT_HEIGHT,
   },
   title: {
-    position: 'absolute',
-    left: (ICON_SIZE + 8) * 2,
-    right: (ICON_SIZE + 8) * 2,
-    top: 0,
-    bottom: 0,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
