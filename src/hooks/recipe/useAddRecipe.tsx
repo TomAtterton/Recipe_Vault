@@ -3,7 +3,6 @@ import { useNavigation } from '@react-navigation/native';
 import { RecipeDetailType } from '@/types';
 import usePostUpdateRecipes from '@/database/api/recipes/hooks/usePostUpdateRecipes';
 import { showSuccessMessage } from '@/utils/promptUtils';
-import { showErrorMessage } from '@/utils/promptUtils';
 import { useEffect, useState } from 'react';
 
 const useAddRecipe = ({
@@ -18,6 +17,7 @@ const useAddRecipe = ({
   const navigation = useNavigation();
 
   const [currentData, setCurrentData] = useState<Partial<RecipeDetailType> | undefined>(data);
+
   useEffect(() => {
     if (!hasScanContent) {
       setCurrentData(data);
@@ -29,6 +29,7 @@ const useAddRecipe = ({
       const recipeId = await onSubmit(updateValues);
 
       showSuccessMessage('Recipe added successfully');
+
       setCurrentData(undefined);
 
       navigation.navigate(Routes.Home);
@@ -42,7 +43,7 @@ const useAddRecipe = ({
         });
       }
     } catch (e) {
-      showErrorMessage('Something went wrong');
+      throw e;
     }
   };
   return {

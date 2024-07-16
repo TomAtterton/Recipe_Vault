@@ -3,7 +3,12 @@ import { randomUUID } from 'expo-crypto';
 import onImageUpload from '@/database/api/storage/useImageUpload';
 import { useBoundStore } from '@/store';
 import { Env } from '@/core/env';
-import { insertRecipe, updateRecipe, updateRelatedTable } from '@/database/api/recipes';
+import {
+  getRecipeCount,
+  insertRecipe,
+  updateRecipe,
+  updateRelatedTable,
+} from '@/database/api/recipes';
 import {
   Category,
   checkMetaDataDuplicates,
@@ -79,6 +84,15 @@ const usePostUpdateRecipes = () => {
     previousValues?: Partial<RecipeDetailType>
   ) => {
     try {
+      const isSyncEnabled = useBoundStore.getState().shouldSync;
+      const groupId = useBoundStore.getState().profile?.groupId;
+      if (isSyncEnabled) {
+        const recipeCount = await getRecipeCount();
+        if (!Env.BETA_VAULTS.includes(groupId || '') && recipeCount >= Env.CLOUD_RECIPE_LIMIT) {
+          throw new Error('Cloud sync is enabled and you have reached the maximum recipe limit.');
+        }
+      }
+
       setIsLoading(true);
       const imageUrl = await onImageUpload(values?.image);
 
@@ -90,6 +104,7 @@ const usePostUpdateRecipes = () => {
       const profile = useBoundStore.getState().profile;
 
       const recipe_id = id || randomUUID();
+
       const recipeDetails: any = {
         recipe_id,
         group_id: profile?.groupId || Env.TEST_GROUP_ID,
@@ -105,9 +120,7 @@ const usePostUpdateRecipes = () => {
         note: values.note,
         last_made: values?.lastMade,
       };
-      console.log('recipeDetails', recipeDetails);
 
-      //
       await updateRecipeAndRelatedTables({
         recipeDetails,
         ingredients,

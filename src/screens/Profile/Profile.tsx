@@ -31,17 +31,17 @@ const IconSource = {
 
 const Title = {
   [ProfileState.INITIAL]: 'Welcome to Your Recipe Vault!',
-  [ProfileState.SHARED]: 'Create Your Shared Vault',
-  [ProfileState.JOIN]: 'Join a Shared Vault',
+  [ProfileState.SHARED]: 'Create Your Cloud Vault',
+  [ProfileState.JOIN]: 'Join Cloud Vault',
 };
 
 const Description = {
   [ProfileState.INITIAL]:
-    'Start by creating a shared vault to sync your recipes with friends and family, or join an existing one to discover and contribute. Let’s get cooking!',
+    'Start by creating a cloud vault to sync your recipes with friends and family, or join an existing one to discover and contribute. Let’s get cooking!',
   [ProfileState.SHARED]:
-    'Give your shared vault a name. This is how it will appear to others when they join. Choose a name that’s easy to remember and reflects the essence of your culinary collection.',
+    'Give your cloud vault a name. This is how it will appear to others when they join. Choose a name that’s easy to remember and reflects the essence of your culinary collection.',
   [ProfileState.JOIN]:
-    'Have a vault code? Enter it here to join a shared vault and explore a world of recipes with friends and family. If you don’t have one, consider creating your own vault!',
+    'Have a vault code? Enter it here to join a cloud vault and explore a world of recipes with friends and family. If you don’t have one, consider creating your own vault!',
 };
 
 const Placeholder = {
@@ -157,15 +157,10 @@ const Profile = () => {
           size={100}
           color={theme.colors.onBackground}
         />
-        <Typography variant={'titleMedium'} style={styles.title}>
+        <Typography variant={'titleLarge'} style={styles.title}>
           {Title[currentState]}
         </Typography>
-        <Typography
-          style={{
-            textAlign: 'center',
-          }}
-          variant={'bodySmall'}
-        >
+        <Typography style={styles.subtitle} variant={'bodyMediumItalic'}>
           {Description[currentState]}
         </Typography>
       </View>
@@ -175,7 +170,7 @@ const Profile = () => {
           onChange={handleTextChange}
           placeholder={Placeholder[currentState]}
           multiline={false}
-          style={styles.input}
+          containerStyle={styles.input}
           maxLength={MaxLength[currentState]}
           errorMessage={errorMessages}
         />
@@ -185,14 +180,14 @@ const Profile = () => {
         {isInitial && (
           <PrimaryButton
             style={styles.button}
-            title={'Create a shared vault'}
+            title={'Create a cloud vault'}
             onPress={handleSharedVault}
           />
         )}
         {isInitial && (
           <PrimaryButton
             style={styles.button}
-            title={'Join a shared vault'}
+            title={'Join a cloud vault'}
             onPress={handleJoinVault}
           />
         )}
@@ -201,7 +196,7 @@ const Profile = () => {
             <PrimaryButton
               isLoading={isLoading}
               style={styles.button}
-              title={'Create'}
+              title={currentState === ProfileState.JOIN ? 'Join Vault' : 'Create Vault'}
               disabled={isLoading || text.length === 0}
               onPress={handleUpdateProfile}
             />
