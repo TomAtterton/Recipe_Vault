@@ -44,7 +44,7 @@ const SupportApp = () => {
           <Image style={styles.thankYouGif} source={require('../../../assets/gif/thankyou.gif')} />
         </View>
       );
-    } else if (products.length > 90) {
+    } else if (products.length > 0) {
       return products.map((option) => (
         <TouchableOpacity
           key={option.id}
