@@ -1,96 +1,75 @@
 import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { fetchProducts } from '@/utils/purchaseUtils';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { fetchProducts, PurchaseProduct } from '@/utils/purchaseUtils';
+import { useStyles } from 'react-native-unistyles';
 import Typography from '@/components/Typography';
 import { Image } from 'expo-image';
-
-const supportAppAmount = [
-  {
-    name: '☕ Fuel my caffeine addiction',
-    amount: 0.99,
-  },
-  {
-    name: "📚 Help me buy a book I'll never finish",
-    amount: 1.99,
-  },
-  {
-    name: '🍕 Treat me to a slice of fancy pizza',
-    amount: 3.99,
-  },
-  {
-    name: '💻 Chip in for my dream laptop',
-    amount: 9.99,
-  },
-];
+import Purchases from 'react-native-purchases';
+import { showErrorMessage } from '@/utils/errorUtils';
+import { stylesheet } from './supportApp.style';
 
 const SupportApp = () => {
-  const [selectedOption, setSelectedOption] = useState<{ name: string; amount: number } | null>(
-    null
-  );
-
   const { styles } = useStyles(stylesheet);
+  const [products, setProducts] = useState<PurchaseProduct[]>([]);
+  const [purchaseMade, setPurchaseMade] = useState(false); // New state to track if a purchase has been made
 
   useEffect(() => {
-    fetchProducts();
+    fetchProducts().then((purchaseProducts) => {
+      setProducts(purchaseProducts || []);
+    });
+    setPurchaseMade(false);
   }, []);
-  const handlePress = (option: { name: string; amount: number }) => {
-    setSelectedOption(option);
+
+  const handlePurchase = async (option: PurchaseProduct) => {
+    try {
+      await Purchases.purchaseStoreProduct(option.product);
+      setPurchaseMade(true); // Set purchaseMade to true after a successful purchase
+    } catch (error) {
+      // @ts-ignore
+      if (error?.code !== Purchases.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
+        // @ts-ignore
+        showErrorMessage(error?.message || 'Something went wrong');
+      }
+    }
   };
 
-  return (
-    <View style={styles.container}>
-      {selectedOption ? (
+  // Determine which state to render
+  const renderContent = () => {
+    if (purchaseMade) {
+      return (
         <View>
           <Typography variant={'titleLarge'} style={styles.thankYouText}>
             Thank you for your support!
           </Typography>
           <Image style={styles.thankYouGif} source={require('../../../assets/gif/thankyou.gif')} />
         </View>
-      ) : (
-        supportAppAmount.map((option, index) => (
-          <TouchableOpacity key={index} style={styles.button} onPress={() => handlePress(option)}>
-            <Typography
-              variant={'bodyMediumItalic'}
-              style={{
-                flex: 1,
-              }}
-            >
-              {option.name}
-            </Typography>
-            <Typography variant={'bodyLarge'}>€{option.amount}</Typography>
-          </TouchableOpacity>
-        ))
-      )}
-    </View>
-  );
+      );
+    } else if (products.length > 90) {
+      return products.map((option) => (
+        <TouchableOpacity
+          key={option.id}
+          style={styles.button}
+          onPress={() => handlePurchase(option)}
+        >
+          <Typography variant={'bodyMediumItalic'} style={styles.name}>
+            {option.name}
+          </Typography>
+          <Typography variant={'bodyLarge'}>{option.amount}</Typography>
+        </TouchableOpacity>
+      ));
+    } else {
+      // Empty state
+      return (
+        <View>
+          <Typography variant={'titleLarge'} style={styles.thankYouText}>
+            Oops something went wrong!
+          </Typography>
+        </View>
+      );
+    }
+  };
+
+  return <View style={styles.container}>{renderContent()}</View>;
 };
-
-const stylesheet = createStyleSheet(() => ({
-  container: {
-    flex: 1,
-    paddingHorizontal: 20,
-    gap: 8,
-    justifyContent: 'center',
-  },
-
-  button: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-    borderRadius: 10,
-  },
-  thankYouText: {
-    textAlign: 'center',
-  },
-  thankYouGif: {
-    width: 200,
-    height: 200,
-    alignSelf: 'center',
-    marginTop: 10,
-    borderRadius: 10,
-  },
-}));
 
 export default SupportApp;
