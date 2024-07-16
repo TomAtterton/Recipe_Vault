@@ -1,10 +1,16 @@
 import * as Calendar from 'expo-calendar';
 import { Reminder } from 'expo-calendar';
 import { useBoundStore } from '@/store';
+import { Alert } from 'react-native';
 
 export const requestReminderPermission = async () => {
   try {
-    const { status } = await Calendar.requestRemindersPermissionsAsync();
+    const { status, canAskAgain } = await Calendar.requestRemindersPermissionsAsync();
+
+    if (status === 'denied' && !canAskAgain) {
+      Alert.alert('Permission Denied', 'You need to enable reminder permissions in settings');
+    }
+
     return status === 'granted';
   } catch (error) {
     return false;
@@ -28,6 +34,7 @@ export const getAllReminders = async () => {
 export const getReminders = async () => {
   try {
     const id = useBoundStore.getState().groceryId;
+
     if (!id) {
       throw new Error('No calendar id provided');
     }
@@ -35,6 +42,11 @@ export const getReminders = async () => {
     const reminders = await Calendar.getRemindersAsync([id]);
     return reminders.filter((reminder) => reminder.completed === false);
   } catch (error) {
+    // @ts-ignore
+    if (error?.code === 'ERR_MISSION_PERMISSIONS') {
+      requestReminderPermission();
+    }
+
     throw error;
   }
 };
