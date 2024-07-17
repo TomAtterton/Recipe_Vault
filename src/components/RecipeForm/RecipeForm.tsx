@@ -54,7 +54,7 @@ const RecipeForm = ({
   isEditing,
   onDeleteRecipe,
 }: Props) => {
-  const { control, onSubmit, scrollViewRef, onClearForm } = useHandleRecipeForm({
+  const { control, onSubmit, scrollViewRef, onClearForm, isSubmitting } = useHandleRecipeForm({
     scannedData: scanContent?.data,
     data,
     onSubmitForm,
@@ -183,7 +183,12 @@ const RecipeForm = ({
           multiline
           control={control}
         />
-        <PrimaryButton style={styles.button} onPress={onSubmit} title={buttonTitle} />
+        <PrimaryButton
+          style={styles.button}
+          onPress={onSubmit}
+          title={buttonTitle}
+          isLoading={isSubmitting}
+        />
       </NestableScrollContainer>
       <View style={[styles.navigationHeader, { top }]}>
         {isEditing ? (

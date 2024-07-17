@@ -20,4 +20,5 @@ export const Env = {
   REVENUE_CAT_API_KEY:
     process.env.EXPO_PUBLIC_REVENUE_CAT_API_KEY || process.env.REVENUE_CAT_API_KEY,
   CLOUD_RECIPE_LIMIT: 5,
+  CLOUDINARY_KEY: process.env.EXPO_PUBLIC_CLOUDINARY_KEY,
 };
