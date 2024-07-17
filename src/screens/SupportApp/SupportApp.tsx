@@ -33,7 +33,6 @@ const SupportApp = () => {
     }
   };
 
-  // Determine which state to render
   const renderContent = () => {
     if (purchaseMade) {
       return (

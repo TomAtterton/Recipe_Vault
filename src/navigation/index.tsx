@@ -22,6 +22,7 @@ import Privacy from '@/screens/Privacy';
 import Help from '@/screens/Help';
 import DatabaseEditor from '@/screens/Settings/pages/DatabaseSettings/DatabaseEditor';
 import AdvanceSyncSettings from '@/screens/Settings/pages/AdvanceSyncSettings';
+import ProPlan from '@/screens/ProPlan';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,15 @@ export const RootNavigator = () => {
       <Stack.Screen name={Routes.RecipeDetailStack} component={RecipeDetailNavigator} />
       <Stack.Screen name={Routes.DatabaseEditor} component={DatabaseEditor} />
       <Stack.Screen name={Routes.AdvanceSyncSettings} component={AdvanceSyncSettings} />
+      <Stack.Screen
+        name={Routes.ProPlan}
+        component={ProPlan}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+          navigationBarHidden: true,
+        }}
+      />
       <Stack.Screen
         name={Routes.AddGroceries}
         component={AddGroceries}

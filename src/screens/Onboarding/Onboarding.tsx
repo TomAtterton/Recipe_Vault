@@ -40,7 +40,7 @@ const onboardingData: {
   {
     icon: 'paper-plane',
     title:
-      'Share your recipes & meal plans with friends through our syncing feature. Using a shared cloud vault!\n\nCurrently in beta so limited to only 5 recipes!',
+      'Share your recipes & meal plans with friends through our syncing feature. Using a shared cloud vault!\n\nLimited to 5 recipes will require a purchase to get unlimited!',
   },
 ];
 
@@ -90,7 +90,7 @@ const Onboarding = () => {
               style={{
                 flex: 0,
               }}
-              size={30}
+              size={40}
               key={index}
               isSelected={index === currentPage}
               onPress={() => handleCheckboxPress(index)}
@@ -104,7 +104,14 @@ const Onboarding = () => {
               /* Handle continue action */
               setHasOnboarded(true);
 
-              navigate(hasOnboarded ? Routes.TabStack : Routes.Login);
+              if (hasOnboarded) {
+                navigate(Routes.TabStack);
+                return;
+              }
+
+              navigate(Routes.Login, {
+                showSkip: true,
+              });
               return;
             }
             /* Handle skip action */

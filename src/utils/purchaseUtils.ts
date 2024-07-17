@@ -1,6 +1,9 @@
 import Purchases from 'react-native-purchases';
 import { Env } from '@/core/env';
 import { PurchasesStoreProduct } from '@revenuecat/purchases-typescript-internal/dist/offerings';
+import { Alert } from 'react-native';
+import { supabase } from '@/database/supabase';
+import { useBoundStore } from '@/store';
 
 const supportAppDescription = {
   recipetier1tip: '☕ Fuel my caffeine addiction',
@@ -30,6 +33,45 @@ export const initPurchases = async () => {
     if (__DEV__) {
       Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG);
     }
+  }
+};
+
+export const handleProPlanPurchase = async (onContactCustomerSupport: () => void) => {
+  try {
+    const products = await Purchases.getProducts(['recipetier4tip']);
+    const product = products[0];
+    if (!product) {
+      throw new Error('Product not found');
+    }
+    await Purchases.purchaseStoreProduct(product);
+    const groupId = useBoundStore.getState().profile?.groupId;
+    const profileId = useBoundStore.getState().profile.id;
+
+    const { error } = await supabase.from('pro_vaults').insert({
+      updated_at: new Date().toISOString(),
+      profile_id: profileId,
+      group_id: groupId,
+    });
+
+    if (error) {
+      throw new Error('Error purchasing pro plan ' + error.message);
+    }
+
+    useBoundStore.getState().setDatabaseStatus('pro');
+
+    return true;
+  } catch (error) {
+    // @ts-ignore
+    if (error?.code === Purchases.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
+      throw new Error('Cancelled purchase');
+    }
+
+    Alert.alert('Contact support', 'There was an issue with your purchase', [
+      {
+        text: 'OK',
+        onPress: onContactCustomerSupport,
+      },
+    ]);
   }
 };
 

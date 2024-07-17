@@ -23,4 +23,5 @@ export enum Routes {
   RecipeDetailStack = 'RecipeDetailStack',
   Search = 'Search',
   ScanImageContent = 'ScanImageContent',
+  ProPlan = 'ProPlan',
 }
