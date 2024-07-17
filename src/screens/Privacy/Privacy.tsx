@@ -6,6 +6,7 @@ import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './privacy.style';
 import Markdown from 'react-native-markdown-display';
 import { useEffect, useState } from 'react';
+import { Env } from '@/core/env';
 
 const Privacy = () => {
   const { goBack } = useNavigation();
@@ -17,9 +18,7 @@ const Privacy = () => {
   const [data, setData] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(
-      'https://gist.githubusercontent.com/TomAtterton/04e81636357761d62d0ad328b94dc046/raw/7830bbead7548b374416f6514c3451fd9f4891fe/recipe-vault-privacy-policy.md'
-    )
+    fetch(Env.PRIVACY_POLICY_URL)
       .then((response) => {
         return response.text();
       })
