@@ -3,12 +3,7 @@ import { randomUUID } from 'expo-crypto';
 import onImageUpload from '@/database/api/storage/useImageUpload';
 import { useBoundStore } from '@/store';
 import { Env } from '@/core/env';
-import {
-  getRecipeCount,
-  insertRecipe,
-  updateRecipe,
-  updateRelatedTable,
-} from '@/database/api/recipes';
+import { insertRecipe, updateRecipe, updateRelatedTable } from '@/database/api/recipes';
 import {
   Category,
   checkMetaDataDuplicates,
@@ -17,6 +12,7 @@ import {
   Tag,
 } from '@/database/api/recipes/helpers/postRecipeHelper';
 import { database } from '@/database';
+import { checkCanAddRecipe } from '@/utils/proPurchaseUtils';
 
 // Extend or modify these as needed to match your exact schema and requirements
 interface RecipeDetails {
@@ -85,10 +81,10 @@ const usePostUpdateRecipes = () => {
   ) => {
     try {
       const isSyncEnabled = useBoundStore.getState().shouldSync;
-      const groupId = useBoundStore.getState().profile?.groupId;
       if (isSyncEnabled) {
-        const recipeCount = await getRecipeCount();
-        if (!Env.BETA_VAULTS.includes(groupId || '') && recipeCount >= Env.CLOUD_RECIPE_LIMIT) {
+        const canAddRecipe = await checkCanAddRecipe();
+
+        if (!canAddRecipe) {
           throw new Error('Cloud sync is enabled and you have reached the maximum recipe limit.');
         }
       }

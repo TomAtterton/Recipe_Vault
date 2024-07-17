@@ -1,7 +1,7 @@
 import metrics from '@/theme/metrics';
 import { createStyleSheet } from 'react-native-unistyles';
 
-export const stylesheet = createStyleSheet((theme) => ({
+export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
     flex: 1,
     marginHorizontal: 20,
@@ -38,6 +38,12 @@ export const stylesheet = createStyleSheet((theme) => ({
     width: metrics.screenWidth / 1.5,
     height: 50,
   },
+  backButton: {
+    position: 'absolute',
+    top: miniRuntime.insets.top,
+    left: 8,
+  },
+
   image: {
     width: '100%',
     height: '100%',

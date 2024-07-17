@@ -39,6 +39,7 @@ export const useBoundStore = create<
           shouldSync: state.shouldSync,
           currentDatabaseName: state.currentDatabaseName,
           darkMode: state.darkMode,
+          databaseStatus: state.databaseStatus,
         }),
       }
     )

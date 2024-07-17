@@ -139,7 +139,9 @@ const DatabaseSettings = () => {
                 await openDatabase({ currentDatabaseName });
                 await syncWithSupabase();
               } else {
-                navigate(Routes.Login);
+                navigate(Routes.Login, {
+                  showSkip: true,
+                });
               }
             }
           },

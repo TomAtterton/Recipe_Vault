@@ -24,6 +24,8 @@ const SyncSettings = () => {
   const profile = useBoundStore((state) => state.profile);
   const setSyncEnabled = useBoundStore((state) => state.setShouldSync);
 
+  const databaseStatus = useBoundStore((state) => state.databaseStatus);
+
   const [isLoading, setIsLoading] = React.useState(false);
 
   const handleSignOut = async () => {
@@ -98,6 +100,10 @@ const SyncSettings = () => {
     });
   };
 
+  const handleProNavigation = () => {
+    navigate(Routes.ProPlan);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
@@ -106,6 +112,7 @@ const SyncSettings = () => {
         {syncEnabled && (
           <>
             <InfoLabelButton title={'Current Vault.'} buttonTitle={profile?.groupName} />
+            <InfoLabelButton title={'Vault Status:'} buttonTitle={databaseStatus} />
             <InfoLabelButton
               title={translate('settings.group_id')}
               buttonTitle={profile?.groupId}
@@ -115,6 +122,13 @@ const SyncSettings = () => {
 
         {syncEnabled ? (
           <>
+            {databaseStatus === 'free' && (
+              <SettingsButton
+                title={'Upgrade to pro'}
+                onPress={handleProNavigation}
+                iconSource={'ufo-flying'}
+              />
+            )}
             <SettingsButton
               title={'Share Database Code'}
               onPress={handleShareDatabase}
@@ -143,7 +157,11 @@ const SyncSettings = () => {
           <SettingsButton
             style={styles.enableSyncButton}
             title={'Enable Sync'}
-            onPress={() => navigate(Routes.Login)}
+            onPress={() =>
+              navigate(Routes.Login, {
+                showSkip: false,
+              })
+            }
             iconSource={'cloud'}
           />
         )}

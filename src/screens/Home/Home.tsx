@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 
 import FilterOptions from 'src/screens/Home/components/FilterOptions';
@@ -14,6 +14,7 @@ import HomeAnimation from '@/screens/Home/homeAnimation';
 import CategorySelection from '@/components/RecipeForm/components/CategorySelection';
 import useDatabaseListener from '@/database/hooks/useDatabaseListener';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { checkIfPro } from '@/utils/proPurchaseUtils';
 
 const Home = () => {
   const {
@@ -30,6 +31,10 @@ const Home = () => {
 
   const onSearchFocus = useCallback(() => {
     setShowingSearch(true);
+  }, []);
+
+  useEffect(() => {
+    checkIfPro();
   }, []);
 
   useDatabaseListener();

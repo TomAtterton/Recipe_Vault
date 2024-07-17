@@ -15,7 +15,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "type-check": "tsc --noemit",
     "lint:translations": "eslint ./src/translations/ --fix --ext .json  ",
-    "gen-supabase": "supabase gen types typescript --project-id cfzwkhnvjvfjfgazjlzh > src/database/types/database.types.ts",
+    "gen-supabase": "supabase gen types --lang=typescript --project-id cfzwkhnvjvfjfgazjlzh > src/database/types/database.types.ts",
     "prettier": "prettier --config .prettierrc.js 'src/**/*.ts' --write",
     "update:stagining": "eas update --channel staging",
     "upload-sourcemaps": "npx sentry-expo-upload-sourcemaps dist",

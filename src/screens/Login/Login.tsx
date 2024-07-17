@@ -9,16 +9,18 @@ import Icon from '@/components/Icon';
 import { stylesheet } from './login.style';
 import { useStyles } from 'react-native-unistyles';
 import Typography from '@/components/Typography';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
 import NavBarButton from '@/components/buttons/NavBarButton';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { RouteProp } from '@/navigation/types';
 
 const Login = () => {
   const { onAppleLogin, onTestLogin } = useHandleAuth();
   const { styles, theme } = useStyles(stylesheet);
-  const { top } = useSafeAreaInsets();
-  const { navigate } = useNavigation();
+  const { navigate, goBack } = useNavigation();
+
+  const { params } = useRoute<RouteProp<Routes.Login>>();
+  const showSkip = params?.showSkip;
 
   const handleSkip = () => navigate(Routes.TabStack);
   return (
@@ -34,9 +36,6 @@ const Login = () => {
         </Typography>
       </View>
       <View style={styles.loginButtonContainer}>
-        <Typography variant={'bodyMediumItalic'} style={styles.footerText}>
-          Currently in beta so only limited to 5 recipes at this moment.
-        </Typography>
         <AppleAuthentication.AppleAuthenticationButton
           buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
           buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.WHITE_OUTLINE}
@@ -44,19 +43,16 @@ const Login = () => {
           style={styles.loginButton}
           onPress={onAppleLogin}
         />
+
+        {showSkip && <LabelButton onPress={handleSkip} title={'Continue with local'} />}
+
         {__DEV__ && (
           <LabelButton onPress={onTestLogin} title={translate('login.test_login_title')} />
         )}
       </View>
-      <NavBarButton
-        iconSource={'close'}
-        style={{
-          position: 'absolute',
-          top: top,
-          right: 0,
-        }}
-        onPress={handleSkip}
-      />
+      {!showSkip && (
+        <NavBarButton iconSource={'arrow-left'} style={styles.backButton} onPress={goBack} />
+      )}
     </SafeAreaView>
   );
 };
