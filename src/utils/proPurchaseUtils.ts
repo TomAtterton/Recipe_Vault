@@ -4,12 +4,12 @@ import { getRecipeCount } from '@/database/api/recipes';
 
 export const checkIfPro = async () => {
   try {
-    const profileId = useBoundStore.getState().profile.id;
+    const groupId = useBoundStore.getState().profile.groupId;
 
     const { data: pro_vaults, error } = await supabase
       .from('pro_vaults')
       .select('*')
-      .eq('profile_id', profileId || '');
+      .eq('group_id', groupId || '');
 
     if (error) {
       throw new Error('Error fetching pro vaults');
