@@ -90,7 +90,7 @@ const usePostUpdateRecipes = () => {
       }
 
       setIsLoading(true);
-      const imageUrl = await onImageUpload(values?.image);
+      const imageUrl = await onImageUpload(values?.image, previousValues?.image);
 
       const { instructions, ingredients, categories, tags } = checkMetaDataDuplicates(
         values,
