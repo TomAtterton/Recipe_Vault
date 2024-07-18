@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createProfileSlice, ProfileSlice } from '@/store/profile';
-import { logger } from '@/store/middleware/log';
 import { createWebviewSlice, WebviewSlice } from '@/store/webview';
 import { createDatabaseSlice, DatabaseSlice } from '@/store/database';
 import { sliceResetFns } from '@/store/helper';
@@ -14,35 +13,33 @@ import { AppSlice, createAppSlice } from '@/store/app';
 export const useBoundStore = create<
   ProfileSlice & WebviewSlice & DatabaseSlice & ScanImageSlice & GroceryListSlice & AppSlice
 >()(
-  logger(
-    persist(
-      (set, get, store) => ({
-        ...createProfileSlice(set, get, store),
-        ...createWebviewSlice(set, get, store),
-        ...createDatabaseSlice(set, get, store),
-        ...createScanImageSlice(set, get, store),
-        ...createGroceryListSlice(set, get, store),
-        ...createAppSlice(set, get, store),
+  persist(
+    (set, get, store) => ({
+      ...createProfileSlice(set, get, store),
+      ...createWebviewSlice(set, get, store),
+      ...createDatabaseSlice(set, get, store),
+      ...createScanImageSlice(set, get, store),
+      ...createGroceryListSlice(set, get, store),
+      ...createAppSlice(set, get, store),
+    }),
+    {
+      name: 'bound-store',
+      storage: createJSONStorage(() => AsyncStorage),
+      partialize: (state) => ({
+        profile: state.profile,
+        session: state.session,
+        bookmarks: state.bookmarks,
+        history: state.history,
+        lastSynced: state.lastSynced,
+        groceryId: state.groceryId,
+        groceryList: state.groceryList,
+        hasOnboarded: state.hasOnboarded,
+        shouldSync: state.shouldSync,
+        currentDatabaseName: state.currentDatabaseName,
+        darkMode: state.darkMode,
+        databaseStatus: state.databaseStatus,
       }),
-      {
-        name: 'bound-store',
-        storage: createJSONStorage(() => AsyncStorage),
-        partialize: (state) => ({
-          profile: state.profile,
-          session: state.session,
-          bookmarks: state.bookmarks,
-          history: state.history,
-          lastSynced: state.lastSynced,
-          groceryId: state.groceryId,
-          groceryList: state.groceryList,
-          hasOnboarded: state.hasOnboarded,
-          shouldSync: state.shouldSync,
-          currentDatabaseName: state.currentDatabaseName,
-          darkMode: state.darkMode,
-          databaseStatus: state.databaseStatus,
-        }),
-      }
-    )
+    }
   )
 );
 export const resetAllSlices = () => {
