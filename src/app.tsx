@@ -21,7 +21,7 @@ import UpdateProvider from '@/providers/UpdateProvider';
 import { useInitialTheme } from 'react-native-unistyles';
 import { useBoundStore } from '@/store';
 import { Env } from '@/core/env';
-import { initPurchases } from '@/utils/purchaseUtils';
+import { initPurchases } from '@/services/purchase';
 
 Sentry.init({
   dsn: Env.SENTRY_DSN,

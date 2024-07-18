@@ -1,7 +1,7 @@
 import { useBoundStore } from '@/store';
 import { database } from '@/database';
 import { SQLiteDatabase } from 'expo-sqlite/next';
-import { supabase } from '@/database/supabase/index';
+import { supabase } from '@/services';
 const oldTimestamp = '2021-01-01T00:00:00.000Z';
 
 export const syncDelete = async (lastSynced?: string): Promise<void> => {

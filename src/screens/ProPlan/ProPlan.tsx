@@ -6,7 +6,7 @@ import PrimaryButton from '@/components/buttons/PrimaryButton';
 import Icon from '@/components/Icon';
 import { useNavigation } from '@react-navigation/native';
 import LabelButton from '@/components/buttons/LabelButton';
-import { handleProPlanPurchase } from '@/utils/purchaseUtils';
+import { handleProPlanPurchase } from '@/services/purchase';
 import { Routes } from '@/navigation/Routes';
 
 const PurchaseScreen = () => {

@@ -1,4 +1,4 @@
-import { supabase } from '@/database/supabase';
+import { supabase } from '@/services';
 import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { setSession, useBoundStore } from '@/store';

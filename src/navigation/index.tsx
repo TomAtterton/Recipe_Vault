@@ -11,7 +11,6 @@ import Login from '@/screens/Login';
 import Splashscreen from '@/screens/Splashscreen';
 import Search from '@/screens/Search';
 import Profile from '@/screens/Profile';
-import useHandleSession from '@/database/api/auth/hooks/useHandleSession';
 import AddGroceries from '@/screens/AddGroceries';
 import ScanImageContent from '@/screens/ScanImageContent';
 import DatabaseSettings from '@/screens/Settings/pages/DatabaseSettings';
@@ -23,6 +22,7 @@ import Help from '@/screens/Help';
 import DatabaseEditor from '@/screens/Settings/pages/DatabaseSettings/DatabaseEditor';
 import AdvanceSyncSettings from '@/screens/Settings/pages/AdvanceSyncSettings';
 import ProPlan from '@/screens/ProPlan';
+import useHandleSession from '@/services/auth/hooks/useHandleSession';
 
 const Stack = createNativeStackNavigator();
 

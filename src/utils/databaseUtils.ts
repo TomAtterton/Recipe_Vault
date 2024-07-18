@@ -1,6 +1,6 @@
 import { setCurrentDatabaseName, setShouldSync } from '@/store';
 import { openDatabase } from '@/database';
-import { syncWithSupabase } from '@/database/supabase/syncUtils';
+import { syncWithSupabase } from '@/services/sync';
 
 export const setupDatabase = async ({ databaseName }: { databaseName: string }) => {
   try {

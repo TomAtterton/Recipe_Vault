@@ -1,4 +1,4 @@
-import { supabase } from '@/database/supabase';
+import { supabase } from '@/services';
 import { randomUUID } from 'expo-crypto';
 
 export const createGroup = async ({ name, userId }: { name: string; userId?: string }) => {

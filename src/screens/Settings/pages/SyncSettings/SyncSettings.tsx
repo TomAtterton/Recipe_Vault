@@ -10,12 +10,11 @@ import NavBarButton from '@/components/buttons/NavBarButton';
 import { useNavigation } from '@react-navigation/native';
 import { stylesheet } from './syncSettings.style';
 import OutlineButton from '@/components/buttons/OutlineButton';
-import { onSignOut } from '@/database/api/auth';
 import { showMessage } from 'react-native-flash-message';
 import { Routes } from '@/navigation/Routes';
 import { database, openDatabase } from '@/database';
 import { Env } from '@/core/env';
-import { supabase } from '@/database/supabase';
+import { onDeleteUser, onSignOut } from '@/services/auth';
 
 const SyncSettings = () => {
   const { styles } = useStyles(stylesheet);
@@ -60,8 +59,7 @@ const SyncSettings = () => {
         onPress: async () => {
           try {
             setIsLoading(true);
-
-            const { error } = await supabase.functions.invoke('delete-user');
+            const { error } = await onDeleteUser();
 
             if (error) {
               throw new Error('Contact customer support there was an issue deleting you account');

@@ -1,9 +1,9 @@
-import { supabase } from '@/database/supabase/index';
+import { supabase } from '@/services';
 import { database } from '@/database';
 import { SQLiteDatabase } from 'expo-sqlite/next';
 import { useBoundStore } from '@/store';
 import { showErrorMessage } from '@/utils/errorUtils';
-import { syncDelete } from '@/database/supabase/syncDelete';
+import { syncDelete } from '@/services/sync/syncDelete';
 
 export const TABLE_NAMES = [
   'profile',
@@ -125,7 +125,6 @@ const fetchChanges = async (
         .gte('updated_at', last_updated_at)
         .eq('profile_id', profileId);
       return profileGroups.data as any[];
-    //
     case 'categories':
     case 'tags':
     case 'mealplans':

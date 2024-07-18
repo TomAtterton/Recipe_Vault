@@ -2,7 +2,7 @@ import { Cloudinary } from '@cloudinary/url-gen';
 import { Env } from '@/core/env';
 import { upload, UploadApiOptions } from 'cloudinary-react-native';
 import { useBoundStore } from '@/store';
-import { supabase } from '@/database/supabase';
+import { supabase } from '@/services';
 
 export const uploadImage = async (
   filePath: string,
@@ -51,8 +51,8 @@ export const uploadImage = async (
     upload(cld, {
       file: filePath,
       options: options,
-      callback: (error, response) => {
-        if (error || !response) {
+      callback: (callBackError, response) => {
+        if (callBackError || !response) {
           reject('Error uploading file');
         } else {
           resolve(response.secure_url);
