@@ -1,11 +1,18 @@
-import * as Calendar from 'expo-calendar';
-import { Reminder } from 'expo-calendar';
+import {
+  EntityTypes,
+  getCalendarsAsync,
+  Reminder,
+  requestRemindersPermissionsAsync,
+  getRemindersAsync,
+  updateReminderAsync,
+  createReminderAsync,
+} from 'expo-calendar';
 import { useBoundStore } from '@/store';
 import { Alert } from 'react-native';
 
 export const requestReminderPermission = async () => {
   try {
-    const { status, canAskAgain } = await Calendar.requestRemindersPermissionsAsync();
+    const { status, canAskAgain } = await requestRemindersPermissionsAsync();
 
     if (status === 'denied' && !canAskAgain) {
       Alert.alert('Permission Denied', 'You need to enable reminder permissions in settings');
@@ -19,15 +26,13 @@ export const requestReminderPermission = async () => {
 
 export const getAllReminders = async () => {
   try {
-    const hasPermission = requestReminderPermission();
+    const hasPermission = await requestReminderPermission();
 
-    if (!hasPermission) {
-      return;
-    }
-    const response = await Calendar.getCalendarsAsync(Calendar.EntityTypes.REMINDER);
-    return response;
+    if (!hasPermission) return;
+
+    return getCalendarsAsync(EntityTypes.REMINDER);
   } catch (error) {
-    console.log('ERROR', error);
+    throw error;
   }
 };
 
@@ -39,7 +44,7 @@ export const getReminders = async () => {
       throw new Error('No calendar id provided');
     }
     // @ts-ignore
-    const reminders = await Calendar.getRemindersAsync([id]);
+    const reminders = await getRemindersAsync([id]);
     return reminders.filter((reminder) => reminder.completed === false);
   } catch (error) {
     // @ts-ignore
@@ -54,7 +59,7 @@ export const getReminders = async () => {
 export const updateReminder = async (details: Reminder, shouldComplete?: boolean) => {
   try {
     if (details?.id) {
-      await Calendar.updateReminderAsync(details.id, {
+      await updateReminderAsync(details.id, {
         calendarId: details.calendarId,
         id: details.id,
         completed: shouldComplete,
@@ -73,7 +78,7 @@ export const createReminder = async (details: Reminder) => {
   try {
     const calendarId = useBoundStore.getState().groceryId;
     if (calendarId) {
-      await Calendar.createReminderAsync(calendarId, details);
+      await createReminderAsync(calendarId, details);
     } else {
       throw new Error('No calendar id provided');
     }
@@ -85,13 +90,10 @@ export const createReminder = async (details: Reminder) => {
 export const createMultipleReminders = async (details: Reminder[]) => {
   try {
     const calendarId = useBoundStore.getState().groceryId;
-    if (calendarId) {
-      for (let i = 0; i < details.length; i++) {
-        await Calendar.createReminderAsync(calendarId, details[i]);
-      }
-    } else {
+    if (!calendarId) {
       throw new Error('No calendar id provided');
     }
+    await Promise.all(details.map((detail) => createReminderAsync(calendarId, detail)));
   } catch (error) {
     throw error;
   }

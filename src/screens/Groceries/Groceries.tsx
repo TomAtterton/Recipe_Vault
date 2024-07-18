@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { FlatList, View } from 'react-native';
 import useGroceryList from './useGroceryList';
 import { Reminder } from 'expo-calendar';
@@ -22,6 +22,7 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import OutlineButton from '@/components/buttons/OutlineButton';
 import Shimmer from '@/components/Shimmer';
 import metrics from '@/theme/metrics';
+import { requestReminderPermission } from '@/utils/reminderUtils';
 
 const keyExtractor = (item: Reminder, index: number) => `${item?.id}` + index;
 
@@ -55,6 +56,10 @@ const Groceries = () => {
 
   const [shouldFocus, setShouldFocus] = React.useState(false);
   const [groceryValue, setGroceryValue] = React.useState<Reminder | null>(null);
+
+  useEffect(() => {
+    requestReminderPermission();
+  }, []);
 
   const handleEdit = useCallback((item: Reminder) => {
     setShouldFocus(true);
