@@ -1,5 +1,5 @@
 import { useBoundStore } from '@/store';
-import { uploadImage } from '@/utils/cloudinaryUtil';
+import { uploadImage } from '@/services/image';
 
 const onImageUpload = async (uri?: string | null, previousUri?: string | null) => {
   try {

@@ -1,17 +1,14 @@
-import * as AppleAuthentication from 'expo-apple-authentication';
-
 import { translate } from '@/core';
-import { supabase } from '@/database/supabase';
-import { Env } from '@/core/env';
 import { Session, User } from '@supabase/supabase-js';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
 import { setCurrentDatabaseName, setShouldSync, updateProfile } from '@/store';
 import { showErrorMessage } from '@/utils/promptUtils';
 import { openDatabase } from '@/database';
-import { syncWithSupabase } from '@/database/supabase/syncUtils';
+import { syncWithSupabase } from '@/services/sync';
 import { useState } from 'react';
-import { getProfileGroup } from '@/database/supabase/getProfileGroup';
+import { profileGroup } from '@/services/profileGroup';
+import { onAppleAuthSignIn, onTestSignIn } from '@/services/auth';
 
 const useHandleAuth = () => {
   const { reset } = useNavigation();
@@ -20,7 +17,7 @@ const useHandleAuth = () => {
     try {
       setIsLoading(true);
 
-      const { groupId, groupName } = await getProfileGroup({
+      const { groupId, groupName } = await profileGroup({
         userId: data.user?.id,
       });
 
@@ -63,28 +60,13 @@ const useHandleAuth = () => {
 
   const onAppleLogin = async () => {
     try {
-      const credential = await AppleAuthentication.signInAsync({
-        requestedScopes: [
-          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-          AppleAuthentication.AppleAuthenticationScope.EMAIL,
-        ],
-      });
-      if (credential.identityToken) {
-        const { error, data } = await supabase.auth.signInWithIdToken({
-          provider: 'apple',
-          token: credential.identityToken,
-        });
+      const { data, error } = await onAppleAuthSignIn();
 
-        if (data) {
-          await handleUpdateProfile(data);
-        }
-
-        if (error) {
-          throw error;
-        }
-      } else {
-        throw new Error(translate('error_messages.no_identity_token'));
+      if (error) {
+        throw error;
       }
+
+      await handleUpdateProfile(data);
     } catch (e) {
       // @ts-ignore
       if (e?.code === 'ERR_REQUEST_CANCELED') {
@@ -99,12 +81,7 @@ const useHandleAuth = () => {
 
   const onTestLogin = async () => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        // @ts-ignore
-        email: Env.TEST_LOGIN_EMAIL,
-        // @ts-ignore
-        password: Env.TEST_LOGIN_PASSWORD,
-      });
+      const { error, data } = await onTestSignIn();
 
       if (error) {
         showErrorMessage(error?.message);

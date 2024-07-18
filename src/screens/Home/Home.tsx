@@ -14,7 +14,7 @@ import HomeAnimation from '@/screens/Home/homeAnimation';
 import CategorySelection from '@/components/RecipeForm/components/CategorySelection';
 import useDatabaseListener from '@/database/hooks/useDatabaseListener';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { checkIfPro } from '@/utils/proPurchaseUtils';
+import { checkIfPro } from '@/services/pro';
 
 const Home = () => {
   const {

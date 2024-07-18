@@ -12,7 +12,7 @@ import {
   Tag,
 } from '@/database/api/recipes/helpers/postRecipeHelper';
 import { database } from '@/database';
-import { checkCanAddRecipe } from '@/utils/proPurchaseUtils';
+import { checkCanAddRecipe } from '@/services/pro';
 
 // Extend or modify these as needed to match your exact schema and requirements
 interface RecipeDetails {

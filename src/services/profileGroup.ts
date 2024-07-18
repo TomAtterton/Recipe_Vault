@@ -1,8 +1,8 @@
-import { supabase } from '@/database/supabase/index';
+import { supabase } from '@/services/index';
 
-export const getProfileGroup = async ({ userId }: { userId?: string | null }) => {
+export const profileGroup = async ({ userId }: { userId?: string | null }) => {
   try {
-    const { data: profileData, error } = await supabase
+    const { data: profileData } = await supabase
       .from('profile_groups')
       .select('id, group_id, groups(name)')
       .eq('profile_id', userId || '');

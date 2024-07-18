@@ -1,7 +1,7 @@
-import { syncPush } from '@/database/supabase/syncPush';
-import { syncPull } from '@/database/supabase/syncPull';
+import { syncPush } from '@/services/sync/syncPush';
+import { syncPull } from '@/services/sync/syncPull';
 import { useBoundStore } from '@/store';
-import { syncDelete } from '@/database/supabase/syncDelete';
+import { syncDelete } from '@/services/sync/syncDelete';
 
 export const syncWithSupabase = async () => {
   try {

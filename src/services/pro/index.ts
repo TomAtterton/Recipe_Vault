@@ -1,4 +1,4 @@
-import { supabase } from '@/database/supabase';
+import { supabase } from '@/services';
 import { useBoundStore } from '@/store';
 import { getRecipeCount } from '@/database/api/recipes';
 

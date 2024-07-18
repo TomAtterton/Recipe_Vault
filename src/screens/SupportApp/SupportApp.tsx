@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { fetchProducts, PurchaseProduct } from '@/utils/purchaseUtils';
+import {
+  fetchProducts,
+  PurchaseCancelError,
+  purchaseProduct,
+  PurchaseProduct,
+} from '@/services/purchase';
 import { useStyles } from 'react-native-unistyles';
 import Typography from '@/components/Typography';
 import { Image } from 'expo-image';
-import Purchases from 'react-native-purchases';
 import { showErrorMessage } from '@/utils/errorUtils';
 import { stylesheet } from './supportApp.style';
 
@@ -22,11 +26,11 @@ const SupportApp = () => {
 
   const handlePurchase = async (option: PurchaseProduct) => {
     try {
-      await Purchases.purchaseStoreProduct(option.product);
+      await purchaseProduct(option.product);
       setPurchaseMade(true); // Set purchaseMade to true after a successful purchase
     } catch (error) {
       // @ts-ignore
-      if (error?.code !== Purchases.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
+      if (error?.code !== PurchaseCancelError) {
         // @ts-ignore
         showErrorMessage(error?.message || 'Something went wrong');
       }

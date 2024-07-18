@@ -1,9 +1,10 @@
-import Purchases from 'react-native-purchases';
+import Purchases, { PurchasesStoreProduct } from 'react-native-purchases';
 import { Env } from '@/core/env';
-import { PurchasesStoreProduct } from '@revenuecat/purchases-typescript-internal/dist/offerings';
 import { Alert } from 'react-native';
-import { supabase } from '@/database/supabase';
+import { supabase } from '@/services';
 import { useBoundStore } from '@/store';
+
+export const PurchaseCancelError = Purchases.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR;
 
 const supportAppDescription = {
   recipetier1tip: '☕ Fuel my caffeine addiction',
@@ -62,7 +63,7 @@ export const handleProPlanPurchase = async (onContactCustomerSupport: () => void
     return true;
   } catch (error) {
     // @ts-ignore
-    if (error?.code === Purchases.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR) {
+    if (error?.code === PurchaseCancelError) {
       throw new Error('Cancelled purchase');
     }
 
@@ -91,4 +92,8 @@ export const fetchProducts = async () => {
       product: product,
     };
   });
+};
+
+export const purchaseProduct = async (product: PurchasesStoreProduct) => {
+  return Purchases.purchaseStoreProduct(product);
 };

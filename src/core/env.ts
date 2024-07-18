@@ -2,11 +2,8 @@ export const Env = {
   BUNDLE_ID: 'com.tomatterton.recipeapp',
   PACKAGE: 'com.tomatterton.recipeapp',
   NAME: 'Recipe Vault',
-  SUPABASE_URL: 'https://cfzwkhnvjvfjfgazjlzh.supabase.co',
-  SUPABASE_KEY:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmendraG52anZmamZnYXpqbHpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTE5Mjc0MTAsImV4cCI6MjAwNzUwMzQxMH0.M14EPvilmyyS-lRT2KfYyBFwNd_aIljuuBcLZDwmK6c',
-  SUPABASE_STORAGE_URL:
-    'https://cfzwkhnvjvfjfgazjlzh.supabase.in/storage/v1/object/public/photos/recipes/',
+  SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL,
+  SUPABASE_KEY: process.env.EXPO_PUBLIC_SUPABASE_KEY,
   TEST_LOGIN_EMAIL: process.env.EXPO_PUBLIC_TEST_LOGIN_EMAIL,
   TEST_LOGIN_PASSWORD: process.env.EXPO_PUBLIC_TEST_LOGIN_PASSWORD,
   TEST_GROUP_ID: 'initial-group',

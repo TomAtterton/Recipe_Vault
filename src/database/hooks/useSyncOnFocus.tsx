@@ -1,6 +1,6 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
-import { syncWithSupabase } from '@/database/supabase/syncUtils';
+import { syncWithSupabase } from '@/services/sync';
 import { useBoundStore } from '@/store';
 
 const useSyncOnFocus = () => {

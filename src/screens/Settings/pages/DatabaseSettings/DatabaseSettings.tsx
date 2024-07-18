@@ -18,8 +18,8 @@ import { setCurrentDatabaseName, setResetDatabase, updateProfile, useBoundStore 
 import { Env } from '@/core/env';
 import { showMessage } from 'react-native-flash-message';
 import LabelButton from '@/components/buttons/LabelButton';
-import { getProfileGroup } from '@/database/supabase/getProfileGroup';
-import { syncWithSupabase } from '@/database/supabase/syncUtils';
+import { profileGroup } from '@/services/profileGroup';
+import { syncWithSupabase } from '@/services/sync';
 
 const DatabaseSettings = () => {
   const { styles } = useStyles(stylesheet);
@@ -125,13 +125,13 @@ const DatabaseSettings = () => {
                 });
               }
             } else {
-              const { groupId, groupName } = await getProfileGroup({
+              const { groupId, groupName: profileGroupName } = await profileGroup({
                 userId,
               });
-              if (groupId && groupName) {
+              if (groupId && profileGroupName) {
                 updateProfile({
                   groupId,
-                  groupName,
+                  groupName: profileGroupName,
                 });
                 setSyncEnabled(true);
                 const currentDatabaseName = `${groupName}.db`;

@@ -1,6 +1,6 @@
 import { database } from '@/database';
 import { SQLiteDatabase } from 'expo-sqlite/next';
-import { supabase } from '@/database/supabase/index';
+import { supabase } from '@/services';
 
 export const TABLE_NAMES = [
   'profile',
@@ -74,13 +74,10 @@ const handleDeleteRemoteTable = async (records: any[]) => {
       };
 
       // Then we delete the record from the remote database table
-      const {
-        error: deleteTableError,
-        status,
-        statusText,
-        count,
-        data,
-      } = await supabase.from(record.table_name).delete().eq(key(), deletedRecordId);
+      const { error: deleteTableError } = await supabase
+        .from(record.table_name)
+        .delete()
+        .eq(key(), deletedRecordId);
 
       if (deleteTableError || deleteRecordError) {
         throw deleteTableError || deleteRecordError;
