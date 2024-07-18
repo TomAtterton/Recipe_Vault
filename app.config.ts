@@ -39,8 +39,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     './plugins/withPodfile',
-    'expo-secure-store',
-    ['expo-config-plugin-ios-share-extension'],
+    'expo-config-plugin-ios-share-extension',
+    [
+      'expo-secure-store',
+      {
+        faceIDPermission: false,
+      },
+    ],
     'expo-apple-authentication',
     [
       '@sentry/react-native/expo',
@@ -83,14 +88,26 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       'expo-image-picker',
       {
-        photosPermission: 'Used to upload your tasty recipes',
-        cameraPermission: 'Used to upload your tasty recipes',
+        photosPermission:
+          '$(PRODUCT_NAME) needs access to photos to upload images of your tasty recipes',
+        cameraPermission:
+          '$(PRODUCT_NAME) needs access to camera to upload images of your tasty recipes',
+        microphonePermission: false,
+      },
+    ],
+    [
+      'expo-av',
+      {
+        microphonePermission: false,
       },
     ],
     [
       'expo-calendar',
       {
-        remindersPermission: 'The app needs to access your reminders.',
+        remindersPermission:
+          '$(PRODUCT_NAME) needs access to your reminders to add to shopping list',
+        calendarPermission:
+          '$(PRODUCT_NAME) doesnt need access to your calendar please ignore if prompted',
       },
     ],
   ],

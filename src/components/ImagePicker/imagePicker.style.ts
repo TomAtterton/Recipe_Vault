@@ -35,7 +35,6 @@ export const stylesheet = createStyleSheet((theme) => ({
   },
   image: {
     borderRadius: 8,
-    resizeMode: 'contain',
     width: '100%',
     height: '100%',
   },

@@ -8,10 +8,10 @@ import {
   onPickImageFromLibrary,
 } from '@/utils/imageUtils';
 import { MenuView } from '@react-native-menu/menu';
-import { Image } from 'expo-image';
 import { useStyles } from 'react-native-unistyles';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import Icon from '@/components/Icon';
+import Image from '@/components/Image';
 
 interface Props {
   imageUri?: string | null | number;
