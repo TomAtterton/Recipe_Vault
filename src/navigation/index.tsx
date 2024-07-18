@@ -35,7 +35,7 @@ export const RootNavigator = () => {
   useHandleSession();
 
   return (
-    <Stack.Navigator screenOptions={defaultOptions}>
+    <Stack.Navigator initialRouteName={Routes.Splashscreen} screenOptions={defaultOptions}>
       <Stack.Screen name={Routes.Splashscreen} component={Splashscreen} options={defaultOptions} />
       <Stack.Screen name={Routes.Onboarding} component={Onboarding} options={defaultOptions} />
       <Stack.Screen name={Routes.Login} component={Login} options={defaultOptions} />
