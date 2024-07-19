@@ -4,8 +4,7 @@ import * as React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import { useNavigation } from '@react-navigation/native';
-import { useStyles } from 'react-native-unistyles';
-import { stylesheet } from '@/screens/Settings/settings.style';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import SettingsButton from '@/components/buttons/SettingsButton';
 import { openURL } from 'expo-linking';
 import { Routes } from '@/navigation/Routes';
@@ -23,14 +22,7 @@ const Help = () => {
       }}
     >
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
-      <View
-        style={{
-          flex: 1,
-          paddingHorizontal: 20,
-          paddingTop: top + 32,
-          gap: 20,
-        }}
-      >
+      <View style={styles.container}>
         <Typography variant={'titleItalicLarge'}>Help.</Typography>
         <SettingsButton
           title={'Privacy'}
@@ -46,12 +38,26 @@ const Help = () => {
         />
         <SettingsButton
           title={'Contact Us'}
-          onPress={() => openURL('mailto:tpatterton@gmail.com')}
+          onPress={() => openURL('mailto:hello@tomatterton.com')}
           iconSource={'paper-plane'}
         />
       </View>
     </View>
   );
 };
+
+const stylesheet = createStyleSheet((theme, miniRuntime) => ({
+  container: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: miniRuntime.insets.top + 32,
+    gap: 20,
+  },
+  backButton: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+}));
 
 export default Help;
