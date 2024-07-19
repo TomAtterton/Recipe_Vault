@@ -39,7 +39,7 @@ export const initPurchases = async () => {
 
 export const handleProPlanPurchase = async (onContactCustomerSupport: () => void) => {
   try {
-    const products = await Purchases.getProducts(['recipetier4tip']);
+    const products = await Purchases.getProducts(['recipevaultpropuchase']);
     const product = products[0];
     if (!product) {
       throw new Error('Product not found');

@@ -12,7 +12,7 @@ import {
   Tag,
 } from '@/database/api/recipes/helpers/postRecipeHelper';
 import { database } from '@/database';
-import { checkCanAddRecipe } from '@/services/pro';
+import useHandlePaywall from '@/hooks/common/useHandlePaywall';
 
 // Extend or modify these as needed to match your exact schema and requirements
 interface RecipeDetails {
@@ -74,20 +74,15 @@ export type RecipeDetailType = {
 const usePostUpdateRecipes = () => {
   const [isLoading, setIsLoading] = useState(false);
 
+  const { onCanAddRecipe } = useHandlePaywall();
+
   const onSubmit = async (
     values: Partial<RecipeDetailType>,
     id?: string | null,
     previousValues?: Partial<RecipeDetailType>
   ) => {
     try {
-      const isSyncEnabled = useBoundStore.getState().shouldSync;
-      if (isSyncEnabled) {
-        const canAddRecipe = await checkCanAddRecipe();
-
-        if (!canAddRecipe) {
-          throw new Error('Cloud sync is enabled and you have reached the maximum recipe limit.');
-        }
-      }
+      await onCanAddRecipe();
 
       setIsLoading(true);
       const imageUrl = await onImageUpload(values?.image, previousValues?.image);
@@ -181,7 +176,7 @@ async function updateRecipeAndRelatedTables({
       }
     });
   } catch (error) {
-    throw error; // Rethrow the error for further handling
+    throw error;
   }
 }
 

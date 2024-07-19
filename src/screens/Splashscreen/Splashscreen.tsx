@@ -14,6 +14,7 @@ import { Routes } from '@/navigation/Routes';
 import { ImageBackground } from 'expo-image';
 import { showErrorMessage } from '@/utils/errorUtils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import images from '@/theme/images';
 
 const Splashscreen = () => {
   const hasHydrated = useHydration();
@@ -57,7 +58,7 @@ const Splashscreen = () => {
     <View style={styles.container}>
       <ImageBackground
         style={styles.imageBackground}
-        source={require('../../../assets/splash.png')}
+        source={images.SPLASH_IMAGE}
         contentFit={'cover'}
       >
         <View

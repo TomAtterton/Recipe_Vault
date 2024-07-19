@@ -68,11 +68,7 @@ const Settings = () => {
             iconSource={'ufo-flying'}
           />
           <SettingsButton title={'Review App'} onPress={requestReview} iconSource={'appstore'} />
-          <BottomSheet
-            bottomSheetRef={bottomSheetRef}
-            snapPoints={['50%']}
-            title={'Help the app development!'}
-          >
+          <BottomSheet bottomSheetRef={bottomSheetRef} snapPoints={['50%']}>
             <SupportApp />
           </BottomSheet>
         </View>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import {
   fetchProducts,
   PurchaseCancelError,
@@ -11,42 +11,44 @@ import Typography from '@/components/Typography';
 import { Image } from 'expo-image';
 import { showErrorMessage } from '@/utils/errorUtils';
 import { stylesheet } from './supportApp.style';
+import images from '@/theme/images';
 
 const SupportApp = () => {
   const { styles } = useStyles(stylesheet);
   const [products, setProducts] = useState<PurchaseProduct[]>([]);
-  const [purchaseMade, setPurchaseMade] = useState(false); // New state to track if a purchase has been made
+  const [hasMadePurchase, setHasMadePurchase] = useState(false); // New state to track if a purchase has been made
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchProducts().then((purchaseProducts) => {
       setProducts(purchaseProducts || []);
     });
-    setPurchaseMade(false);
+    setHasMadePurchase(false);
   }, []);
 
   const handlePurchase = async (option: PurchaseProduct) => {
     try {
+      setIsLoading(true);
       await purchaseProduct(option.product);
-      setPurchaseMade(true); // Set purchaseMade to true after a successful purchase
+      setHasMadePurchase(true); // Set purchaseMade to true after a successful purchase
     } catch (error) {
       // @ts-ignore
       if (error?.code !== PurchaseCancelError) {
         // @ts-ignore
         showErrorMessage(error?.message || 'Something went wrong');
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const renderContent = () => {
-    if (purchaseMade) {
-      return (
-        <View>
-          <Typography variant={'titleLarge'} style={styles.thankYouText}>
-            Thank you for your support!
-          </Typography>
-          <Image style={styles.thankYouGif} source={require('../../../assets/gif/thankyou.gif')} />
-        </View>
-      );
+    if (isLoading) {
+      return <ActivityIndicator />;
+    }
+
+    if (hasMadePurchase) {
+      return <Image style={styles.thankYouGif} source={{ uri: images.THANK_YOU_GIF_URL }} />;
     } else if (products.length > 0) {
       return products.map((option) => (
         <TouchableOpacity
@@ -61,7 +63,6 @@ const SupportApp = () => {
         </TouchableOpacity>
       ));
     } else {
-      // Empty state
       return (
         <View>
           <Typography variant={'titleLarge'} style={styles.thankYouText}>
@@ -72,7 +73,14 @@ const SupportApp = () => {
     }
   };
 
-  return <View style={styles.container}>{renderContent()}</View>;
+  return (
+    <View style={styles.container}>
+      <Typography variant={'titleMedium'} style={styles.title}>
+        {hasMadePurchase ? 'Thank you for your support!' : 'Support the app'}
+      </Typography>
+      {renderContent()}
+    </View>
+  );
 };
 
 export default SupportApp;

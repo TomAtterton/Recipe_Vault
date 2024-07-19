@@ -40,7 +40,7 @@ const onboardingData: {
   {
     icon: 'paper-plane',
     title:
-      'Share your recipes and meal plans with up to 3 friends using our syncing feature and shared cloud vault.\n\nLimited to 5 recipes; upgrade to a pro vault to unlock unlimited storage!\n',
+      'Share your recipes and meal plans with up to 2 friends using our syncing feature and shared cloud vault.\n\nLimited to 5 recipes; upgrade to a pro vault to unlock unlimited storage!\n',
   },
 ];
 

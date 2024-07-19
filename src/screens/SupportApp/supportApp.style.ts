@@ -7,7 +7,11 @@ export const stylesheet = createStyleSheet(() => ({
     gap: 8,
     justifyContent: 'center',
   },
-
+  title: {
+    position: 'absolute',
+    top: 8,
+    alignSelf: 'center',
+  },
   button: {
     flexDirection: 'row',
     justifyContent: 'space-between',
