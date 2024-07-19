@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 
 import * as SplashScreen from 'expo-splash-screen';
-import React, { useRef } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -33,17 +33,11 @@ const App = () => {
   const isDarkMode = useBoundStore((state) => state.darkMode);
   useInitialTheme(isDarkMode ? 'dark' : 'light');
 
-  const navigation = useRef();
-
   return (
     <GestureHandlerRootView style={styles.container}>
       <SafeAreaProvider>
         <BottomSheetModalProvider>
-          <NavigationContainer
-            // @ts-ignore
-            ref={navigation}
-            theme={isDarkMode ? darkNavigationTheme : lightNavigationTheme}
-          >
+          <NavigationContainer theme={isDarkMode ? darkNavigationTheme : lightNavigationTheme}>
             <UpdateProvider>
               <RootNavigator />
             </UpdateProvider>
