@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { View, SafeAreaView } from 'react-native';
 import Typography from '@/components/Typography';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -8,29 +8,34 @@ import { useNavigation } from '@react-navigation/native';
 import LabelButton from '@/components/buttons/LabelButton';
 import { handleProPlanPurchase } from '@/services/purchase';
 import { Routes } from '@/navigation/Routes';
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 const PurchaseScreen = () => {
   const { navigate, goBack } = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const confettiRef = useRef<ConfettiCannon>(null);
+
+  const onContactCustomerSupport = () => {
+    goBack();
+    navigate(Routes.Help);
+  };
 
   const handlePurchase = async () => {
-    const onContactCustomerSupport = () => {
-      goBack();
-      navigate(Routes.Help);
-    };
-    await handleProPlanPurchase(onContactCustomerSupport);
+    try {
+      setIsLoading(true);
+      await handleProPlanPurchase(onContactCustomerSupport);
+      confettiRef.current?.start();
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const { styles, theme } = useStyles(stylesheet);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Icon
-        style={{
-          alignSelf: 'center',
-        }}
-        name={'cloud'}
-        size={80}
-        color={theme.colors.onBackground}
-      />
+      <Icon style={styles.icon} name={'cloud'} size={80} color={theme.colors.onBackground} />
       <Typography variant={'displaySmall'} style={styles.title}>
         Cloud Vault Pro
       </Typography>
@@ -47,7 +52,7 @@ const PurchaseScreen = () => {
         <View style={styles.itemContainer}>
           <Icon name={'people'} size={32} color={theme.colors.onBackground} />
           <Typography variant={'bodyMediumItalic'} style={styles.itemText}>
-            Share your pro vault with up to 3 friends and family.
+            Share your pro vault with up to 2 friends and family.
           </Typography>
         </View>
         <View style={styles.itemContainer}>
@@ -58,9 +63,20 @@ const PurchaseScreen = () => {
         </View>
       </View>
       <View style={styles.footerContainer}>
-        <PrimaryButton title={'Upgrade to Pro'} onPress={handlePurchase} />
+        <PrimaryButton title={'Upgrade to Pro'} onPress={handlePurchase} isLoading={isLoading} />
         <LabelButton title={'Continue with free version'} onPress={goBack} />
       </View>
+      <ConfettiCannon
+        ref={confettiRef}
+        count={100}
+        origin={{ x: -50, y: 10 }}
+        fadeOut={true}
+        autoStart={false}
+        onAnimationEnd={() => {
+          confettiRef.current?.stop();
+          goBack();
+        }}
+      />
     </SafeAreaView>
   );
 };
@@ -69,6 +85,10 @@ const stylesheet = createStyleSheet((theme) => ({
   container: {
     flex: 1,
     marginHorizontal: 20,
+  },
+  icon: {
+    alignSelf: 'center',
+    marginTop: 32,
   },
   title: {
     marginBottom: 16,

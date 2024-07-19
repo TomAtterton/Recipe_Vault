@@ -8676,6 +8676,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-asset@npm:^10.0.10, expo-asset@npm:~10.0.10":
+  version: 10.0.10
+  resolution: "expo-asset@npm:10.0.10"
+  dependencies:
+    expo-constants: ~16.0.0
+    invariant: ^2.2.4
+    md5-file: ^3.2.3
+  peerDependencies:
+    expo: "*"
+  checksum: abf6afee29db1df356008b2260ecfd37eafdeeda989deeaf546d6c6857f82f71efe6d2f6e348d5bf0f077325f9ce2c8dad006ad5d8d2df35cdd9bf3dc15e714a
+  languageName: node
+  linkType: hard
+
 "expo-asset@npm:^8.10.1":
   version: 8.14.0
   resolution: "expo-asset@npm:8.14.0"
@@ -8687,19 +8700,6 @@ __metadata:
     invariant: ^2.2.4
     md5-file: ^3.2.3
   checksum: f4986fb8dc29b0ba40ae41fb9f39a8fea98b54251ecc7cf449065c21bdc6286874ebed49f4f33681251f18712d3ab59042fc2ee2ccad7b61c6fa1b15d7ade986
-  languageName: node
-  linkType: hard
-
-"expo-asset@npm:~10.0.10":
-  version: 10.0.10
-  resolution: "expo-asset@npm:10.0.10"
-  dependencies:
-    expo-constants: ~16.0.0
-    invariant: ^2.2.4
-    md5-file: ^3.2.3
-  peerDependencies:
-    expo: "*"
-  checksum: abf6afee29db1df356008b2260ecfd37eafdeeda989deeaf546d6c6857f82f71efe6d2f6e348d5bf0f077325f9ce2c8dad006ad5d8d2df35cdd9bf3dc15e714a
   languageName: node
   linkType: hard
 
@@ -16186,6 +16186,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-confetti-cannon@npm:^1.5.2":
+  version: 1.5.2
+  resolution: "react-native-confetti-cannon@npm:1.5.2"
+  checksum: 09026fd93304c0f3c3acfcf8dfc9b25003b30826031dffd81df6eea3b66dcee84f6ac4237719a84d3d71cb430f4fbf53d4c22b64ef17d439d5a3e5986c2ada83
+  languageName: node
+  linkType: hard
+
 "react-native-draggable-flatlist@npm:^4.0.1":
   version: 4.0.1
   resolution: "react-native-draggable-flatlist@npm:4.0.1"
@@ -16858,6 +16865,7 @@ __metadata:
     eslint-plugin-unused-imports: ^2.0.0
     expo: ^51.0.21
     expo-apple-authentication: ^6.4.1
+    expo-asset: ^10.0.10
     expo-av: ^14.0.6
     expo-blur: ^13.0.2
     expo-build-properties: ~0.12.3
@@ -16907,6 +16915,7 @@ __metadata:
     react-i18next: ^15.0.0
     react-native: 0.74.3
     react-native-collapsible-tab-view: ^8.0.0
+    react-native-confetti-cannon: ^1.5.2
     react-native-draggable-flatlist: ^4.0.1
     react-native-fast-collapsible: ^1.1.1
     react-native-fetch-api: ^3.0.0

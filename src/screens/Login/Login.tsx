@@ -1,7 +1,7 @@
 import React from 'react';
 import * as AppleAuthentication from 'expo-apple-authentication';
 
-import { SafeAreaView, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView, View } from 'react-native';
 import useHandleAuth from './useHandleAuth';
 import { translate } from '@/core';
 import LabelButton from '@/components/buttons/LabelButton';
@@ -15,7 +15,7 @@ import NavBarButton from '@/components/buttons/NavBarButton';
 import type { RouteProp } from '@/navigation/types';
 
 const Login = () => {
-  const { onAppleLogin, onTestLogin } = useHandleAuth();
+  const { onAppleLogin, onTestLogin, isLoading } = useHandleAuth();
   const { styles, theme } = useStyles(stylesheet);
   const { navigate, goBack } = useNavigation();
 
@@ -52,6 +52,11 @@ const Login = () => {
       </View>
       {!showSkip && (
         <NavBarButton iconSource={'arrow-left'} style={styles.backButton} onPress={goBack} />
+      )}
+      {isLoading && (
+        <View style={styles.loadingView}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        </View>
       )}
     </SafeAreaView>
   );

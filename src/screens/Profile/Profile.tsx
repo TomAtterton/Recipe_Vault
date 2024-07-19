@@ -16,43 +16,44 @@ import { createGroup, createProfileGroup } from 'src/services/group';
 import { getProfileGroupByGroupId } from '@/services/profileGroup';
 import { setupDatabase } from '@/utils/databaseUtils';
 import LabelButton from '@/components/buttons/LabelButton';
+import { onSignOut } from '@/services/auth';
 
 enum ProfileState {
   INITIAL = 'initial',
-  SHARED = 'shared',
+  CREATE = 'create',
   JOIN = 'join',
 }
 
 const IconSource = {
   [ProfileState.INITIAL]: 'cloud',
-  [ProfileState.SHARED]: 'cloud',
+  [ProfileState.CREATE]: 'cloud',
   [ProfileState.JOIN]: 'share',
 };
 
 const Title = {
   [ProfileState.INITIAL]: 'Welcome to Your Recipe Vault!',
-  [ProfileState.SHARED]: 'Create Your Cloud Vault',
+  [ProfileState.CREATE]: 'Create Your Cloud Vault',
   [ProfileState.JOIN]: 'Join Cloud Vault',
 };
 
 const Description = {
   [ProfileState.INITIAL]:
     'Start by creating a cloud vault to sync your recipes with friends and family, or join an existing one to discover and contribute. Let’s get cooking!',
-  [ProfileState.SHARED]:
+  [ProfileState.CREATE]:
     'Give your cloud vault a name. This is how it will appear to others when they join. Choose a name that’s easy to remember and reflects the essence of your culinary collection.',
   [ProfileState.JOIN]:
-    'Have a vault code? Enter it here to join a cloud vault and explore a world of recipes with friends and family. If you don’t have one, consider creating your own vault!',
+    'Have a vault code? Enter it here to join a cloud vault and explore a world of recipes with up to two friends or family. If you don’t have one, consider creating your own vault!',
 };
 
 const Placeholder = {
   [ProfileState.INITIAL]: '',
-  [ProfileState.SHARED]: 'Name Your Vault',
+  [ProfileState.CREATE]: 'Name Your Vault',
   [ProfileState.JOIN]: 'Enter Vault Code',
 };
 
 const MaxLength = {
   [ProfileState.INITIAL]: 0,
-  [ProfileState.SHARED]: 10,
+  [ProfileState.CREATE]: 10,
   [ProfileState.JOIN]: 40,
 };
 
@@ -68,7 +69,7 @@ const Profile = () => {
     try {
       setIsLoading(true);
 
-      if (currentState === ProfileState.SHARED) {
+      if (currentState === ProfileState.CREATE) {
         // if text contains anything other than letters setErrorMessage
         if (text.match(/[^a-zA-Z]/)) {
           setErrorMessages(
@@ -137,7 +138,7 @@ const Profile = () => {
   const isInitial = currentState === ProfileState.INITIAL;
 
   const handleSharedVault = () => {
-    setCurrentState(ProfileState.SHARED);
+    setCurrentState(ProfileState.CREATE);
   };
 
   const handleJoinVault = () => {
@@ -146,6 +147,13 @@ const Profile = () => {
   const handleTextChange = (newText: string) => {
     if (errorMessages) setErrorMessages(''); // Clear error messages if any exist
     setText(newText);
+  };
+  const handleLogout = () => {
+    onSignOut();
+    reset({
+      index: 0,
+      routes: [{ name: Routes.TabStack }],
+    });
   };
 
   useKeyboardForm();
@@ -191,7 +199,7 @@ const Profile = () => {
             onPress={handleJoinVault}
           />
         )}
-        {!isInitial && (
+        {!isInitial ? (
           <>
             <PrimaryButton
               isLoading={isLoading}
@@ -202,6 +210,8 @@ const Profile = () => {
             />
             <LabelButton title={'Cancel'} onPress={() => setCurrentState(ProfileState.INITIAL)} />
           </>
+        ) : (
+          <LabelButton title={'logout'} onPress={handleLogout} />
         )}
       </View>
     </SafeAreaView>

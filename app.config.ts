@@ -41,7 +41,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       'expo-asset',
       {
-        assets: ['./assets/icon.png', './assets/splash.png', './assets/gif/thankyou.gif'],
+        assets: ['./assets/icon.png', './assets/splash.png'],
       },
     ],
     './plugins/withPodfile',
