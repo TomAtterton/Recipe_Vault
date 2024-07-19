@@ -38,8 +38,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     package: 'com.tomatterton.recipeapp',
   },
   plugins: [
+    [
+      'expo-asset',
+      {
+        assets: ['./assets/icon.png', './assets/splash.png', './assets/gif/thankyou.gif'],
+      },
+    ],
     './plugins/withPodfile',
     'expo-config-plugin-ios-share-extension',
+
     [
       'expo-secure-store',
       {

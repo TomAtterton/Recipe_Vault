@@ -11,6 +11,7 @@ import Typography from '@/components/Typography';
 import { Image } from 'expo-image';
 import { showErrorMessage } from '@/utils/errorUtils';
 import { stylesheet } from './supportApp.style';
+import images from '@/theme/images';
 
 const SupportApp = () => {
   const { styles } = useStyles(stylesheet);
@@ -44,7 +45,7 @@ const SupportApp = () => {
           <Typography variant={'titleLarge'} style={styles.thankYouText}>
             Thank you for your support!
           </Typography>
-          <Image style={styles.thankYouGif} source={require('../../../assets/gif/thankyou.gif')} />
+          <Image style={styles.thankYouGif} source={images.THANK_YOU_GIF} />
         </View>
       );
     } else if (products.length > 0) {
