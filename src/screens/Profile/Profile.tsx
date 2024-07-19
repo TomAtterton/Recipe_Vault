@@ -17,6 +17,7 @@ import { getProfileGroupByGroupId } from '@/services/profileGroup';
 import { setupDatabase } from '@/utils/databaseUtils';
 import LabelButton from '@/components/buttons/LabelButton';
 import { onSignOut } from '@/services/auth';
+import { translate } from '@/core';
 
 enum ProfileState {
   INITIAL = 'initial',
@@ -208,7 +209,10 @@ const Profile = () => {
               disabled={isLoading || text.length === 0}
               onPress={handleUpdateProfile}
             />
-            <LabelButton title={'Cancel'} onPress={() => setCurrentState(ProfileState.INITIAL)} />
+            <LabelButton
+              title={translate('default.cancel')}
+              onPress={() => setCurrentState(ProfileState.INITIAL)}
+            />
           </>
         ) : (
           <LabelButton title={'logout'} onPress={handleLogout} />

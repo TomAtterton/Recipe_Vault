@@ -12,6 +12,7 @@ import { Image } from 'expo-image';
 import { showErrorMessage } from '@/utils/errorUtils';
 import { stylesheet } from './supportApp.style';
 import images from '@/theme/images';
+import { translate } from '@/core';
 
 const SupportApp = () => {
   const { styles } = useStyles(stylesheet);
@@ -35,7 +36,7 @@ const SupportApp = () => {
       // @ts-ignore
       if (error?.code !== PurchaseCancelError) {
         // @ts-ignore
-        showErrorMessage(error?.message || 'Something went wrong');
+        showErrorMessage(error?.message || translate('error.default.error_message'));
       }
     } finally {
       setIsLoading(false);
@@ -66,7 +67,7 @@ const SupportApp = () => {
       return (
         <View>
           <Typography variant={'titleLarge'} style={styles.thankYouText}>
-            Oops something went wrong!
+            {translate('error.default.error_message')}
           </Typography>
         </View>
       );

@@ -21,6 +21,7 @@ import LabelButton from '@/components/buttons/LabelButton';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import IconButton from '@/components/buttons/IconButton';
 import { useKeyboardForm } from '@/hooks/common/useKeyboardForm';
+import { translate } from '@/core';
 
 const ScanImageContainer = () => {
   const {
@@ -110,7 +111,7 @@ const ScanImageContainer = () => {
           onPress={handleSave}
           title={'Save'}
         />
-        <LabelButton onPress={navigation.goBack} title={'cancel'} />
+        <LabelButton onPress={navigation.goBack} title={translate('default.cancel')} />
       </View>
       <Animated.View
         style={[

@@ -3,6 +3,7 @@ import { Env } from '@/core/env';
 import { Alert } from 'react-native';
 import { supabase } from '@/services';
 import { useBoundStore } from '@/store';
+import { translate } from '@/core';
 
 export const PurchaseCancelError = Purchases.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR;
 
@@ -69,7 +70,7 @@ export const handleProPlanPurchase = async (onContactCustomerSupport: () => void
 
     Alert.alert('Contact support', 'There was an issue with your purchase', [
       {
-        text: 'OK',
+        text: translate('default.ok'),
         onPress: onContactCustomerSupport,
       },
     ]);

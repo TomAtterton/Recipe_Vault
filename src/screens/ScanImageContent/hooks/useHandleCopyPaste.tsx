@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import * as Clipboard from 'expo-clipboard';
 import { Alert } from 'react-native';
 import { RecipeFormType } from '@/utils/recipeFormUtil';
+import { translate } from '@/core';
 
 let listener: any;
 
@@ -20,9 +21,9 @@ const useHandleCopyPaste = ({ onCallback, setValue, value, formId }: Props) => {
     listener = Clipboard.addClipboardListener(async () => {
       const content = await Clipboard.getStringAsync();
       onCallback();
-      Alert.alert('Content Copied!', 'What would you like to do with the copied content?', [
+      Alert.alert(translate('prompt.copy.title'), translate('prompt.copy.message'), [
         {
-          text: 'Paste as New Content',
+          text: translate('prompt.copy.button'),
           onPress: () => {
             switch (formId) {
               case 'title':
@@ -63,7 +64,7 @@ const useHandleCopyPaste = ({ onCallback, setValue, value, formId }: Props) => {
           style: 'default',
         },
         {
-          text: 'Dismiss',
+          text: translate('default.dismiss'),
           onPress: () => {},
           style: 'cancel',
         },

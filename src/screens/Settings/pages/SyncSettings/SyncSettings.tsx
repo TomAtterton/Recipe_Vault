@@ -37,8 +37,8 @@ const SyncSettings = () => {
       setSyncEnabled(false);
     } catch (error) {
       showMessage({
-        message: 'Error',
-        description: 'Something went wrong',
+        message: translate('error.default.error_title'),
+        description: translate('error.default.error_message'),
         type: 'danger',
         duration: 3000,
         icon: 'danger',
@@ -49,46 +49,50 @@ const SyncSettings = () => {
   };
 
   const handleDeleteAccount = async () => {
-    Alert.alert('Delete Account', 'Are you sure you want to delete your account?', [
-      {
-        text: 'Cancel',
-        style: 'cancel',
-      },
-      {
-        text: 'Delete',
-        onPress: async () => {
-          try {
-            setIsLoading(true);
-            const { error } = await onDeleteUser();
-
-            if (error) {
-              throw new Error('Contact customer support there was an issue deleting you account');
-            }
-
-            database?.closeSync();
-            await onSignOut();
-            setResetProfile();
-            setResetDatabase();
-
-            await openDatabase({
-              shouldClose: false,
-              currentDatabaseName: Env.SQLITE_DB_NAME,
-            });
-          } catch (error) {
-            showMessage({
-              message: 'Error',
-              // @ts-ignore
-              description: error?.message || 'Something went wrong',
-              type: 'danger',
-              duration: 3000,
-              icon: 'danger',
-            });
-          } finally {
-            setIsLoading(false);
-          }
+    Alert.alert(
+      translate('prompt.delete_account.title'),
+      translate('prompt.delete_account.message'),
+      [
+        {
+          text: translate('default.cancel'),
+          style: 'cancel',
         },
-      },
-    ]);
+        {
+          text: translate('default.delete'),
+          onPress: async () => {
+            try {
+              setIsLoading(true);
+              const { error } = await onDeleteUser();
+
+              if (error) {
+                throw new Error(translate('error.delete_account.error_message'));
+              }
+
+              database?.closeSync();
+              await onSignOut();
+              setResetProfile();
+              setResetDatabase();
+
+              await openDatabase({
+                shouldClose: false,
+                currentDatabaseName: Env.SQLITE_DB_NAME,
+              });
+            } catch (error) {
+              showMessage({
+                message: translate('error.default.error_title'),
+                // @ts-ignore
+                description: error?.message || translate('error.default.error_message'),
+                type: 'danger',
+                duration: 3000,
+                icon: 'danger',
+              });
+            } finally {
+              setIsLoading(false);
+            }
+          },
+        },
+      ]
+    );
   };
 
   const handleShareDatabase = async () => {

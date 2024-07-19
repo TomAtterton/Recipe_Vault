@@ -20,6 +20,7 @@ import { showMessage } from 'react-native-flash-message';
 import LabelButton from '@/components/buttons/LabelButton';
 import { profileGroup } from '@/services/profileGroup';
 import { syncWithSupabase } from '@/services/sync';
+import { translate } from '@/core';
 
 const DatabaseSettings = () => {
   const { styles } = useStyles(stylesheet);
@@ -27,26 +28,30 @@ const DatabaseSettings = () => {
 
   const handleResetDatabase = async () => {
     try {
-      Alert.alert('Reset Database', 'Are you sure you want to reset the database?', [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: async () => {
-            if (database?.databaseName) {
-              await database.closeAsync();
-              await deleteDatabaseAsync(database?.databaseName);
-              await openDatabase({
-                currentDatabaseName: database.databaseName,
-                shouldClose: false,
-              });
-              showSuccessMessage('Database reset successfully');
-            }
+      Alert.alert(
+        translate('prompt.reset_database.title'),
+        translate('prompt.reset_database.message'),
+        [
+          {
+            text: translate('default.cancel'),
+            style: 'cancel',
           },
-        },
-      ]);
+          {
+            text: translate('default.ok'),
+            onPress: async () => {
+              if (database?.databaseName) {
+                await database.closeAsync();
+                await deleteDatabaseAsync(database?.databaseName);
+                await openDatabase({
+                  currentDatabaseName: database.databaseName,
+                  shouldClose: false,
+                });
+                showSuccessMessage('Database reset successfully');
+              }
+            },
+          },
+        ]
+      );
     } catch (error) {
       console.log('error', error);
       showErrorMessage('Error resetting database');
@@ -55,22 +60,26 @@ const DatabaseSettings = () => {
 
   const handleClearDatabase = async () => {
     try {
-      Alert.alert('Clear Database', 'Are you sure you want to clear the database?', [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: async () => {
-            await dropTables(database);
-            showSuccessMessage('Database cleared successfully');
+      Alert.alert(
+        translate('prompt.clear_database.title'),
+        translate('prompt.clear_database.message'),
+        [
+          {
+            text: translate('default.cancel'),
+            style: 'cancel',
           },
-        },
-      ]);
+          {
+            text: translate('default.ok'),
+            onPress: async () => {
+              await dropTables(database);
+              showSuccessMessage(translate('prompt.clear_database.success_message'));
+            },
+          },
+        ]
+      );
     } catch (error) {
       console.log('error', error);
-      showErrorMessage('Error clearing database');
+      showErrorMessage(translate('prompt.clear_database.error_message'));
     }
   };
 
@@ -99,11 +108,11 @@ const DatabaseSettings = () => {
         : 'Will enable cloud sync and switch to cloud vault.',
       [
         {
-          text: 'Cancel',
+          text: translate('default.cancel'),
           style: 'cancel',
         },
         {
-          text: 'OK',
+          text: translate('default.ok'),
           onPress: async () => {
             if (isSyncEnabled) {
               try {
@@ -117,8 +126,8 @@ const DatabaseSettings = () => {
                 await openDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
               } catch (error) {
                 showMessage({
-                  message: 'Error',
-                  description: 'Something went wrong',
+                  message: translate('error.default.error_title'),
+                  description: translate('error.default.error_message'),
                   type: 'danger',
                   duration: 3000,
                   icon: 'danger',

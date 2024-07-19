@@ -1,4 +1,62 @@
 {
+  "home": {
+    "header": {
+      "title": "Good afternoon,",
+      "subtitle": "Discover something delicious"
+    },
+    "search": {
+      "placeholder": "Search for recipes",
+      "button": "Search"
+    },
+    "empty": {
+      "title": "There are no recipes yet.",
+      "button": "create your first recipe"
+    }
+  },
+  "bookmark": {
+    "clear_bookmarks": "Clear all Bookmarks",
+    "clear_history": "Clear all History",
+    "history": "History",
+    "bookmarks": "Bookmarks"
+  },
+  "floating_input": {
+    "placeholder": "Enter a value",
+    "button": "submit"
+  },
+  "prompt": {
+    "copy": {
+      "title": "Content Copied!",
+      "message": "The content has been copied to your clipboard.",
+      "button": "Paste as New Content"
+    },
+    "clear_database": {
+      "title": "Clear Database",
+      "message": "Are you sure you want to clear the database?",
+      "error_message": "There was an issue clearing the database.",
+      "success_message": "The database has been cleared."
+    },
+    "reset_database": {
+      "title": "Reset Database",
+      "message": "Are you sure you want to reset the database?"
+    },
+    "delete_account": {
+      "title": "Delete Account",
+      "message": "Are you sure you want to delete your account?",
+      "success_message": "Your account has been deleted.",
+      "error_message": "Contact customer support there was an issue deleting you account."
+    }
+  },
+  "default": {
+    "cancel": "cancel",
+    "ok": "ok",
+    "dismiss": "dismiss",
+    "delete": "delete",
+    "error_title": "Error",
+    "error_message": "Something went wrong"
+  },
+  "empty": {
+    "no_results": "No results found."
+  },
   "error_messages": {
     "cancelled_sign_in": "Sign in was cancelled.",
     "default": "An error occurred. Please try again later.",

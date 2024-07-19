@@ -8,6 +8,7 @@ import HomeAnimation from '@/screens/Home/homeAnimation';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import IconButton from '@/components/buttons/IconButton';
+import { translate } from '@/core';
 
 const HeaderContainer = () => {
   const {
@@ -21,10 +22,10 @@ const HeaderContainer = () => {
       <View style={styles.textContainer}>
         <View>
           <Typography variant={'headlineLarge'} style={styles.title}>
-            {'Good afternoon,'}
+            {translate('home.header.title')}
           </Typography>
           <Typography variant={'headlineLarge'} style={styles.subTitle}>
-            {'Discover something delicious'}
+            {translate('home.header.subtitle')}
           </Typography>
         </View>
       </View>

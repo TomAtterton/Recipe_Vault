@@ -10,6 +10,7 @@ import ChipListHeader from './ChipListHeader';
 import ChipItem from '@/components/inputs/ChipInput/ChipItem';
 import Typography from '@/components/Typography';
 import BottomSheet from '@/components/BottomSheet';
+import { translate } from '@/core';
 
 export type ChipItemType = {
   id: string;
@@ -65,10 +66,10 @@ const ChipInput = ({ style, control, name, title, currentData, onUpdate, onDelet
         `\nAre you sure ?\n\n This will remove it from all recipes.`,
         [
           {
-            text: 'Cancel',
+            text: translate('default.cancel'),
             style: 'cancel',
           },
-          { text: 'OK', style: 'destructive', onPress: () => onDelete(item) },
+          { text: translate('default.ok'), style: 'destructive', onPress: () => onDelete(item) },
         ]
       );
     },

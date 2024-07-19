@@ -8,6 +8,7 @@ import { stylesheet } from '@/components/inputs/ChipInput/chipInput.style';
 import AddButton from '@/components/buttons/AddButton';
 import FormInput from '@/components/inputs/FormInput';
 import LabelButton from '@/components/buttons/LabelButton';
+import { translate } from '@/core';
 
 const ChipListHeader = ({
   items,
@@ -83,7 +84,7 @@ const ChipListHeader = ({
             style={styles.newCategoryInput}
             onSubmitEditing={handleSaveNewItem}
           />
-          <LabelButton title={'Cancel'} onPress={handleCancelNewItem} />
+          <LabelButton title={translate('default.cancel')} onPress={handleCancelNewItem} />
         </>
       )}
     </View>

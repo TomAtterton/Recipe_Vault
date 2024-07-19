@@ -17,6 +17,7 @@ import Icon from '@/components/Icon';
 import Typography from '@/components/Typography';
 import OutlineButton from '@/components/buttons/OutlineButton';
 import { useStyles } from 'react-native-unistyles';
+import { translate } from '@/core';
 
 const keyExtractor = (_: Partial<RecipeDetailType>, index: number) =>
   `item-${(_?.id || '') + index}`;
@@ -61,9 +62,9 @@ const TrySomethingCarousel = ({ onSeeAll }: { onSeeAll: () => void }) => {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Icon name={'safe'} color={theme.colors.primary} size={32} />
-            <Typography variant={'bodyMedium'}>There are no recipes yet</Typography>
+            <Typography variant={'bodyMedium'}>{translate('home.empty.title')}</Typography>
             <OutlineButton
-              title={'create your first recipe'}
+              title={translate('home.empty.button')}
               onPress={() => navigate(Routes.AddRecipe, {})}
             />
           </View>

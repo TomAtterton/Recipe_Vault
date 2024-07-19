@@ -9,6 +9,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { SCREEN_HEIGHT } from '@gorhom/bottom-sheet';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
+import { translate } from '@/core';
 
 interface Props {
   showBookmark: boolean;
@@ -33,14 +34,15 @@ const BookmarkPage = ({ showBookmark, onLinkPress, onShowBookmarkModal }: Props)
   const historyData = useBoundStore((state) => state.history);
 
   const sectionData = useMemo(() => {
-    const bookmarks = bookmarkData.length > 0 ? ['Bookmarks', ...bookmarkData] : [];
-    const history = historyData.length > 0 ? ['History', ...historyData] : [];
+    const bookmarks =
+      bookmarkData.length > 0 ? [translate('bookmark.bookmarks'), ...bookmarkData] : [];
+    const history = historyData.length > 0 ? [translate('bookmark.history'), ...historyData] : [];
 
     return [...bookmarks, ...history];
   }, [bookmarkData, historyData]);
   const handleRenderItem = useCallback(
     ({ item, index }: { item: string | BookmarkItemType; index: number }) => {
-      const isBookmark = item === 'Bookmarks';
+      const isBookmark = item === translate('bookmark.bookmarks');
 
       if (typeof item === 'string') {
         return (
@@ -51,7 +53,9 @@ const BookmarkPage = ({ showBookmark, onLinkPress, onShowBookmarkModal }: Props)
             {!isBookmark && (
               <TouchableOpacity style={styles.deleteAllHistoryButton} onPress={deleteAllHistory}>
                 <Typography variant={'bodySmall'} style={styles.clearTitle}>
-                  {isBookmark ? 'Clear all bookmarks' : 'Clear all history'}
+                  {isBookmark
+                    ? translate('bookmark.clear_bookmarks')
+                    : translate('bookmark.clear_history')}
                 </Typography>
               </TouchableOpacity>
             )}

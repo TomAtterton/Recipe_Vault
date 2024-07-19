@@ -11,6 +11,7 @@ import type { RouteProp } from '@/navigation/types';
 import { Routes } from '@/navigation/Routes';
 import { RecipeSearchItemType } from '@/database/api/recipes/hooks/useFilterRecipe';
 import VerticalCard from '@/components/cards/VerticalCard';
+import { translate } from '@/core';
 
 const Search = ({}) => {
   const { searchText, setSearchText, data } = useSearchRecipe();
@@ -31,7 +32,7 @@ const Search = ({}) => {
         showSuccessMessage('Meal plan added successfully');
         goBack();
       } catch (e) {
-        showErrorMessage('Something went wrong');
+        showErrorMessage(translate('error.default.error_message'));
         console.log('error', e);
       }
     },

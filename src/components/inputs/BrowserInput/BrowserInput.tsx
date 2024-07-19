@@ -9,6 +9,7 @@ import { useStyles } from 'react-native-unistyles';
 import Input from '@/components/inputs';
 import IconButton from '@/components/buttons/IconButton';
 import LabelButton from '@/components/buttons/LabelButton';
+import { translate } from '@/core';
 
 interface Props {
   onShowBookmarkModal: (item: { id?: string; name?: string }) => void;
@@ -137,7 +138,7 @@ const BrowserBar = ({
               setUrlValue(url);
               setShowBookmark(false);
             }}
-            title={'cancel'}
+            title={translate('default.cancel')}
           />
         )}
       </View>

@@ -3,6 +3,7 @@ import { ActivityIndicator, View } from 'react-native';
 
 import styles from './emptyList.style';
 import Typography from '@/components/Typography';
+import { translate } from '@/core';
 
 type Props = {
   isLoading: boolean;
@@ -12,8 +13,7 @@ const EmptyList = React.memo(({ isLoading }: Props) => {
     <View style={styles.container}>
       {!isLoading ? (
         <View style={styles.contentContainer}>
-          {/*<NoData />*/}
-          <Typography>Sorry! No data found</Typography>
+          <Typography>{translate('empty.no_results')}</Typography>
         </View>
       ) : (
         <ActivityIndicator />

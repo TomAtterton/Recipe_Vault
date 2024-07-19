@@ -10,6 +10,7 @@ import Input from '@/components/inputs';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import Typography from '@/components/Typography';
 import { stylesheet } from '@/screens/Home/components/SearchBar/searchBar.style';
+import { translate } from '@/core';
 
 interface Props {
   style?: StyleProp<ViewStyle>;
@@ -78,7 +79,7 @@ const SearchBar = ({
             value={searchText}
             onChangeText={setSearchText}
             placeholderTextColor={theme.colors.placeholder}
-            placeholder="Search for recipes"
+            placeholder={translate('home.search.placeholder')}
             returnKeyType={'search'}
             inputMode={'search'}
             onBlur={() => {
@@ -106,7 +107,7 @@ const SearchBar = ({
               color: theme.colors.primary,
             }}
           >
-            cancel
+            {translate('default.cancel')}
           </Typography>
         </AnimatedButton>
       )}

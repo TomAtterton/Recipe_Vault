@@ -22,6 +22,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import Typography from '@/components/Typography';
 import { stylesheet } from './floatingInput.style';
 import IconButton from '@/components/buttons/IconButton';
+import { translate } from '@/core';
 
 interface Props {
   style?: StyleProp<ViewStyle>;
@@ -213,7 +214,11 @@ const FloatingInput = ({
                 style={styles.deleteButton}
               />
             )}
-            <OutlineButton title={'send'} onPress={handleSubmit} disabled={text?.length === 0} />
+            <OutlineButton
+              title={translate('floating_input.button')}
+              onPress={handleSubmit}
+              disabled={text?.length === 0}
+            />
           </View>
         </Animated.View>
       </GestureDetector>
