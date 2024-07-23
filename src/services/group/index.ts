@@ -19,6 +19,7 @@ export const createGroup = async ({ name, userId }: { name: string; userId?: str
         id: randomUUID(),
         profile_id: userId,
         group_id: id,
+        group_role: 'admin',
         updated_at: new Date().toISOString(),
       },
     ]);
@@ -60,6 +61,7 @@ export const createProfileGroup = async ({
         id: randomUUID(),
         profile_id: userId,
         group_id: groupId,
+        group_role: 'read_write',
         updated_at: new Date().toISOString(),
       },
     ]);
@@ -70,5 +72,44 @@ export const createProfileGroup = async ({
   } catch (e) {
     console.log('error creating profile group', e);
     throw e;
+  }
+};
+
+export const getProfileGroup = async ({ userId }: { userId?: string | null }) => {
+  try {
+    const { data: profileData } = await supabase
+      .from('profile_groups')
+      .select('id, group_id, group_role, groups(name)')
+      .eq('profile_id', userId || '');
+
+    const response = profileData?.[0];
+    const groupId = response?.group_id;
+    const groupName = response?.groups?.name;
+    const groupRole = response?.group_role;
+
+    return {
+      groupId,
+      groupName,
+      groupRole,
+    };
+  } catch (e) {
+    console.log('Error getting group data', e);
+    return {};
+  }
+};
+
+export const getProfileGroupByGroupId = async ({ groupId }: { groupId: string }) => {
+  try {
+    const { data: groupData } = await supabase.from('groups').select('name').eq('id', groupId);
+
+    const response = groupData?.[0];
+    const groupName = response?.name;
+
+    return {
+      groupName,
+    };
+  } catch (e) {
+    console.log('Error getting group data', e);
+    return {};
   }
 };

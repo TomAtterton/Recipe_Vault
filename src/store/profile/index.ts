@@ -10,6 +10,7 @@ export type ProfileSlice = {
     name?: string;
     groupId: string;
     groupName?: string;
+    groupRole?: string;
     email: string;
     avatarId?: string;
   };
@@ -26,6 +27,7 @@ const initialProfileState = {
     name: '',
     email: '',
     avatarId: '',
+    group_role: 'read_write',
     groupId: Env.TEST_GROUP_ID,
     groupName: Env.SQLITE_DB_NAME,
   },

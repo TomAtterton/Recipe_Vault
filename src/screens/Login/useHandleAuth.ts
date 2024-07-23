@@ -4,11 +4,11 @@ import { useNavigation } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
 import { setCurrentDatabaseName, setShouldSync, updateProfile } from '@/store';
 import { showErrorMessage } from '@/utils/promptUtils';
-import { openDatabase } from '@/database';
+import { onOpenDatabase } from '@/database';
 import { syncWithSupabase } from '@/services/sync';
 import { useState } from 'react';
-import { profileGroup } from '@/services/profileGroup';
 import { onAppleAuthSignIn, onTestSignIn } from '@/services/auth';
+import { getProfileGroup } from '@/services/group';
 
 const useHandleAuth = () => {
   const { reset } = useNavigation();
@@ -17,22 +17,23 @@ const useHandleAuth = () => {
     try {
       setIsLoading(true);
 
-      const { groupId, groupName } = await profileGroup({
+      const { groupId, groupName, groupRole } = await getProfileGroup({
         userId: data.user?.id,
       });
 
-      if (groupName && groupId) {
+      if (groupName && groupId && groupRole) {
         updateProfile({
           id: data.user?.id,
           email: data?.user?.email || '',
           groupId,
           groupName,
+          groupRole,
         });
         setShouldSync(true);
 
         const currentDatabaseName = `${groupName}.db`;
         setCurrentDatabaseName(currentDatabaseName);
-        await openDatabase({ currentDatabaseName });
+        await onOpenDatabase({ currentDatabaseName });
         await syncWithSupabase();
         reset({
           index: 0,

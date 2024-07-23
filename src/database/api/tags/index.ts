@@ -1,5 +1,5 @@
 import { TableNames } from '@/database/api/types';
-import { sqlDelete, sqlInsert } from '@/database';
+import { sqlDelete, sqlInsert } from '@/database/sql';
 import { randomUUID } from 'expo-crypto';
 
 export const SELECT_TAGS = `SELECT id, name FROM ${TableNames.tags}`;

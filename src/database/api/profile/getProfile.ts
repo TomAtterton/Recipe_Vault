@@ -1,4 +1,4 @@
-import { sqlGet } from '@/database';
+import { sqlGet } from '@/database/sql';
 import { SELECT_PROFILE } from '@/database/api/profile/index';
 
 const getProfile = async (userId: string) => {

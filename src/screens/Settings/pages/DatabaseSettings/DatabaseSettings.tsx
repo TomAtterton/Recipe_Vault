@@ -2,8 +2,7 @@ import { Alert, SafeAreaView, View } from 'react-native';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import SettingsButton from '@/components/buttons/SettingsButton';
-import { dropTables } from '@/database/sql/initDatabase';
-import { database, openDatabase } from '@/database';
+import { database, onDeleteDatabase, onOpenDatabase } from '@/database';
 import * as React from 'react';
 import InfoLabelButton from '@/components/buttons/InfoLabelButton';
 import NavBarButton from '@/components/buttons/NavBarButton';
@@ -18,9 +17,10 @@ import { setCurrentDatabaseName, setResetDatabase, updateProfile, useBoundStore 
 import { Env } from '@/core/env';
 import { showMessage } from 'react-native-flash-message';
 import LabelButton from '@/components/buttons/LabelButton';
-import { profileGroup } from '@/services/profileGroup';
 import { syncWithSupabase } from '@/services/sync';
 import { translate } from '@/core';
+import { getProfileGroup } from '@/services/group';
+import { checkIfPro } from '@/services/pro';
 
 const DatabaseSettings = () => {
   const { styles } = useStyles(stylesheet);
@@ -42,7 +42,7 @@ const DatabaseSettings = () => {
               if (database?.databaseName) {
                 await database.closeAsync();
                 await deleteDatabaseAsync(database?.databaseName);
-                await openDatabase({
+                await onOpenDatabase({
                   currentDatabaseName: database.databaseName,
                   shouldClose: false,
                 });
@@ -71,7 +71,7 @@ const DatabaseSettings = () => {
           {
             text: translate('default.ok'),
             onPress: async () => {
-              await dropTables(database);
+              await onDeleteDatabase(database);
               showSuccessMessage(translate('prompt.clear_database.success_message'));
             },
           },
@@ -116,14 +116,14 @@ const DatabaseSettings = () => {
           onPress: async () => {
             if (isSyncEnabled) {
               try {
-                // setResetProfile();
                 updateProfile({
                   groupId: Env.TEST_GROUP_ID,
-                  groupName: 'Local Vault',
+                  groupName: Env.SQLITE_DB_NAME,
+                  groupRole: 'read_write',
                 });
                 setResetDatabase();
                 setSyncEnabled(false);
-                await openDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
+                await onOpenDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
               } catch (error) {
                 showMessage({
                   message: translate('error.default.error_title'),
@@ -134,18 +134,25 @@ const DatabaseSettings = () => {
                 });
               }
             } else {
-              const { groupId, groupName: profileGroupName } = await profileGroup({
+              const {
+                groupId,
+                groupName: profileGroupName,
+                groupRole,
+              } = await getProfileGroup({
                 userId,
               });
-              if (groupId && profileGroupName) {
+
+              if (groupId && profileGroupName && groupRole) {
                 updateProfile({
                   groupId,
                   groupName: profileGroupName,
+                  groupRole,
                 });
+                await checkIfPro();
                 setSyncEnabled(true);
                 const currentDatabaseName = `${groupName}.db`;
                 setCurrentDatabaseName(currentDatabaseName);
-                await openDatabase({ currentDatabaseName });
+                await onOpenDatabase({ currentDatabaseName });
                 await syncWithSupabase();
               } else {
                 navigate(Routes.Login, {

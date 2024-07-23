@@ -1,6 +1,6 @@
 import { setCurrentDatabaseName, setShouldSync } from '@/store';
-import { openDatabase } from '@/database';
 import { syncWithSupabase } from '@/services/sync';
+import { onOpenDatabase } from '@/database';
 
 export const setupDatabase = async ({ databaseName }: { databaseName: string }) => {
   try {
@@ -8,7 +8,7 @@ export const setupDatabase = async ({ databaseName }: { databaseName: string }) 
     setShouldSync(true);
     const currentDatabaseName = `${databaseName}.db`;
     setCurrentDatabaseName(currentDatabaseName);
-    await openDatabase({ currentDatabaseName });
+    await onOpenDatabase({ currentDatabaseName });
     await syncWithSupabase();
   } catch (e) {
     console.log('error setting up database', e);

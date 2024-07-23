@@ -1,5 +1,6 @@
 import { RecipeDetails } from '@/database/types/recipes';
-import { database, sqlDelete, sqlExecute, sqlGet, sqlInsert, sqlUpdate } from '@/database';
+import { database } from '@/database';
+import { sqlDelete, sqlExecute, sqlInsert, sqlUpdate, sqlGet } from '@/database/sql';
 import { useBoundStore } from '@/store';
 import { TableNames } from '@/database/api/types';
 import { randomUUID } from 'expo-crypto';
@@ -37,55 +38,6 @@ export const SELECT_TRY_SOMETHING =
   'FROM recipes \n' +
   'ORDER BY created_at DESC\n' +
   'LIMIT 5;';
-
-// TODO this could be simplified
-export const SELECT_RECIPE_DETAILS_JOINED = `SELECT
-  r.*,
-  ri.ingredients,
-  rin.instructions,
-  rt.tags,
-  rc.categories
-FROM
-  recipes r
-LEFT JOIN (
-  SELECT
-    recipe_id,
-    json_group_array(json_object('id', id, 'text', text, 'section_title', section_title)) AS ingredients
-  FROM
-    recipe_ingredients
-  GROUP BY
-    recipe_id
-) ri ON r.id = ri.recipe_id
-LEFT JOIN (
-  SELECT
-    recipe_id,
-    json_group_array(json_object('id', id, 'text', text, 'section_title', section_title)) AS instructions
-  FROM
-    recipe_instructions
-  GROUP BY
-    recipe_id
-) rin ON r.id = rin.recipe_id
-LEFT JOIN (
-  SELECT
-    recipe_id,
-    json_group_array(json_object('tag_id', tag_id)) AS tags
-  FROM
-    recipe_tags
-  GROUP BY
-    recipe_id
-) rt ON r.id = rt.recipe_id
-LEFT JOIN (
-  SELECT
-    recipe_id,
-    json_group_array(json_object('category_id', category_id)) AS categories
-  FROM
-    recipe_categories
-  GROUP BY
-    recipe_id
-) rc ON r.id = rc.recipe_id
-WHERE
-  r.id = ?;
-`;
 
 export const updateRecipe = async ({
   recipe_id,

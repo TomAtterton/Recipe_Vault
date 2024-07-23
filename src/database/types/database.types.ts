@@ -214,6 +214,7 @@ export type Database = {
         Row: {
           created_at: string
           group_id: string | null
+          group_role: string | null
           id: string
           profile_id: string | null
           updated_at: string | null
@@ -221,6 +222,7 @@ export type Database = {
         Insert: {
           created_at?: string
           group_id?: string | null
+          group_role?: string | null
           id?: string
           profile_id?: string | null
           updated_at?: string | null
@@ -228,6 +230,7 @@ export type Database = {
         Update: {
           created_at?: string
           group_id?: string | null
+          group_role?: string | null
           id?: string
           profile_id?: string | null
           updated_at?: string | null

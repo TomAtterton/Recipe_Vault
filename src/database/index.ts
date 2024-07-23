@@ -1,13 +1,21 @@
-import {
-  deleteDatabaseAsync,
-  openDatabaseAsync,
-  SQLiteBindParams,
-  SQLiteDatabase,
-  SQLiteOpenOptions,
-} from 'expo-sqlite/next';
-import { randomUUID } from 'expo-crypto';
+import { openDatabaseAsync, SQLiteDatabase, SQLiteOpenOptions } from 'expo-sqlite/next';
 import { useBoundStore } from '@/store';
-import { initDatabase } from '@/database/sql/initDatabase';
+import { Env } from '@/core/env';
+import { sqlInsert } from '@/database/sql';
+import {
+  createCategoriesTable,
+  createGroupsTable,
+  createMealPlansTable,
+  createProfileGroupsTable,
+  createProfileTable,
+  createRecipeCategoriesTable,
+  createRecipeIngredientsTable,
+  createRecipeInstructionsTable,
+  createRecipesTable,
+  createRecipeTagsTable,
+  createTagsTable,
+} from '@/database/tables';
+import { createDeletedRecordsTable } from '@/database/tables/DeletedRecordsTable';
 
 export let database: SQLiteDatabase | undefined;
 
@@ -15,114 +23,62 @@ export const setDatabase = (db: SQLiteDatabase | undefined) => {
   database = db;
 };
 
-export const sqlExecute = async (sql: string, parameters?: any[]): Promise<any> => {
-  if (!database) throw new Error('Database not initialized');
-  try {
-    console.log('SQL Execute', sql, parameters);
-    return database.runAsync(sql, parameters || []);
-  } catch (e) {
-    console.log('error executing', e);
-    throw e;
+const DATABASE_VERSION = 2;
+
+const initDatabase = async (db: SQLiteDatabase) => {
+  // Always set these PRAGMA statements for each session
+  await db.execAsync('PRAGMA journal_mode = WAL');
+  await db.execAsync('PRAGMA foreign_keys = ON');
+
+  // @ts-ignore
+  let { user_version: currentDbVersion } = await db.getFirstAsync<{ user_version: number }>(
+    'PRAGMA user_version'
+  );
+
+  if (currentDbVersion >= DATABASE_VERSION) {
+    return;
+  }
+
+  await createTables(db);
+  await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
+  const shouldSync = useBoundStore.getState().shouldSync;
+
+  if (!shouldSync) {
+    const initialGroupId = Env.TEST_GROUP_ID;
+    const initialGroup = database?.getFirstAsync<{
+      id: string;
+    }>(`SELECT id FROM groups WHERE id = '${initialGroupId}'`);
+
+    if (!initialGroup) {
+      await sqlInsert('groups', { id: initialGroupId });
+    }
   }
 };
 
-export const sqlDelete = async (table: string, id: string, key?: string) => {
-  if (!database) throw new Error('Database not initialized');
+const createTables = async (db?: SQLiteDatabase) => {
+  if (!db) throw new Error('Database not initialized');
   try {
-    await database.runAsync(`delete from ${table} where ${key || 'id'} = ?`, [id]);
-
-    const currentTimestamp = new Date().toISOString();
-    const groupId = useBoundStore.getState().profile.groupId;
-
-    await sqlInsert('deleted_records', {
-      id: randomUUID(),
-      created_at: currentTimestamp,
-      updated_at: currentTimestamp,
-      deleted_record_id: id,
-      table_name: table,
-      group_id: groupId,
-      is_modified: true,
+    await db.withExclusiveTransactionAsync(async (tx) => {
+      await tx.execAsync(createGroupsTable);
+      await tx.execAsync(createRecipesTable);
+      await tx.execAsync(createCategoriesTable);
+      await tx.execAsync(createTagsTable);
+      await tx.execAsync(createProfileTable);
+      await tx.execAsync(createMealPlansTable);
+      await tx.execAsync(createRecipeInstructionsTable);
+      await tx.execAsync(createProfileGroupsTable);
+      await tx.execAsync(createRecipeCategoriesTable);
+      await tx.execAsync(createRecipeTagsTable);
+      await tx.execAsync(createRecipeIngredientsTable);
+      await tx.execAsync(createDeletedRecordsTable);
     });
-    console.log('successfully deleted', table, id);
   } catch (e) {
-    console.log('error inserting', e);
+    console.log('error creating tables', e);
     throw e;
   }
 };
 
-export const sqlInsert = async (table: string, values: Record<string, any>) => {
-  if (!database) throw new Error('Database not initialized');
-  try {
-    const currentTimestamp = new Date().toISOString();
-
-    const mutatedObject = {
-      ...values,
-      created_at: currentTimestamp,
-      updated_at: currentTimestamp,
-      is_modified: true,
-    };
-
-    const { columns, placeholders, parameters } = generateKeysAndPlaceholders(mutatedObject);
-
-    await database.runAsync(
-      `insert into ${table} (${columns}) values (${placeholders})`,
-      parameters
-    );
-  } catch (e) {
-    console.log('error inserting', e);
-    throw e;
-  }
-};
-
-export const sqlUpdate = async (table: string, values: Record<string, any>, id: string) => {
-  if (!database) throw new Error('Database not initialized');
-  try {
-    const mutatedObject = {
-      updated_at: new Date().toISOString(),
-      is_modified: true,
-      ...values,
-    };
-
-    const { columns, parameters } = generateKeysAndPlaceholdersForUpdate(mutatedObject);
-
-    await database.runAsync(`UPDATE ${table} SET ${columns} where id = ?`, [...parameters, id]);
-  } catch (e) {
-    throw e;
-  }
-};
-
-export const sqlGet = <T>(sql: string, parameters: SQLiteBindParams): T | null => {
-  if (!database) throw new Error('Database not initialized');
-  return database.getFirstSync(sql, parameters);
-};
-
-const generateKeysAndPlaceholders = (values: Record<string, any>) => {
-  const keys = Object.keys(values);
-  const columns = keys.join(', ');
-  const placeholders = keys.map(() => '?').join(', ');
-  const parameters = Object.values(values);
-  return { columns, placeholders, parameters };
-};
-
-const generateKeysAndPlaceholdersForUpdate = (values: Record<string, any>) => {
-  const keys = Object.keys(values);
-  const columns = keys.join(' = ?, ') + ' = ?';
-  const parameters = Object.values(values);
-  return { columns, parameters };
-};
-
-export const clearDatabase = async () => {
-  try {
-    if (!database) throw new Error('Database not initialized');
-    console.log('clearDatabase', database);
-    await database.closeAsync();
-    await deleteDatabaseAsync(database.databaseName);
-  } catch (e) {
-    console.log('clearDatabase error', e);
-  }
-};
-
-export const openDatabase = async ({
+export const onOpenDatabase = async ({
   currentDatabaseName,
   shouldClose = true,
   options,
@@ -143,6 +99,38 @@ export const openDatabase = async ({
     await initDatabase(newDatabase);
   } catch (e) {
     console.log('error opening database', e);
+    throw e;
+  }
+};
+
+export const onDeleteDatabase = async (db?: SQLiteDatabase) => {
+  try {
+    if (!db) throw new Error('Database not initialized');
+    console.log('Wiping Database', db);
+
+    // List of tables to be dropped
+    const tables = [
+      'recipes',
+      'categories',
+      'tags',
+      'mealplans',
+      'recipe_instructions',
+      'profile_groups',
+      'recipe_categories',
+      'recipe_tags',
+      'recipe_ingredients',
+      'deleted_records',
+    ];
+
+    await db.withExclusiveTransactionAsync(async (txn) => {
+      for (const table of tables) {
+        await txn.runAsync(`DELETE from ${table}`);
+      }
+
+      await txn.runAsync('PRAGMA user_version = 0');
+    });
+  } catch (e) {
+    console.log('error dropping tables', e);
     throw e;
   }
 };
