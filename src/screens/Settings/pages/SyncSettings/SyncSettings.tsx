@@ -12,7 +12,7 @@ import { stylesheet } from './syncSettings.style';
 import OutlineButton from '@/components/buttons/OutlineButton';
 import { showMessage } from 'react-native-flash-message';
 import { Routes } from '@/navigation/Routes';
-import { database, openDatabase } from '@/database';
+import { database, onOpenDatabase } from '@/database';
 import { Env } from '@/core/env';
 import { onDeleteUser, onSignOut } from '@/services/auth';
 
@@ -33,7 +33,7 @@ const SyncSettings = () => {
       await onSignOut();
       setResetProfile();
       setResetDatabase();
-      await openDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
+      await onOpenDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
       setSyncEnabled(false);
     } catch (error) {
       showMessage({
@@ -73,7 +73,7 @@ const SyncSettings = () => {
               setResetProfile();
               setResetDatabase();
 
-              await openDatabase({
+              await onOpenDatabase({
                 shouldClose: false,
                 currentDatabaseName: Env.SQLITE_DB_NAME,
               });

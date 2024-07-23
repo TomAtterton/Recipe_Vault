@@ -1,6 +1,6 @@
-import { sqlDelete, sqlExecute, sqlInsert } from '@/database';
 import { TableNames } from '@/database/api/types';
 import { randomUUID } from 'expo-crypto';
+import { sqlDelete, sqlExecute, sqlInsert } from '@/database/sql';
 
 export const SELECT_CATEGORIES = `SELECT id, name FROM ${TableNames.categories}`;
 

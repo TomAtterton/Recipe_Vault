@@ -1606,9 +1606,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/fingerprint@npm:^0.10.1":
-  version: 0.10.1
-  resolution: "@expo/fingerprint@npm:0.10.1"
+"@expo/fingerprint@npm:^0.10.2":
+  version: 0.10.2
+  resolution: "@expo/fingerprint@npm:0.10.2"
   dependencies:
     "@expo/spawn-async": ^1.7.2
     chalk: ^4.1.2
@@ -1620,7 +1620,7 @@ __metadata:
     semver: ^7.6.0
   bin:
     fingerprint: bin/cli.js
-  checksum: 62387e64ea65aed5321e94004e6a8d44cffdb3b705c5baee0aad9152de73f96560ef836457209eedd74d4d3cced8b2698da466338603f591b486a4756b86306f
+  checksum: 2b54af3fd5018528bf682f0d86b30ade37ea6e1c3d38005acb1c60f23bfc0b9273098acd806a95873a7039b45212b78530f67c3debdf64cf7dcb97bffe4eaa7b
   languageName: node
   linkType: hard
 
@@ -1711,7 +1711,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/metro-config@npm:0.18.8, @expo/metro-config@npm:~0.18.6":
+"@expo/metro-config@npm:0.18.9":
+  version: 0.18.9
+  resolution: "@expo/metro-config@npm:0.18.9"
+  dependencies:
+    "@babel/core": ^7.20.0
+    "@babel/generator": ^7.20.5
+    "@babel/parser": ^7.20.0
+    "@babel/types": ^7.20.0
+    "@expo/config": ~9.0.0-beta.0
+    "@expo/env": ~0.3.0
+    "@expo/json-file": ~8.3.0
+    "@expo/spawn-async": ^1.7.2
+    chalk: ^4.1.0
+    debug: ^4.3.2
+    find-yarn-workspace-root: ~2.0.0
+    fs-extra: ^9.1.0
+    getenv: ^1.0.0
+    glob: ^7.2.3
+    jsc-safe-url: ^0.2.4
+    lightningcss: ~1.19.0
+    postcss: ~8.4.32
+    resolve-from: ^5.0.0
+  checksum: 720bb621cf037e3183d4cec6be4773ba28c0b602a43cbd156637ffaebb279881a22578eaa4e106203a1664df1f521a9e5602106de843997914a97c95bcad22f2
+  languageName: node
+  linkType: hard
+
+"@expo/metro-config@npm:~0.18.6":
   version: 0.18.8
   resolution: "@expo/metro-config@npm:0.18.8"
   dependencies:
@@ -8658,21 +8684,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-apple-authentication@npm:6.4.1":
-  version: 6.4.1
-  resolution: "expo-apple-authentication@npm:6.4.1"
+"expo-apple-authentication@npm:~6.4.2":
+  version: 6.4.2
+  resolution: "expo-apple-authentication@npm:6.4.2"
   peerDependencies:
     expo: "*"
-  checksum: 309983ad8afe3fb198176edca8036c09b0637d70b65bd0182c32ae929d7af06773e7d9caea5efb5b37a057d8913cc4b733902648c5c82eb1041a01cf1fe22eab
-  languageName: node
-  linkType: hard
-
-"expo-apple-authentication@patch:expo-apple-authentication@npm%3A6.4.1#./.yarn/patches/expo-apple-authentication-npm-6.4.1-7163d83225.patch::locator=recipeapp%40workspace%3A.":
-  version: 6.4.1
-  resolution: "expo-apple-authentication@patch:expo-apple-authentication@npm%3A6.4.1#./.yarn/patches/expo-apple-authentication-npm-6.4.1-7163d83225.patch::version=6.4.1&hash=dc5d7f&locator=recipeapp%40workspace%3A."
-  peerDependencies:
-    expo: "*"
-  checksum: 5526198df2f06bf6372f57dab4529b401f96e9041da6b062d2bd547f5b39d14246126391e64bdb058c6478c2795511d1aea747c9cfad60cc6c1de21a30c020a3
+  checksum: 43cc990a1bcc7a089f7960ec2584dcb2b947fada141d7425988e0a52d010450ffc6f19d934910867b2427f22964067c9c2bb451a3d7e61d90d90bab61c3fc229
   languageName: node
   linkType: hard
 
@@ -9140,14 +9157,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-updates@npm:~0.25.20":
-  version: 0.25.20
-  resolution: "expo-updates@npm:0.25.20"
+"expo-updates@npm:~0.25.21":
+  version: 0.25.21
+  resolution: "expo-updates@npm:0.25.21"
   dependencies:
     "@expo/code-signing-certificates": 0.0.5
     "@expo/config": ~9.0.0-beta.0
     "@expo/config-plugins": ~8.0.8
-    "@expo/fingerprint": ^0.10.1
+    "@expo/fingerprint": ^0.10.2
     "@expo/spawn-async": ^1.7.2
     arg: 4.1.0
     chalk: ^4.1.2
@@ -9163,19 +9180,19 @@ __metadata:
     expo: "*"
   bin:
     expo-updates: bin/cli.js
-  checksum: 0a539e7e9fd241f3dfde46b4d5bf3f6e51591ff1b80afbe5c015e4f300fee462c5a7ef1f45c9ece956b8480a70437d9a1329cd9ad31b21ead3a16ab432037aa0
+  checksum: 92e405a424b0b94fcc45f333b72b0fa0400c947214568bf2b4e19b6c75f6bc95c14bf6525991b3705526bbe7b0b3d46c6b68954555205e83744e521e16c384d2
   languageName: node
   linkType: hard
 
-"expo@npm:^51.0.21":
-  version: 51.0.21
-  resolution: "expo@npm:51.0.21"
+"expo@npm:^51.0.22":
+  version: 51.0.22
+  resolution: "expo@npm:51.0.22"
   dependencies:
     "@babel/runtime": ^7.20.0
     "@expo/cli": 0.18.25
     "@expo/config": 9.0.3
     "@expo/config-plugins": 8.0.8
-    "@expo/metro-config": 0.18.8
+    "@expo/metro-config": 0.18.9
     "@expo/vector-icons": ^14.0.0
     babel-preset-expo: ~11.0.12
     expo-asset: ~10.0.10
@@ -9188,7 +9205,7 @@ __metadata:
     whatwg-url-without-unicode: 8.0.0-3
   bin:
     expo: bin/cli
-  checksum: dcd18974ae1b8a7d0a08252ad013c4d2ebf986e5e39b2ed2cefe521623c182bf6cba67bd05fe54bbf0586a9ac6559c872807ef6d4e829af3a314ed52e1434e4a
+  checksum: 99274c8da23fa6c81825b4bdac6a264700cdf0a17cc101ed31f3700dbc78e75c6ec0e41a724b2c591269e41163f9cf52745b83e54ce831342192c0cfdd5144b6
   languageName: node
   linkType: hard
 
@@ -16493,9 +16510,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-unistyles@npm:^2.8.4":
-  version: 2.8.4
-  resolution: "react-native-unistyles@npm:2.8.4"
+"react-native-unistyles@npm:^2.9.0":
+  version: 2.9.0
+  resolution: "react-native-unistyles@npm:2.9.0"
   peerDependencies:
     "@react-native/normalize-colors": "*"
     react: "*"
@@ -16510,7 +16527,7 @@ __metadata:
       optional: true
     react-native-windows:
       optional: true
-  checksum: 97fafa110a2dab90c4cfa1a617e495d84efce2f0272cfd7634ec8b083e0644e8a46b67bdd2fd80e4f967321e9aa63cce17164761d721ff13d3ba2e95a79dbbb7
+  checksum: 12e27a42fc85f707a27e2bc20739e822898d94b24acfd2eeea49c424f43f6167f44c02cd0318a4bc1d8d5cffb4c60d7669fdea2ae361d887f62f98d5aa19ddbc
   languageName: node
   linkType: hard
 
@@ -16863,8 +16880,8 @@ __metadata:
     eslint: ^8.48.0
     eslint-plugin-i18n-json: ^4.0.0
     eslint-plugin-unused-imports: ^2.0.0
-    expo: ^51.0.21
-    expo-apple-authentication: ^6.4.1
+    expo: ^51.0.22
+    expo-apple-authentication: ~6.4.2
     expo-asset: ^10.0.10
     expo-av: ^14.0.6
     expo-blur: ^13.0.2
@@ -16891,7 +16908,7 @@ __metadata:
     expo-status-bar: ~1.12.1
     expo-store-review: ~7.0.2
     expo-system-ui: ~3.0.7
-    expo-updates: ~0.25.20
+    expo-updates: ~0.25.21
     figma-squircle: ^0.3.1
     husky: ^8.0.3
     i18next: ^23.12.1
@@ -16934,7 +16951,7 @@ __metadata:
     react-native-safe-area-context: ^4.10.8
     react-native-screens: ^3.32.0
     react-native-tab-view: ^3.5.2
-    react-native-unistyles: ^2.8.4
+    react-native-unistyles: ^2.9.0
     react-native-url-polyfill: ^2.0.0
     react-native-vector-icons: ^10.1.0
     react-native-webview: ^13.10.5

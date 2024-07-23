@@ -1,5 +1,6 @@
 import { RecipeDetails } from '@/database/types/recipes';
-import { database, sqlDelete, sqlExecute, sqlGet, sqlInsert, sqlUpdate } from '@/database';
+import { database } from '@/database';
+import { sqlDelete, sqlExecute, sqlInsert, sqlUpdate, sqlGet } from '@/database/sql';
 import { useBoundStore } from '@/store';
 import { TableNames } from '@/database/api/types';
 import { randomUUID } from 'expo-crypto';

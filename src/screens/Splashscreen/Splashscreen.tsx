@@ -9,7 +9,7 @@ import { useBoundStore } from '@/store';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './splashscreen.style';
 import Typography from '@/components/Typography';
-import { openDatabase } from '@/database';
+import { onOpenDatabase } from '@/database';
 import { Routes } from '@/navigation/Routes';
 import { ImageBackground } from 'expo-image';
 import { showErrorMessage } from '@/utils/errorUtils';
@@ -34,7 +34,7 @@ const Splashscreen = () => {
     const onSetup = async () => {
       if (hasHydrated && currentDatabaseName) {
         try {
-          await openDatabase({ currentDatabaseName });
+          await onOpenDatabase({ currentDatabaseName });
           await hideSplash();
         } catch (error) {
           // @ts-ignore

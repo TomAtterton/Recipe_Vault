@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, SafeAreaView } from 'react-native';
 import Typography from '@/components/Typography';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { useStyles } from 'react-native-unistyles';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import Icon from '@/components/Icon';
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,8 @@ import LabelButton from '@/components/buttons/LabelButton';
 import { handleProPlanPurchase } from '@/services/purchase';
 import { Routes } from '@/navigation/Routes';
 import ConfettiCannon from 'react-native-confetti-cannon';
+import { stylesheet } from './proPlan.style';
+import { checkIfPro } from '@/services/pro';
 
 const PurchaseScreen = () => {
   const { navigate, goBack } = useNavigation();
@@ -32,6 +34,14 @@ const PurchaseScreen = () => {
   };
 
   const { styles, theme } = useStyles(stylesheet);
+
+  useEffect(() => {
+    checkIfPro().then((isPro) => {
+      if (isPro) {
+        goBack();
+      }
+    });
+  }, [goBack]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -80,46 +90,5 @@ const PurchaseScreen = () => {
     </SafeAreaView>
   );
 };
-
-const stylesheet = createStyleSheet((theme) => ({
-  container: {
-    flex: 1,
-    marginHorizontal: 20,
-  },
-  icon: {
-    alignSelf: 'center',
-    marginTop: 32,
-  },
-  title: {
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  subTitle: {
-    color: theme.colors.primary,
-    marginBottom: 8,
-  },
-  contentContainer: {
-    flex: 1,
-    gap: 16,
-    paddingTop: 20,
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    gap: 16,
-  },
-  itemText: {
-    flex: 1,
-  },
-  footerContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingBottom: 20,
-  },
-  footerText: {
-    marginBottom: 16,
-    color: theme.colors.primary,
-  },
-}));
 
 export default PurchaseScreen;

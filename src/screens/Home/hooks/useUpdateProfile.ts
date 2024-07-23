@@ -14,7 +14,7 @@ const useUpdateProfile = () => {
         .then((profileData) => {
           updateProfile({
             groupId: profileData?.groupId || Env.TEST_GROUP_ID,
-            groupName: profileData?.groupName || 'Default Vault',
+            groupName: profileData?.groupName || Env.SQLITE_DB_NAME,
           });
         })
         .catch((e) => {

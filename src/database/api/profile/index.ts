@@ -1,4 +1,4 @@
-import { sqlInsert } from '@/database';
+import { sqlInsert } from '@/database/sql';
 import { TableNames } from '@/database/api/types';
 import { randomUUID } from 'expo-crypto';
 
