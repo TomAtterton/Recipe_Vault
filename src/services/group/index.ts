@@ -19,6 +19,7 @@ export const createGroup = async ({ name, userId }: { name: string; userId?: str
         id: randomUUID(),
         profile_id: userId,
         group_id: id,
+        group_role: 'admin',
         updated_at: new Date().toISOString(),
       },
     ]);
@@ -60,7 +61,7 @@ export const createProfileGroup = async ({
         id: randomUUID(),
         profile_id: userId,
         group_id: groupId,
-        user_type: 'admin',
+        group_role: 'read_write',
         updated_at: new Date().toISOString(),
       },
     ]);
