@@ -1,8 +1,9 @@
-import { StyleSheet } from 'react-native';
+import { createStyleSheet } from 'react-native-unistyles';
 
-export default StyleSheet.create({
+export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
     flex: 1,
+    paddingTop: miniRuntime.insets.top,
   },
   emptyContainer: {
     flex: 1,
@@ -27,4 +28,4 @@ export default StyleSheet.create({
     paddingTop: 20,
     alignItems: 'center',
   },
-});
+}));

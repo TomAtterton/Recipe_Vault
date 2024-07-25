@@ -4,7 +4,7 @@ export const SEARCH_BAR_HEIGHT = 60;
 
 export const stylesheet = createStyleSheet((theme) => ({
   container: {
-    paddingTop: 20,
+    marginTop: 20,
     position: 'absolute',
     left: 0,
     right: 0,

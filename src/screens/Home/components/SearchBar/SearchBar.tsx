@@ -1,5 +1,13 @@
 import React, { useMemo, useState } from 'react';
-import { Keyboard, StyleProp, TextInput, TouchableOpacity, View, ViewStyle } from 'react-native';
+import {
+  Keyboard,
+  StyleProp,
+  TextInput,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+  ViewStyle,
+} from 'react-native';
 import Animated from 'react-native-reanimated';
 import HomeAnimation from '@/screens/Home/homeAnimation';
 
@@ -7,7 +15,6 @@ import { useStyles } from 'react-native-unistyles';
 import SquircleDynamicContainer from '@/components/SquircleDynamicContainer';
 import Icon from '@/components/Icon';
 import Input from '@/components/inputs';
-import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import Typography from '@/components/Typography';
 import { stylesheet } from '@/screens/Home/components/SearchBar/searchBar.style';
 import { translate } from '@/core';
@@ -24,7 +31,6 @@ interface Props {
 const AnimatedButton = Animated.createAnimatedComponent(TouchableOpacity);
 
 const DEFAULT_HEIGHT = 48;
-const DEFAULT_WIDTH = SCREEN_WIDTH - 40;
 
 const SearchBar = ({
   style,
@@ -36,6 +42,8 @@ const SearchBar = ({
 }: Props) => {
   const searchRef = React.useRef<TextInput>(null);
   const { styles, theme } = useStyles(stylesheet);
+  const { width } = useWindowDimensions();
+
   const [isFocused, setIsFocused] = useState(false);
 
   const borderColor = useMemo(() => {
@@ -46,21 +54,11 @@ const SearchBar = ({
   }, [isFocused, theme.colors.onBackground, theme.colors.primary]);
 
   return (
-    <Animated.View
-      style={[
-        styles.container,
-        {
-          // @ts-ignore
-          backgroundColor: theme.colors.inputBackground,
-        },
-        style,
-      ]}
-      {...HomeAnimation.searchBarAnimation}
-    >
+    <Animated.View style={[styles.container, style]} {...HomeAnimation.searchBarAnimation}>
       <SquircleDynamicContainer
         style={styles.squircleContainer}
         height={DEFAULT_HEIGHT}
-        width={DEFAULT_WIDTH}
+        width={width - 40}
         color={borderColor}
         animationDuration={400}
         {...HomeAnimation.searchContainerAnimation}

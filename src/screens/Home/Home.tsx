@@ -5,7 +5,6 @@ import FilterOptions from 'src/screens/Home/components/FilterOptions';
 import SearchBar from 'src/screens/Home/components/SearchBar';
 import useSearchRecipe from '@/hooks/recipe/useSearchRecipe';
 
-import styles from './home.style';
 import SearchList from '@/screens/Home/components/SearchList';
 import HeaderContainer from '@/screens/Home/components/HeaderContainer';
 import TrySomethingCarousel from '@/screens/Home/components/TrySomethingCarousel';
@@ -13,8 +12,9 @@ import Animated from 'react-native-reanimated';
 import HomeAnimation from '@/screens/Home/homeAnimation';
 import CategorySelection from '@/components/RecipeForm/components/CategorySelection';
 import useDatabaseListener from '@/database/hooks/useDatabaseListener';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { checkIfPro } from '@/services/pro';
+import { stylesheet } from '@/screens/Home/home.style';
+import { useStyles } from 'react-native-unistyles';
 
 const Home = () => {
   const {
@@ -28,6 +28,7 @@ const Home = () => {
   } = useSearchRecipe();
 
   const [showingSearch, setShowingSearch] = useState(false);
+  const { styles } = useStyles(stylesheet);
 
   const onSearchFocus = useCallback(() => {
     setShowingSearch(true);
@@ -38,17 +39,9 @@ const Home = () => {
   }, []);
 
   useDatabaseListener();
-  const { top } = useSafeAreaInsets();
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          paddingTop: top,
-        },
-      ]}
-    >
+    <View style={[styles.container]}>
       {!showingSearch && <HeaderContainer />}
       <Animated.View style={styles.searchContainer} {...HomeAnimation.searchContainerAnimation}>
         <SearchBar

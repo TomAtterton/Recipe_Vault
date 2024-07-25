@@ -1,4 +1,3 @@
-import metrics from '@/theme/metrics';
 import { createStyleSheet } from 'react-native-unistyles';
 
 export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
@@ -35,7 +34,7 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     paddingBottom: 20,
   },
   loginButton: {
-    width: metrics.screenWidth / 1.5,
+    width: miniRuntime.screen.width / 1.5,
     height: 50,
   },
   backButton: {

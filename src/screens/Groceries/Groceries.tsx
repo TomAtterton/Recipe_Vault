@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, useWindowDimensions, View } from 'react-native';
 import useGroceryList from './useGroceryList';
 import { Reminder } from 'expo-calendar';
 import { RefreshControl } from 'react-native-gesture-handler';
@@ -21,7 +21,6 @@ import BottomSheet from '@/components/BottomSheet';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import OutlineButton from '@/components/buttons/OutlineButton';
 import Shimmer from '@/components/Shimmer';
-import metrics from '@/theme/metrics';
 import { requestReminderPermission } from '@/utils/reminderUtils';
 
 const keyExtractor = (item: Reminder, index: number) => `${item?.id}` + index;
@@ -49,7 +48,7 @@ const Groceries = () => {
   };
 
   useScrollToTop(scrollViewRef);
-
+  const { width } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
 
   const listData = useMemo(() => (isLoading ? loadingArray : data), [data, isLoading]);
@@ -84,13 +83,13 @@ const Groceries = () => {
         return (
           <View style={styles.loadingContainer}>
             <Shimmer style={{ borderRadius: 10 }} width={44} height={44} />
-            <Shimmer style={{ borderRadius: 10 }} width={metrics.screenWidth / 1.4} height={48} />
+            <Shimmer style={{ borderRadius: 10 }} width={width / 1.4} height={48} />
           </View>
         );
       }
       return <GroceryItem item={item} onCompleted={onCompleted} onEdit={handleEdit} />;
     },
-    [isLoading, onCompleted, handleEdit, styles.loadingContainer]
+    [isLoading, onCompleted, handleEdit, styles.loadingContainer, width]
   );
 
   return (

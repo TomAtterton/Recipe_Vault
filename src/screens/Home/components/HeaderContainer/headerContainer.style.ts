@@ -1,11 +1,13 @@
-import { HEIGHT } from '@/theme/constants';
 import { createStyleSheet } from 'react-native-unistyles';
 
-const HEADER_HEIGHT = HEIGHT / 3.5;
-
-export const stylesheet = createStyleSheet((theme) => ({
+export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
-    minHeight: HEADER_HEIGHT,
+    minHeight: {
+      xs: miniRuntime.screen.height / 3.5,
+      sm: miniRuntime.screen.height / 3.5,
+      md: miniRuntime.screen.height / 4.5,
+      lg: miniRuntime.screen.height / 3.5,
+    },
   },
   title: {},
   subTitle: {
@@ -13,7 +15,12 @@ export const stylesheet = createStyleSheet((theme) => ({
     color: theme.colors.primary,
   },
   textContainer: {
-    height: HEADER_HEIGHT,
+    height: {
+      xs: miniRuntime.screen.height / 3.5,
+      sm: miniRuntime.screen.height / 3.5,
+      md: miniRuntime.screen.height / 4.5,
+      lg: miniRuntime.screen.height / 3.5,
+    },
     flexDirection: 'row',
     alignItems: 'flex-end',
     paddingHorizontal: 20,

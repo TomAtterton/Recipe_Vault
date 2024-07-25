@@ -76,6 +76,8 @@ const RecipeDescription = ({
           <CalendarPicker title={name} id={id} />
         </View>
       </View>
+
+      <StarRating onChange={onRatingChange} initialValue={currentRating} />
       <View style={styles.titleContainer} pointerEvents={'box-none'}>
         <Typography
           style={[
@@ -125,7 +127,6 @@ const RecipeDescription = ({
           </View>
         </BottomSheet>
       )}
-      <StarRating onChange={onRatingChange} initialValue={currentRating} />
     </View>
   );
 };

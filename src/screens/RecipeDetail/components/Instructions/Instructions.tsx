@@ -6,7 +6,7 @@ import useGetRecipeInstructions from '@/database/api/recipes/hooks/useGetRecipeI
 import { stylesheet } from './instructions.style';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
-import { View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import MarkdownText from '@/screens/RecipeDetail/components/Instructions/MarkdownText';
 
 interface InstructionsProps {
@@ -45,7 +45,7 @@ const Instructions: React.FC<InstructionsProps> = ({
     return acc;
   }, []);
 
-  const { styles } = useStyles(stylesheet);
+  const { styles, breakpoint } = useStyles(stylesheet);
   const handleRenderInstruction = ({ item }: { item: StepInstruction }) => {
     if (typeof item === 'string') {
       return (
@@ -65,13 +65,16 @@ const Instructions: React.FC<InstructionsProps> = ({
     );
   };
 
+  const isiPad = breakpoint === 'xl' || breakpoint === 'lg' || breakpoint === 'md';
+
+  const ListComponent = isiPad ? FlatList : Tabs.FlatList;
   return (
-    <Tabs.FlatList
+    <ListComponent
+      keyExtractor={keyExtractor}
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
       data={sections}
       renderItem={handleRenderInstruction}
-      keyExtractor={keyExtractor}
     />
   );
 };

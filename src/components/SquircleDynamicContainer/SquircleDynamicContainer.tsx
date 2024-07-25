@@ -28,6 +28,7 @@ const SquircleDynamicContainer = forwardRef<View, Props>(
 
     const handleLayout = useCallback(
       (e: LayoutChangeEvent) => {
+        setDefaultWidth(e.nativeEvent.layout.width);
         animatedWidth.value = withTiming(e.nativeEvent.layout.width, {
           duration: animationDuration,
         });

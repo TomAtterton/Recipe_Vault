@@ -1,7 +1,13 @@
-import { Animated, View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import {
+  Animated,
+  View,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  useWindowDimensions,
+} from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import React, { useCallback } from 'react';
-import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useStyles } from 'react-native-unistyles';
 import Icon from '@/components/Icon';
 import { IconName } from '@/components/Icon/types';
@@ -99,8 +105,8 @@ interface SwipeButtonProps {
 }
 
 const SwipeButton = ({ progress, rowWidth, backgroundColor, icon, isLeft }: SwipeButtonProps) => {
-  const screenWidth = SCREEN_WIDTH;
-  const outputRange = isLeft ? [-screenWidth, 0] : [screenWidth, 0];
+  const { width } = useWindowDimensions();
+  const outputRange = isLeft ? [-width, 0] : [width, 0];
 
   const trans = progress.interpolate({
     inputRange: [0, 1],

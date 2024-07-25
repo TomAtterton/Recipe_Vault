@@ -14,7 +14,6 @@ export const stylesheet = createStyleSheet(() => ({
   scrollContent: {
     flex: 1,
     flexGrow: 1,
-    backgroundColor: 'red',
     marginTop: 40,
     gap: 20,
   },

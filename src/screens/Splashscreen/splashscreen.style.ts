@@ -3,20 +3,19 @@ import { createStyleSheet } from 'react-native-unistyles';
 export const stylesheet = createStyleSheet((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   bottomContent: {
     flex: 1,
     justifyContent: 'flex-end',
     overflow: 'visible',
   },
-  imageBackground: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    width: '100%',
+  image: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   title: {
     color: theme.colors.placeholder,

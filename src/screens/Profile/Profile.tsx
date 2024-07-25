@@ -133,7 +133,7 @@ const Profile = () => {
   };
   const { styles, theme } = useStyles(stylesheet);
 
-  const [currentState, setCurrentState] = React.useState(ProfileState.INITIAL);
+  const [currentState, setCurrentState] = useState(ProfileState.INITIAL);
 
   const isInitial = currentState === ProfileState.INITIAL;
 

@@ -7,8 +7,6 @@ import { BlurView } from 'expo-blur';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from '@/navigation/tabBar.style';
 import { IconName } from '@/components/Icon/types';
-import AddRecipeSelection from '@/screens/AddRecipeSelection';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useBoundStore } from '@/store';
 
 const TAB_ICONS = {
@@ -21,7 +19,6 @@ const TAB_ICONS = {
 
 export const TabBar = ({ state, descriptors, navigation, insets }: BottomTabBarProps) => {
   const { styles, theme } = useStyles(stylesheet);
-  const optionsRef = React.useRef<BottomSheetModal>(null);
   const tabBarHeight = 45 + insets.bottom;
   const darkMode = useBoundStore((_) => _.darkMode);
   return (
@@ -81,7 +78,6 @@ export const TabBar = ({ state, descriptors, navigation, insets }: BottomTabBarP
           </Pressable>
         );
       })}
-      <AddRecipeSelection optionsRef={optionsRef} />
     </BlurView>
   );
 };

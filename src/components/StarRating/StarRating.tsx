@@ -42,10 +42,26 @@ const StarRating = ({ style, initialValue = 0, onChange }: Props) => {
     });
 
   const gestures = Gesture.Race(tap, pan);
+  const [containerWidth, setContainerWidth] = React.useState(0);
 
   return (
     <GestureDetector gesture={gestures}>
-      <Canvas style={[styles.container, style]}>
+      <Canvas
+        style={[
+          styles.container,
+          style,
+          {
+            transform: [
+              {
+                translateX: containerWidth / 2 - 20 - (SIZE_MARGIN * 5) / 2,
+              },
+            ],
+          },
+        ]}
+        onLayout={(e) => {
+          setContainerWidth(e.nativeEvent.layout.width);
+        }}
+      >
         {array.map((i) => {
           return (
             <Group key={i} transform={[{ translateX: SIZE_MARGIN * i }]}>
