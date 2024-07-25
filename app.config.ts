@@ -8,7 +8,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   version: '0.0.20',
   runtimeVersion: '0.0.20',
   scheme: 'recipeapp',
-  // orientation: 'default',
+  orientation: 'portrait',
   icon: './assets/icon.png',
   userInterfaceStyle: 'automatic',
   splash: {
