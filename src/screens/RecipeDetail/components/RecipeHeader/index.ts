@@ -1,3 +1,4 @@
+import AnimatedRecipeHeader from './AnimatedRecipeHeader';
 import RecipeHeader from './RecipeHeader';
 
-export default RecipeHeader;
+export { AnimatedRecipeHeader, RecipeHeader };

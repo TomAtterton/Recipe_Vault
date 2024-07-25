@@ -17,6 +17,8 @@ const HeaderContainer = () => {
   } = useStyles(stylesheet);
   const { navigate } = useNavigation();
 
+  const handleSettingsPress = () => navigate(Routes.Settings);
+
   return (
     <Animated.View style={styles.container} {...HomeAnimation.headerContainerAnimation}>
       <View style={styles.textContainer}>
@@ -35,10 +37,7 @@ const HeaderContainer = () => {
         iconSource={'profile'}
         iconSize={40}
         buttonSize={'large'}
-        onPress={() => {
-          // @ts-ignore
-          navigate(Routes.Settings);
-        }}
+        onPress={handleSettingsPress}
       />
     </Animated.View>
   );

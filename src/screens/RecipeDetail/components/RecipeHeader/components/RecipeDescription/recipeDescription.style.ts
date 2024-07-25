@@ -1,12 +1,14 @@
 import { createStyleSheet } from 'react-native-unistyles';
-import metrics from '@/theme/metrics';
-import { IMAGE_HEIGHT } from '@/screens/RecipeDetail/components/RecipeHeader/recipeHeader.style';
 
-export const stylesheet = createStyleSheet(({ colors }) => ({
+export const stylesheet = createStyleSheet(({ colors }, { screen }) => ({
   container: {
-    flex: 1,
-    marginTop: IMAGE_HEIGHT,
-    maxHeight: metrics.screenHeight / 4,
+    marginTop: {
+      xs: screen.height / 2.8,
+      sm: screen.height / 2.8,
+      md: 0,
+      lg: 0,
+      xl: 0,
+    },
     paddingHorizontal: 20,
     paddingVertical: 20,
   },

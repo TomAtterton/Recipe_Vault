@@ -9,6 +9,7 @@ export type RootStackParamList = RecipeDetailStackParamList &
   TabParamList & {
     [Routes.TabStack]: undefined;
     [Routes.Splashscreen]: undefined;
+    [Routes.Settings]: undefined;
     [Routes.Login]: {
       showSkip: boolean;
     };

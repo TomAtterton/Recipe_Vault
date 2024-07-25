@@ -1,7 +1,7 @@
 import { ActivityIndicator, View } from 'react-native';
 
 import useHydration from '@/store/useHydration';
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 
 import * as ExpoSplashscreen from 'expo-splash-screen';
 import { useNavigation } from '@react-navigation/native';
@@ -11,7 +11,7 @@ import { stylesheet } from './splashscreen.style';
 import Typography from '@/components/Typography';
 import { onOpenDatabase } from '@/database';
 import { Routes } from '@/navigation/Routes';
-import { ImageBackground } from 'expo-image';
+import { Image } from 'expo-image';
 import { showErrorMessage } from '@/utils/errorUtils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import images from '@/theme/images';
@@ -25,7 +25,7 @@ const Splashscreen = () => {
 
   const { reset } = useNavigation();
 
-  const hideSplash = React.useCallback(async () => {
+  const hideSplash = useCallback(async () => {
     await ExpoSplashscreen.hideAsync();
   }, []);
 
@@ -56,29 +56,24 @@ const Splashscreen = () => {
   const { bottom } = useSafeAreaInsets();
   return (
     <View style={styles.container}>
-      <ImageBackground
-        style={styles.imageBackground}
-        source={images.SPLASH_IMAGE}
-        contentFit={'cover'}
+      <Image style={styles.image} source={images.SPLASH_IMAGE} contentFit={'contain'} />
+      <View
+        style={[
+          styles.bottomContent,
+          {
+            paddingBottom: bottom,
+          },
+        ]}
       >
-        <View
-          style={[
-            styles.bottomContent,
-            {
-              paddingBottom: bottom,
-            },
-          ]}
-        >
-          <Typography style={styles.title} variant={'displayMedium'}>
-            Recipe Vault
-          </Typography>
-          <ActivityIndicator
-            style={styles.activityIndicator}
-            size={'large'}
-            color={theme.colors.primary}
-          />
-        </View>
-      </ImageBackground>
+        <Typography style={styles.title} variant={'displayMedium'}>
+          Recipe Vault
+        </Typography>
+        <ActivityIndicator
+          style={styles.activityIndicator}
+          size={'large'}
+          color={theme.colors.primary}
+        />
+      </View>
     </View>
   );
 };

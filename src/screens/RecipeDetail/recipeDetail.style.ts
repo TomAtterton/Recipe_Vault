@@ -1,22 +1,18 @@
-import { StyleSheet } from 'react-native';
+import { createStyleSheet } from 'react-native-unistyles';
 
-export default StyleSheet.create({
+export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
     flex: 1,
-  },
-  timeContainerWrapper: {
-    position: 'absolute',
-    bottom: 16,
-    left: 16,
-    right: 16,
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingTop: miniRuntime.insets.top + 64,
+  },
+  navBar: {
+    position: 'absolute',
+    right: 16,
+    left: 16,
     justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: 'row',
+    top: miniRuntime.insets.top + 64 / 3,
   },
-  timeContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-    borderRadius: 10,
-  },
-});
+}));

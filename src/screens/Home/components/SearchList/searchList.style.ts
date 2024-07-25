@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { createStyleSheet } from 'react-native-unistyles';
 
-export default StyleSheet.create({
+export const stylesheet = createStyleSheet(() => ({
   container: {
     flex: 1,
     marginTop: 40,
@@ -18,4 +18,4 @@ export default StyleSheet.create({
     marginTop: 10,
     borderRadius: 10,
   },
-});
+}));

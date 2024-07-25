@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { FlatList, Keyboard, View } from 'react-native';
-import { HEIGHT } from '@/theme/constants';
+import { FlatList, Keyboard, useWindowDimensions, View } from 'react-native';
 
 interface Props {
   currentFilters: FilterObjectType;
@@ -35,7 +34,9 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
     optionsRef.current?.present();
   }, [currentFilters]);
 
-  const snapPoints = React.useMemo(() => [HEIGHT / 1.2], []);
+  const { height } = useWindowDimensions();
+
+  const snapPoints = React.useMemo(() => [height / 1.2], [height]);
   const optionsRef = React.useRef<BottomSheetModal>(null);
 
   const [filterOptions, setFilterOptions] = useState<FilterObjectType>({

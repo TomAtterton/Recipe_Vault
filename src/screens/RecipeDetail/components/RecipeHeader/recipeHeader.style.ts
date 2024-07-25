@@ -1,17 +1,45 @@
-import { HEIGHT } from '@/theme/constants';
-import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { createStyleSheet } from 'react-native-unistyles';
 
-export const IMAGE_HEIGHT = HEIGHT / 2.8;
-export const IMAGE_WIDTH = SCREEN_WIDTH;
-
-export const stylesheet = createStyleSheet(() => ({
+export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
-    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: {
+      xs: 0,
+      sm: 0,
+      md: 10,
+      lg: 10,
+      xl: 10,
+    },
+    width: {
+      xs: miniRuntime.screen.width,
+      sm: miniRuntime.screen.width,
+      md: miniRuntime.screen.width / 2,
+      lg: miniRuntime.screen.width / 3,
+      xl: miniRuntime.screen.width / 3,
+    },
+    height: {
+      xs: miniRuntime.screen.height / 4 + miniRuntime.screen.height / 2.8,
+      md: '50%',
+      lg: '50%',
+      xl: '50%',
+    },
   },
   image: {
-    width: IMAGE_WIDTH,
-    height: IMAGE_HEIGHT,
+    borderRadius: 20,
+    height: {
+      xs: miniRuntime.screen.height / 2.8,
+      sm: miniRuntime.screen.height / 2.8,
+      md: miniRuntime.screen.width / 3,
+      lg: miniRuntime.screen.width / 3,
+      xl: miniRuntime.screen.width / 4,
+    },
+    width: {
+      xs: miniRuntime.screen.width,
+      sm: miniRuntime.screen.width,
+      md: undefined,
+      lg: undefined,
+      xl: undefined,
+    },
   },
   topNavigation: {
     position: 'absolute',

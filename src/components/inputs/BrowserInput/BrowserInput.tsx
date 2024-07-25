@@ -1,6 +1,5 @@
 import { Keyboard, TouchableOpacity, View } from 'react-native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import WebView from 'react-native-webview';
 import { ICON_SIZE, stylesheet } from './browserInput.style';
 import Animated, { SlideInRight } from 'react-native-reanimated';
@@ -34,8 +33,6 @@ const BrowserBar = ({
   isBackEnabled,
   isForwardEnabled,
 }: Props) => {
-  const { top } = useSafeAreaInsets();
-
   const [urlValue, setUrlValue] = useState('https://google.com');
   const { styles, theme } = useStyles(stylesheet);
 
@@ -58,7 +55,7 @@ const BrowserBar = ({
   }, [url]);
 
   return (
-    <View style={[styles.container, { marginTop: top }]}>
+    <View style={styles.container}>
       <View style={styles.contentContainer}>
         <View
           style={[

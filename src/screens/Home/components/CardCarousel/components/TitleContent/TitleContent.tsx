@@ -1,9 +1,10 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 
-import styles from './titleContent.style';
+import { stylesheet } from './titleContent.style';
 import Typography from '@/components/Typography';
 import LabelButton from '@/components/buttons/LabelButton';
+import { useStyles } from 'react-native-unistyles';
 
 interface Props {
   title?: string;
@@ -12,6 +13,8 @@ interface Props {
 }
 
 const TitleContent = ({ title, showSeeAll, onSeeAll }: Props) => {
+  const { styles } = useStyles(stylesheet);
+
   if (!title) return;
 
   return (

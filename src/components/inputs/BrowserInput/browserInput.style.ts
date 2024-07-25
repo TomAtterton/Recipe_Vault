@@ -4,12 +4,13 @@ export const SEARCH_BAR_HEIGHT = 60;
 export const ICON_SIZE = 24;
 export const INPUT_HEIGHT = 45;
 
-export const stylesheet = createStyleSheet((theme) => ({
+export const stylesheet = createStyleSheet((theme, { insets: { top } }) => ({
   container: {
     paddingBottom: 20,
     marginHorizontal: 20,
     height: SEARCH_BAR_HEIGHT,
     justifyContent: 'center',
+    marginTop: top + 20,
   },
   contentContainer: {
     flexDirection: 'row',

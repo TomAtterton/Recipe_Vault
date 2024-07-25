@@ -5,6 +5,7 @@ import {
   View,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  useWindowDimensions,
 } from 'react-native';
 import Typography from '@/components/Typography';
 import Icon from '@/components/Icon';
@@ -13,7 +14,7 @@ import CheckBox from '@/components/CheckBox';
 import { useStyles } from 'react-native-unistyles';
 
 import { IconName } from '@/components/Icon/types';
-import { SCREEN_WIDTH, stylesheet } from './onboarding.style';
+import { stylesheet } from './onboarding.style';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
 import { setHasOnboarded, useBoundStore } from '@/store';
@@ -46,10 +47,11 @@ const onboardingData: {
 
 const Onboarding = () => {
   const [currentPage, setCurrentPage] = useState(0);
+  const { width } = useWindowDimensions();
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const { x } = event.nativeEvent.contentOffset;
-    const indexOfNextScreen = Math.round(x / SCREEN_WIDTH);
+    const indexOfNextScreen = Math.round(x / width);
     if (indexOfNextScreen !== currentPage) {
       setCurrentPage(indexOfNextScreen);
     }
@@ -59,10 +61,9 @@ const Onboarding = () => {
   const hasOnboarded = useBoundStore((state) => state.hasOnboarded);
   const isFinalPage = currentPage === onboardingData.length - 1;
   const { navigate } = useNavigation();
-
   const handleCheckboxPress = (index: number) => {
     scrollViewRef.current?.scrollTo({
-      x: SCREEN_WIDTH * index,
+      x: width * index,
       animated: true,
     });
   };
@@ -77,7 +78,7 @@ const Onboarding = () => {
         scrollEventThrottle={16} // Handle scroll event at every 16ms for smoother tracking
         showsHorizontalScrollIndicator={false}
         style={styles.scrollView}
-        contentContainerStyle={{ width: SCREEN_WIDTH * onboardingData.length }}
+        contentContainerStyle={{ width: width * onboardingData.length }}
       >
         {onboardingData.map((item, index) => (
           <OnboardingView key={index} {...item} />
@@ -116,7 +117,7 @@ const Onboarding = () => {
             }
             /* Handle skip action */
             scrollViewRef.current?.scrollTo({
-              x: SCREEN_WIDTH * (currentPage + 1),
+              x: width * (currentPage + 1),
               animated: true,
             });
           }}

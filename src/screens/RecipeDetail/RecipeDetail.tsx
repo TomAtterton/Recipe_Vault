@@ -1,33 +1,58 @@
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useKeepAwake } from 'expo-keep-awake';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { MaterialTabBar, Tabs } from 'react-native-collapsible-tab-view';
 
 import type { RouteProp } from '@/navigation/types';
-import RecipeHeader from '@/screens/RecipeDetail/components/RecipeHeader';
+import { RecipeHeader, AnimatedRecipeHeader } from '@/screens/RecipeDetail/components/RecipeHeader';
 import Ingredients from '@/screens/RecipeDetail/components/Ingredients';
 import Instructions from '@/screens/RecipeDetail/components/Instructions';
+import EditButton from './components/RecipeHeader/components/EditButton';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useSyncOnFocus from '@/database/hooks/useSyncOnFocus';
 import { useStyles } from 'react-native-unistyles';
 import useGetRecipeIngredients from '@/database/api/recipes/hooks/useGetRecipeIngredients';
-import { RECIPE_HEADER_HEIGHT } from '@/screens/RecipeDetail/components/RecipeHeader/RecipeHeader';
+import { useWindowDimensions, View } from 'react-native';
+import NavBarButton from '@/components/buttons/NavBarButton';
+import { stylesheet } from './recipeDetail.style';
 
 const RecipeDetail = () => {
   useKeepAwake();
   const { params } = useRoute<RouteProp<'RecipeDetails'>>();
 
-  const handleRenderHeader = useCallback(() => <RecipeHeader recipeId={params.id} />, [params.id]);
+  const { height } = useWindowDimensions();
 
-  const { theme } = useStyles();
+  const RECIPE_HEADER_HEIGHT = useMemo(() => height / 2.8 + height / 4, [height]);
+
+  const handleRenderHeader = useCallback(
+    () => <AnimatedRecipeHeader recipeId={params.id} />,
+    [params.id]
+  );
+
   const { top } = useSafeAreaInsets();
+  const { styles, theme, breakpoint } = useStyles(stylesheet);
 
   useSyncOnFocus();
 
   const { ingredients: data } = useGetRecipeIngredients(params.id);
 
-  return (
+  const isiPadLandscape = breakpoint === 'xl' || breakpoint === 'lg';
+  const isiPadPortrait = breakpoint === 'md';
+
+  const { goBack } = useNavigation();
+
+  return isiPadLandscape || isiPadPortrait ? (
+    <View style={styles.container}>
+      <RecipeHeader recipeId={params.id} />
+      <Ingredients recipeId={params.id} data={data} />
+      <Instructions recipeId={params.id} ingredients={data} />
+      <View pointerEvents={'box-none'} style={styles.navBar}>
+        <NavBarButton iconSource={'arrow-left'} onPress={goBack} />
+        <EditButton id={params.id} />
+      </View>
+    </View>
+  ) : (
     <Tabs.Container
       headerHeight={RECIPE_HEADER_HEIGHT}
       lazy

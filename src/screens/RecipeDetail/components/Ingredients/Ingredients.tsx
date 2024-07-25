@@ -11,6 +11,7 @@ import { getRecipeServings } from '@/database/api/recipes';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './ingredients.style';
+import { FlatList } from 'react-native';
 
 interface IngredientsProps {
   recipeId: string;
@@ -45,7 +46,7 @@ const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data }: Ingredients
     ),
     [isMetric, servings]
   );
-  const { styles } = useStyles(stylesheet);
+  const { styles, breakpoint } = useStyles(stylesheet);
 
   const handleRenderIngredient = useCallback(
     ({ item }: { item: string | Ingredient }) => {
@@ -85,11 +86,15 @@ const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data }: Ingredients
     [data]
   );
 
+  const isiPad = breakpoint === 'xl' || breakpoint === 'lg' || breakpoint === 'md';
+
+  const ListComponent = isiPad ? FlatList : Tabs.FlatList;
+
   return (
-    <Tabs.FlatList
+    <ListComponent
       keyExtractor={keyExtractor}
       style={styles.container}
-      contentContainerStyle={styles.listContainer}
+      contentContainerStyle={styles.contentContainerStyle}
       ListHeaderComponent={handleRenderHeader}
       data={sections}
       renderItem={handleRenderIngredient}

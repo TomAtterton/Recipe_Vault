@@ -3,11 +3,18 @@ import { createStyleSheet } from 'react-native-unistyles';
 export const stylesheet = createStyleSheet((theme) => ({
   container: {
     paddingHorizontal: 16,
+    width: {
+      md: '50%',
+      lg: '33.33%',
+      xl: '33.33%',
+    },
+    height: {
+      md: '50%',
+      lg: '50%',
+      xl: '100%',
+    },
   },
-  flatList: {
-    flex: 1,
-  },
-  listContainer: {
+  contentContainerStyle: {
     paddingBottom: 40,
   },
   sectionHeader: {

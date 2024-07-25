@@ -8,12 +8,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   version: '0.0.20',
   runtimeVersion: '0.0.20',
   scheme: 'recipeapp',
-  orientation: 'portrait',
+  // orientation: 'default',
   icon: './assets/icon.png',
   userInterfaceStyle: 'automatic',
   splash: {
     image: './assets/splash.png',
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     backgroundColor: '#19120C',
   },
   updates: {
@@ -22,7 +22,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     fallbackToCacheTimeout: 0,
   },
   ios: {
-    supportsTablet: false,
+    supportsTablet: true,
     bundleIdentifier: 'com.tomatterton.recipeapp',
     usesAppleSignIn: true,
     icon: './assets/icon.png',

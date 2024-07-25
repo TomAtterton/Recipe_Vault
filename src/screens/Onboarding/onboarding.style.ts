@@ -1,20 +1,16 @@
 import { createStyleSheet } from 'react-native-unistyles';
-import { Dimensions } from 'react-native';
 
-export const SCREEN_WIDTH = Dimensions.get('window').width;
-
-export const stylesheet = createStyleSheet(() => ({
+export const stylesheet = createStyleSheet((theme, { screen: { width } }) => ({
   container: {
     flex: 1,
   },
   scrollView: {
-    width: SCREEN_WIDTH,
+    width: width,
   },
   onboardingView: {
-    width: SCREEN_WIDTH,
+    width,
     paddingTop: 80,
     gap: 20,
-    alignItems: 'center',
     paddingHorizontal: 20,
     overflow: 'visible',
   },
