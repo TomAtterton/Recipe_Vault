@@ -2,8 +2,6 @@ import { createStyleSheet } from 'react-native-unistyles';
 
 export const stylesheet = createStyleSheet((theme) => ({
   container: {
-    // flex: 1,
-    marginTop: 20,
     paddingHorizontal: 20,
     width: {
       lg: '33.33%',
@@ -11,7 +9,7 @@ export const stylesheet = createStyleSheet((theme) => ({
     },
     height: {
       md: '50%',
-      lg: '50%',
+      lg: '100%',
       xl: '100%',
     },
   },

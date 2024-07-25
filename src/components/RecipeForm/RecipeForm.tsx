@@ -91,14 +91,7 @@ const RecipeForm = ({
   }, [top]);
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          paddingTop: top,
-        },
-      ]}
-    >
+    <View style={styles.container}>
       <NestableScrollContainer
         // @ts-ignore
         ref={scrollViewRef}

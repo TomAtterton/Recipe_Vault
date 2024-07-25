@@ -34,7 +34,7 @@ export const stylesheet = createStyleSheet(({ colors }, { screen }) => ({
     color: colors.placeholder,
   },
   titleContainer: {
-    marginVertical: 16,
+    marginVertical: 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

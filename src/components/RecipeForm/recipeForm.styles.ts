@@ -1,8 +1,15 @@
 import { createStyleSheet } from 'react-native-unistyles';
 
-export const stylesheet = createStyleSheet(() => ({
+export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
     flex: 1,
+    paddingTop: {
+      xs: miniRuntime.insets.top,
+      sm: miniRuntime.insets.top,
+      md: miniRuntime.insets.top + 32,
+      lg: miniRuntime.insets.top + 32,
+      xl: miniRuntime.insets.top + 32,
+    },
   },
   navigationHeader: {
     position: 'absolute',

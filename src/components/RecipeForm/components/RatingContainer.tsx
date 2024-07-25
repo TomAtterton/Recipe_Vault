@@ -13,6 +13,7 @@ const RatingContainer = ({ control, name }: Props) => {
 
   return (
     <StarRating
+      padding={40}
       onChange={(e) => field.onChange(e)}
       initialValue={(field?.value as RecipeFormType['rating']) || 0}
     />

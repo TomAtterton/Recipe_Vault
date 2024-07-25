@@ -10,7 +10,7 @@ export const stylesheet = createStyleSheet((theme) => ({
     },
     height: {
       md: '50%',
-      lg: '50%',
+      lg: '100%',
       xl: '100%',
     },
   },

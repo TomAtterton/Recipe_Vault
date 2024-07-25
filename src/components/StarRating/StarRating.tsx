@@ -12,9 +12,10 @@ export type Props = {
   style?: StyleProp<ViewStyle>;
   initialValue?: number;
   onChange: (rating: number) => void;
+  padding?: number;
 };
 
-const StarRating = ({ style, initialValue = 0, onChange }: Props) => {
+const StarRating = ({ style, initialValue = 0, onChange, padding = 0 }: Props) => {
   const selectedStarIndex = useSharedValue(initialValue);
 
   useEffect(() => {
@@ -59,7 +60,7 @@ const StarRating = ({ style, initialValue = 0, onChange }: Props) => {
           },
         ]}
         onLayout={(e) => {
-          setContainerWidth(e.nativeEvent.layout.width);
+          setContainerWidth(e.nativeEvent.layout.width + padding);
         }}
       >
         {array.map((i) => {

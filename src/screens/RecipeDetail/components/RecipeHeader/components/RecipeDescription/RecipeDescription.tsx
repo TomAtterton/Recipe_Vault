@@ -55,8 +55,6 @@ const RecipeDescription = ({
     });
   };
 
-  const dynamicFontSize = name?.length && name.length > 30 ? 18 : 24;
-
   const hasPrepTime = useMemo(() => !!prepTime && !hasZeroOnly(prepTime), [prepTime]);
   const hasCookTime = useMemo(() => !!cookTime && !hasZeroOnly(cookTime), [cookTime]);
 
@@ -77,20 +75,8 @@ const RecipeDescription = ({
         </View>
       </View>
 
-      <StarRating onChange={onRatingChange} initialValue={currentRating} />
       <View style={styles.titleContainer} pointerEvents={'box-none'}>
-        <Typography
-          style={[
-            styles.title,
-            {
-              fontSize: dynamicFontSize,
-            },
-          ]}
-          // @ts-ignore
-          pointerEvents={'none'}
-          numberOfLines={2}
-          variant={'titleLarge'}
-        >
+        <Typography style={styles.title} variant={'titleLarge'}>
           {name}
         </Typography>
         {hasInfo && (
@@ -104,6 +90,7 @@ const RecipeDescription = ({
           />
         )}
       </View>
+      <StarRating padding={40} onChange={onRatingChange} initialValue={currentRating} />
       {hasInfo && (
         <BottomSheet bottomSheetRef={bottomSheetRef} snapPoints={['30%']}>
           <View style={styles.infoContainer}>
