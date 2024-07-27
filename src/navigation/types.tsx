@@ -4,6 +4,7 @@ import { RecipeDetailStackParamList } from '@/navigation/recipeDetailNavigator';
 import { TabParamList } from '@/navigation/tabNavigator';
 import { Routes } from '@/navigation/Routes';
 import { RecipeFormType } from '@/utils/recipeFormUtil';
+import { Ingredient } from '@/types';
 
 export type RootStackParamList = RecipeDetailStackParamList &
   TabParamList & {
@@ -23,7 +24,7 @@ export type RootStackParamList = RecipeDetailStackParamList &
     [Routes.AdvanceSyncSettings]: undefined;
     [Routes.DatabaseEditor]: undefined;
     [Routes.AddGroceries]: {
-      ingredients?: string[];
+      ingredients?: Ingredient[];
     };
     [Routes.Profile]: undefined;
     [Routes.Search]: {

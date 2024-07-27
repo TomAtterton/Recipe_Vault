@@ -16,12 +16,14 @@ interface Props extends Omit<TextInputProps, 'onChange'> {
 const CheckBoxInput = ({ label, isSelected, onPress, onPressInput, ...props }: Props) => {
   const { styles } = useStyles(stylesheet);
 
+  const hasOnPressInput = onPressInput !== undefined;
+
   return (
     <View style={styles.container}>
       <CheckBox style={styles.checkbox} isSelected={isSelected} onPress={onPress} />
       <TouchableOpacity style={styles.contentContainer} onPress={onPressInput}>
         <FormInput
-          pointerEvents={'none'}
+          pointerEvents={hasOnPressInput ? 'none' : 'auto'}
           containerStyle={styles.inputContainer}
           value={label}
           multiline={true}

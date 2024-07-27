@@ -49,9 +49,8 @@ const RecipeDescription = ({
   const { navigate } = useNavigation();
 
   const handleAddGroceries = () => {
-    const ingredientsList = ingredients?.map((ingredient) => ingredient.text);
     navigate(Routes.AddGroceries, {
-      ingredients: ingredientsList,
+      ingredients,
     });
   };
 

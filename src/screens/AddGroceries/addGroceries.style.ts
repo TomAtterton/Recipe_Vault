@@ -6,8 +6,14 @@ export const stylesheet = createStyleSheet(() => ({
     marginHorizontal: 20,
     marginTop: 20,
   },
+
   title: {
     textAlign: 'center',
+  },
+  selectContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingVertical: 16,
   },
   scrollview: {
     flex: 1,
