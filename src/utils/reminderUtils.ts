@@ -62,7 +62,7 @@ export const updateReminder = async (details: Reminder, shouldComplete?: boolean
       await updateReminderAsync(details.id, {
         calendarId: details.calendarId,
         id: details.id,
-        completed: shouldComplete,
+        completed: shouldComplete || false,
         completionDate: new Date(),
         title: details.title,
       });

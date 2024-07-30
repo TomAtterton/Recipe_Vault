@@ -22,6 +22,7 @@ import { useInitialTheme } from 'react-native-unistyles';
 import { useBoundStore } from '@/store';
 import { Env } from '@/core/env';
 import { initPurchases } from '@/services/purchase';
+import { FloatingInputProvider } from '@/providers/FloatingInputProvider';
 
 Sentry.init({
   dsn: Env.SENTRY_DSN,
@@ -38,9 +39,11 @@ const App = () => {
       <SafeAreaProvider>
         <BottomSheetModalProvider>
           <NavigationContainer theme={isDarkMode ? darkNavigationTheme : lightNavigationTheme}>
-            <UpdateProvider>
-              <RootNavigator />
-            </UpdateProvider>
+            <FloatingInputProvider>
+              <UpdateProvider>
+                <RootNavigator />
+              </UpdateProvider>
+            </FloatingInputProvider>
           </NavigationContainer>
         </BottomSheetModalProvider>
       </SafeAreaProvider>

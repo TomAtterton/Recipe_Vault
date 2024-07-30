@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { createStyleSheet } from 'react-native-unistyles';
 
-export default StyleSheet.create({
+export const stylesheet = createStyleSheet({
   container: {
     flex: 1,
     marginVertical: 8,
@@ -8,11 +8,8 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  touchable: {
+  contentContainer: {
     flex: 1,
-  },
-  text: {
-    // Add any additional styles for the text component here
   },
   input: {
     flex: 1,

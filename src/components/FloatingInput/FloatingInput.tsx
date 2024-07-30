@@ -6,58 +6,47 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import Input from '@/components/inputs';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Keyboard, Pressable, StyleProp, TextInput, View, ViewStyle } from 'react-native';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { Keyboard, Pressable, TextInput, useWindowDimensions, View } from 'react-native';
 import { useStyles } from 'react-native-unistyles';
 import OutlineButton from '@/components/buttons/OutlineButton';
-import {
-  Directions,
-  Gesture,
-  GestureDetector,
-  TouchableWithoutFeedback,
-} from 'react-native-gesture-handler';
+import { Directions, Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { SCREEN_HEIGHT } from '@gorhom/bottom-sheet';
-import KeyboardManager from 'react-native-keyboard-manager';
-import { useFocusEffect } from '@react-navigation/native';
 import Typography from '@/components/Typography';
 import { stylesheet } from './floatingInput.style';
 import IconButton from '@/components/buttons/IconButton';
 import { translate } from '@/core';
-
-interface Props {
-  style?: StyleProp<ViewStyle>;
-  children?: React.ReactNode;
-  onSubmit: (text: string) => void;
-  onDismiss?: (containsValue?: boolean) => void;
-  placeholder?: string;
-  shouldFocus?: boolean;
-  description?: string;
-  initialValue?: string;
-  multiline?: boolean;
-  onRemove?: () => void;
-}
+import { FloatingInputContext } from '@/providers/FloatingInputProvider';
 
 const BOTTOM_ACTION_BAR_HEIGHT = 50 + 20;
 const MIN_HEIGHT = 120;
-const maxHeightTextInput = SCREEN_HEIGHT / 2.3;
-const maxHeight = maxHeightTextInput + BOTTOM_ACTION_BAR_HEIGHT + 20;
 
-const FloatingInput = ({
-  style,
-  placeholder,
-  description,
-  initialValue,
-  onDismiss,
-  shouldFocus,
-  children,
-  onSubmit,
-  multiline,
-  onRemove,
-}: Props) => {
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+const FloatingInput = () => {
+  const {
+    placeholder,
+    description,
+    initialValue,
+    multiline,
+    onDismiss,
+    shouldFocus,
+    onSubmit,
+    onRemove,
+  } = useContext(FloatingInputContext) || {};
+
+  const { height: screenHeight } = useWindowDimensions();
+
+  const maxHeightTextInput = useMemo(() => screenHeight / 2.3, [screenHeight]);
+  const maxHeight = useMemo(
+    () => maxHeightTextInput + BOTTOM_ACTION_BAR_HEIGHT + 20,
+    [maxHeightTextInput]
+  );
+
   const { state, height } = useAnimatedKeyboard();
   const inputRef = React.useRef<TextInput>(null);
   const [isFocused, setIsFocused] = React.useState(false);
-  const [text, setText] = useState('');
+  const [text, setText] = useState(initialValue);
 
   const { styles } = useStyles(stylesheet);
   const animatedMinHeight = useSharedValue(MIN_HEIGHT);
@@ -78,28 +67,15 @@ const FloatingInput = ({
     handleReset();
   };
 
-  const handleAdd = () => {
-    setIsFocused(true);
-    inputRef.current?.focus();
-  };
-
   const handleSubmit = () => {
-    const trimmedText = text.trim();
-    onSubmit(trimmedText);
+    const trimmedText = text?.trim();
+    onSubmit && onSubmit(trimmedText || '');
     Keyboard.dismiss();
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      KeyboardManager?.setEnable(false);
-      KeyboardManager.setEnableAutoToolbar(false);
-      // KeyboardManager.resignFirstResponder();
-      KeyboardManager.setShouldResignOnTouchOutside(false);
-    }, [])
-  );
-
   useEffect(() => {
-    initialValue && setText(initialValue);
+    setText(initialValue || '');
+
     if (shouldFocus) {
       setIsFocused(true);
       inputRef.current?.focus();
@@ -152,13 +128,8 @@ const FloatingInput = ({
 
   return (
     <>
-      <Pressable onPress={handleAdd} style={style}>
-        <View pointerEvents={'none'}>{children}</View>
-      </Pressable>
       {isFocused && (
-        <Animated.View pointerEvents="box-none" style={[styles.backdrop, backdropStyle]}>
-          <TouchableWithoutFeedback onPress={handleDismiss} />
-        </Animated.View>
+        <AnimatedPressable onPress={handleDismiss} style={[styles.backdrop, backdropStyle]} />
       )}
       <GestureDetector gesture={gestures}>
         <Animated.View

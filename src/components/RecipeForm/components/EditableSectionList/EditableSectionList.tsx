@@ -5,7 +5,7 @@ import { NestableDraggableFlatList } from 'react-native-draggable-flatlist';
 import Item from './components/Item/Item';
 import { stylesheet } from './editableSectionList.style';
 import useEditSectionList from './hooks/useEditSectionList';
-import { useController } from 'react-hook-form';
+import { useController, useFieldArray } from 'react-hook-form';
 import {
   controlNameType,
   controlType,
@@ -15,7 +15,7 @@ import {
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import ListButton from '@/components/buttons/ListButton';
-import ScanButton from '@/components/RecipeForm/components/EditableSectionList/components/ScanButton';
+import ScanButton from './components/ScanButton';
 
 interface Props {
   control: controlType;
@@ -34,16 +34,20 @@ interface Props {
 const keyExtractor = (item: DraggableListItem, index: number) => item?.id + index;
 
 const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveText }: Props) => {
-  const { field, fieldState } = useController({ control, name });
+  const { fieldState } = useController({ control, name });
+  const { fields, append, remove, move, update } = useFieldArray({
+    control,
+    name: name,
+  });
 
   const fieldValue = useMemo(() => {
-    return field.value as DraggableListItem[];
-  }, [field.value]);
+    return fields as DraggableListItem[];
+  }, [fields]);
 
   const { isIngredient, addItem, addSection } = useEditSectionList({
     type,
     items: fieldValue,
-    onUpdate: field.onChange,
+    onUpdate: append,
   });
 
   const errorMessage = useMemo(() => {
@@ -54,47 +58,34 @@ const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveTex
     return '';
   }, [fieldState.error]);
 
-  const onUpdateValue = useCallback(
-    (item: DraggableListItem) => {
-      field.onChange(
-        fieldValue.map((_: any) => {
-          return _.id === item.id ? item : _;
-        }) || []
-      );
+  const handleEdit = useCallback(
+    (item: DraggableListItem, index: number | undefined) => {
+      onEdit &&
+        onEdit(
+          item.text,
+          (value) => {
+            update(index || 0, { ...item, text: value });
+          },
+          () => remove(index),
+          () => {}
+        );
     },
-    [field, fieldValue]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fieldValue, onEdit]
   );
 
-  const onRemoveValue = useCallback(
-    (item: DraggableListItem) => {
-      field.onChange(
-        fieldValue.filter((_: any) => {
-          return _.id !== item.id;
-        })
-      );
-    },
-    [field, fieldValue]
-  );
   const handleRenderItem = useCallback(
-    ({ item, drag, isActive, ...props }: RenderItemParams<DraggableListItem>) => (
-      <Item
-        isDraggable={true}
-        item={item}
-        onUpdateValue={onUpdateValue}
-        onRemoveValue={onRemoveValue}
-        drag={drag}
-        onEdit={onEdit}
-        isActive={isActive}
-        isIngredient={isIngredient}
-        {...props}
-      />
+    ({ item, drag, isActive, getIndex }: RenderItemParams<DraggableListItem>) => (
+      <Item item={item} drag={drag} isActive={isActive} onEdit={handleEdit} getIndex={getIndex} />
     ),
-    [onEdit, isIngredient, onRemoveValue, onUpdateValue]
+    [handleEdit]
   );
 
   const onDragEnd = useCallback(
-    ({ data: movedData }: { data: DraggableListItem[] }) => field?.onChange(movedData),
-    [field]
+    ({ from, to }: { from: number; to: number }) => {
+      move(from, to);
+    },
+    [move]
   );
 
   const {
@@ -111,6 +102,7 @@ const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveTex
           </Typography>
           <ScanButton onScanLiveText={onScanLiveText} name={name} itemState={fieldValue} />
         </View>
+
         <NestableDraggableFlatList
           keyExtractor={keyExtractor}
           style={styles.listContainer}

@@ -20,7 +20,6 @@ import useScanImageParser from '@/components/RecipeForm/hooks/useScanImageParser
 import ControlledImagePicker from '@/components/RecipeForm/components/ImagePicker';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import FloatingInput from '@/components/FloatingInput';
 import useEditFloatingInput from '@/components/RecipeForm/hooks/useEditFloatingInput';
 import { useMemo } from 'react';
 import EditButton from '@/components/RecipeForm/components/EditButton';
@@ -64,23 +63,16 @@ const RecipeForm = ({
     id,
     isEditing,
   });
+
   const { styles } = useStyles(stylesheet);
   const { goBack } = useNavigation();
-
   const { top } = useSafeAreaInsets();
   const tabBarHeight = useBottomTabBarHeight();
 
   // @ts-ignore
   useScrollToTop(scrollViewRef);
 
-  const {
-    handleEdit,
-    editText,
-    shouldFocus,
-    handleInputSubmit,
-    handleInputRemove,
-    handleInputDismiss,
-  } = useEditFloatingInput();
+  const { handleEdit } = useEditFloatingInput();
 
   const bottomPadding = useMemo(() => {
     return isEditing ? 32 : tabBarHeight + 32;
@@ -193,14 +185,6 @@ const RecipeForm = ({
           <EditButton onPress={onClearForm} />
         )}
       </View>
-      <FloatingInput
-        onSubmit={handleInputSubmit}
-        onDismiss={handleInputDismiss}
-        multiline={true}
-        initialValue={editText}
-        shouldFocus={shouldFocus}
-        onRemove={handleInputRemove}
-      />
     </View>
   );
 };

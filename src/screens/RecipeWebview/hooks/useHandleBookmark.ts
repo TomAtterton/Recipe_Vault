@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { addHistory } from '@/store';
+import { addBookmark, addHistory, onEditBookmark } from '@/store';
+import { useFloatingInput } from '@/providers/FloatingInputProvider';
 
 const useHandleBookmark = (uri: string, setUri: (value: string) => void) => {
   const [showBookmark, setShowBookmark] = useState(false);
@@ -10,22 +11,38 @@ const useHandleBookmark = (uri: string, setUri: (value: string) => void) => {
     addHistory({ name: item, url: item });
   };
 
-  const [bookmarkInput, setBookmarkInput] = useState<{
-    id?: string;
-    name?: string;
-    uri: string;
-  } | null>(null);
+  const { showInput } = useFloatingInput();
 
   const handleShowBookmarkModal = ({ id, name }: { id?: string; name?: string }) => {
-    setBookmarkInput({ id, name, uri });
+    showInput &&
+      showInput({
+        placeholder: 'Enter bookmark name',
+        description: uri || '',
+        initialValue: name,
+        onSubmit: (text: string) => {
+          if (id) {
+            onEditBookmark({
+              id,
+              name: text,
+            });
+          } else {
+            uri &&
+              addBookmark({
+                name: text || uri,
+                url: uri,
+              });
+          }
+        },
+        onDismiss: () => {
+          setShowBookmark(false);
+        },
+      });
   };
 
   return {
     showBookmark,
     handleLinkPress,
     handleShowBookmarkModal,
-    setBookmarkInput,
-    bookmarkInput,
     setShowBookmark,
   };
 };
