@@ -16,11 +16,6 @@ export const stylesheet = createStyleSheet(() => ({
     flexGrow: 1,
     paddingBottom: 80,
   },
-  addButtonContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-  },
   blurView: {
     paddingVertical: 8,
   },

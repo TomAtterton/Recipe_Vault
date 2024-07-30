@@ -7,9 +7,10 @@ export const translateWebview = (text: string, url: string): Partial<RecipeDetai
   const cookTime = convertTimeToString(recipe?.cookTime);
   const prepTime = convertTimeToString(recipe?.prepTime);
   const userId = useBoundStore.getState().profile.id;
+
   const recipeDetail: Partial<RecipeDetailType> = {
     id: randomUUID(),
-    userId, // TODO does this matter anymore
+    userId,
     name: recipe?.name || '',
     rating: 0,
     dateAdded: '',
@@ -29,10 +30,8 @@ export const translateWebview = (text: string, url: string): Partial<RecipeDetai
   return recipeDetail;
 };
 
-function decodeHtmlEntity(str: string) {
-  return str.replace(/&#(\d+);/g, function (match, dec) {
-    return String.fromCharCode(dec);
-  });
+function decodeHtmlEntity(str: string): string {
+  return str.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(dec));
 }
 
 const convertRecipeIngredientInstructions = (
@@ -41,136 +40,87 @@ const convertRecipeIngredientInstructions = (
     | { text: string }[]
     | { itemListElement: { text: string }[] }[]
 ): Ingredient[] => {
-  return recipeIngredientInstructions.flatMap(
-    (
-      ingredientInstruction:
-        | string
-        | { text: string }
-        | {
-            itemListElement: { text: string }[];
-          }
-    ) => {
-      if (typeof ingredientInstruction === 'string') {
-        return [
-          {
-            title: '',
-            id: randomUUID(),
-            text: decodeHtmlEntity(ingredientInstruction),
-            type: 'ingredient',
-          },
-        ];
-      } else if ('text' in ingredientInstruction) {
-        return [
-          {
-            title: '',
-            id: randomUUID(),
-            text: decodeHtmlEntity(ingredientInstruction.text),
-            type: 'ingredient',
-          },
-        ];
-      } else if ('itemListElement' in ingredientInstruction) {
-        return ingredientInstruction.itemListElement.map((item: { text: string }) => {
-          return {
-            title: '',
-            id: randomUUID(),
-            text: decodeHtmlEntity(item.text),
-            type: 'ingredient',
-          };
-        });
-      } else {
-        return [];
-      }
+  let sectionTitle = '';
+
+  const mapInstruction = (text: string): Ingredient | [] => {
+    const decodedText = decodeHtmlEntity(text);
+    const type = decodedText.endsWith(':') ? 'section' : 'ingredient';
+    sectionTitle = type === 'section' ? decodedText : sectionTitle;
+    return decodedText && decodedText !== sectionTitle
+      ? {
+          title: sectionTitle,
+          id: randomUUID(),
+          text: decodedText,
+          type,
+        }
+      : [];
+  };
+
+  return recipeIngredientInstructions.flatMap((ingredientInstruction) => {
+    if (typeof ingredientInstruction === 'string') {
+      return mapInstruction(ingredientInstruction);
+    } else if ('text' in ingredientInstruction) {
+      return mapInstruction(ingredientInstruction.text);
+    } else if ('itemListElement' in ingredientInstruction) {
+      return ingredientInstruction.itemListElement.flatMap((item) => mapInstruction(item.text));
+    } else {
+      return [];
     }
-  );
+  });
 };
+
 const convertImage = (
   image?: string | ({ url: string } | string)[] | { url: string }
 ): string | undefined => {
   if (typeof image === 'string') {
     return image;
   } else if (Array.isArray(image)) {
-    if (typeof image[0] === 'string') {
-      return image[0];
-    } else if (image[0].url) {
-      return image[0].url;
-    } else {
-      return undefined;
-    }
-  } else if (image && image.url) {
-    return image.url;
+    return typeof image[0] === 'string' ? image[0] : image[0]?.url;
   } else {
-    return undefined;
+    return image?.url;
   }
 };
 
 const convertRecipeYield = (recipeYield?: string | number | string[]): number => {
-  if (typeof recipeYield === 'string') {
+  if (typeof recipeYield === 'number') {
+    return recipeYield;
+  } else if (typeof recipeYield === 'string') {
     const firstNumber = recipeYield.match(/\d+/);
     return firstNumber ? parseInt(firstNumber[0]) : 0;
-  } else if (typeof recipeYield === 'number') {
-    return recipeYield;
   } else if (Array.isArray(recipeYield)) {
-    return parseInt(recipeYield[0].replace(/\D/g, ''));
+    const firstNumber = recipeYield[0].match(/\d+/);
+    return firstNumber ? parseInt(firstNumber[0]) : 0;
   } else {
     return 0;
   }
 };
 
 const convertTimeToString = (time?: string): string => {
+  if (!time) return '0 minutes';
+
   try {
-    if (!time) {
-      console.log('no time');
-      return '0 minutes';
-    }
-    // if time is in ISO 8601 format
-
-    if (time.includes('PT')) {
-      const timeArray = time.split('T');
-
-      if (timeArray.length !== 2) {
-        throw new Error('Invalid time format');
-      }
-
-      const hoursPart = timeArray[1].split('H');
-
-      if (hoursPart.length === 1) {
-        const minutes = hoursPart[0].split('M')[0];
-        return formatTime(0, parseInt(minutes));
-      } else if (hoursPart.length === 2) {
-        const hours = parseInt(hoursPart[0]);
-        const minutesPart = hoursPart[1].split('M');
-
-        if (minutesPart.length === 1) {
-          const minutes = parseInt(minutesPart[0]);
-          return formatTime(hours, minutes);
-        } else {
-          throw new Error('Invalid time format');
-        }
-      } else {
-        throw new Error('Invalid time format');
-      }
+    if (time.startsWith('PT')) {
+      const timePattern = /PT(?:(\d+)H)?(?:(\d+)M)?/;
+      const [, hours, minutes] = time.match(timePattern) ?? [];
+      return formatTime(parseInt(hours || '0', 10), parseInt(minutes || '0', 10));
     } else {
-      const dateToConvert = new Date(time);
-      const hours = dateToConvert.getUTCHours();
-      const minutes = dateToConvert.getUTCMinutes();
-      return formatTime(hours, minutes);
+      const date = new Date(time);
+      return formatTime(date.getUTCHours(), date.getUTCMinutes());
     }
-  } catch (error) {
+  } catch {
     return '0 minutes';
   }
 };
 
 const formatTime = (hours: number, minutes: number): string => {
-  const hoursString = hours !== 1 ? `${hours} hours` : `${hours} hour`;
-  const minutesString = minutes !== 1 ? `${minutes} minutes` : `${minutes} minute`;
+  const hoursString = hours === 1 ? '1 hour' : `${hours} hours`;
+  const minutesString = minutes === 1 ? '1 minute' : `${minutes} minutes`;
 
-  if (hours > 0 && minutes > 0) {
-    return `${hoursString} ${minutesString}`;
-  } else if (hours > 0) {
-    return hoursString;
-  } else if (minutes > 0) {
-    return minutesString;
-  } else {
-    return '0 minutes';
-  }
+  return hours > 0 && minutes > 0
+    ? `${hoursString} ${minutesString}`
+    : hours > 0
+    ? hoursString
+    : minutes > 0
+    ? minutesString
+    : '0 minutes';
 };

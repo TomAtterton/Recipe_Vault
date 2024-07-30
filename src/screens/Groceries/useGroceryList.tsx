@@ -47,10 +47,11 @@ const useGroceryList = () => {
     fetchList();
   }, [fetchList, groceryListId]);
 
-  const handleEdit = async (details: Reminder) => {
+  const handleEdit = async (details: Reminder, shouldComplete?: boolean) => {
     try {
       updateGroceryItem(details);
-      await updateReminder(details);
+      await updateReminder(details, shouldComplete);
+      await handleRefresh(false);
     } catch (e) {
       showErrorMessage('Error updating reminder');
       console.log('error', e);

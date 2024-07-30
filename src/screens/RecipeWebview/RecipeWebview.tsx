@@ -8,7 +8,6 @@ import AddButton from '@/screens/RecipeWebview/components/AddButton';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useStyles } from 'react-native-unistyles';
 import BrowserInput from '@/components/inputs/BrowserInput';
-import AddBookmarkInput from '@/components/AddBookmarkInput';
 import useHandleUrl from '@/screens/RecipeWebview/hooks/useHandleUrl';
 import useHandleDetection from '@/screens/RecipeWebview/hooks/useHandleDetection';
 import useHandleBookmark from '@/screens/RecipeWebview/hooks/useHandleBookmark';
@@ -34,7 +33,7 @@ const RecipeWebview = ({
 
   const { handleMessage, recipeDetected, handleAddRecipe } = useHandleDetection(uri);
 
-  const { showBookmark, setShowBookmark, handleShowBookmarkModal, handleLinkPress, bookmarkInput } =
+  const { showBookmark, setShowBookmark, handleShowBookmarkModal, handleLinkPress } =
     useHandleBookmark(uri, setUri);
 
   const handleUrlSubmit = (newUrl: string) => {
@@ -100,7 +99,6 @@ const RecipeWebview = ({
         />
         {recipeDetected && <AddButton handleAddRecipe={handleAddRecipe} />}
       </View>
-      <AddBookmarkInput bookmarkInput={bookmarkInput} />
     </>
   );
 };

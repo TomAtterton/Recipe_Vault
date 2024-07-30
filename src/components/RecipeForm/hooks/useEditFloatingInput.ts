@@ -1,12 +1,8 @@
-import { useCallback, useState } from 'react';
-
-let editCallback: (value: string) => void;
-let removeCallback: () => void;
-let dismissCallback: () => void;
+import { useCallback } from 'react';
+import { useFloatingInput } from '@/providers/FloatingInputProvider';
 
 const useEditFloatingInput = () => {
-  const [editText, setEditText] = useState('');
-  const [shouldFocus, setShouldFocus] = useState(false);
+  const { showInput } = useFloatingInput();
 
   const handleEdit = useCallback(
     (
@@ -15,47 +11,27 @@ const useEditFloatingInput = () => {
       callbackRemove?: () => void,
       callbackDismiss?: () => void
     ) => {
-      setEditText(value);
-      if (callbackEdit) {
-        editCallback = callbackEdit;
-      }
-      if (callbackRemove) {
-        removeCallback = callbackRemove;
-      }
-      if (callbackDismiss) {
-        dismissCallback = callbackDismiss;
-      }
-      setShouldFocus(true);
+      showInput &&
+        showInput({
+          placeholder: 'Edit',
+          initialValue: value,
+          multiline: true,
+          onSubmit: (title) => {
+            callbackEdit && callbackEdit(title);
+          },
+          onRemove: () => {
+            callbackRemove && callbackRemove();
+          },
+          onDismiss: () => {
+            callbackDismiss && callbackDismiss();
+          },
+        });
     },
-    []
+    [showInput]
   );
-
-  const handleInputSubmit = (value: string) => {
-    editCallback(value);
-    setShouldFocus(false);
-  };
-
-  const handleInputDismiss = (containsValue?: boolean) => {
-    if (!containsValue) {
-      dismissCallback && dismissCallback();
-    }
-    setEditText('');
-    setShouldFocus(false);
-  };
-
-  const handleInputRemove = () => {
-    removeCallback && removeCallback();
-    setEditText('');
-    setShouldFocus(false);
-  };
 
   return {
     handleEdit,
-    editText,
-    shouldFocus,
-    handleInputSubmit,
-    handleInputDismiss,
-    handleInputRemove,
   };
 };
 
