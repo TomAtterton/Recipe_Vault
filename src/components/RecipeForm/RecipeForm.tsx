@@ -5,7 +5,7 @@ import NumberPicker from 'src/components/NumberPicker';
 import HourMinutePicker from 'src/components/HourMinutePicker';
 import { stylesheet } from './recipeForm.styles';
 import { RecipeDetailType } from '@/types';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { ScanImageDataType } from '@/screens/ScanImageContent/scanImageUtil';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import { useStyles } from 'react-native-unistyles';
@@ -63,6 +63,20 @@ const RecipeForm = ({
     id,
     isEditing,
   });
+
+  const handleDeleteRecipe = () => {
+    Alert.alert('Delete Recipe', 'Are you sure you want to delete this recipe?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: onDeleteRecipe,
+      },
+    ]);
+  };
 
   const { styles } = useStyles(stylesheet);
   const { goBack } = useNavigation();
@@ -179,7 +193,7 @@ const RecipeForm = ({
         {isEditing ? (
           <>
             <NavBarButton iconSource={'arrow-left'} onPress={goBack} />
-            {<NavBarButton iconSource={'bin'} onPress={onDeleteRecipe} />}
+            {<NavBarButton iconSource={'bin'} onPress={handleDeleteRecipe} />}
           </>
         ) : (
           <EditButton onPress={onClearForm} />
