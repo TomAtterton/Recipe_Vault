@@ -1,6 +1,9 @@
+import { useState } from 'react';
+import { Alert } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
 
 import {
   transformDefaultValues,
@@ -14,7 +17,7 @@ import { onUpdateRecipeProps } from '@/components/RecipeForm/RecipeForm';
 import { showErrorMessage } from '@/utils/promptUtils';
 import { ScrollView } from 'react-native';
 import { setScannedImage } from '@/store';
-import { useFocusEffect } from '@react-navigation/native';
+import { translate } from '@/core';
 
 const useHandleRecipeForm = ({
   scannedData,
@@ -27,6 +30,7 @@ const useHandleRecipeForm = ({
 }) => {
   const scrollViewRef = useRef<ScrollView | undefined>(undefined);
   const transformedValues = useMemo(() => transformDefaultValues(data), [data]);
+  const [isDirty, setIsDirty] = useState(false);
 
   const {
     control,
@@ -34,7 +38,7 @@ const useHandleRecipeForm = ({
     setValue,
     clearErrors,
     reset,
-    formState: { isSubmitting },
+    formState: { isSubmitting, dirtyFields },
   } = useForm<RecipeFormType>({
     resolver: zodResolver(recipeFormSchema),
     mode: 'onSubmit',
@@ -64,6 +68,12 @@ const useHandleRecipeForm = ({
     }
   }, [scannedData, setValue]);
 
+  useEffect(() => {
+    if (Object.keys(dirtyFields).length > 0) {
+      setIsDirty(true);
+    }
+  }, [dirtyFields]);
+
   const onSubmit: SubmitHandler<RecipeFormType> = async (formData: RecipeFormType) => {
     try {
       const recipeIngredient = parseSectionData(formData.recipeIngredient);
@@ -85,6 +95,7 @@ const useHandleRecipeForm = ({
       });
       setScannedImage('');
       reset();
+      setIsDirty(false);
     } catch (e) {
       // @ts-ignore
       showErrorMessage(e?.message || 'Something went wrong', 3000);
@@ -96,7 +107,46 @@ const useHandleRecipeForm = ({
   const onClearForm = () => {
     reset();
     clearErrors();
+    setIsDirty(false);
   };
+  const navigation = useNavigation();
+  useFocusEffect(
+    useCallback(() => {
+      const onBeforeRemove = (e: any) => {
+        if (!isDirty) {
+          return;
+        }
+
+        e.preventDefault();
+
+        Alert.alert(
+          translate('prompt.discard_changes.title'),
+          translate('prompt.discard_changes.message'),
+          [
+            {
+              text: translate('prompt.discard_changes.cancel'),
+              style: 'cancel',
+              onPress: () => {},
+            },
+            {
+              text: translate('prompt.discard_changes.discard'),
+              style: 'destructive',
+              onPress: () => {
+                setIsDirty(false);
+                navigation.dispatch(e.data.action);
+              },
+            },
+          ]
+        );
+      };
+
+      navigation.addListener('beforeRemove', onBeforeRemove);
+
+      return () => {
+        navigation.removeListener('beforeRemove', onBeforeRemove);
+      };
+    }, [isDirty, navigation])
+  );
 
   return {
     control,

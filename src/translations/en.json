@@ -1,58 +1,17 @@
 {
-  "home": {
-    "header": {
-      "title": "Good afternoon,",
-      "subtitle": "Discover something delicious"
-    },
-    "search": {
-      "placeholder": "Search for recipes",
-      "button": "Search"
-    },
-    "empty": {
-      "title": "There are no recipes yet.",
-      "button": "create your first recipe"
-    }
-  },
   "bookmark": {
+    "bookmarks": "Bookmarks",
     "clear_bookmarks": "Clear all Bookmarks",
     "clear_history": "Clear all History",
-    "history": "History",
-    "bookmarks": "Bookmarks"
-  },
-  "floating_input": {
-    "placeholder": "Enter a value",
-    "button": "submit"
-  },
-  "prompt": {
-    "copy": {
-      "title": "Content Copied!",
-      "message": "The content has been copied to your clipboard.",
-      "button": "Paste as New Content"
-    },
-    "clear_database": {
-      "title": "Clear Database",
-      "message": "Are you sure you want to clear the database?",
-      "error_message": "There was an issue clearing the database.",
-      "success_message": "The database has been cleared."
-    },
-    "reset_database": {
-      "title": "Reset Database",
-      "message": "Are you sure you want to reset the database?"
-    },
-    "delete_account": {
-      "title": "Delete Account",
-      "message": "Are you sure you want to delete your account?",
-      "success_message": "Your account has been deleted.",
-      "error_message": "Contact customer support there was an issue deleting you account."
-    }
+    "history": "History"
   },
   "default": {
     "cancel": "cancel",
-    "ok": "ok",
-    "dismiss": "dismiss",
     "delete": "delete",
+    "dismiss": "dismiss",
+    "error_message": "Something went wrong",
     "error_title": "Error",
-    "error_message": "Something went wrong"
+    "ok": "ok"
   },
   "empty": {
     "no_results": "No results found."
@@ -62,8 +21,55 @@
     "default": "An error occurred. Please try again later.",
     "no_identity_token": "No identity token was returned."
   },
+  "floating_input": {
+    "button": "submit",
+    "placeholder": "Enter a value"
+  },
+  "home": {
+    "empty": {
+      "button": "create your first recipe",
+      "title": "There are no recipes yet."
+    },
+    "header": {
+      "subtitle": "Discover something delicious",
+      "title": "Good afternoon,"
+    },
+    "search": {
+      "button": "Search",
+      "placeholder": "Search for recipes"
+    }
+  },
   "login": {
     "test_login_title": "Test Login"
+  },
+  "prompt": {
+    "clear_database": {
+      "error_message": "There was an issue clearing the database.",
+      "message": "Are you sure you want to clear the database?",
+      "success_message": "The database has been cleared.",
+      "title": "Clear Database"
+    },
+    "copy": {
+      "button": "Paste as New Content",
+      "message": "The content has been copied to your clipboard.",
+      "title": "Content Copied!"
+    },
+    "delete_account": {
+      "error_message": "Contact customer support there was an issue deleting you account.",
+      "message": "Are you sure you want to delete your account?",
+      "success_message": "Your account has been deleted.",
+      "title": "Delete Account"
+    },
+    "discard_changes": {
+      "cancel": "Cancel",
+      "discard": "Discard",
+      "message": "You have unsaved changes. Are you sure you want to discard them and leave the screen?",
+      "title": "Discard changes?"
+    },
+    "reset_database": {
+      "message": "Are you sure you want to reset the database?",
+      "title": "Reset Database"
+    }
   },
   "settings": {
     "about": "About",
