@@ -19,7 +19,8 @@
     "prettier": "prettier --config .prettierrc.js 'src/**/*.ts' --write",
     "update:stagining": "eas update --channel staging",
     "upload-sourcemaps": "npx sentry-expo-upload-sourcemaps dist",
-    "update-expo": "yarn add expo && npx expo install --fix"
+    "update-expo": "yarn add expo && npx expo install --fix",
+    "devtools": "npx react-devtools"
   },
   "dependencies": {
     "@bacons/link-assets": "^1.1.0",

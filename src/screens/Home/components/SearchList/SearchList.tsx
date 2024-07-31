@@ -1,5 +1,5 @@
 import { FlashList } from '@shopify/flash-list';
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { RecipeDetailType } from '@/types';
 import { Routes } from '@/navigation/Routes';
@@ -18,22 +18,20 @@ const keyExtractor = (_: Partial<RecipeDetailType>, index: number) =>
 const SearchList = ({ data }: { data?: Partial<RecipeDetailType>[] }) => {
   const { navigate } = useNavigation();
   const { styles, breakpoint } = useStyles(stylesheet);
-  const renderItem = useCallback(
-    ({ item }: { item: Partial<RecipeDetailType> }) => (
-      <HorizontalCard
-        {...item}
-        onPress={() =>
-          item.id &&
-          navigate(Routes.RecipeDetailStack, {
-            screen: Routes.RecipeDetails,
-            params: {
-              id: item.id,
-            },
-          })
-        }
-      />
-    ),
-    [navigate]
+
+  const renderItem = ({ item }: { item: Partial<RecipeDetailType> }) => (
+    <HorizontalCard
+      {...item}
+      onPress={() =>
+        item.id &&
+        navigate(Routes.RecipeDetailStack, {
+          screen: Routes.RecipeDetails,
+          params: {
+            id: item.id,
+          },
+        })
+      }
+    />
   );
 
   const numColumns = useMemo(() => {
