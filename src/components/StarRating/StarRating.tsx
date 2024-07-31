@@ -1,5 +1,5 @@
 import { Canvas, Group, Path } from '@shopify/react-native-skia';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { runOnJS, useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import { useStyles } from 'react-native-unistyles';
@@ -43,7 +43,8 @@ const StarRating = ({ style, initialValue = 0, onChange, padding = 0 }: Props) =
     });
 
   const gestures = Gesture.Race(tap, pan);
-  const [containerWidth, setContainerWidth] = React.useState(0);
+
+  const [containerWidth, setContainerWidth] = useState(0);
 
   return (
     <GestureDetector gesture={gestures}>

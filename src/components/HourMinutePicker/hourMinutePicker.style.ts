@@ -7,31 +7,29 @@ export const stylesheet = createStyleSheet((theme) => ({
   contentContainer: {
     paddingHorizontal: 16,
   },
-  itemStyle: {
-    color: theme.colors.onBackground,
-  },
-  selectedNumber: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    paddingTop: 6,
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 8,
   },
   description: {
-    fontSize: 16,
     marginBottom: 16,
+  },
+  pickerContainer: {
+    flexDirection: 'row',
+  },
+  picker: {
+    width: '35%',
+  },
+  pickerItem: {
+    color: theme.colors.onBackground,
+  },
+  labelContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  labelText: {
+    textAlign: 'left',
   },
   saveButton: {
     marginTop: 20,
-  },
-  saveTitle: {
-    fontWeight: 'bold',
-    color: 'white',
   },
 }));

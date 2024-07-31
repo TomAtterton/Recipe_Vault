@@ -8,7 +8,7 @@ import { stylesheet } from '@/components/BottomSheet/bottomSheet.style';
 interface Props extends BottomSheetModalProps {
   bottomSheetRef: React.RefObject<BottomSheetModal>;
   children: React.ReactNode;
-  snapPoints: (number | string)[];
+  snapPoints?: (number | string)[];
   title?: string;
 }
 
@@ -18,7 +18,7 @@ const BottomSheet = ({ bottomSheetRef, children, snapPoints, title, ...props }: 
     theme: { colors },
   } = useStyles(stylesheet);
 
-  const bottomSheetSnapPoints = snapPoints?.length > 0 ? snapPoints : ['50%'];
+  const bottomSheetSnapPoints = (snapPoints?.length || 0) > 0 ? snapPoints : ['50%'];
 
   return (
     <BottomSheetModal

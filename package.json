@@ -26,7 +26,7 @@
     "@bacons/link-assets": "^1.1.0",
     "@candlefinance/faster-image": "^1.6.2",
     "@cloudinary/url-gen": "^1.19.0",
-    "@gorhom/bottom-sheet": "^4.6.3",
+    "@gorhom/bottom-sheet": "^4.6.4",
     "@hookform/resolvers": "^3.9.0",
     "@likashefqet/react-native-image-zoom": "^2.2.0",
     "@react-native-async-storage/async-storage": "^1.24.0",

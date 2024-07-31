@@ -1,16 +1,16 @@
-import React, { useRef, useMemo, useCallback } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { View, ViewStyle, StyleProp } from 'react-native';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Picker } from '@react-native-picker/picker';
-import styles from './numberPicker.style';
+import { stylesheet } from './numberPicker.style';
 
-import { renderBackdrop } from '@/components/BackDrop';
 import { useController } from 'react-hook-form';
 import { controlNameType, controlType } from '@/utils/recipeFormUtil';
 import Typography from '@/components/Typography';
-import { useStyles } from 'react-native-unistyles';
 import InfoLabelButton from '@/components/buttons/InfoLabelButton';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
+import BottomSheet from '@/components/BottomSheet';
+import { useStyles } from 'react-native-unistyles';
 
 interface Props {
   control: controlType;
@@ -21,6 +21,8 @@ interface Props {
   valueSuffix?: string;
 }
 
+const numberItems = Array.from({ length: 30 });
+
 const NumberPicker = ({
   name,
   control,
@@ -30,52 +32,37 @@ const NumberPicker = ({
   containerStyle,
 }: Props) => {
   const { field } = useController({ control, name });
-
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-
-  const { theme } = useStyles();
-
+  const { styles } = useStyles(stylesheet);
   const selectedNumber = field?.value;
 
-  const handlePresentModalPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
+  const buttonTitle = useMemo(
+    () => selectedNumber + (valueSuffix ? ' ' + valueSuffix : ''),
+    [selectedNumber, valueSuffix]
+  );
 
-  const handleSavePress = useCallback(() => {
+  const handlePresentModalPress = () => {
+    bottomSheetModalRef.current?.present();
+  };
+
+  const handleSavePress = () => {
     bottomSheetModalRef.current?.close();
-  }, []);
+  };
 
   const renderPickerItems = useMemo(() => {
-    const items = [];
-    for (let i = 1; i <= 100; i++) {
-      items.push(<Picker.Item key={i} label={`${i}`} value={i} />);
-    }
-    return items;
+    return numberItems.map((_, i) => <Picker.Item key={i} label={`${i}`} value={i} />);
   }, []);
 
   return (
     <View style={[styles.container, containerStyle]}>
-      <InfoLabelButton
-        title={title}
-        buttonTitle={selectedNumber + (valueSuffix ? ' ' + valueSuffix : '')}
-        onPress={handlePresentModalPress}
-      />
-      <BottomSheetModal
-        backdropComponent={renderBackdrop}
-        ref={bottomSheetModalRef}
-        handleIndicatorStyle={{ backgroundColor: theme.colors.onBackground }}
-        snapPoints={['50%']}
-        enablePanDownToClose
-        onDismiss={handleSavePress}
-        backgroundStyle={{ backgroundColor: theme.colors.background }}
-      >
+      <InfoLabelButton title={title} buttonTitle={buttonTitle} onPress={handlePresentModalPress} />
+      <BottomSheet bottomSheetRef={bottomSheetModalRef}>
         <View style={styles.contentContainer}>
           <Typography style={styles.title}>{title}</Typography>
           <Typography style={styles.description}>{description}</Typography>
           <Picker
             selectedValue={selectedNumber}
             onValueChange={(value) => {
-              // convert to number
               value && field.onChange(+value);
             }}
             itemStyle={styles.itemStyle}
@@ -84,7 +71,7 @@ const NumberPicker = ({
           </Picker>
           <PrimaryButton style={styles.saveButton} onPress={handleSavePress} title={'Save'} />
         </View>
-      </BottomSheetModal>
+      </BottomSheet>
     </View>
   );
 };
