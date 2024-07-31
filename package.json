@@ -19,7 +19,8 @@
     "prettier": "prettier --config .prettierrc.js 'src/**/*.ts' --write",
     "update:stagining": "eas update --channel staging",
     "upload-sourcemaps": "npx sentry-expo-upload-sourcemaps dist",
-    "update-expo": "yarn add expo && npx expo install --fix"
+    "update-expo": "yarn add expo && npx expo install --fix",
+    "devtools": "npx react-devtools"
   },
   "dependencies": {
     "@bacons/link-assets": "^1.1.0",
@@ -94,7 +95,7 @@
     "react-native-fast-collapsible": "^1.1.1",
     "react-native-fetch-api": "^3.0.0",
     "react-native-flash-message": "^0.4.2",
-    "react-native-gesture-handler": "^2.17.1",
+    "react-native-gesture-handler": "^2.18.0",
     "react-native-get-random-values": "^1.11.0",
     "react-native-image-crop-picker": "^0.41.2",
     "react-native-keyboard-manager": "^6.5.16-0",

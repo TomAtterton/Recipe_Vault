@@ -16275,9 +16275,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:^2.17.1":
-  version: 2.17.1
-  resolution: "react-native-gesture-handler@npm:2.17.1"
+"react-native-gesture-handler@npm:^2.18.0":
+  version: 2.18.0
+  resolution: "react-native-gesture-handler@npm:2.18.0"
   dependencies:
     "@egjs/hammerjs": ^2.0.17
     hoist-non-react-statics: ^3.3.0
@@ -16286,7 +16286,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 70da4fc51d92899591aadf03396a8e0b78223fbe71da5b10e76232058c1ef5943d54c1dd8da815d5b6a8b41f259ea9d50457680e2ef7878c88d7396771170ae3
+  checksum: 98529b672751d20ee470d368b64ceb8c829e66eb6d7c61724cd84500a76efec52c0b7d67a76ce3bac9bece1d7575ee3e9bb3c66044458ae2fd0ef3000e94e60b
   languageName: node
   linkType: hard
 
@@ -16930,7 +16930,7 @@ __metadata:
     react-native-fast-collapsible: ^1.1.1
     react-native-fetch-api: ^3.0.0
     react-native-flash-message: ^0.4.2
-    react-native-gesture-handler: ^2.17.1
+    react-native-gesture-handler: ^2.18.0
     react-native-get-random-values: ^1.11.0
     react-native-image-crop-picker: ^0.41.2
     react-native-keyboard-manager: ^6.5.16-0
