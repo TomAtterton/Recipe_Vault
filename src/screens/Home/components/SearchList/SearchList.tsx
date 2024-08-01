@@ -28,6 +28,7 @@ const SearchList = ({ data }: { data?: Partial<RecipeDetailType>[] }) => {
           screen: Routes.RecipeDetails,
           params: {
             id: item.id,
+            image: item?.image || null,
           },
         })
       }

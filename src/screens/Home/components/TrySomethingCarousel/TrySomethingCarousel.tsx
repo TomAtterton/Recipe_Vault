@@ -37,6 +37,7 @@ const TrySomethingCarousel = ({ onSeeAll }: { onSeeAll: () => void }) => {
               screen: Routes.RecipeDetails,
               params: {
                 id: item.id,
+                image: item?.image || null,
               },
             })
           }

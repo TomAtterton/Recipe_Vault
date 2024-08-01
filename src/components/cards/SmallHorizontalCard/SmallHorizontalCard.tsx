@@ -77,6 +77,7 @@ const SmallHorizontalCard = ({ item }: Props) => {
             screen: Routes.RecipeDetails,
             params: {
               id: item.recipeId,
+              image: item?.image || null,
             },
           })
         }

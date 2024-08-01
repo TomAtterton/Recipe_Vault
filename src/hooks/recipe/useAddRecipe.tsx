@@ -39,6 +39,7 @@ const useAddRecipe = ({
           screen: Routes.RecipeDetails,
           params: {
             id: recipeId,
+            image: updateValues?.image || null,
           },
         });
       }

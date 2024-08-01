@@ -10,7 +10,7 @@ import { ScanImageDataType } from '@/screens/ScanImageContent/scanImageUtil';
 import ScanImageContent from '@/screens/ScanImageContent';
 
 export type RecipeDetailStackParamList = {
-  RecipeDetails: { id: string };
+  RecipeDetails: { id: string; image: string | null };
   EditRecipe: {
     id?: string | null;
     scanContent?: {

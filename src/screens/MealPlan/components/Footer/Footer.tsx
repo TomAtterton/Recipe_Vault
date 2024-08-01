@@ -3,7 +3,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
-import { stylesheet } from '@/screens/MealPlan/components/Header/header.style';
+import { stylesheet } from './footer.style';
 import IconButton from '@/components/buttons/IconButton';
 
 interface Props {
@@ -12,12 +12,14 @@ interface Props {
   onWeekChange: (offset: number) => void;
 }
 
-const Header = ({ currentWeek, weekOffset, onWeekChange }: Props) => {
+const Footer = ({ currentWeek, weekOffset, onWeekChange }: Props) => {
   const {
     styles,
     theme: { colors },
   } = useStyles(stylesheet);
+
   const tabBarHeight = useBottomTabBarHeight();
+
   return (
     <BlurView
       tint="dark"
@@ -50,4 +52,4 @@ const Header = ({ currentWeek, weekOffset, onWeekChange }: Props) => {
   );
 };
 
-export default Header;
+export default Footer;

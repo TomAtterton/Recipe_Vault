@@ -3,7 +3,7 @@ import { View, SafeAreaView } from 'react-native';
 
 import { RecipeDetailType } from '@/types';
 import useMealPlan from '@/screens/MealPlan/hooks/useMealPlan';
-import Header from '@/screens/MealPlan/components/Header';
+import Footer from 'src/screens/MealPlan/components/Footer';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
 import MealPlanMenuSelection from 'src/components/MealPlanMenuSelection';
@@ -29,6 +29,7 @@ export type MealPlanType = {
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const keyExtractor = (item: MealPlanType) => item.id;
+
 const WeekListWithRecipes = () => {
   const { currentDate, getCurrentDateByDay, currentWeek, data, weekOffset, setWeekOffset } =
     useMealPlan();
@@ -93,7 +94,7 @@ const WeekListWithRecipes = () => {
           getCurrentDateByDay={getCurrentDateByDay}
         />
       </Animated.ScrollView>
-      <Header currentWeek={currentWeek} weekOffset={weekOffset} onWeekChange={setWeekOffset} />
+      <Footer currentWeek={currentWeek} weekOffset={weekOffset} onWeekChange={setWeekOffset} />
     </SafeAreaView>
   );
 };

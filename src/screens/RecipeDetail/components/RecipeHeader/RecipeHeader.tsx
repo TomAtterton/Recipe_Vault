@@ -9,7 +9,7 @@ import useRecipeDetail from '@/hooks/recipe/useRecipeDetail';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './recipeHeader.style';
 
-const RecipeHeader = ({ recipeId }: { recipeId: string }) => {
+const RecipeHeader = ({ recipeId, image }: { recipeId: string; image: string | null }) => {
   const { data, onUpdateRecipe } = useRecipeDetail({
     id: recipeId,
   });
@@ -25,7 +25,6 @@ const RecipeHeader = ({ recipeId }: { recipeId: string }) => {
   const {
     name,
     id,
-    image,
     prepTime,
     performTime: cookTime,
     rating: currentRating,

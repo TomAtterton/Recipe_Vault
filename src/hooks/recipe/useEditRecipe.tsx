@@ -47,6 +47,7 @@ const useEditRecipe = ({ id }: { id?: string | null }) => {
               screen: Routes.RecipeDetails,
               params: {
                 id,
+                image: mergedData?.image || null,
               },
             });
         }

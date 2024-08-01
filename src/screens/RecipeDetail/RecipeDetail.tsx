@@ -19,15 +19,17 @@ import { stylesheet } from './recipeDetail.style';
 
 const RecipeDetail = () => {
   useKeepAwake();
-  const { params } = useRoute<RouteProp<'RecipeDetails'>>();
+  const {
+    params: { id, image },
+  } = useRoute<RouteProp<'RecipeDetails'>>();
 
   const { height } = useWindowDimensions();
 
   const RECIPE_HEADER_HEIGHT = useMemo(() => height / 2.8 + height / 4, [height]);
 
   const handleRenderHeader = useCallback(
-    () => <AnimatedRecipeHeader recipeId={params.id} />,
-    [params.id]
+    () => <AnimatedRecipeHeader recipeId={id} image={image} />,
+    [id, image]
   );
 
   const { top } = useSafeAreaInsets();
@@ -35,7 +37,7 @@ const RecipeDetail = () => {
 
   useSyncOnFocus();
 
-  const { ingredients: data } = useGetRecipeIngredients(params.id);
+  const { ingredients: data } = useGetRecipeIngredients(id);
 
   const isiPadLandscape = breakpoint === 'xl' || breakpoint === 'lg';
   const isiPadPortrait = breakpoint === 'md';
@@ -44,12 +46,12 @@ const RecipeDetail = () => {
 
   return isiPadLandscape || isiPadPortrait ? (
     <View style={styles.container}>
-      <RecipeHeader recipeId={params.id} />
-      <Ingredients recipeId={params.id} data={data} />
-      <Instructions recipeId={params.id} ingredients={data} />
+      <RecipeHeader recipeId={id} image={image} />
+      <Ingredients recipeId={id} data={data} />
+      <Instructions recipeId={id} ingredients={data} />
       <View pointerEvents={'box-none'} style={styles.navBar}>
         <NavBarButton iconSource={'arrow-left'} onPress={goBack} />
-        <EditButton id={params.id} />
+        <EditButton id={id} />
       </View>
     </View>
   ) : (
@@ -77,10 +79,10 @@ const RecipeDetail = () => {
       renderHeader={handleRenderHeader}
     >
       <Tabs.Tab name="Ingredients" label={'Ingredients'} key={'ingredients'}>
-        <Ingredients recipeId={params.id} data={data} />
+        <Ingredients recipeId={id} data={data} />
       </Tabs.Tab>
       <Tabs.Tab name="Instructions" label={'Instructions'} key={'instructions'}>
-        <Instructions recipeId={params.id} ingredients={data} />
+        <Instructions recipeId={id} ingredients={data} />
       </Tabs.Tab>
     </Tabs.Container>
   );

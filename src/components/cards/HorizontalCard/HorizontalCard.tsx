@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { IMAGE_HEIGHT, IMAGE_WIDTH, stylesheet } from './horizontalCard.style';
 import Icon from '@/components/Icon';
@@ -24,10 +24,13 @@ const shortenPerformTime = (performTime: string) => {
 
 const HorizontalCard = ({ name, rating, performTime, image, onPress = () => {} }: Props) => {
   const { styles, theme } = useStyles(stylesheet);
-  const imageSource = useMemo(() => (image ? { url: image } : null), [image]);
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <SquircleImage width={IMAGE_WIDTH} height={IMAGE_HEIGHT} source={imageSource} />
+      <SquircleImage
+        width={IMAGE_WIDTH}
+        height={IMAGE_HEIGHT}
+        source={image ? { url: image } : null}
+      />
       <View style={styles.textContainer}>
         <Typography style={styles.title} variant={'titleMedium'} numberOfLines={2}>
           {name}

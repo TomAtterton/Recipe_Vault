@@ -15,7 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated';
 import { useCurrentTabScrollY } from 'react-native-collapsible-tab-view';
 
-const AnimatedRecipeHeader = ({ recipeId }: { recipeId: string }) => {
+const AnimatedRecipeHeader = ({ recipeId, image }: { recipeId: string; image: string | null }) => {
   const { data, onUpdateRecipe } = useRecipeDetail({
     id: recipeId,
   });
@@ -24,6 +24,8 @@ const AnimatedRecipeHeader = ({ recipeId }: { recipeId: string }) => {
   const { height } = useWindowDimensions();
 
   const RECIPE_HEADER_HEIGHT = height / 2.8 + height / 4;
+  const { goBack } = useNavigation();
+  const { top } = useSafeAreaInsets();
 
   const handleUpdateRecipe = useCallback(
     (updateValues?: Partial<RecipeDetailType>) => {
@@ -34,7 +36,6 @@ const AnimatedRecipeHeader = ({ recipeId }: { recipeId: string }) => {
   const {
     name,
     id,
-    image,
     prepTime,
     performTime: cookTime,
     rating: currentRating,
@@ -83,8 +84,6 @@ const AnimatedRecipeHeader = ({ recipeId }: { recipeId: string }) => {
       left: 0,
     };
   });
-  const { goBack } = useNavigation();
-  const { top } = useSafeAreaInsets();
 
   const animatedNavBarStyle = useAnimatedStyle(() => {
     const translateY = interpolate(
