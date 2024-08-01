@@ -2,8 +2,8 @@ import { supabase } from '@/services';
 import { database } from '@/database';
 import { SQLiteDatabase } from 'expo-sqlite/next';
 import { useBoundStore } from '@/store';
-import { showErrorMessage } from '@/utils/errorUtils';
 import { syncDelete } from '@/services/sync/syncDelete';
+import { showErrorMessage } from '@/utils/promptUtils';
 
 export const TABLE_NAMES = [
   'profile',

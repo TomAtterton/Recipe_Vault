@@ -12,9 +12,9 @@ import Typography from '@/components/Typography';
 import { onOpenDatabase } from '@/database';
 import { Routes } from '@/navigation/Routes';
 import { Image } from 'expo-image';
-import { showErrorMessage } from '@/utils/errorUtils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import images from '@/theme/images';
+import { showErrorMessage } from '@/utils/promptUtils';
 
 const Splashscreen = () => {
   const hasHydrated = useHydration();

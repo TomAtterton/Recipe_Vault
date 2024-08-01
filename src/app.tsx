@@ -3,7 +3,6 @@ import 'react-native-gesture-handler';
 import * as SplashScreen from 'expo-splash-screen';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { RootNavigator } from '@/navigation';
@@ -23,6 +22,8 @@ import { useBoundStore } from '@/store';
 import { Env } from '@/core/env';
 import { initPurchases } from '@/services/purchase';
 import { FloatingInputProvider } from '@/providers/FloatingInputProvider';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from '@/utils/promptUtils';
 
 Sentry.init({
   dsn: Env.SENTRY_DSN,
@@ -44,10 +45,10 @@ const App = () => {
                 <RootNavigator />
               </UpdateProvider>
             </FloatingInputProvider>
+            <Toast config={toastConfig} />
           </NavigationContainer>
         </BottomSheetModalProvider>
       </SafeAreaProvider>
-      <FlashMessage position="top" />
     </GestureHandlerRootView>
   );
 };

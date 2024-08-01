@@ -1,30 +1,34 @@
 import React from 'react';
-import { useUpdates, fetchUpdateAsync, reloadAsync } from 'expo-updates';
+import { useUpdates, fetchUpdateAsync, checkForUpdateAsync } from 'expo-updates';
 import { useEffect } from 'react';
-import { showErrorMessage } from '@/utils/errorUtils';
+import { showUpdateMessage } from '@/utils/promptUtils';
+import { useAppState } from '@/hooks/common/useAppState';
 
 interface Props {
   children: React.ReactNode;
 }
 
 const UpdateProvider = ({ children }: Props) => {
-  const { isUpdateAvailable } = useUpdates();
-  const handleUpdate = async () => {
-    try {
-      await fetchUpdateAsync();
-      await reloadAsync();
-      showErrorMessage('App updated');
-    } catch (error) {
-      // @ts-ignore
-      showErrorMessage('Error updating app ' + error?.message);
+  const { isUpdateAvailable, isUpdatePending } = useUpdates();
+
+  useAppState((status) => {
+    if (__DEV__) return;
+    if (status === 'active') {
+      checkForUpdateAsync();
     }
-  };
+  });
 
   useEffect(() => {
     if (isUpdateAvailable) {
-      handleUpdate();
+      fetchUpdateAsync();
     }
   }, [isUpdateAvailable]);
+
+  useEffect(() => {
+    if (isUpdatePending) {
+      showUpdateMessage();
+    }
+  }, [isUpdatePending]);
 
   return children;
 };

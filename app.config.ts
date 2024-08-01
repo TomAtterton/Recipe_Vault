@@ -18,9 +18,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     backgroundColor: '#19120C',
   },
   updates: {
-    checkAutomatically: 'ON_LOAD',
     url: 'https://u.expo.dev/9d67c9e0-c046-4082-b3dc-37c5fcfd0932',
-    fallbackToCacheTimeout: 0,
   },
   ios: {
     supportsTablet: true,

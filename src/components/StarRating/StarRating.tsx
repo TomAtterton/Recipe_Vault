@@ -1,7 +1,13 @@
 import { Canvas, Group, Path } from '@shopify/react-native-skia';
 import React, { useEffect } from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { runOnJS, useDerivedValue, useSharedValue } from 'react-native-reanimated';
+import Animated, {
+  runOnJS,
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import { useStyles } from 'react-native-unistyles';
 import { SIZE_MARGIN, stylesheet } from '@/components/StarRating/starRating.style';
 import { StyleProp, ViewStyle } from 'react-native';
@@ -43,34 +49,36 @@ const StarRating = ({ style, initialValue = 0, onChange, padding = 0 }: Props) =
     });
 
   const gestures = Gesture.Race(tap, pan);
-  const [containerWidth, setContainerWidth] = React.useState(0);
+  const containerWidth = useSharedValue(0);
 
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: withTiming(containerWidth.value > 0 ? 1 : 0, { duration: 200 }),
+      transform: [
+        {
+          translateX: containerWidth.value / 2 - 20 - (SIZE_MARGIN * 5) / 2,
+        },
+      ],
+    };
+  }, [selectedStarIndex, containerWidth]);
   return (
     <GestureDetector gesture={gestures}>
-      <Canvas
-        style={[
-          styles.container,
-          style,
-          {
-            transform: [
-              {
-                translateX: containerWidth / 2 - 20 - (SIZE_MARGIN * 5) / 2,
-              },
-            ],
-          },
-        ]}
-        onLayout={(e) => {
-          setContainerWidth(e.nativeEvent.layout.width + padding);
-        }}
-      >
-        {array.map((i) => {
-          return (
-            <Group key={i} transform={[{ translateX: SIZE_MARGIN * i }]}>
-              <Star index={i} selectedStarIndex={selectedStarIndex} />
-            </Group>
-          );
-        })}
-      </Canvas>
+      <Animated.View style={animatedStyle} pointerEvents={'box-none'}>
+        <Canvas
+          style={[styles.container, style]}
+          onLayout={(e) => {
+            containerWidth.value = e.nativeEvent.layout.width + padding;
+          }}
+        >
+          {array.map((i) => {
+            return (
+              <Group key={i} transform={[{ translateX: SIZE_MARGIN * i }]}>
+                <Star index={i} selectedStarIndex={selectedStarIndex} />
+              </Group>
+            );
+          })}
+        </Canvas>
+      </Animated.View>
     </GestureDetector>
   );
 };

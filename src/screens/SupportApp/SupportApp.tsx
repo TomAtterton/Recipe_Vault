@@ -9,10 +9,10 @@ import {
 import { useStyles } from 'react-native-unistyles';
 import Typography from '@/components/Typography';
 import { Image } from 'expo-image';
-import { showErrorMessage } from '@/utils/errorUtils';
 import { stylesheet } from './supportApp.style';
 import images from '@/theme/images';
 import { translate } from '@/core';
+import { showErrorMessage } from '@/utils/promptUtils';
 
 const SupportApp = () => {
   const { styles } = useStyles(stylesheet);
