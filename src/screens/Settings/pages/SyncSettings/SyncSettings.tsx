@@ -10,11 +10,11 @@ import NavBarButton from '@/components/buttons/NavBarButton';
 import { useNavigation } from '@react-navigation/native';
 import { stylesheet } from './syncSettings.style';
 import OutlineButton from '@/components/buttons/OutlineButton';
-import { showMessage } from 'react-native-flash-message';
 import { Routes } from '@/navigation/Routes';
 import { database, onOpenDatabase } from '@/database';
 import { Env } from '@/core/env';
 import { onDeleteUser, onSignOut } from '@/services/auth';
+import { showErrorMessage } from '@/utils/promptUtils';
 
 const SyncSettings = () => {
   const { styles } = useStyles(stylesheet);
@@ -36,13 +36,7 @@ const SyncSettings = () => {
       await onOpenDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
       setSyncEnabled(false);
     } catch (error) {
-      showMessage({
-        message: translate('error.default.error_title'),
-        description: translate('error.default.error_message'),
-        type: 'danger',
-        duration: 3000,
-        icon: 'danger',
-      });
+      showErrorMessage(translate('error.default.error_message'), 3000);
     } finally {
       setIsLoading(false);
     }
@@ -78,14 +72,7 @@ const SyncSettings = () => {
                 currentDatabaseName: Env.SQLITE_DB_NAME,
               });
             } catch (error) {
-              showMessage({
-                message: translate('error.default.error_title'),
-                // @ts-ignore
-                description: error?.message || translate('error.default.error_message'),
-                type: 'danger',
-                duration: 3000,
-                icon: 'danger',
-              });
+              showErrorMessage(translate('error.default.error_title'));
             } finally {
               setIsLoading(false);
             }

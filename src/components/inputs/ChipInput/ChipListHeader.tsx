@@ -1,7 +1,6 @@
 import { View } from 'react-native';
 import React, { useCallback, useState } from 'react';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import { showMessage } from 'react-native-flash-message';
 import { ChipItemType } from '@/components/inputs/ChipInput/ChipInput';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from '@/components/inputs/ChipInput/chipInput.style';
@@ -9,6 +8,7 @@ import AddButton from '@/components/buttons/AddButton';
 import FormInput from '@/components/inputs/FormInput';
 import LabelButton from '@/components/buttons/LabelButton';
 import { translate } from '@/core';
+import { showErrorMessage } from '@/utils/promptUtils';
 
 const ChipListHeader = ({
   items,
@@ -51,13 +51,7 @@ const ChipListHeader = ({
     if (itemExists) {
       setNewItem('');
 
-      showMessage({
-        message: 'Error',
-        description: 'Item already exists',
-        type: 'danger',
-        duration: 1000,
-        icon: 'danger',
-      });
+      showErrorMessage('Item already exists');
       return;
     }
 

@@ -26,6 +26,7 @@ const EditRecipe = ({}) => {
       onSubmitForm={onUpdateRecipe}
       data={data}
       isEditing={true}
+      isNested={true}
       onDeleteRecipe={handleDeleteRecipe}
     />
   );

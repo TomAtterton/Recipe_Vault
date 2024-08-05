@@ -3,7 +3,7 @@ import { RouteProp } from '@/navigation/types';
 import { Routes } from '@/navigation/Routes';
 import { useMemo, useState } from 'react';
 import { createMultipleReminders } from '@/utils/reminderUtils';
-import { showErrorMessage } from '@/utils/errorUtils';
+import { showErrorMessage } from '@/utils/promptUtils';
 
 const useAddGroceries = () => {
   const route = useRoute<RouteProp<Routes.AddGroceries>>();

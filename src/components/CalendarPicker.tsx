@@ -6,13 +6,13 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { MenuView } from '@react-native-menu/menu';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { format } from 'date-fns';
-import { showMessage } from 'react-native-flash-message';
 import usePostMealPlan from '@/database/api/mealplan/usePostMealPlan';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import IconButton from '@/components/buttons/IconButton';
 import BottomSheet from '@/components/BottomSheet';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
+import { showErrorMessage, showSuccessMessage } from '@/utils/promptUtils';
 
 interface Props {
   title?: string;
@@ -42,21 +42,9 @@ const CalendarPicker = ({ title, id, initialValue = new Date() }: Props) => {
         date: format(selectDate, 'yyyy-MM-dd'),
         entryType: entryType,
       });
-      showMessage({
-        message: 'Success',
-        description: 'Meal plan added successfully',
-        type: 'success',
-        duration: 1000,
-        icon: 'success',
-      });
+      showSuccessMessage('Meal plan added successfully');
     } catch (e) {
-      showMessage({
-        message: 'Error',
-        description: 'Something went wrong',
-        type: 'danger',
-        duration: 1000,
-        icon: 'danger',
-      });
+      showErrorMessage('Something went wrong');
       console.log('error', e);
     }
   }, [addMealPlan, entryType, id, selectDate, title]);

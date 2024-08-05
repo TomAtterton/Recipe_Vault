@@ -21,6 +21,7 @@ export type TabParamList = {
         [key: string]: ScanImageDataType;
       };
     };
+    isNested?: boolean;
     data?: Partial<RecipeDetailType>;
   };
   [Routes.RecipeWebview]: undefined;

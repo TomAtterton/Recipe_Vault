@@ -9,13 +9,11 @@ import NavBarButton from '@/components/buttons/NavBarButton';
 import { useNavigation } from '@react-navigation/native';
 import { stylesheet } from '@/screens/Settings/pages/DatabaseSettings/databaseSettings.style';
 import { deleteDatabaseAsync } from 'expo-sqlite/next';
-import { showSuccessMessage } from '@/utils/promptUtils';
-import { showErrorMessage } from '@/utils/errorUtils';
+import { showErrorMessage, showSuccessMessage } from '@/utils/promptUtils';
 import { Routes } from '@/navigation/Routes';
 import { useMemo } from 'react';
 import { setCurrentDatabaseName, setResetDatabase, updateProfile, useBoundStore } from '@/store';
 import { Env } from '@/core/env';
-import { showMessage } from 'react-native-flash-message';
 import LabelButton from '@/components/buttons/LabelButton';
 import { syncWithSupabase } from '@/services/sync';
 import { translate } from '@/core';
@@ -125,13 +123,7 @@ const DatabaseSettings = () => {
                 setSyncEnabled(false);
                 await onOpenDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
               } catch (error) {
-                showMessage({
-                  message: translate('error.default.error_title'),
-                  description: translate('error.default.error_message'),
-                  type: 'danger',
-                  duration: 3000,
-                  icon: 'danger',
-                });
+                showErrorMessage(translate('error.default.error_message', 3000));
               }
             } else {
               const {

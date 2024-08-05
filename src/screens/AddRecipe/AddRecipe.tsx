@@ -8,8 +8,10 @@ import RecipeForm from '@/components/RecipeForm';
 
 const AddRecipe = ({}) => {
   const { params } = useRoute<RouteProp<Routes.AddRecipe>>();
-  const { id, scanContent, data } = params || {};
+
+  const { id, scanContent, data, isNested } = params || {};
   const hasScanContent = !!scanContent;
+
   const { onAddRecipe, currentData } = useAddRecipe({ data, hasScanContent });
 
   return (
@@ -19,6 +21,7 @@ const AddRecipe = ({}) => {
       scanContent={scanContent}
       onSubmitForm={onAddRecipe}
       data={currentData}
+      isNested={isNested}
     />
   );
 };

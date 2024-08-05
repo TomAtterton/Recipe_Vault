@@ -21,7 +21,9 @@ export enum Routes {
   Settings = 'Settings',
   RecipeWebview = 'RecipeWebview',
   RecipeDetailStack = 'RecipeDetailStack',
+  RecipeDetectionStack = 'RecipeDetectionStack',
   Search = 'Search',
   ScanImageContent = 'ScanImageContent',
   ProPlan = 'ProPlan',
+  ImageDetection = 'ImageDetection',
 }

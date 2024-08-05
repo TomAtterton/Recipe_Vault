@@ -16,12 +16,13 @@ import useGetRecipeIngredients from '@/database/api/recipes/hooks/useGetRecipeIn
 import { useWindowDimensions, View } from 'react-native';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import { stylesheet } from './recipeDetail.style';
+import { Routes } from '@/navigation/Routes';
 
 const RecipeDetail = () => {
   useKeepAwake();
   const {
     params: { id, image },
-  } = useRoute<RouteProp<'RecipeDetails'>>();
+  } = useRoute<RouteProp<Routes.RecipeDetails>>();
 
   const { height } = useWindowDimensions();
 

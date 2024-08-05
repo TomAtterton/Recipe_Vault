@@ -22,6 +22,9 @@ export const darkColors = {
   error: 'rgba(100, 0, 0, 1)',
   errorContainer: 'rgba(100, 0, 0, 1)',
   //
+  success: 'rgba(0, 100, 0, 1)',
+  white: 'rgba(239, 224, 213, 1)',
+  update: 'rgba(29, 30, 60, 1)',
 };
 
 export const lightColors = {
@@ -48,4 +51,7 @@ export const lightColors = {
   error: 'rgba(255, 0, 0, 1)',
   errorContainer: 'rgba(255, 0, 0, .1)',
   //
+  success: 'rgba(0, 100, 0, 1)',
+  white: 'rgba(239, 224, 213, 1)',
+  update: 'rgba(29, 30, 60, 1)',
 };
