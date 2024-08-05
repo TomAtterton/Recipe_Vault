@@ -31,13 +31,13 @@ const Image = ({ style, source, ...props }: ImgProps) => {
         },
       ]}
       source={{
-        ...source,
         resizeMode: 'cover',
         cachePolicy: 'discWithCacheControl',
         url: imageUri || images.PLACEHOLDER_IMAGE,
         showActivityIndicator: true,
         transitionDuration: 0.3,
         progressiveLoadingEnabled: true,
+        ...source,
       }}
       {...props}
     />

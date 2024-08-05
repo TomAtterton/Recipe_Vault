@@ -1,6 +1,7 @@
 import { Ingredient, RecipeDetailType } from '@/types';
 import { randomUUID } from 'expo-crypto';
 import { useBoundStore } from '@/store';
+import { string } from 'zod';
 
 export const translateWebview = (text: string, url: string): Partial<RecipeDetailType> => {
   const recipe = JSON.parse(text);
@@ -34,7 +35,7 @@ function decodeHtmlEntity(str: string): string {
   return str.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(dec));
 }
 
-const convertRecipeIngredientInstructions = (
+export const convertRecipeIngredientInstructions = (
   recipeIngredientInstructions:
     | string[]
     | { text: string }[]
@@ -95,11 +96,11 @@ const convertRecipeYield = (recipeYield?: string | number | string[]): number =>
   }
 };
 
-const convertTimeToString = (time?: string): string => {
+export const convertTimeToString = (time?: string | number): string => {
   if (!time) return '0 minutes';
 
   try {
-    if (time.startsWith('PT')) {
+    if (time === typeof string && time?.startsWith('PT')) {
       const timePattern = /PT(?:(\d+)H)?(?:(\d+)M)?/;
       const [, hours, minutes] = time.match(timePattern) ?? [];
       return formatTime(parseInt(hours || '0', 10), parseInt(minutes || '0', 10));

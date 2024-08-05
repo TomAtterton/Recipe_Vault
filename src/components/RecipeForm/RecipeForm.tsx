@@ -41,6 +41,7 @@ interface Props {
   onSubmitForm: onUpdateRecipeProps;
   buttonTitle: string;
   isEditing?: boolean;
+  isNested?: boolean;
   onDeleteRecipe?: () => void;
 }
 
@@ -51,6 +52,7 @@ const RecipeForm = ({
   onSubmitForm,
   buttonTitle,
   isEditing,
+  isNested,
   onDeleteRecipe,
 }: Props) => {
   const { control, onSubmit, scrollViewRef, onClearForm, isSubmitting } = useHandleRecipeForm({
@@ -89,8 +91,8 @@ const RecipeForm = ({
   const { handleEdit } = useEditFloatingInput();
 
   const bottomPadding = useMemo(() => {
-    return isEditing ? 32 : tabBarHeight + 32;
-  }, [isEditing, tabBarHeight]);
+    return isNested ? 32 : tabBarHeight + 32;
+  }, [isNested, tabBarHeight]);
 
   const topPadding = useMemo(() => {
     return top + 32;
@@ -190,7 +192,7 @@ const RecipeForm = ({
         />
       </NestableScrollContainer>
       <View style={[styles.navigationHeader, { top }]}>
-        {isEditing ? (
+        {isNested ? (
           <>
             <NavBarButton iconSource={'arrow-left'} onPress={goBack} />
             {<NavBarButton iconSource={'bin'} onPress={handleDeleteRecipe} />}

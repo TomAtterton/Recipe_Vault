@@ -1,26 +1,42 @@
 import {
+  ImagePickerOptions,
+  ImagePickerResult,
+  launchCameraAsync,
+  launchImageLibraryAsync,
   requestCameraPermissionsAsync,
   requestMediaLibraryPermissionsAsync,
+  MediaTypeOptions,
 } from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { showErrorMessage } from '@/utils/promptUtils';
-import RNImageCropPicker, { Options, Image, PickerErrorCode } from 'react-native-image-crop-picker';
+import { cropImage } from '../../modules/expo-image-cropper';
 
-const DEFAULT_IMAGE_SIZE = 300 * 3;
-
-const defaultImageOptions: Options = {
-  mediaType: 'photo',
-  cropping: true,
-  multiple: false,
-  compressImageQuality: 0.8,
-  width: DEFAULT_IMAGE_SIZE,
-  height: DEFAULT_IMAGE_SIZE,
+const defaultImageOptions: ImagePickerOptions = {
+  mediaTypes: MediaTypeOptions.Images,
+  allowsMultipleSelection: false,
+  quality: 0.8,
 };
 
-export const onPickImageFromLibrary = async () => {
+export const onOpenImageCropper = async (imageUri: string, isTemporary: boolean) => {
   try {
-    let result: Image = await RNImageCropPicker.openPicker(defaultImageOptions);
-    return await handleResult(result);
+    const { filePath } = await cropImage({ uri: imageUri, options: { isTemporary } });
+    return handleResult(filePath);
+  } catch (e) {
+    return imageUri;
+  }
+};
+
+export const onPickImageFromLibrary = async (isTemporary: boolean) => {
+  try {
+    let result = await launchImageLibraryAsync(defaultImageOptions);
+    const imagePath = await handleResult(result);
+
+    if (imagePath) {
+      const { filePath } = await cropImage({ uri: imagePath, options: { isTemporary } });
+      return filePath;
+    } else {
+      throw new Error('No image selected');
+    }
   } catch (e: unknown) {
     // @ts-ignore
     const errorCode = e?.code as PickerErrorCode;
@@ -38,22 +54,18 @@ export const onPickImageFromLibrary = async () => {
   }
 };
 
-export const onOpenImageCropper = async (imageUri: string) => {
+export const onPickImageFromCamera = async (isTemporary: boolean) => {
   try {
-    const result = await RNImageCropPicker.openCropper({
-      ...defaultImageOptions,
-      path: imageUri,
-    });
-    return await handleResult(result);
-  } catch (e) {
-    return imageUri;
-  }
-};
+    const result = await launchCameraAsync();
 
-export const onPickImageFromCamera = async () => {
-  try {
-    let result: Image = await RNImageCropPicker.openCamera(defaultImageOptions);
-    return await handleResult(result);
+    const imagePath = await handleResult(result);
+
+    if (imagePath) {
+      const { filePath } = await cropImage({ uri: imagePath, options: { isTemporary } });
+      return filePath;
+    } else {
+      throw new Error('No image selected');
+    }
   } catch (e: unknown) {
     // @ts-ignore
     const errorCode = e?.code as PickerErrorCode;
@@ -72,11 +84,14 @@ export const onPickImageFromCamera = async () => {
   }
 };
 
-const handleResult = async (result: Image) => {
+const handleResult = async (result: ImagePickerResult | string) => {
   try {
-    const uri = result?.path;
+    if (typeof result === 'string') {
+      return await handleManipulationResult(result);
+    }
 
-    return handleManipulationResult(uri);
+    const uri = result?.assets?.[0].uri || '';
+    return await handleManipulationResult(uri);
   } catch (e) {
     throw new Error('Setting image failed');
   }
@@ -84,6 +99,7 @@ const handleResult = async (result: Image) => {
 
 const handleManipulationResult = async (imageUri: string) => {
   const imageManipulationResult = await ImageManipulator.manipulateAsync(imageUri, [], {
+    compress: 0.8,
     format: ImageManipulator.SaveFormat.WEBP,
   });
   return imageManipulationResult?.uri;

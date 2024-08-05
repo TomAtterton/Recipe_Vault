@@ -23,6 +23,7 @@ import DatabaseEditor from '@/screens/Settings/pages/DatabaseSettings/DatabaseEd
 import AdvanceSyncSettings from '@/screens/Settings/pages/AdvanceSyncSettings';
 import ProPlan from '@/screens/ProPlan';
 import useHandleSession from '@/services/auth/hooks/useHandleSession';
+import { RecipeDetectionNavigator } from '@/navigation/recipeDetectionNavigator';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,8 +43,10 @@ export const RootNavigator = () => {
       <Stack.Screen name={Routes.Profile} component={Profile} options={defaultOptions} />
       <Stack.Screen name={Routes.TabStack} component={TabNavigator} />
       <Stack.Screen name={Routes.RecipeDetailStack} component={RecipeDetailNavigator} />
+      <Stack.Screen name={Routes.RecipeDetectionStack} component={RecipeDetectionNavigator} />
       <Stack.Screen name={Routes.DatabaseEditor} component={DatabaseEditor} />
       <Stack.Screen name={Routes.AdvanceSyncSettings} component={AdvanceSyncSettings} />
+
       <Stack.Screen
         name={Routes.ProPlan}
         component={ProPlan}

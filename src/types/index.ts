@@ -13,8 +13,6 @@ export type Ingredient = {
   title?: string | null;
   id: string;
   text: string;
-  // isEditing: boolean;
-  // TODO fix this weird naming
   type?: 'section' | 'ingredient'; // Add the type property to Ingredient type
 };
 
@@ -22,8 +20,6 @@ export type Instruction = {
   title?: string | null;
   id: string;
   text: string;
-  // isEditing?: boolean;
-  // TODO fix this weird naming
   type?: 'section' | 'ingredient'; // Add the type property to Ingredient type
 };
 

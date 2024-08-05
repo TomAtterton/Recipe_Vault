@@ -5,6 +5,7 @@ import { TabParamList } from '@/navigation/tabNavigator';
 import { Routes } from '@/navigation/Routes';
 import { RecipeFormType } from '@/utils/recipeFormUtil';
 import { Ingredient } from '@/types';
+import { RecipeDetectionStackParamList } from '@/navigation/recipeDetectionNavigator';
 
 export type RootStackParamList = RecipeDetailStackParamList &
   TabParamList & {
@@ -15,6 +16,7 @@ export type RootStackParamList = RecipeDetailStackParamList &
       showSkip: boolean;
     };
     [Routes.ProPlan]: undefined;
+    [Routes.ImageDetection]: undefined;
     [Routes.Privacy]: undefined;
     [Routes.Help]: undefined;
     [Routes.Onboarding]: undefined;
@@ -32,6 +34,7 @@ export type RootStackParamList = RecipeDetailStackParamList &
       selectDate: string;
     };
     [Routes.RecipeDetailStack]: NavigatorScreenParams<RecipeDetailStackParamList>;
+    [Routes.RecipeDetectionStack]: NavigatorScreenParams<RecipeDetectionStackParamList>;
     [Routes.ScanImageContent]: {
       id?: string | null;
       value: string;

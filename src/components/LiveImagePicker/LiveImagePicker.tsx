@@ -20,7 +20,12 @@ const LiveImagePicker = ({ onFullScreen }: Props) => {
   );
 
   return (
-    <ImagePicker onSelectImage={handleSelectedImage} onFullScreen={onFullScreen} imageUri={image} />
+    <ImagePicker
+      onSelectImage={handleSelectedImage}
+      onFullScreen={onFullScreen}
+      imageUri={image}
+      isTemporary={true}
+    />
   );
 };
 
