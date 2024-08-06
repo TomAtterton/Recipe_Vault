@@ -48,21 +48,34 @@ public class ExpoImageCropperModule: Module {
         return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController
     }
 
-    public func definition() -> ModuleDefinition {
-        Name("ExpoImageCropper")
+public func definition() -> ModuleDefinition {
+    Name("ExpoImageCropper")
 
-        AsyncFunction("cropImage") { (filePath: String, cropOptions:CropOptions, promise: Promise) in
+    AsyncFunction("cropImage") { (filePath: String, cropOptions: CropOptions, promise: Promise) in
 
-            self.croppingDelegate.currentPromise = promise
-            self.croppingDelegate.options = cropOptions
+        self.croppingDelegate.currentPromise = promise
+        self.croppingDelegate.options = cropOptions
 
-            DispatchQueue.global().async {
+        DispatchQueue.global().async {
 
-                guard let filePathURL = URL(string: filePath) else {
-                    promise.reject(ExpoError(errorCode: 1, message: "Error converting filePath to URL."))
+            guard let filePathURL = URL(string: filePath) else {
+                promise.reject(ExpoError(errorCode: 1, message: "Error converting filePath to URL."))
+                return
+            }
+
+            var image: UIImage?
+
+            if filePathURL.scheme == "http" || filePathURL.scheme == "https" {
+                // Load image from URL
+                do {
+                    let imageData = try Data(contentsOf: filePathURL)
+                    image = UIImage(data: imageData)
+                } catch {
+                    promise.reject(ExpoError(errorCode: 5, message: "Failed to load image from URL."))
                     return
                 }
-
+            } else {
+                // Load image from local file path
                 let localFilePath = filePathURL.path
 
                 guard FileManager.default.fileExists(atPath: localFilePath) else {
@@ -70,31 +83,31 @@ public class ExpoImageCropperModule: Module {
                     return
                 }
 
-                guard let image = UIImage(contentsOfFile: localFilePath) else {
-                    promise.reject(ExpoError(errorCode: 3, message: "Failed to load image from file path."))
+                image = UIImage(contentsOfFile: localFilePath)
+            }
+
+            guard let validImage = image else {
+                promise.reject(ExpoError(errorCode: 3, message: "Failed to load image."))
+                return
+            }
+
+            DispatchQueue.main.async {
+
+                guard let rootVC = self.rootViewController else {
+                    promise.reject(ExpoError(errorCode: 4, message: "Unable to get root view controller."))
                     return
                 }
 
+                let cropViewController = TOCropViewController(image: validImage)
+                cropViewController.modalPresentationStyle = .overFullScreen
+                cropViewController.modalTransitionStyle = .coverVertical
+                cropViewController.delegate = self.croppingDelegate
 
-                DispatchQueue.main.async {
-
-                    guard let rootVC = self.rootViewController else {
-                        promise.reject(ExpoError(errorCode: 4, message: "Unable to get root view controller."))
-                        return
-                    }
-
-                    let cropViewController = TOCropViewController(image: image)
-                    cropViewController.modalPresentationStyle = .overFullScreen
-                    cropViewController.modalTransitionStyle = .coverVertical
-                    cropViewController.delegate = self.croppingDelegate
-
-
-
-                    rootVC.present(cropViewController, animated: true, completion: nil)
-                }
+                rootVC.present(cropViewController, animated: true, completion: nil)
             }
         }
     }
+}
 
 }
 
