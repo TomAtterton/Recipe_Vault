@@ -13,7 +13,7 @@ export const generateRecipe = async (query: string) => {
     throw new Error('Query too short');
   }
 
-  const { data, error } = await supabase.functions.invoke('generateRecipe', {
+  const { data, error } = await supabase.functions.invoke('generate-recipe', {
     body: JSON.stringify({ query }),
   });
 
