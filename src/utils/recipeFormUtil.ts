@@ -100,13 +100,13 @@ export type DraggableListItem = {
 
 export const generateSectionData = (data: any[]) => {
   const draggableListItems: DraggableListItem[] = [];
-
-  const sections: Record<string, boolean> = {};
+  const sections = new Set<string>();
 
   data.forEach((item) => {
-    const { title } = item;
-    if (title && !sections[title]) {
-      sections[title] = true;
+    const { id, title, text } = item;
+
+    if (title && !sections.has(title)) {
+      sections.add(title);
       draggableListItems.push({
         id: randomUUID(),
         title,
@@ -116,9 +116,9 @@ export const generateSectionData = (data: any[]) => {
     }
 
     draggableListItems.push({
-      id: item?.id || randomUUID(),
-      title: item.title,
-      text: item.text,
+      id: id || randomUUID(),
+      title,
+      text,
       type: 'ingredient',
     });
   });
