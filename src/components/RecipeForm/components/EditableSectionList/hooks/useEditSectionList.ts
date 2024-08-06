@@ -4,26 +4,35 @@ import { DraggableListItem } from '@/utils/recipeFormUtil';
 
 const useEditSectionList = ({
   type,
-  items,
-  onUpdate,
+  onAppend,
+  onEdit,
 }: {
   type: string;
-  items: DraggableListItem[];
-  onUpdate: (items: DraggableListItem[]) => void;
+
+  onAppend: (items: DraggableListItem[]) => void;
+  onEdit?: (
+    value: string,
+    onChange: (value: string) => void,
+    onRemove?: () => void,
+    onDismiss?: () => void
+  ) => void;
 }) => {
   const isIngredient = useMemo(() => type === 'ingredient', [type]);
 
-  const addItem = () => {
+  const handleAddItem = () => {
     const newItem: DraggableListItem = {
       title: null,
       id: randomUUID(),
       text: '',
       type: 'ingredient',
     };
-    onUpdate([...items, newItem]);
+    onEdit &&
+      onEdit('', (value) => {
+        onAppend && onAppend([{ ...newItem, text: value }]);
+      });
   };
 
-  const addSection = () => {
+  const handleAddSection = () => {
     const newSection: DraggableListItem = {
       id: randomUUID(),
       title: '',
@@ -31,13 +40,14 @@ const useEditSectionList = ({
       type: 'section',
     };
 
-    onUpdate([...items, newSection]);
+    onEdit &&
+      onEdit(newSection.text, (value) => onAppend && onAppend([{ ...newSection, title: value }]));
   };
 
   return {
     isIngredient,
-    addItem,
-    addSection,
+    onAddItem: handleAddItem,
+    onAddSectionItem: handleAddSection,
   };
 };
 

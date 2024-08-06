@@ -35,19 +35,22 @@ const keyExtractor = (item: DraggableListItem, index: number) => item?.id + inde
 
 const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveText }: Props) => {
   const { fieldState } = useController({ control, name });
+
   const { fields, append, remove, move, update } = useFieldArray({
     control,
     name: name,
   });
 
+  // console.log('TEST fields', fields);
+
   const fieldValue = useMemo(() => {
     return fields as DraggableListItem[];
   }, [fields]);
 
-  const { isIngredient, addItem, addSection } = useEditSectionList({
+  const { isIngredient, onAddItem, onAddSectionItem } = useEditSectionList({
     type,
-    items: fieldValue,
-    onUpdate: append,
+    onAppend: append,
+    onEdit,
   });
 
   const errorMessage = useMemo(() => {
@@ -130,9 +133,9 @@ const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveTex
         <ListButton
           iconSource={'add-outline'}
           title={isIngredient ? 'ingredient' : 'instruction'}
-          onPress={addItem}
+          onPress={onAddItem}
         />
-        <ListButton iconSource={'add-outline'} title={'section'} onPress={addSection} />
+        <ListButton iconSource={'add-outline'} title={'section'} onPress={onAddSectionItem} />
       </View>
     </>
   );
