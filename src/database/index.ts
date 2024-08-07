@@ -29,7 +29,6 @@ const initDatabase = async (db: SQLiteDatabase) => {
   // Always set these PRAGMA statements for each session
   await db.execAsync('PRAGMA journal_mode = WAL');
   await db.execAsync('PRAGMA foreign_keys = ON');
-
   // @ts-ignore
   let { user_version: currentDbVersion } = await db.getFirstAsync<{ user_version: number }>(
     'PRAGMA user_version'
@@ -45,10 +44,9 @@ const initDatabase = async (db: SQLiteDatabase) => {
 
   if (!shouldSync) {
     const initialGroupId = Env.TEST_GROUP_ID;
-    const initialGroup = database?.getFirstAsync<{
+    const initialGroup = await database?.getFirstAsync<{
       id: string;
     }>(`SELECT id FROM groups WHERE id = '${initialGroupId}'`);
-
     if (!initialGroup) {
       await sqlInsert('groups', { id: initialGroupId });
     }

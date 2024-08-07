@@ -1,5 +1,6 @@
 import { StateCreator } from 'zustand';
 import { sliceResetFns } from '@/store/helper';
+import { Env } from '@/core/env';
 
 export type DatabaseSlice = {
   currentDatabaseName: string;
@@ -14,7 +15,7 @@ export type DatabaseSlice = {
 };
 
 const initialDatabaseState = {
-  currentDatabaseName: 'recipe_vault.db',
+  currentDatabaseName: Env.SQLITE_DB_NAME,
   databaseStatus: 'free',
   shouldSync: false,
   lastSynced: undefined,

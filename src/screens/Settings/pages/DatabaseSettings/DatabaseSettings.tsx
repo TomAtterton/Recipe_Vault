@@ -12,17 +12,14 @@ import { deleteDatabaseAsync } from 'expo-sqlite/next';
 import { showErrorMessage, showSuccessMessage } from '@/utils/promptUtils';
 import { Routes } from '@/navigation/Routes';
 import { useMemo } from 'react';
-import { setCurrentDatabaseName, setResetDatabase, updateProfile, useBoundStore } from '@/store';
-import { Env } from '@/core/env';
+import { useBoundStore } from '@/store';
 import LabelButton from '@/components/buttons/LabelButton';
-import { syncWithSupabase } from '@/services/sync';
 import { translate } from '@/core';
-import { getProfileGroup } from '@/services/group';
-import { checkIfPro } from '@/services/pro';
+import useHandleSwitchDatabase from '@/screens/Settings/pages/DatabaseSettings/useHandleSwitchDatabase';
 
 const DatabaseSettings = () => {
   const { styles } = useStyles(stylesheet);
-  const { goBack } = useNavigation();
+  const { goBack, navigate } = useNavigation();
 
   const handleResetDatabase = async () => {
     try {
@@ -87,76 +84,15 @@ const DatabaseSettings = () => {
     []
   );
 
-  const { navigate } = useNavigation();
   const handleNavigateToDatabaseDetails = () => {
     navigate(Routes.DatabaseEditor);
   };
 
   const showTestSettings = !__DEV__;
   const isSyncEnabled = useBoundStore((state) => state.shouldSync);
-  const setSyncEnabled = useBoundStore((state) => state.setShouldSync);
   const groupName = useBoundStore((state) => state.profile?.groupName);
-  const userId = useBoundStore((state) => state.profile?.id);
 
-  const handleSwitchDatabase = () => {
-    Alert.alert(
-      isSyncEnabled ? 'Switch to local vault?' : 'Switch to cloud vault?',
-      isSyncEnabled
-        ? 'Will disable cloud sync and switch to local vault.'
-        : 'Will enable cloud sync and switch to cloud vault.',
-      [
-        {
-          text: translate('default.cancel'),
-          style: 'cancel',
-        },
-        {
-          text: translate('default.ok'),
-          onPress: async () => {
-            if (isSyncEnabled) {
-              try {
-                updateProfile({
-                  groupId: Env.TEST_GROUP_ID,
-                  groupName: Env.SQLITE_DB_NAME,
-                  groupRole: 'read_write',
-                });
-                setResetDatabase();
-                setSyncEnabled(false);
-                await onOpenDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
-              } catch (error) {
-                showErrorMessage(translate('error.default.error_message', 3000));
-              }
-            } else {
-              const {
-                groupId,
-                groupName: profileGroupName,
-                groupRole,
-              } = await getProfileGroup({
-                userId,
-              });
-
-              if (groupId && profileGroupName && groupRole) {
-                updateProfile({
-                  groupId,
-                  groupName: profileGroupName,
-                  groupRole,
-                });
-                await checkIfPro();
-                setSyncEnabled(true);
-                const currentDatabaseName = `${groupName}.db`;
-                setCurrentDatabaseName(currentDatabaseName);
-                await onOpenDatabase({ currentDatabaseName });
-                await syncWithSupabase();
-              } else {
-                navigate(Routes.Login, {
-                  showSkip: true,
-                });
-              }
-            }
-          },
-        },
-      ]
-    );
-  };
+  const { handleSwitchDatabase } = useHandleSwitchDatabase();
 
   return (
     <SafeAreaView style={styles.container}>

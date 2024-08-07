@@ -10,11 +10,13 @@ import {
 import * as ImageManipulator from 'expo-image-manipulator';
 import { showErrorMessage } from '@/utils/promptUtils';
 import { cropImage } from '../../modules/expo-image-cropper';
+import { UIImagePickerPreferredAssetRepresentationMode } from 'expo-image-picker/src/ImagePicker.types';
 
 const defaultImageOptions: ImagePickerOptions = {
   mediaTypes: MediaTypeOptions.Images,
   allowsMultipleSelection: false,
   quality: 0.8,
+  preferredAssetRepresentationMode: UIImagePickerPreferredAssetRepresentationMode.Current,
 };
 
 export const onOpenImageCropper = async (imageUri: string, isTemporary: boolean) => {
@@ -30,7 +32,6 @@ export const onPickImageFromLibrary = async (isTemporary: boolean) => {
   try {
     let result = await launchImageLibraryAsync(defaultImageOptions);
     const imagePath = await handleResult(result);
-
     if (imagePath) {
       const { filePath } = await cropImage({ uri: imagePath, options: { isTemporary } });
       return filePath;
@@ -98,9 +99,21 @@ const handleResult = async (result: ImagePickerResult | string) => {
 };
 
 const handleManipulationResult = async (imageUri: string) => {
-  const imageManipulationResult = await ImageManipulator.manipulateAsync(imageUri, [], {
-    compress: 0.8,
-    format: ImageManipulator.SaveFormat.WEBP,
-  });
+  return imageUri;
+  const imageManipulationResult = await ImageManipulator.manipulateAsync(
+    imageUri,
+    [
+      {
+        resize: {
+          width: 300 * 3,
+          height: 300 * 3,
+        },
+      },
+    ],
+    {
+      compress: 0.8,
+      format: ImageManipulator.SaveFormat.WEBP,
+    }
+  );
   return imageManipulationResult?.uri;
 };

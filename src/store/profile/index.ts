@@ -7,6 +7,7 @@ export type ProfileSlice = {
   session: Session | null;
   profile: {
     id?: string;
+    cloudId?: string;
     name?: string;
     groupId: string;
     groupName?: string;
@@ -23,7 +24,8 @@ export type ProfileSlice = {
 const initialProfileState = {
   session: null,
   profile: {
-    id: '',
+    id: Env.TEST_USER_ID,
+    cloudId: '',
     name: '',
     email: '',
     avatarId: '',
