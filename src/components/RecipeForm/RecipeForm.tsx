@@ -9,7 +9,7 @@ import { Alert, View } from 'react-native';
 import { ScanImageDataType } from '@/screens/ScanImageContent/scanImageUtil';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import { useStyles } from 'react-native-unistyles';
-import { useNavigation, useScrollToTop } from '@react-navigation/native';
+import { useScrollToTop } from '@react-navigation/native';
 import ControlledInput from '@/components/inputs/ControlledInput';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import RatingContainer from '@/components/RecipeForm/components/RatingContainer';
@@ -55,11 +55,12 @@ const RecipeForm = ({
   isNested,
   onDeleteRecipe,
 }: Props) => {
-  const { control, onSubmit, scrollViewRef, onClearForm, isSubmitting } = useHandleRecipeForm({
-    scannedData: scanContent?.data,
-    data,
-    onSubmitForm,
-  });
+  const { control, onSubmit, scrollViewRef, onClearForm, isSubmitting, handleGoBack } =
+    useHandleRecipeForm({
+      scannedData: scanContent?.data,
+      data,
+      onSubmitForm,
+    });
 
   const { handleScanLiveText } = useScanImageParser({
     id,
@@ -81,7 +82,6 @@ const RecipeForm = ({
   };
 
   const { styles } = useStyles(stylesheet);
-  const { goBack } = useNavigation();
   const { top } = useSafeAreaInsets();
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -194,7 +194,7 @@ const RecipeForm = ({
       <View style={[styles.navigationHeader, { top }]}>
         {isNested ? (
           <>
-            <NavBarButton iconSource={'arrow-left'} onPress={goBack} />
+            <NavBarButton iconSource={'arrow-left'} onPress={handleGoBack} />
             {<NavBarButton iconSource={'bin'} onPress={handleDeleteRecipe} />}
           </>
         ) : (

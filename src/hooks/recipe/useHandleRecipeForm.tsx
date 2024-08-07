@@ -109,46 +109,36 @@ const useHandleRecipeForm = ({
     clearErrors();
     setIsDirty(false);
   };
-  const navigation = useNavigation();
-  useFocusEffect(
-    useCallback(() => {
-      const onBeforeRemove = (e: any) => {
-        if (!isDirty) {
-          return;
-        }
 
-        e.preventDefault();
+  const { goBack } = useNavigation();
 
-        Alert.alert(
-          translate('prompt.discard_changes.title'),
-          translate('prompt.discard_changes.message'),
-          [
-            {
-              text: translate('prompt.discard_changes.cancel'),
-              style: 'cancel',
-              onPress: () => {},
+  const handleGoBack = () => {
+    if (!isDirty) {
+      goBack();
+    } else {
+      Alert.alert(
+        translate('prompt.discard_changes.title'),
+        translate('prompt.discard_changes.message'),
+        [
+          {
+            text: translate('prompt.discard_changes.cancel'),
+            style: 'cancel',
+            onPress: () => {},
+          },
+          {
+            text: translate('prompt.discard_changes.discard'),
+            style: 'destructive',
+            onPress: () => {
+              setIsDirty(false);
             },
-            {
-              text: translate('prompt.discard_changes.discard'),
-              style: 'destructive',
-              onPress: () => {
-                setIsDirty(false);
-                navigation.dispatch(e.data.action);
-              },
-            },
-          ]
-        );
-      };
-
-      navigation.addListener('beforeRemove', onBeforeRemove);
-
-      return () => {
-        navigation.removeListener('beforeRemove', onBeforeRemove);
-      };
-    }, [isDirty, navigation])
-  );
+          },
+        ]
+      );
+    }
+  };
 
   return {
+    handleGoBack,
     control,
     onSubmit: handleSubmit(onSubmit),
     isSubmitting,
