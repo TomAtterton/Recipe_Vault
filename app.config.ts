@@ -12,6 +12,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: './assets/icon.png',
   userInterfaceStyle: 'automatic',
   backgroundColor: '#19120C',
+
   splash: {
     image: './assets/splash.png',
     resizeMode: 'contain',
@@ -123,21 +124,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
     eas: {
       projectId: '9d67c9e0-c046-4082-b3dc-37c5fcfd0932',
-      build: {
-        experimental: {
-          ios: {
-            appExtensions: [
-              {
-                targetName: 'ShareExtension',
-                bundleIdentifier: 'com.tomatterton.recipeapp.share-extension',
-                entitlements: {
-                  'com.apple.security.application-groups': ['group.com.tomatterton.recipeapp'],
-                },
-              },
-            ],
-          },
-        },
-      },
     },
   },
 });
