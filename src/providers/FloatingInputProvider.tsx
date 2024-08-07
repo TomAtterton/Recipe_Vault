@@ -3,7 +3,7 @@ import FloatingInput from '@/components/FloatingInput';
 import { useFocusEffect } from '@react-navigation/native';
 import KeyboardManager from 'react-native-keyboard-manager';
 
-interface FloatingInputOptions {
+export interface FloatingInputOptions {
   placeholder?: string;
   description?: string;
   multiline?: boolean;
@@ -15,14 +15,6 @@ interface FloatingInputOptions {
 
 interface FloatingInputContextProps {
   showInput: (options: FloatingInputOptions) => void;
-  placeholder: string;
-  description: string;
-  multiline: boolean;
-  initialValue: string;
-  onSubmit: (text: string) => void;
-  onDismiss: (containsValue?: boolean) => void;
-  onRemove?: () => void;
-  shouldFocus: boolean;
 }
 
 const FloatingInputContext = createContext<FloatingInputContextProps | undefined>(undefined);
@@ -59,18 +51,19 @@ const FloatingInputProvider: FunctionComponent<FloatingInputProviderProps> = ({ 
     <FloatingInputContext.Provider
       value={{
         showInput,
-        shouldFocus,
-        placeholder,
-        description,
-        multiline,
-        initialValue,
-        onSubmit,
-        onRemove,
-        onDismiss,
       }}
     >
       {children}
-      <FloatingInput />
+      <FloatingInput
+        placeholder={placeholder}
+        description={description}
+        multiline={multiline}
+        initialValue={initialValue}
+        shouldFocus={shouldFocus}
+        onSubmit={onSubmit}
+        onRemove={onRemove}
+        onDismiss={onDismiss}
+      />
     </FloatingInputContext.Provider>
   );
 };

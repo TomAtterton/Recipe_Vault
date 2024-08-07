@@ -6,7 +6,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import Input from '@/components/inputs';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Keyboard, Pressable, TextInput, useWindowDimensions, View } from 'react-native';
 import { useStyles } from 'react-native-unistyles';
 import OutlineButton from '@/components/buttons/OutlineButton';
@@ -16,25 +16,25 @@ import Typography from '@/components/Typography';
 import { stylesheet } from './floatingInput.style';
 import IconButton from '@/components/buttons/IconButton';
 import { translate } from '@/core';
-import { FloatingInputContext } from '@/providers/FloatingInputProvider';
+import { FloatingInputOptions } from '@/providers/FloatingInputProvider';
 
 const BOTTOM_ACTION_BAR_HEIGHT = 50 + 20;
 const MIN_HEIGHT = 120;
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-const FloatingInput = () => {
-  const {
-    placeholder,
-    description,
-    initialValue,
-    multiline,
-    onDismiss,
-    shouldFocus,
-    onSubmit,
-    onRemove,
-  } = useContext(FloatingInputContext) || {};
-
+const FloatingInput = ({
+  placeholder,
+  description,
+  initialValue,
+  multiline,
+  onDismiss,
+  onSubmit,
+  onRemove,
+  shouldFocus,
+}: FloatingInputOptions & {
+  shouldFocus: boolean;
+}) => {
   const { height: screenHeight } = useWindowDimensions();
 
   const maxHeightTextInput = useMemo(() => screenHeight / 2.3, [screenHeight]);
@@ -148,7 +148,7 @@ const FloatingInput = () => {
             <Input
               ref={inputRef}
               placeholder={placeholder}
-              multiline={multiline}
+              multiline={true}
               textAlignVertical="top"
               value={text}
               onChangeText={setText}

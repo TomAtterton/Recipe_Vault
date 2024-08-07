@@ -48,6 +48,7 @@ export const uploadImage = async (
   };
 
   return new Promise<string | null>((resolve, reject) => {
+    // @ts-ignore
     upload(cld, {
       file: filePath,
       options: options,
