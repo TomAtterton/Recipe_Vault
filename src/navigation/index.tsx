@@ -24,6 +24,7 @@ import AdvanceSyncSettings from '@/screens/Settings/pages/AdvanceSyncSettings';
 import ProPlan from '@/screens/ProPlan';
 import useHandleSession from '@/services/auth/hooks/useHandleSession';
 import { RecipeDetectionNavigator } from '@/navigation/recipeDetectionNavigator';
+import RecipeSettings from '@/screens/Settings/pages/RecipeSettings';
 
 const Stack = createNativeStackNavigator();
 
@@ -86,6 +87,15 @@ export const RootNavigator = () => {
         key={Routes.AppSettings}
         name={Routes.AppSettings}
         component={AppSettings}
+        options={{
+          headerShown: false,
+          navigationBarHidden: true,
+        }}
+      />
+      <Stack.Screen
+        key={Routes.RecipeSettings}
+        name={Routes.RecipeSettings}
+        component={RecipeSettings}
         options={{
           headerShown: false,
           navigationBarHidden: true,

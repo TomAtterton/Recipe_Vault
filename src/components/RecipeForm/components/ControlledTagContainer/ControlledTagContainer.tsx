@@ -7,7 +7,7 @@ interface Props {
   control: controlType;
 }
 
-const TagContainer = ({ control }: Props) => {
+const ControlledTagContainer = ({ control }: Props) => {
   const { data: tags, onUpdateTags, onDeleteTags } = useUpdateTags();
 
   return (
@@ -22,4 +22,4 @@ const TagContainer = ({ control }: Props) => {
   );
 };
 
-export default TagContainer;
+export default ControlledTagContainer;

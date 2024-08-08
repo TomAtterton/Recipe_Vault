@@ -14,8 +14,7 @@ import ControlledInput from '@/components/inputs/ControlledInput';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import RatingContainer from '@/components/RecipeForm/components/RatingContainer';
 import EditableSectionList from '@/components/RecipeForm/components/EditableSectionList';
-import CategoryContainer from '@/components/RecipeForm/components/CategoryContainer';
-import TagContainer from '@/components/RecipeForm/components/TagContainer';
+import ControlledTagContainer from 'src/components/RecipeForm/components/ControlledTagContainer';
 import useScanImageParser from '@/components/RecipeForm/hooks/useScanImageParser';
 import ControlledImagePicker from '@/components/RecipeForm/components/ImagePicker';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -23,6 +22,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import useEditFloatingInput from '@/components/RecipeForm/hooks/useEditFloatingInput';
 import { useMemo } from 'react';
 import EditButton from '@/components/RecipeForm/components/EditButton';
+import ControlledCategoryContainer from 'src/components/RecipeForm/components/ControlledCategoryContainer';
 
 export type onUpdateRecipeProps = ({
   updateValues,
@@ -166,8 +166,8 @@ const RecipeForm = ({
           type={'instruction'}
           onScanLiveText={handleScanLiveText}
         />
-        <CategoryContainer control={control} />
-        <TagContainer control={control} />
+        <ControlledCategoryContainer control={control} />
+        <ControlledTagContainer control={control} />
         <ControlledInput
           style={styles.input}
           name="source"

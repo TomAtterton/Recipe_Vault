@@ -46,6 +46,11 @@ const Settings = () => {
           iconSource={'settings'}
         />
         <SettingsButton
+          title={'Recipes'}
+          onPress={() => navigate(Routes.RecipeSettings)}
+          iconSource={'hamburger'}
+        />
+        <SettingsButton
           title={'Vaults'}
           onPress={() => navigate(Routes.DatabaseSettings)}
           iconSource={'safe'}

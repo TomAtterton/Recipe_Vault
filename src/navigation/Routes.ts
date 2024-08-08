@@ -12,6 +12,7 @@ export enum Routes {
   AppSettings = 'AppSettings',
   SyncSettings = 'SyncSettings',
   AdvanceSyncSettings = 'AdvanceSyncSettings',
+  RecipeSettings = 'RecipeSettings',
   RecipeDetails = 'RecipeDetails',
   EditRecipe = 'EditRecipe',
   AddRecipe = 'AddRecipe',

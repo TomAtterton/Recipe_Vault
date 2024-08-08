@@ -7,7 +7,7 @@ interface Props {
   control: controlType;
 }
 
-const CategoryContainer = ({ control }: Props) => {
+const ControlledCategoryContainer = ({ control }: Props) => {
   const { data: categories, onUpdateCategory, onDeleteCategory } = useUpdateCategories();
 
   return (
@@ -22,4 +22,4 @@ const CategoryContainer = ({ control }: Props) => {
   );
 };
 
-export default CategoryContainer;
+export default ControlledCategoryContainer;
