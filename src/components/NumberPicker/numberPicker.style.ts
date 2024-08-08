@@ -5,7 +5,7 @@ export const stylesheet = createStyleSheet((theme) => ({
     flex: 1,
   },
   contentContainer: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
   },
   itemStyle: {
     color: theme.colors.onBackground,

@@ -11,16 +11,15 @@ import Typography from '@/components/Typography';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { requestReview } from 'expo-store-review';
 import SupportApp from '@/screens/SupportApp';
-import BottomSheet from '@/components/BottomSheet';
+import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 import { useRef } from 'react';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 const Settings = () => {
   const { styles } = useStyles(stylesheet);
 
   const { navigate, goBack } = useNavigation();
   const { top } = useSafeAreaInsets();
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const bottomSheetRef = useRef<BottomSheetRef>(null);
 
   const handleSupportApp = () => {
     bottomSheetRef.current?.present();

@@ -28,8 +28,14 @@ export const stylesheet = createStyleSheet((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  container: {
+    flex: 1,
+    marginHorizontal: 20,
+    marginVertical: 32,
+  },
   rating: {
-    marginTop: 20,
+    // flex: 1,
+    // marginTop: 20,
   },
   selectedIcon: {
     marginRight: 20,
@@ -44,11 +50,7 @@ export const stylesheet = createStyleSheet((theme) => ({
     height: 40,
     justifyContent: 'center',
   },
-  container: {
-    flex: 1,
-    marginHorizontal: 20,
-    marginVertical: 32,
-  },
+
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -64,8 +66,8 @@ export const stylesheet = createStyleSheet((theme) => ({
   content: {
     flex: 1,
   },
-  tagTitle: {
-    paddingTop: 20,
+  contentTitle: {
+    paddingVertical: 20,
   },
   tagList: {
     gap: 20,

@@ -16,8 +16,7 @@ import Icon from '@/components/Icon';
 import { useScrollToTop } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NavBarButton from '@/components/buttons/NavBarButton';
-import BottomSheet from '@/components/BottomSheet';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 import OutlineButton from '@/components/buttons/OutlineButton';
 import Shimmer from '@/components/Shimmer';
 import { requestReminderPermission } from '@/utils/reminderUtils';
@@ -38,7 +37,7 @@ const Groceries = () => {
   const { data, onAdd, onEdit, onRefresh, onCompleted, isLoading } = useGroceryList();
   const groceryListId = useBoundStore((state) => state.groceryId);
   const scrollViewRef = useRef(null);
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const bottomSheetRef = useRef<BottomSheetRef>(null);
 
   const tabBarHeight = useBottomTabBarHeight();
   const { styles, theme } = useStyles(stylesheet);
@@ -159,11 +158,7 @@ const Groceries = () => {
           <AddButton style={styles.addButton} title={'Add Grocery'} onPress={handleAdd} />
         </BlurView>
       )}
-      <BottomSheet
-        bottomSheetRef={bottomSheetRef}
-        snapPoints={['80%']}
-        title={'Choose which reminders list you would like to link with'}
-      >
+      <BottomSheet bottomSheetRef={bottomSheetRef} snapPoints={['80%']}>
         <SelectGroceryList onClose={() => bottomSheetRef.current?.dismiss()} />
       </BottomSheet>
     </View>

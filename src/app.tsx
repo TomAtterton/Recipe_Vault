@@ -6,7 +6,6 @@ import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { RootNavigator } from '@/navigation';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -38,16 +37,14 @@ const App = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <SafeAreaProvider>
-        <BottomSheetModalProvider>
-          <NavigationContainer theme={isDarkMode ? darkNavigationTheme : lightNavigationTheme}>
-            <FloatingInputProvider>
-              <UpdateProvider>
-                <RootNavigator />
-              </UpdateProvider>
-            </FloatingInputProvider>
-            <Toast config={toastConfig} />
-          </NavigationContainer>
-        </BottomSheetModalProvider>
+        <NavigationContainer theme={isDarkMode ? darkNavigationTheme : lightNavigationTheme}>
+          <FloatingInputProvider>
+            <UpdateProvider>
+              <RootNavigator />
+            </UpdateProvider>
+          </FloatingInputProvider>
+          <Toast config={toastConfig} />
+        </NavigationContainer>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

@@ -26,7 +26,6 @@ export const stylesheet = createStyleSheet((theme) => ({
   },
   emptyView: {
     paddingVertical: 16,
-    backgroundColor: 'blue',
     justifyContent: 'center',
     alignItems: 'center',
   },

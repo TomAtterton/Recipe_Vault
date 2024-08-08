@@ -1,4 +1,4 @@
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { deleteAllHistory, deleteBookmark, deleteHistory, useBoundStore } from '@/store';
@@ -6,7 +6,6 @@ import { SEARCH_BAR_HEIGHT, stylesheet } from './bookmarkPage.style';
 import { FlashList } from '@shopify/flash-list';
 import BookmarkItem from '@/screens/RecipeWebview/components/BookmarkPage/BookmarkItem/BookmarkItem';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { SCREEN_HEIGHT } from '@gorhom/bottom-sheet';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import { translate } from '@/core';
@@ -30,6 +29,7 @@ const BookmarkPage = ({ showBookmark, onLinkPress, onShowBookmarkModal }: Props)
   const { styles } = useStyles(stylesheet);
 
   const { top } = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
   const bookmarkData = useBoundStore((state) => state.bookmarks);
   const historyData = useBoundStore((state) => state.history);
 
@@ -97,15 +97,15 @@ const BookmarkPage = ({ showBookmark, onLinkPress, onShowBookmarkModal }: Props)
     ]
   );
 
-  const translateY = useSharedValue(SCREEN_HEIGHT - top - SEARCH_BAR_HEIGHT);
+  const translateY = useSharedValue(height - top - SEARCH_BAR_HEIGHT);
 
   useEffect(() => {
     if (showBookmark) {
       translateY.value = 0;
     } else {
-      translateY.value = SCREEN_HEIGHT - top - SEARCH_BAR_HEIGHT;
+      translateY.value = height - top - SEARCH_BAR_HEIGHT;
     }
-  }, [showBookmark, top, translateY]);
+  }, [height, showBookmark, top, translateY]);
 
   const animatedStyles = useAnimatedStyle(() => {
     return {

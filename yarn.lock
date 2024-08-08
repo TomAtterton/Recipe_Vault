@@ -2126,40 +2126,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gorhom/bottom-sheet@npm:^4.6.4":
-  version: 4.6.4
-  resolution: "@gorhom/bottom-sheet@npm:4.6.4"
-  dependencies:
-    "@gorhom/portal": 1.0.14
-    invariant: ^2.2.4
-  peerDependencies:
-    "@types/react": "*"
-    "@types/react-native": "*"
-    react: "*"
-    react-native: "*"
-    react-native-gesture-handler: ">=1.10.1"
-    react-native-reanimated: ">=2.2.0"
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-    "@types/react-native":
-      optional: true
-  checksum: 2cea033c4f321b93fdbf61470b507b5efd51425a8ab927b49d7aaa1d9f0568cbcfb188e385311389dbffbafe47b941dbd3e60f74b1d663a1a2d73262e2719f85
-  languageName: node
-  linkType: hard
-
-"@gorhom/portal@npm:1.0.14":
-  version: 1.0.14
-  resolution: "@gorhom/portal@npm:1.0.14"
-  dependencies:
-    nanoid: ^3.3.1
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 227bb96a2db854ab29bb9da8d4f3823c7f7448358de459709dd1b78522110da564c9a8734c6bc7d7153ed7c99320e0fb5d60b420c2ebb75ecaf2f0d757f410f9
-  languageName: node
-  linkType: hard
-
 "@graphql-typed-document-node/core@npm:^3.1.0":
   version: 3.2.0
   resolution: "@graphql-typed-document-node/core@npm:3.2.0"
@@ -2589,6 +2555,16 @@ __metadata:
     react-native-gesture-handler: ">=2.x.x"
     react-native-reanimated: ">=2.x.x"
   checksum: f0382e6e31ae2bcafdcdd223124782d86596ddb93bcdb312b56219f3b4768f2ac6dc0d3c03f670a822c99ad6574b8bf70ac06c7359d8387831242c0f61764acc
+  languageName: node
+  linkType: hard
+
+"@lodev09/react-native-true-sheet@npm:^0.12.4":
+  version: 0.12.4
+  resolution: "@lodev09/react-native-true-sheet@npm:0.12.4"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 729dc1eae7ac72a1012e6e6adc25c138b3c923fe7dcf357784263d9a84c868d134d495b99058d87f2fb4bb0606371366d6235005cf566187961936b3fa7326c6
   languageName: node
   linkType: hard
 
@@ -14227,7 +14203,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.1.23, nanoid@npm:^3.3.1, nanoid@npm:^3.3.7":
+"nanoid@npm:^3.1.23, nanoid@npm:^3.3.7":
   version: 3.3.7
   resolution: "nanoid@npm:3.3.7"
   bin:
@@ -16935,9 +16911,9 @@ __metadata:
     "@candlefinance/faster-image": ^1.6.2
     "@cloudinary/url-gen": ^1.19.0
     "@expo/config": ~9.0.0
-    "@gorhom/bottom-sheet": ^4.6.4
     "@hookform/resolvers": ^3.9.0
     "@likashefqet/react-native-image-zoom": ^2.2.0
+    "@lodev09/react-native-true-sheet": ^0.12.4
     "@react-native-async-storage/async-storage": ^1.24.0
     "@react-native-community/datetimepicker": ^8.2.0
     "@react-native-community/eslint-config": ^3.2.0

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { MenuView } from '@react-native-menu/menu';
@@ -10,7 +9,7 @@ import usePostMealPlan from '@/database/api/mealplan/usePostMealPlan';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import IconButton from '@/components/buttons/IconButton';
-import BottomSheet from '@/components/BottomSheet';
+import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import { showErrorMessage, showSuccessMessage } from '@/utils/promptUtils';
 
@@ -22,7 +21,7 @@ interface Props {
 }
 
 const CalendarPicker = ({ title, id, initialValue = new Date() }: Props) => {
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const bottomSheetModalRef = useRef<BottomSheetRef>(null);
   const [selectDate, setSelectDate] = useState(initialValue);
   const [entryType, setEntryType] = useState<'dinner' | 'breakfast' | 'lunch'>('dinner');
   const {} = useStyles();
@@ -51,7 +50,7 @@ const CalendarPicker = ({ title, id, initialValue = new Date() }: Props) => {
 
   const handleSavePress = useCallback(async () => {
     await onAddToMealPlan();
-    bottomSheetModalRef.current?.close();
+    bottomSheetModalRef.current?.dismiss();
   }, [onAddToMealPlan]);
 
   const { bottom } = useSafeAreaInsets();
@@ -66,7 +65,7 @@ const CalendarPicker = ({ title, id, initialValue = new Date() }: Props) => {
         iconSource={'calendar-add'}
         onPress={handlePresentModalPress}
       />
-      <BottomSheet bottomSheetRef={bottomSheetModalRef} snapPoints={['40%']} enablePanDownToClose>
+      <BottomSheet bottomSheetRef={bottomSheetModalRef} snapPoints={['40%']}>
         <View style={styles.contentContainer}>
           <Typography variant={'titleLarge'} style={styles.title}>
             Add to meal plan!

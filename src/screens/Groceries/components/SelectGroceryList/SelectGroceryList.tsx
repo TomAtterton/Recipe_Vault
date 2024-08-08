@@ -63,11 +63,14 @@ const SelectGroceryList = ({ onClose }: Props) => {
       subscription.remove();
     };
   }, []);
-
   return (
     <View style={styles.container}>
+      <Typography variant={'titleMedium'}>
+        Choose which reminders list you would like to link with
+      </Typography>
       <FlatList
         style={styles.list}
+        nestedScrollEnabled={true}
         contentContainerStyle={styles.listContentContainer}
         data={allReminders}
         renderItem={handleRenderItem}
@@ -78,12 +81,14 @@ const SelectGroceryList = ({ onClose }: Props) => {
           </View>
         )}
       />
-      <OutlineButton
-        title={'save'}
-        onPress={handleSave}
-        disabled={!selectedGroceryId}
-        style={styles.button}
-      />
+      {allReminders?.length > 0 && (
+        <OutlineButton
+          title={'save'}
+          onPress={handleSave}
+          disabled={!selectedGroceryId}
+          style={styles.button}
+        />
+      )}
     </View>
   );
 };
