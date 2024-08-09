@@ -9,18 +9,20 @@ export const stylesheet = createStyleSheet((theme) => ({
   backButton: {
     alignSelf: 'flex-start',
   },
-  vaultsContainer: {
-    paddingTop: 8,
-    flex: 0.5,
-    gap: 8,
+  bottomContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    gap: 16,
   },
-  vaultsScrollView: { flex: 1 },
-  vaultsScrollViewContent: { flexGrow: 1 },
+  enableSyncButton: {
+    marginTop: 20,
+  },
   dangerZoneTitle: {
     color: theme.colors.primary,
   },
   dangerZoneContainer: {
     flex: 1,
+    paddingTop: 20,
     justifyContent: 'flex-end',
     gap: 16,
     paddingBottom: 20,

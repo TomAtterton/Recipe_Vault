@@ -4,6 +4,7 @@ export const stylesheet = createStyleSheet((theme) => ({
   container: {
     flexDirection: 'row',
     height: 40,
+    gap: 8,
     alignItems: 'center',
     borderRadius: theme.borderRadius,
   },
@@ -13,14 +14,12 @@ export const stylesheet = createStyleSheet((theme) => ({
   },
   rightContent: {
     flex: 1,
+    gap: 8,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   buttonTitle: {
     color: theme.colors.primary,
-  },
-  icon: {
-    paddingLeft: 8,
   },
 }));

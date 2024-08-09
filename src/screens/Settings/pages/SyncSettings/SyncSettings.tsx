@@ -1,4 +1,4 @@
-import { Share, SafeAreaView, View, Alert } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import SettingsButton from '@/components/buttons/SettingsButton';
@@ -11,16 +11,17 @@ import { useNavigation } from '@react-navigation/native';
 import { stylesheet } from './syncSettings.style';
 import OutlineButton from '@/components/buttons/OutlineButton';
 import { Routes } from '@/navigation/Routes';
-import { database, onOpenDatabase } from '@/database';
+import { onOpenDatabase } from '@/database';
 import { Env } from '@/core/env';
-import { onDeleteUser, onSignOut } from '@/services/auth';
+import { onSignOut } from '@/services/auth';
 import { showErrorMessage } from '@/utils/promptUtils';
 
 const SyncSettings = () => {
   const { styles } = useStyles(stylesheet);
   const syncEnabled = useBoundStore((state) => state.shouldSync);
-  const { goBack, navigate } = useNavigation();
+  const { goBack, navigate, reset } = useNavigation();
   const profile = useBoundStore((state) => state.profile);
+  const userId = useBoundStore((state) => state.session?.user.id);
   const setSyncEnabled = useBoundStore((state) => state.setShouldSync);
 
   const databaseStatus = useBoundStore((state) => state.databaseStatus);
@@ -42,53 +43,6 @@ const SyncSettings = () => {
     }
   };
 
-  const handleDeleteAccount = async () => {
-    Alert.alert(
-      translate('prompt.delete_account.title'),
-      translate('prompt.delete_account.message'),
-      [
-        {
-          text: translate('default.cancel'),
-          style: 'cancel',
-        },
-        {
-          text: translate('default.delete'),
-          onPress: async () => {
-            try {
-              setIsLoading(true);
-              const { error } = await onDeleteUser();
-
-              if (error) {
-                throw new Error(translate('error.delete_account.error_message'));
-              }
-
-              database?.closeSync();
-              await onSignOut();
-              setResetProfile();
-              setResetDatabase();
-
-              await onOpenDatabase({
-                shouldClose: false,
-                currentDatabaseName: Env.SQLITE_DB_NAME,
-              });
-            } catch (error) {
-              showErrorMessage(translate('error.default.error_title'));
-            } finally {
-              setIsLoading(false);
-            }
-          },
-        },
-      ]
-    );
-  };
-
-  const handleShareDatabase = async () => {
-    await Share.share({
-      title: 'Share database code with a friend',
-      message: profile?.groupId,
-    });
-  };
-
   const handleProNavigation = () => {
     navigate(Routes.ProPlan);
   };
@@ -97,15 +51,11 @@ const SyncSettings = () => {
     <SafeAreaView style={styles.container}>
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
       <View style={styles.container}>
-        <Typography variant={'titleItalicLarge'}>Sync Settings.</Typography>
+        <Typography variant={'titleItalicLarge'}>Cloud Sync Settings.</Typography>
         {syncEnabled && (
           <>
             <InfoLabelButton title={'Current Vault.'} buttonTitle={profile?.groupName} />
             <InfoLabelButton title={'Vault Status:'} buttonTitle={databaseStatus} />
-            <InfoLabelButton
-              title={translate('settings.group_id')}
-              buttonTitle={profile?.groupId}
-            />
           </>
         )}
 
@@ -119,40 +69,52 @@ const SyncSettings = () => {
               />
             )}
             <SettingsButton
-              title={'Share Database Code'}
-              onPress={handleShareDatabase}
-              iconSource={'paper-plane'}
-            />
-            <SettingsButton
               title={'Advanced Sync Settings'}
               iconSource={'cog'}
-              onPress={() => navigate(Routes.AdvanceSyncSettings)}
+              onPress={() => navigate(Routes.Profile)}
             />
-
-            <View style={styles.bottomContainer}>
-              <OutlineButton
-                title={'Delete Account'}
-                onPress={handleDeleteAccount}
-                isLoading={isLoading}
-              />
-              <OutlineButton
-                title={translate('settings.logout')}
-                onPress={handleSignOut}
-                isLoading={isLoading}
-              />
-            </View>
+            <SettingsButton
+              title={'Account Settings'}
+              iconSource={'info'}
+              onPress={() => navigate(Routes.AccountSettings)}
+            />
+            <SettingsButton
+              title={'Manage Group Users'}
+              iconSource={'people'}
+              onPress={() => navigate(Routes.ManageGroupUsers)}
+            />
           </>
         ) : (
           <SettingsButton
             style={styles.enableSyncButton}
-            title={'Enable Sync'}
-            onPress={() =>
-              navigate(Routes.Login, {
-                showSkip: false,
-              })
-            }
+            title={userId ? 'Enable Cloud Vault' : 'Enable Sync'}
+            onPress={() => {
+              if (!userId) {
+                navigate(Routes.Login, {
+                  showSkip: false,
+                });
+              } else {
+                reset({
+                  index: 0,
+                  routes: [
+                    { name: Routes.TabStack },
+                    { name: Routes.Settings },
+                    { name: Routes.DatabaseSettings },
+                  ],
+                });
+              }
+            }}
             iconSource={'cloud'}
           />
+        )}
+        {userId && (
+          <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+            <OutlineButton
+              title={translate('settings.logout')}
+              onPress={handleSignOut}
+              isLoading={isLoading}
+            />
+          </View>
         )}
       </View>
     </SafeAreaView>

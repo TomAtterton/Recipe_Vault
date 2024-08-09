@@ -37,12 +37,12 @@ const RecipeSettings = () => {
         <SettingsButton
           title={'Manage Categories'}
           onPress={handleManageCategories}
-          iconSource={'bookmark-outline'}
+          iconSource={'pencil-add'}
         />
         <SettingsButton
           title={'Manage Tags'}
           onPress={handleManageTags}
-          iconSource={'bookmark-outline'}
+          iconSource={'pencil-add'}
         />
         <ManageCategoriesContainer manageCategoriesRef={manageCategoriesRef} />
         <ManageTagsContainer manageTagsRef={manageTagsRef} />

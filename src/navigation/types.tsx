@@ -21,15 +21,20 @@ export type RootStackParamList = RecipeDetailStackParamList &
     [Routes.Help]: undefined;
     [Routes.Onboarding]: undefined;
     [Routes.DatabaseSettings]: undefined;
+    [Routes.AccountSettings]: undefined;
     [Routes.AppSettings]: undefined;
     [Routes.RecipeSettings]: undefined;
     [Routes.SyncSettings]: undefined;
     [Routes.AdvanceSyncSettings]: undefined;
     [Routes.DatabaseEditor]: undefined;
+    [Routes.CreateVault]: undefined;
+    [Routes.JoinVault]: undefined;
+    [Routes.ManageGroupUsers]: undefined;
     [Routes.AddGroceries]: {
       ingredients?: Ingredient[];
     };
     [Routes.Profile]: undefined;
+    [Routes.WelcomeOnboarding]: undefined;
     [Routes.Search]: {
       entryType: 'breakfast' | 'lunch' | 'dinner' | 'snack';
       selectDate: string;

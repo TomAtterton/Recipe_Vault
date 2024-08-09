@@ -9,7 +9,6 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   },
   titleContainer: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     gap: 20,
   },
@@ -17,7 +16,6 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     textAlign: 'center',
   },
   subtitle: {
-    paddingTop: 20,
     textAlign: 'center',
   },
   buttonContainer: {
@@ -31,7 +29,9 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     height: 50,
   },
   backButton: {
-    alignSelf: 'flex-start',
+    position: 'absolute',
+    top: miniRuntime.insets.top,
+    left: 0,
   },
   input: {
     marginTop: 40,

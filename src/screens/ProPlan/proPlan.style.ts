@@ -3,7 +3,7 @@ import { createStyleSheet } from 'react-native-unistyles';
 export const stylesheet = createStyleSheet((theme) => ({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    marginHorizontal: 20,
   },
   icon: {
     alignSelf: 'center',
@@ -14,6 +14,7 @@ export const stylesheet = createStyleSheet((theme) => ({
     textAlign: 'center',
   },
   subTitle: {
+    textAlign: 'center',
     color: theme.colors.primary,
     marginBottom: 8,
   },

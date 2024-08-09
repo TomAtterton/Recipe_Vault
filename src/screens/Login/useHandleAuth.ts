@@ -2,13 +2,11 @@ import { translate } from '@/core';
 import { Session, User } from '@supabase/supabase-js';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
-import { setCurrentDatabaseName, setShouldSync, updateProfile } from '@/store';
 import { showErrorMessage } from '@/utils/promptUtils';
-import { onOpenDatabase } from '@/database';
-import { syncWithSupabase } from '@/services/sync';
 import { useState } from 'react';
 import { onAppleAuthSignIn, onTestSignIn } from '@/services/auth';
 import { getProfileGroup } from '@/services/group';
+import { updateProfile } from '@/store';
 
 const useHandleAuth = () => {
   const { reset } = useNavigation();
@@ -16,36 +14,25 @@ const useHandleAuth = () => {
   const handleUpdateProfile = async (data: { user: User | null; session: Session | null }) => {
     try {
       setIsLoading(true);
-
-      const { groupId, groupName, groupRole } = await getProfileGroup({
+      const { groupId, profileName } = await getProfileGroup({
         userId: data.user?.id,
       });
 
-      if (groupName && groupId && groupRole) {
-        updateProfile({
-          id: data.user?.id,
-          email: data?.user?.email || '',
-          groupId,
-          groupName,
-          groupRole,
-        });
-        setShouldSync(true);
+      updateProfile({
+        id: data.user?.id,
+        email: data?.user?.email || '',
+      });
 
-        const currentDatabaseName = `${groupName}.db`;
-        setCurrentDatabaseName(currentDatabaseName);
-        await onOpenDatabase({ currentDatabaseName });
-        await syncWithSupabase();
+      if (groupId && profileName) {
         reset({
           index: 0,
-          routes: [{ name: Routes.TabStack }],
+          routes: [
+            { name: Routes.TabStack },
+            { name: Routes.Settings },
+            { name: Routes.DatabaseSettings },
+          ],
         });
       } else {
-        updateProfile({
-          id: data.user?.id,
-          email: data?.user?.email || '',
-        });
-
-        // TODO handle no group setup
         reset({
           index: 0,
           routes: [{ name: Routes.Profile }],
@@ -105,5 +92,4 @@ const useHandleAuth = () => {
     isLoading,
   };
 };
-
 export default useHandleAuth;

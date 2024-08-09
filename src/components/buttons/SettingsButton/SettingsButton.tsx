@@ -11,9 +11,10 @@ interface Props extends PressableProps {
   style?: StyleProp<ViewStyle>;
   title: string;
   iconSource?: IconName;
+  iconSize?: number;
 }
 
-const SettingsButton = ({ style, title, iconSource, ...props }: Props) => {
+const SettingsButton = ({ style, title, iconSource, iconSize = 24, ...props }: Props) => {
   const { styles, theme } = useStyles(stylesheet);
   const hasIcon = !!iconSource;
   const buttonOpacity = props?.disabled ? 0.5 : 1;
@@ -34,10 +35,20 @@ const SettingsButton = ({ style, title, iconSource, ...props }: Props) => {
         {...props}
       >
         {hasIcon && (
-          <Icon style={styles.icon} name={iconSource} size={24} color={theme.colors.onBackground} />
+          <Icon
+            style={styles.icon}
+            name={iconSource}
+            size={iconSize}
+            color={theme.colors.onBackground}
+          />
         )}
         <Typography style={styles.text}>{title}</Typography>
-        <Icon style={styles.icon} name={'arrow-right'} size={24} color={theme.colors.primary} />
+        <Icon
+          style={styles.icon}
+          name={'arrow-right'}
+          size={iconSize}
+          color={theme.colors.primary}
+        />
       </Pressable>
     </SquircleDynamicContainer>
   );

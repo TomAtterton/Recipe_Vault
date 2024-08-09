@@ -17,7 +17,6 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     textAlign: 'center',
   },
   subtitle: {
-    paddingTop: 20,
     textAlign: 'center',
   },
   buttonContainer: {
