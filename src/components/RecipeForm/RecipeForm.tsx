@@ -123,7 +123,6 @@ const RecipeForm = ({
           label="Title"
           multiline
           onEdit={handleEdit}
-          onScanLiveText={handleScanLiveText}
           control={control}
         />
         <RatingContainer name={'rating'} control={control} />
