@@ -63,11 +63,16 @@ const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveTex
 
   const handleEdit = useCallback(
     (item: DraggableListItem, index: number | undefined) => {
+      const isSection = item.type === 'section';
       onEdit &&
         onEdit(
-          item.text,
+          (isSection ? item.title : item.text) || '',
           (value) => {
-            update(index || 0, { ...item, text: value });
+            update(index || 0, {
+              ...item,
+              text: isSection ? '' : value,
+              title: isSection ? value : '',
+            });
           },
           () => remove(index),
           () => {}
