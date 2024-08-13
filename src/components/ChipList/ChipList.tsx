@@ -1,5 +1,5 @@
 import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
-import { Alert, FlatList } from 'react-native';
+import { Alert } from 'react-native';
 import React, { useCallback } from 'react';
 import ChipItem from '@/components/inputs/ChipInput/ChipItem';
 import ChipListHeader from '@/components/inputs/ChipInput/ChipListHeader';
@@ -7,6 +7,7 @@ import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from '@/components/ChipList/chipList.style';
 import { ChipItemType } from '@/components/inputs/ChipInput/ChipInput';
 import { translate } from '@/core';
+import { FlatList } from 'react-native-gesture-handler';
 
 interface Props {
   chipListRef: React.RefObject<BottomSheetRef>;
@@ -32,7 +33,7 @@ const ChipList = ({
   onUpdate,
 }: Props) => {
   const { styles } = useStyles(stylesheet);
-
+  console.log('List render');
   const handleDelete = useCallback(
     (item: ChipItemType) => {
       Alert.alert(
@@ -50,8 +51,13 @@ const ChipList = ({
     [onDelete]
   );
 
+  console.log('hideSelection', hideSelection);
+  console.log('selectedItems', selectedItems);
+  console.log('onSelect', onSelect);
+  console.log('handleDelete', handleDelete);
   const renderSelectItem = useCallback(
     ({ item }: { item: ChipItemType }) => {
+      console.log('Item render');
       return (
         <ChipItem
           hideSelection={hideSelection}
@@ -62,17 +68,21 @@ const ChipList = ({
         />
       );
     },
-    [hideSelection, selectedItems, onSelect, handleDelete]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [hideSelection, selectedItems]
   );
 
   const onRenderCategoryHeader = useCallback(
     () => <ChipListHeader itemsRef={chipListRef} items={data} onUpdateItem={onUpdate} />,
-    [chipListRef, data, onUpdate]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [chipListRef, data]
   );
 
+  console.log('data', data);
   return (
     <BottomSheet bottomSheetRef={chipListRef} snapPoints={['80%']}>
       <FlatList
+        nestedScrollEnabled
         keyExtractor={keyExtractor}
         ListHeaderComponent={onRenderCategoryHeader}
         data={data}

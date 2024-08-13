@@ -2,6 +2,7 @@ import * as React from 'react';
 import useUpdateTags from '@/hooks/recipe/useUpdateTags';
 import { controlNameType, controlType } from '@/utils/recipeFormUtil';
 import ChipInput from '@/components/inputs/ChipInput';
+import { memo } from 'react';
 
 interface Props {
   control: controlType;
@@ -22,4 +23,4 @@ const ControlledTagContainer = ({ control }: Props) => {
   );
 };
 
-export default ControlledTagContainer;
+export default memo(ControlledTagContainer);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import useUpdateCategories from '@/hooks/recipe/useUpdateCategories';
 import { controlNameType, controlType } from '@/utils/recipeFormUtil';
 import ChipInput from '@/components/inputs/ChipInput';
@@ -22,4 +22,4 @@ const ControlledCategoryContainer = ({ control }: Props) => {
   );
 };
 
-export default ControlledCategoryContainer;
+export default memo(ControlledCategoryContainer);

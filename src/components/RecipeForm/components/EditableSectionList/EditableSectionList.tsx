@@ -1,11 +1,9 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { View } from 'react-native';
-import type { RenderItemParams } from 'react-native-draggable-flatlist';
-import { NestableDraggableFlatList } from 'react-native-draggable-flatlist';
 import Item from './components/Item/Item';
 import { stylesheet } from './editableSectionList.style';
 import useEditSectionList from './hooks/useEditSectionList';
-import { useController, useFieldArray } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 import {
   controlNameType,
   controlType,
@@ -16,6 +14,7 @@ import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import ListButton from '@/components/buttons/ListButton';
 import ScanButton from './components/ScanButton';
+import DraggableFlatList, { RenderItemParams } from '@/components/DraggableFlatList';
 
 interface Props {
   control: controlType;
@@ -34,32 +33,16 @@ interface Props {
 const keyExtractor = (item: DraggableListItem, index: number) => item?.id + index;
 
 const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveText }: Props) => {
-  const { fieldState } = useController({ control, name });
-
   const { fields, append, remove, move, update } = useFieldArray({
     control,
-    name: name,
+    name,
   });
-
-  // console.log('TEST fields', fields);
-
-  const fieldValue = useMemo(() => {
-    return fields as DraggableListItem[];
-  }, [fields]);
 
   const { isIngredient, onAddItem, onAddSectionItem } = useEditSectionList({
     type,
     onAppend: append,
     onEdit,
   });
-
-  const errorMessage = useMemo(() => {
-    if (fieldState?.error) {
-      // @ts-ignore
-      return fieldState.error?.message || fieldState.error?.find((_) => _?.text).text?.message;
-    }
-    return '';
-  }, [fieldState.error]);
 
   const handleEdit = useCallback(
     (item: DraggableListItem, index: number | undefined) => {
@@ -78,8 +61,7 @@ const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveTex
           () => {}
         );
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fieldValue, onEdit]
+    [onEdit, remove, update]
   );
 
   const handleRenderItem = useCallback(
@@ -96,10 +78,7 @@ const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveTex
     [move]
   );
 
-  const {
-    styles,
-    theme: { colors },
-  } = useStyles(stylesheet);
+  const { styles } = useStyles(stylesheet);
 
   return (
     <>
@@ -108,32 +87,28 @@ const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveTex
           <Typography style={styles.title} variant="titleLarge">
             {title}
           </Typography>
-          <ScanButton onScanLiveText={onScanLiveText} name={name} itemState={fieldValue} />
+          <ScanButton
+            onScanLiveText={onScanLiveText}
+            name={name}
+            itemState={fields as DraggableListItem[]}
+          />
         </View>
 
-        <NestableDraggableFlatList
-          keyExtractor={keyExtractor}
-          style={styles.listContainer}
-          containerStyle={styles.listContainer}
-          contentContainerStyle={styles.listContentContainer}
-          keyboardShouldPersistTaps={'always'}
-          activationDistance={50}
-          autoscrollThreshold={100}
-          data={fieldValue}
-          onDragEnd={onDragEnd}
-          renderItem={handleRenderItem}
-        />
+        {fields && fields.length > 0 && (
+          <DraggableFlatList
+            keyExtractor={keyExtractor}
+            style={styles.listContainer}
+            containerStyle={styles.listContainer}
+            contentContainerStyle={styles.listContentContainer}
+            keyboardShouldPersistTaps={'always'}
+            activationDistance={50}
+            autoscrollThreshold={100}
+            data={fields as DraggableListItem[]}
+            onDragEnd={onDragEnd}
+            renderItem={handleRenderItem}
+          />
+        )}
       </View>
-      {!!errorMessage && (
-        <Typography
-          variant={'titleSmall'}
-          style={{
-            color: colors.error,
-          }}
-        >
-          {errorMessage}
-        </Typography>
-      )}
       <View style={styles.listButtonContainer}>
         <ListButton
           iconSource={'add-outline'}
@@ -146,4 +121,4 @@ const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveTex
   );
 };
 
-export default EditableSectionList;
+export default memo(EditableSectionList);

@@ -38,11 +38,11 @@ const App = () => {
     <GestureHandlerRootView style={styles.container}>
       <SafeAreaProvider>
         <NavigationContainer theme={isDarkMode ? darkNavigationTheme : lightNavigationTheme}>
-          <FloatingInputProvider>
-            <UpdateProvider>
+          <UpdateProvider>
+            <FloatingInputProvider>
               <RootNavigator />
-            </UpdateProvider>
-          </FloatingInputProvider>
+            </FloatingInputProvider>
+          </UpdateProvider>
           <Toast config={toastConfig} />
         </NavigationContainer>
       </SafeAreaProvider>

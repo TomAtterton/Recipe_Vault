@@ -1,6 +1,5 @@
-// import { BottomSheetFlatList, BottomSheetModal, SCREEN_HEIGHT } from '@gorhom/bottom-sheet';
 import React, { useCallback, useMemo, useRef } from 'react';
-import { ScrollView, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { TouchableOpacity, View, ViewStyle } from 'react-native';
 
 import { useController } from 'react-hook-form';
 import { controlNameType, controlType, RecipeFormType } from '@/utils/recipeFormUtil';
@@ -56,12 +55,8 @@ const ChipInput = ({ style, control, name, title, currentData, onUpdate, onDelet
 
   return (
     <View style={style}>
-      <TouchableOpacity style={styles.contentContainer} onPress={openCategories}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
-        >
+      <TouchableOpacity style={styles.container} onPress={openCategories}>
+        <View style={styles.contentContainer}>
           {values.length > 0 ? (
             values.map((value) => (
               <View style={styles.chipContainer} key={value}>
@@ -75,7 +70,7 @@ const ChipInput = ({ style, control, name, title, currentData, onUpdate, onDelet
               {title}
             </Typography>
           )}
-        </ScrollView>
+        </View>
       </TouchableOpacity>
       <ChipList
         chipListRef={chipListRef}

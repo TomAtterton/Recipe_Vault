@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import type { RenderItemParams } from 'react-native-draggable-flatlist';
 
 import { DraggableListItem } from '@/utils/recipeFormUtil';
 import { useStyles } from 'react-native-unistyles';
 import Typography from '@/components/Typography';
-import IconButton from '@/components/buttons/IconButton';
 import { stylesheet } from './item.style';
+import IconButton from '@/components/buttons/IconButton';
+import { RenderItemParams } from '@/components/DraggableFlatList';
 
 const Item = ({
   item: { id, type, title: sectionTitle, text: value },
@@ -21,8 +21,7 @@ const Item = ({
   const { styles, theme } = useStyles(stylesheet);
 
   const handleEdit = () => {
-    const index = getIndex();
-    onEdit({ id, type, title: sectionTitle, text: value }, index);
+    onEdit({ id, type, title: sectionTitle, text: value }, getIndex());
   };
 
   return (

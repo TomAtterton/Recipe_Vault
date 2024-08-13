@@ -1,13 +1,12 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import { View, StyleProp, ViewStyle } from 'react-native';
 
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { MenuView } from '@react-native-menu/menu';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { format } from 'date-fns';
 import usePostMealPlan from '@/database/api/mealplan/usePostMealPlan';
 import Typography from '@/components/Typography';
-import { useStyles } from 'react-native-unistyles';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import IconButton from '@/components/buttons/IconButton';
 import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
@@ -53,7 +52,7 @@ const CalendarPicker = ({ title, id, initialValue = new Date() }: Props) => {
     bottomSheetModalRef.current?.dismiss();
   }, [onAddToMealPlan]);
 
-  const { bottom } = useSafeAreaInsets();
+  const { styles } = useStyles(stylesheet);
 
   const {
     theme: { colors },
@@ -117,7 +116,7 @@ const CalendarPicker = ({ title, id, initialValue = new Date() }: Props) => {
           </MenuView>
         </View>
         <PrimaryButton
-          style={[styles.saveButton, { marginBottom: bottom }]}
+          style={[styles.saveButton]}
           onPress={handleSavePress}
           title={'Save to meal plan'}
         />
@@ -126,9 +125,8 @@ const CalendarPicker = ({ title, id, initialValue = new Date() }: Props) => {
   );
 };
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   contentContainer: {
-    flex: 1,
     paddingHorizontal: 16,
     paddingTop: 16,
   },
@@ -154,11 +152,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   saveButton: {
+    position: 'absolute',
+    bottom: miniRuntime.insets.bottom,
+    left: 0,
+    right: 0,
     marginHorizontal: 16,
   },
   saveTitle: {
     fontWeight: 'bold',
   },
-});
+}));
 
 export default CalendarPicker;

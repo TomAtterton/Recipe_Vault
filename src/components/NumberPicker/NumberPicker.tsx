@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, memo } from 'react';
 import { View, ViewStyle, StyleProp } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { stylesheet } from './numberPicker.style';
@@ -75,4 +75,4 @@ const NumberPicker = ({
   );
 };
 
-export default NumberPicker;
+export default memo(NumberPicker);

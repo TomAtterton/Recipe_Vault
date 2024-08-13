@@ -1,5 +1,4 @@
 import useHandleRecipeForm from '@/hooks/recipe/useHandleRecipeForm';
-import { NestableScrollContainer } from 'react-native-draggable-flatlist';
 import * as React from 'react';
 import NumberPicker from 'src/components/NumberPicker';
 import HourMinutePicker from 'src/components/HourMinutePicker';
@@ -13,8 +12,6 @@ import { useScrollToTop } from '@react-navigation/native';
 import ControlledInput from '@/components/inputs/ControlledInput';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import RatingContainer from '@/components/RecipeForm/components/RatingContainer';
-import EditableSectionList from '@/components/RecipeForm/components/EditableSectionList';
-import ControlledTagContainer from 'src/components/RecipeForm/components/ControlledTagContainer';
 import useScanImageParser from '@/components/RecipeForm/hooks/useScanImageParser';
 import ControlledImagePicker from '@/components/RecipeForm/components/ImagePicker';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -22,7 +19,10 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import useEditFloatingInput from '@/components/RecipeForm/hooks/useEditFloatingInput';
 import { useMemo } from 'react';
 import EditButton from '@/components/RecipeForm/components/EditButton';
-import ControlledCategoryContainer from 'src/components/RecipeForm/components/ControlledCategoryContainer';
+import EditableSectionList from './components/EditableSectionList';
+import ControlledCategoryContainer from '@/components/RecipeForm/components/ControlledCategoryContainer';
+import ControlledTagContainer from '@/components/RecipeForm/components/ControlledTagContainer';
+import { NestableScrollContainer } from '@/components/DraggableFlatList';
 
 export type onUpdateRecipeProps = ({
   updateValues,

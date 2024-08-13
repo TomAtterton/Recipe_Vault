@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import {
   transformDefaultValues,
@@ -15,9 +15,9 @@ import {
 import { RecipeDetailType } from '@/types';
 import { onUpdateRecipeProps } from '@/components/RecipeForm/RecipeForm';
 import { showErrorMessage } from '@/utils/promptUtils';
-import { ScrollView } from 'react-native';
 import { setScannedImage } from '@/store';
 import { translate } from '@/core';
+import Animated, { useAnimatedRef } from 'react-native-reanimated';
 
 const useHandleRecipeForm = ({
   scannedData,
@@ -28,7 +28,7 @@ const useHandleRecipeForm = ({
   data?: Partial<RecipeDetailType>;
   onSubmitForm: onUpdateRecipeProps;
 }) => {
-  const scrollViewRef = useRef<ScrollView | undefined>(undefined);
+  const scrollViewRef = useAnimatedRef<Animated.ScrollView>();
   const transformedValues = useMemo(() => transformDefaultValues(data), [data]);
   const [isDirty, setIsDirty] = useState(false);
 

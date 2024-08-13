@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { StyleProp, Text, TextProps, TextStyle } from 'react-native';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './typography.style';
@@ -37,4 +37,4 @@ const Typography = ({ children, style, variant, ...props }: Props) => {
   );
 };
 
-export default Typography;
+export default memo(Typography);

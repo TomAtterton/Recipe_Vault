@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { FlatList, Keyboard, useWindowDimensions, View } from 'react-native';
+import { FlatList, Keyboard, View } from 'react-native';
 
 interface Props {
   currentFilters: FilterObjectType;
@@ -35,9 +35,6 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
     optionsRef.current?.present();
   }, [currentFilters]);
 
-  const { height } = useWindowDimensions();
-
-  const snapPoints = React.useMemo(() => [height / 1.2], [height]);
   const optionsRef = React.useRef<BottomSheetRef>(null);
 
   const [filterOptions, setFilterOptions] = useState<FilterObjectType>({
@@ -116,7 +113,7 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
       </View>
       <BottomSheet
         bottomSheetRef={optionsRef}
-        snapPoints={snapPoints}
+        snapPoints={['80%']}
         onDismiss={() => {
           setFilterOptions(defaultFilterOptions);
         }}

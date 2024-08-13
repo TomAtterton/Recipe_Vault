@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useController } from 'react-hook-form';
 import { controlNameType, controlType, RecipeFormType } from '@/utils/recipeFormUtil';
 import StarRating from '@/components/StarRating';
@@ -10,7 +10,6 @@ interface Props {
 
 const RatingContainer = ({ control, name }: Props) => {
   const { field } = useController({ control, name });
-
   return (
     <StarRating
       padding={40}
@@ -20,4 +19,4 @@ const RatingContainer = ({ control, name }: Props) => {
   );
 };
 
-export default RatingContainer;
+export default memo(RatingContainer);

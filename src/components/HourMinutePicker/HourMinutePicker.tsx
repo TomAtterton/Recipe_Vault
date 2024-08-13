@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react';
+import React, { useState, useRef, useMemo, useEffect, memo } from 'react';
 import { View, StyleProp, ViewStyle } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
@@ -27,7 +27,6 @@ const minuteItems = Array.from({ length: numberOfMinutes });
 
 const HourMinutePicker = ({ control, name, title, description, containerStyle }: Props) => {
   const { field } = useController({ control, name });
-
   const bottomSheetModalRef = useRef<BottomSheetRef>(null);
 
   const { initialHours, initialMinutes } = useMemo(() => {
@@ -149,4 +148,4 @@ const HourMinutePicker = ({ control, name, title, description, containerStyle }:
   );
 };
 
-export default HourMinutePicker;
+export default memo(HourMinutePicker);

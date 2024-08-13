@@ -16310,12 +16310,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-draggable-flatlist@link:./shared/react-native-draggable-flatlist::locator=recipeapp%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "react-native-draggable-flatlist@link:./shared/react-native-draggable-flatlist::locator=recipeapp%40workspace%3A."
-  languageName: node
-  linkType: soft
-
 "react-native-fast-collapsible@npm:^1.1.1":
   version: 1.1.1
   resolution: "react-native-fast-collapsible@npm:1.1.1"
@@ -17009,7 +17003,6 @@ __metadata:
     react-native: 0.74.3
     react-native-collapsible-tab-view: ^8.0.0
     react-native-confetti-cannon: ^1.5.2
-    react-native-draggable-flatlist: "git+https://github.com/TomAtterton/react-native-draggable-flatlist"
     react-native-fast-collapsible: ^1.1.1
     react-native-fetch-api: ^3.0.0
     react-native-gesture-handler: ^2.18.1
