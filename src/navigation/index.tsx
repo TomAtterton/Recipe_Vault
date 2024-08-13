@@ -24,6 +24,12 @@ import AdvanceSyncSettings from '@/screens/Settings/pages/AdvanceSyncSettings';
 import ProPlan from '@/screens/ProPlan';
 import useHandleSession from '@/services/auth/hooks/useHandleSession';
 import { RecipeDetectionNavigator } from '@/navigation/recipeDetectionNavigator';
+import RecipeSettings from '@/screens/Settings/pages/RecipeSettings';
+import CreateVault from '@/screens/CreateVault';
+import JoinVault from '@/screens/JoinVault';
+import AccountSettings from '@/screens/Settings/pages/AccountSettings';
+import ManageGroupUsers from '@/screens/Settings/pages/ManageGroupUsers';
+import WelcomeOnboarding from '@/screens/WelcomeOnboarding';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,13 +40,17 @@ const defaultOptions = {
 export const RootNavigator = () => {
   useHandleShare();
   useHandleSession();
-
   return (
     <Stack.Navigator initialRouteName={Routes.Splashscreen} screenOptions={defaultOptions}>
       <Stack.Screen name={Routes.Splashscreen} component={Splashscreen} options={defaultOptions} />
       <Stack.Screen name={Routes.Onboarding} component={Onboarding} options={defaultOptions} />
       <Stack.Screen name={Routes.Login} component={Login} options={defaultOptions} />
       <Stack.Screen name={Routes.Profile} component={Profile} options={defaultOptions} />
+      <Stack.Screen
+        name={Routes.WelcomeOnboarding}
+        component={WelcomeOnboarding}
+        options={defaultOptions}
+      />
       <Stack.Screen name={Routes.TabStack} component={TabNavigator} />
       <Stack.Screen name={Routes.RecipeDetailStack} component={RecipeDetailNavigator} />
       <Stack.Screen name={Routes.RecipeDetectionStack} component={RecipeDetectionNavigator} />
@@ -92,9 +102,54 @@ export const RootNavigator = () => {
         }}
       />
       <Stack.Screen
+        key={Routes.RecipeSettings}
+        name={Routes.RecipeSettings}
+        component={RecipeSettings}
+        options={{
+          headerShown: false,
+          navigationBarHidden: true,
+        }}
+      />
+      <Stack.Screen
+        key={Routes.CreateVault}
+        name={Routes.CreateVault}
+        component={CreateVault}
+        options={{
+          headerShown: false,
+          navigationBarHidden: true,
+        }}
+      />
+      <Stack.Screen
+        key={Routes.JoinVault}
+        name={Routes.JoinVault}
+        component={JoinVault}
+        options={{
+          headerShown: false,
+          navigationBarHidden: true,
+        }}
+      />
+      <Stack.Screen
         key={Routes.DatabaseSettings}
         name={Routes.DatabaseSettings}
         component={DatabaseSettings}
+        options={{
+          headerShown: false,
+          navigationBarHidden: true,
+        }}
+      />
+      <Stack.Screen
+        key={Routes.AccountSettings}
+        name={Routes.AccountSettings}
+        component={AccountSettings}
+        options={{
+          headerShown: false,
+          navigationBarHidden: true,
+        }}
+      />
+      <Stack.Screen
+        key={Routes.ManageGroupUsers}
+        name={Routes.ManageGroupUsers}
+        component={ManageGroupUsers}
         options={{
           headerShown: false,
           navigationBarHidden: true,

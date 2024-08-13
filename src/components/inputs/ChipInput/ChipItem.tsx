@@ -6,27 +6,38 @@ import { stylesheet } from '@/components/inputs/ChipInput/chipInput.style';
 import { useStyles } from 'react-native-unistyles';
 import CheckBox from '@/components/CheckBox';
 import IconButton from '@/components/buttons/IconButton';
+import Typography from '@/components/Typography';
 
 interface ChipItemProps {
   item: ChipItemType;
-  selectedItems: ChipItemType[];
-  onSelectItem: (item: ChipItemType) => void;
+  hideSelection?: boolean;
+  selectedItems?: ChipItemType[];
+  onSelectItem?: (item: ChipItemType) => void;
   onDeleteItem: (item: ChipItemType) => void;
 }
 
-const ChipItem: React.FC<ChipItemProps> = ({ item, selectedItems, onSelectItem, onDeleteItem }) => {
-  const isSelected = selectedItems.some((selectedItem) => selectedItem.id === item.id);
+const ChipItem: React.FC<ChipItemProps> = ({
+  item,
+  selectedItems,
+  hideSelection,
+  onSelectItem,
+  onDeleteItem,
+}) => {
+  const isSelected = selectedItems?.some((selectedItem) => selectedItem.id === item.id) || false;
 
-  const handleSelect = () => onSelectItem(item);
+  const handleSelect = () => onSelectItem && onSelectItem(item);
   const { styles } = useStyles(stylesheet);
   return (
     <View style={styles.selectItemContainer}>
-      {!!item?.name && (
-        <CheckBox label={item?.name} isSelected={isSelected} onPress={handleSelect} />
+      {hideSelection ? (
+        <Typography variant={'titleMedium'}>{item?.name}</Typography>
+      ) : (
+        !!item?.name && (
+          <CheckBox label={item?.name} isSelected={isSelected} onPress={handleSelect} />
+        )
       )}
       <IconButton iconSource={'bin'} onPress={() => onDeleteItem(item)} />
     </View>
   );
 };
-
 export default ChipItem;

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { FlatList, Keyboard, useWindowDimensions, View } from 'react-native';
+import { FlatList, Keyboard, View } from 'react-native';
 
 interface Props {
   currentFilters: FilterObjectType;
@@ -11,9 +11,8 @@ import { FilterObjectType } from '@/utils/filterUtils';
 import useGetTags from '@/database/api/tags/useGetTags';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
-import BottomSheet from '@/components/BottomSheet';
+import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 import CheckBox from '@/components/CheckBox';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import IconButton from '@/components/buttons/IconButton';
 import LabelButton from '@/components/buttons/LabelButton';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
@@ -27,6 +26,8 @@ export const defaultFilterOptions = () => ({
   tags: [],
 });
 
+const keyExtractor = (item: Tag) => item.id || '';
+
 const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
   const onFilter = useCallback(() => {
     setFilterOptions(currentFilters);
@@ -34,10 +35,7 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
     optionsRef.current?.present();
   }, [currentFilters]);
 
-  const { height } = useWindowDimensions();
-
-  const snapPoints = React.useMemo(() => [height / 1.2], [height]);
-  const optionsRef = React.useRef<BottomSheetModal>(null);
+  const optionsRef = React.useRef<BottomSheetRef>(null);
 
   const [filterOptions, setFilterOptions] = useState<FilterObjectType>({
     rating: currentFilters?.rating || null,
@@ -115,7 +113,7 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
       </View>
       <BottomSheet
         bottomSheetRef={optionsRef}
-        snapPoints={snapPoints}
+        snapPoints={['80%']}
         onDismiss={() => {
           setFilterOptions(defaultFilterOptions);
         }}
@@ -126,21 +124,28 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
             <LabelButton onPress={onReset} hitSlop={styles.resetButtonHitSlop} title={'reset'} />
           </View>
           <View style={styles.content}>
+            <Typography style={styles.contentTitle} variant={'titleMedium'}>
+              Rating
+            </Typography>
             <StarRating
-              style={styles.rating}
+              padding={40}
               initialValue={filterOptions?.rating || 0}
               onChange={(rating) => updateFilterOption('rating', rating)}
             />
-            <Typography style={styles.tagTitle} variant={'titleMedium'}>
-              Tags
-            </Typography>
-            <FlatList
-              keyExtractor={(item) => item.id || ''}
-              keyboardDismissMode={'on-drag'}
-              contentContainerStyle={styles.tagList}
-              data={(data as Tag[] | undefined) || []}
-              renderItem={onRenderItem}
-            />
+            {data && data.length > 0 && (
+              <>
+                <Typography style={styles.contentTitle} variant={'titleMedium'}>
+                  Tags
+                </Typography>
+                <FlatList
+                  keyExtractor={keyExtractor}
+                  keyboardDismissMode={'on-drag'}
+                  contentContainerStyle={styles.tagList}
+                  data={(data as Tag[] | undefined) || []}
+                  renderItem={onRenderItem}
+                />
+              </>
+            )}
           </View>
           <PrimaryButton style={styles.saveButton} onPress={onSaved} title={'Save'} />
         </View>

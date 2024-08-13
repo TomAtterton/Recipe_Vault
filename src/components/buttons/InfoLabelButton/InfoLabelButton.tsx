@@ -10,12 +10,22 @@ import { showSuccessMessage } from '@/utils/promptUtils';
 
 interface Props extends PressableProps {
   style?: StyleProp<ViewStyle>;
+  buttonTitleStyle?: StyleProp<ViewStyle>;
   title: string;
   buttonTitle?: string | null;
   iconSource?: IconName;
+  leftIconSource?: IconName;
 }
 
-const InfoLabelButton = ({ style, title, buttonTitle, iconSource, ...props }: Props) => {
+const InfoLabelButton = ({
+  style,
+  buttonTitleStyle,
+  title,
+  buttonTitle,
+  leftIconSource,
+  iconSource,
+  ...props
+}: Props) => {
   const { styles, theme } = useStyles(stylesheet);
   const hasIcon = !!iconSource;
   const buttonOpacity = props?.disabled ? 0.5 : 1;
@@ -43,14 +53,13 @@ const InfoLabelButton = ({ style, title, buttonTitle, iconSource, ...props }: Pr
       {...props}
       onPress={handlePress}
     >
+      {leftIconSource && <Icon name={leftIconSource} size={16} color={theme.colors.primary} />}
       <Typography style={styles.title}>{title}</Typography>
       <View style={styles.rightContent}>
-        <Typography numberOfLines={1} style={styles.buttonTitle}>
+        <Typography numberOfLines={1} style={[styles.buttonTitle, buttonTitleStyle]}>
           {buttonTitle}
         </Typography>
-        {hasIcon && (
-          <Icon style={styles.icon} name={iconSource} size={16} color={theme.colors.primary} />
-        )}
+        {hasIcon && <Icon name={iconSource} size={16} color={theme.colors.primary} />}
       </View>
     </Pressable>
   );

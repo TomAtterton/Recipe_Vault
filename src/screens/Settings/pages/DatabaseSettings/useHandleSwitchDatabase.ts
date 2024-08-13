@@ -1,25 +1,42 @@
-import { Alert } from 'react-native';
 import { translate } from '@/core';
 import { setCurrentDatabaseName, setResetDatabase, updateProfile, useBoundStore } from '@/store';
 import { Env } from '@/core/env';
 import { onOpenDatabase } from '@/database';
 import { showErrorMessage } from '@/utils/promptUtils';
-import { getProfileGroup } from '@/services/group';
+import { getProfileGroups, getProfileGroupWithUserId } from '@/services/group';
 import { checkIfPro } from '@/services/pro';
 import { syncWithSupabase } from '@/services/sync';
 import { Routes } from '@/navigation/Routes';
 import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 
 const useHandleSwitchDatabase = () => {
   const { navigate } = useNavigation();
 
-  const isSyncEnabled = useBoundStore((state) => state.shouldSync);
   const setSyncEnabled = useBoundStore((state) => state.setShouldSync);
-  const userId = useBoundStore((state) => state.profile?.id);
-  const cloudId = useBoundStore((state) => state.profile?.cloudId);
-  const groupName = useBoundStore((state) => state.profile?.groupName);
 
-  const handleEnableSync = async () => {
+  const userId = useBoundStore((state) => state.profile?.id);
+  const cloudId = useBoundStore((state) => state.session?.user.id);
+  const currentGroupName = useBoundStore((state) => state.profile?.groupName);
+
+  const [groups, setGroups] = useState<{ id: string; name: string }[]>([]);
+
+  useEffect(() => {
+    getProfileGroups({ userId: cloudId })
+      .then((_) => {
+        const parsedGroups = _.map((group) => ({
+          id: group.group_id || '',
+          name: group?.groups?.name || '',
+        }));
+        setGroups(parsedGroups);
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
+  }, [cloudId, userId]);
+
+  const handleEnableCloudDatabase = async (id: string) => {
     if (!cloudId) {
       return navigate(Routes.Login, {
         showSkip: false,
@@ -27,23 +44,20 @@ const useHandleSwitchDatabase = () => {
     } else {
       setSyncEnabled(true);
       //
-      const {
-        groupId,
-        groupName: profileGroupName,
-        groupRole,
-      } = await getProfileGroup({
+      const { groupName: profileGroupName, groupRole } = await getProfileGroupWithUserId({
         userId: cloudId,
+        groupId: id,
       });
 
-      if (groupId && profileGroupName && groupRole) {
-        //
+      if (profileGroupName && groupRole) {
         updateProfile({
-          groupId,
+          groupId: id,
           groupName: profileGroupName,
           groupRole,
         });
+
         await checkIfPro();
-        const currentDatabaseName = `${groupName}.db`;
+        const currentDatabaseName = `${currentGroupName}.db`;
         setCurrentDatabaseName(currentDatabaseName);
         await onOpenDatabase({ currentDatabaseName });
         await syncWithSupabase();
@@ -55,10 +69,9 @@ const useHandleSwitchDatabase = () => {
     }
   };
 
-  const handleDisableSync = async () => {
+  const handleEnableLocalDatabase = async () => {
     try {
       updateProfile({
-        cloudId: userId,
         id: Env.TEST_USER_ID,
         groupId: Env.TEST_GROUP_ID,
         groupName: Env.SQLITE_DB_NAME,
@@ -73,10 +86,12 @@ const useHandleSwitchDatabase = () => {
     }
   };
 
-  const handleSwitchDatabase = () => {
+  const handleSwitchDatabase = async (id: string) => {
+    const isLocal = id === Env.TEST_GROUP_ID;
+
     Alert.alert(
-      isSyncEnabled ? 'Switch to local vault?' : 'Switch to cloud vault?',
-      isSyncEnabled
+      isLocal ? 'Switch to local vault?' : 'Switch to cloud vault?',
+      isLocal
         ? 'Will disable cloud sync and switch to local vault.'
         : 'Will enable cloud sync and switch to cloud vault.',
       [
@@ -87,17 +102,17 @@ const useHandleSwitchDatabase = () => {
         {
           text: translate('default.ok'),
           onPress: async () => {
-            if (isSyncEnabled) {
-              await handleDisableSync();
+            if (isLocal) {
+              await handleEnableLocalDatabase();
             } else {
-              await handleEnableSync();
+              await handleEnableCloudDatabase(id);
             }
           },
         },
       ]
     );
   };
-  return { handleSwitchDatabase };
+  return { handleSwitchDatabase, groups };
 };
 
 export default useHandleSwitchDatabase;

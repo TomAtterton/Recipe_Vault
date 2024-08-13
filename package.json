@@ -27,9 +27,9 @@
     "@bacons/link-assets": "^1.1.0",
     "@candlefinance/faster-image": "^1.6.2",
     "@cloudinary/url-gen": "^1.19.0",
-    "@gorhom/bottom-sheet": "^4.6.4",
     "@hookform/resolvers": "^3.9.0",
     "@likashefqet/react-native-image-zoom": "^2.2.0",
+    "@lodev09/react-native-true-sheet": "^0.12.4",
     "@react-native-async-storage/async-storage": "^1.24.0",
     "@react-native-community/datetimepicker": "^8.2.0",
     "@react-native-menu/menu": "^1.1.2",
@@ -94,7 +94,6 @@
     "react-native": "0.74.3",
     "react-native-collapsible-tab-view": "^8.0.0",
     "react-native-confetti-cannon": "^1.5.2",
-    "react-native-draggable-flatlist": "git+https://github.com/TomAtterton/react-native-draggable-flatlist",
     "react-native-fast-collapsible": "^1.1.1",
     "react-native-fetch-api": "^3.0.0",
     "react-native-gesture-handler": "^2.18.1",
@@ -161,7 +160,6 @@
   },
   "packageManager": "yarn@3.6.4",
   "resolutions": {
-    "expo-apple-authentication@^6.4.1": "patch:expo-apple-authentication@npm%3A6.4.1#./.yarn/patches/expo-apple-authentication-npm-6.4.1-7163d83225.patch",
-    "react-native-draggable-flatlist": "link:./shared/react-native-draggable-flatlist"
+    "expo-apple-authentication@^6.4.1": "patch:expo-apple-authentication@npm%3A6.4.1#./.yarn/patches/expo-apple-authentication-npm-6.4.1-7163d83225.patch"
   }
 }

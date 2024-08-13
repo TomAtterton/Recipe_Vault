@@ -1,6 +1,6 @@
 import { createStyleSheet } from 'react-native-unistyles';
 
-export const stylesheet = createStyleSheet({
+export const stylesheet = createStyleSheet((theme) => ({
   container: {
     flex: 1,
     paddingHorizontal: 20,
@@ -17,4 +17,13 @@ export const stylesheet = createStyleSheet({
   enableSyncButton: {
     marginTop: 20,
   },
-});
+  dangerZoneTitle: {
+    color: theme.colors.primary,
+  },
+  dangerZoneContainer: {
+    paddingTop: 20,
+    justifyContent: 'flex-end',
+    gap: 16,
+    paddingBottom: 20,
+  },
+}));

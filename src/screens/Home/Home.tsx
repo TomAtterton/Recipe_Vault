@@ -10,11 +10,11 @@ import HeaderContainer from '@/screens/Home/components/HeaderContainer';
 import TrySomethingCarousel from '@/screens/Home/components/TrySomethingCarousel';
 import Animated from 'react-native-reanimated';
 import HomeAnimation from '@/screens/Home/homeAnimation';
-import CategorySelection from '@/components/RecipeForm/components/CategorySelection';
 import useDatabaseListener from '@/database/hooks/useDatabaseListener';
 import { checkIfPro } from '@/services/pro';
 import { stylesheet } from '@/screens/Home/home.style';
 import { useStyles } from 'react-native-unistyles';
+import CategorySelection from '@/components/CategorySelection';
 
 const Home = () => {
   const {

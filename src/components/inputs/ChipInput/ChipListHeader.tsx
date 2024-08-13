@@ -1,6 +1,5 @@
 import { View } from 'react-native';
 import React, { useCallback, useState } from 'react';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { ChipItemType } from '@/components/inputs/ChipInput/ChipInput';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from '@/components/inputs/ChipInput/chipInput.style';
@@ -9,6 +8,7 @@ import FormInput from '@/components/inputs/FormInput';
 import LabelButton from '@/components/buttons/LabelButton';
 import { translate } from '@/core';
 import { showErrorMessage } from '@/utils/promptUtils';
+import { BottomSheetRef } from '@/components/BottomSheet';
 
 const ChipListHeader = ({
   items,
@@ -17,7 +17,7 @@ const ChipListHeader = ({
 }: {
   items?: ChipItemType[] | null;
   onUpdateItem: (item: ChipItemType) => Promise<void>;
-  itemsRef: React.RefObject<BottomSheetModal>; // Renamed categoriesRef to itemsRef
+  itemsRef: React.RefObject<BottomSheetRef>; // Renamed categoriesRef to itemsRef
 }) => {
   const [newItem, setNewItem] = useState('');
   const [showAddItemInput, setShowAddItemInput] = useState(false);

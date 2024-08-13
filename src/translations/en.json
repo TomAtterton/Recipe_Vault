@@ -56,7 +56,7 @@
     },
     "delete_account": {
       "error_message": "Contact customer support there was an issue deleting you account.",
-      "message": "Are you sure you want to delete your account? You cannot reverse this!",
+      "message": "Are you sure you want to delete your account? You cannot reverse this! Any Purchases made will be lost.",
       "success_message": "Your account has been deleted.",
       "title": "Delete Account"
     },

@@ -6,8 +6,7 @@ import { stylesheet } from './recipeDescription.style';
 import Icon from '@/components/Icon';
 import IconButton from '@/components/buttons/IconButton';
 import CalendarPicker from '@/components/CalendarPicker';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import BottomSheet from '@/components/BottomSheet';
+import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 import InfoLabelButton from '@/components/buttons/InfoLabelButton';
 import StarRating from '@/components/StarRating';
 import { useNavigation } from '@react-navigation/native';
@@ -44,7 +43,7 @@ const RecipeDescription = ({
   ingredients,
 }: Props) => {
   const { styles } = useStyles(stylesheet);
-  const bottomSheetRef = React.useRef<BottomSheetModal>(null);
+  const bottomSheetRef = React.useRef<BottomSheetRef>(null);
   const hasInfo = !!source || !!note;
   const { navigate } = useNavigation();
 

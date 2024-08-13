@@ -11,7 +11,6 @@ import { Keyboard, Pressable, TextInput, useWindowDimensions, View } from 'react
 import { useStyles } from 'react-native-unistyles';
 import OutlineButton from '@/components/buttons/OutlineButton';
 import { Directions, Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { SCREEN_HEIGHT } from '@gorhom/bottom-sheet';
 import Typography from '@/components/Typography';
 import { stylesheet } from './floatingInput.style';
 import IconButton from '@/components/buttons/IconButton';
@@ -122,7 +121,7 @@ const FloatingInput = ({
       animatedMaxHeight.value = withTiming(maxHeightValue);
     });
 
-  const contentBottom = useMemo(() => (isFocused ? 0 : -SCREEN_HEIGHT), [isFocused]);
+  const contentBottom = useMemo(() => (isFocused ? 0 : -screenHeight), [isFocused, screenHeight]);
 
   const gestures = Gesture.Simultaneous(flingGestureUp, flingGestureDown);
 

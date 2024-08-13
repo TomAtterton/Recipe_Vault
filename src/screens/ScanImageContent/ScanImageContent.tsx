@@ -1,7 +1,7 @@
 import LiveImagePicker from 'src/components/LiveImagePicker';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import KeyboardManager from 'react-native-keyboard-manager';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
@@ -11,7 +11,6 @@ import styles from './scanImageContent.style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ImageZoom } from 'src/components/ImageZoom';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { SCREEN_HEIGHT } from '@gorhom/bottom-sheet';
 import { useBoundStore } from '@/store';
 import useHandleCopyPaste from './hooks/useHandleCopyPaste';
 import useHandleForm from './hooks/useHandleForm';
@@ -30,7 +29,9 @@ const ScanImageContainer = () => {
   const [value, setValue] = useState<string>(currentValue);
   const [showFullScreen, setShowFullScreen] = useState(false);
 
-  const translateY = useSharedValue(SCREEN_HEIGHT * 2);
+  const { height } = useWindowDimensions();
+
+  const translateY = useSharedValue(height * 2);
   const { top, bottom } = useSafeAreaInsets();
 
   const {
@@ -66,9 +67,9 @@ const ScanImageContainer = () => {
     if (showFullScreen) {
       translateY.value = 0;
     } else {
-      translateY.value = SCREEN_HEIGHT * 2;
+      translateY.value = height * 2;
     }
-  }, [showFullScreen, top, translateY]);
+  }, [height, showFullScreen, top, translateY]);
 
   const animatedStyles = useAnimatedStyle(() => {
     return {

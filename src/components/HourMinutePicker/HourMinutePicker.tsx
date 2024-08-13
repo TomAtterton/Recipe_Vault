@@ -1,6 +1,5 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react';
+import React, { useState, useRef, useMemo, useEffect, memo } from 'react';
 import { View, StyleProp, ViewStyle } from 'react-native';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Picker } from '@react-native-picker/picker';
 
 import { useController } from 'react-hook-form';
@@ -8,7 +7,7 @@ import { controlNameType, controlType } from '@/utils/recipeFormUtil';
 import Typography from '@/components/Typography';
 import InfoLabelButton from '@/components/buttons/InfoLabelButton';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
-import BottomSheet from '@/components/BottomSheet';
+import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './hourMinutePicker.style';
 
@@ -28,8 +27,7 @@ const minuteItems = Array.from({ length: numberOfMinutes });
 
 const HourMinutePicker = ({ control, name, title, description, containerStyle }: Props) => {
   const { field } = useController({ control, name });
-
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const bottomSheetModalRef = useRef<BottomSheetRef>(null);
 
   const { initialHours, initialMinutes } = useMemo(() => {
     if (field.value) {
@@ -96,7 +94,7 @@ const HourMinutePicker = ({ control, name, title, description, containerStyle }:
       updatedValue = `${selectedMinute} minute${selectedMinute > 1 ? 's' : ''}`;
     }
     field.onChange(updatedValue);
-    bottomSheetModalRef.current?.close();
+    bottomSheetModalRef.current?.dismiss();
   };
 
   const renderHourItems = useMemo(() => {
@@ -150,4 +148,4 @@ const HourMinutePicker = ({ control, name, title, description, containerStyle }:
   );
 };
 
-export default HourMinutePicker;
+export default memo(HourMinutePicker);

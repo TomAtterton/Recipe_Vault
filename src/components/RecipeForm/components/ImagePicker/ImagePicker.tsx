@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import { useController } from 'react-hook-form';
 import { controlNameType, controlType } from '@/utils/recipeFormUtil';
 import ImagePicker from '@/components/ImagePicker';
@@ -21,4 +21,4 @@ const ControlledImagePicker = ({ control, name }: Props) => {
   return <ImagePicker imageUri={field?.value} onSelectImage={handleSelectedImage} />;
 };
 
-export default ControlledImagePicker;
+export default memo(ControlledImagePicker);

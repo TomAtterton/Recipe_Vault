@@ -1,17 +1,18 @@
 import { createStyleSheet } from 'react-native-unistyles';
 
-export const stylesheet = createStyleSheet({
+export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
-    flex: 1,
+    // Flex isn't calculated correctly with bottom sheet so we do caluclations based on 80% screen height with top insets and 20 padding
+    height: miniRuntime.screen.height * 0.8 - miniRuntime.insets.top - 20,
     paddingHorizontal: 20,
   },
   list: {
     flex: 1,
   },
   listContentContainer: {
-    paddingTop: 20,
-    gap: 20,
     flexGrow: 1,
+    gap: 20,
+    paddingVertical: 20,
   },
   button: {
     marginTop: 20,
@@ -23,4 +24,4 @@ export const stylesheet = createStyleSheet({
     alignItems: 'center',
     gap: 20,
   },
-});
+}));

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useController } from 'react-hook-form';
 
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { controlNameType, controlType, RecipeFormType } from '@/utils/recipeFormUtil';
 import FormInput from '@/components/inputs/FormInput';
 import { TextInputProps } from 'react-native';
@@ -22,7 +22,6 @@ const ControlledInput = ({ name, onEdit, control, ...inputProps }: ControlledInp
     },
     [field]
   );
-
   return (
     <FormInput
       pointerEvents={'none'}
@@ -38,4 +37,4 @@ const ControlledInput = ({ name, onEdit, control, ...inputProps }: ControlledInp
   );
 };
 
-export default ControlledInput;
+export default memo(ControlledInput);

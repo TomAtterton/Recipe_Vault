@@ -11,6 +11,7 @@ import { Routes } from '@/navigation/Routes';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { stylesheet } from './proPlan.style';
 import { checkIfPro } from '@/services/pro';
+import { useBoundStore } from '@/store';
 
 const PurchaseScreen = () => {
   const { navigate, goBack } = useNavigation();
@@ -23,9 +24,12 @@ const PurchaseScreen = () => {
     navigate(Routes.Help);
   };
 
+  const isLoggedIn = useBoundStore((state) => state.session?.user);
+
   const handlePurchase = async () => {
     try {
       setIsLoading(true);
+
       await handleProPlanPurchase(onContactCustomerSupport);
       confettiRef.current?.start();
     } finally {
@@ -56,7 +60,7 @@ const PurchaseScreen = () => {
         <View style={styles.itemContainer}>
           <Icon name={'cloud'} size={32} color={theme.colors.onBackground} />
           <Typography variant={'bodyMediumItalic'} style={styles.itemText}>
-            Add unlimited recipes and sync them to the cloud.
+            Remove 5 Recipe limitation and add unlimited recipes and sync them to the cloud.
           </Typography>
         </View>
         <View style={styles.itemContainer}>
@@ -73,8 +77,18 @@ const PurchaseScreen = () => {
         </View>
       </View>
       <View style={styles.footerContainer}>
-        <PrimaryButton title={'Upgrade to Pro'} onPress={handlePurchase} isLoading={isLoading} />
-        <LabelButton title={'Continue with free version'} onPress={goBack} />
+        {isLoggedIn ? (
+          <>
+            <PrimaryButton
+              title={'Upgrade to Pro'}
+              onPress={handlePurchase}
+              isLoading={isLoading}
+            />
+            <LabelButton title={'Continue with free version'} onPress={goBack} />{' '}
+          </>
+        ) : (
+          <PrimaryButton title={'Login to upgrade'} onPress={goBack} />
+        )}
       </View>
       <ConfettiCannon
         ref={confettiRef}

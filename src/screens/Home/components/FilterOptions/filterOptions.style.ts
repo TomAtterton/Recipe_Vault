@@ -1,6 +1,6 @@
 import { createStyleSheet } from 'react-native-unistyles';
 
-export const stylesheet = createStyleSheet((theme) => ({
+export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   filterButton: {
     borderColor: theme.colors.onBackground,
     borderWidth: 1,
@@ -28,8 +28,8 @@ export const stylesheet = createStyleSheet((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  rating: {
-    marginTop: 20,
+  container: {
+    height: miniRuntime.screen.height * 0.8,
   },
   selectedIcon: {
     marginRight: 20,
@@ -44,16 +44,13 @@ export const stylesheet = createStyleSheet((theme) => ({
     height: 40,
     justifyContent: 'center',
   },
-  container: {
-    flex: 1,
-    marginHorizontal: 20,
-    marginVertical: 32,
-  },
+
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingBottom: 20,
+    paddingHorizontal: 20,
   },
   resetButtonHitSlop: {
     top: 20,
@@ -62,16 +59,18 @@ export const stylesheet = createStyleSheet((theme) => ({
     right: 20,
   },
   content: {
-    flex: 1,
+    flex: 0.9,
+    paddingHorizontal: 20,
   },
-  tagTitle: {
-    paddingTop: 20,
+  contentTitle: {
+    paddingVertical: 20,
   },
   tagList: {
     gap: 20,
     paddingVertical: 20,
   },
   saveButton: {
-    marginVertical: 20,
+    marginHorizontal: 20,
+    marginBottom: miniRuntime.insets.bottom + 20,
   },
 }));

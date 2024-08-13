@@ -7,11 +7,10 @@ export type ProfileSlice = {
   session: Session | null;
   profile: {
     id?: string;
-    cloudId?: string;
-    name?: string;
     groupId: string;
     groupName?: string;
     groupRole?: string;
+    name?: string;
     email: string;
     avatarId?: string;
   };

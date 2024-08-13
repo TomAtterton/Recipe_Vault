@@ -48,7 +48,7 @@ export const onPickImageFromLibrary = async (isTemporary: boolean) => {
         showErrorMessage('Permission to access library was denied please enable in settings');
       }
     }
-    if (errorCode === 'E_PICKER_CANCELLED') {
+    if (errorCode === 'E_PICKER_CANCELLED' || !errorCode) {
       return;
     }
     showErrorMessage('Error picking image');
@@ -58,7 +58,6 @@ export const onPickImageFromLibrary = async (isTemporary: boolean) => {
 export const onPickImageFromCamera = async (isTemporary: boolean) => {
   try {
     const result = await launchCameraAsync();
-
     const imagePath = await handleResult(result);
 
     if (imagePath) {
@@ -70,15 +69,14 @@ export const onPickImageFromCamera = async (isTemporary: boolean) => {
   } catch (e: unknown) {
     // @ts-ignore
     const errorCode = e?.code as PickerErrorCode;
-    console.log('error code', errorCode);
-    if (errorCode === 'E_NO_CAMERA_PERMISSION') {
+    if (errorCode === 'E_NO_CAMERA_PERMISSION' || errorCode === 'ERR_MISSING_CAMERA_PERMISSION') {
       try {
         await requestCameraPermissionsAsync();
       } catch (_) {
         showErrorMessage('Permission to access camera was denied please enable in settings');
       }
     }
-    if (errorCode === 'E_PICKER_CANCELLED') {
+    if (errorCode === 'E_PICKER_CANCELLED' || !errorCode) {
       return;
     }
     showErrorMessage('Error picking image');
@@ -99,7 +97,6 @@ const handleResult = async (result: ImagePickerResult | string) => {
 };
 
 const handleManipulationResult = async (imageUri: string) => {
-  return imageUri;
   const imageManipulationResult = await ImageManipulator.manipulateAsync(
     imageUri,
     [

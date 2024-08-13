@@ -1,7 +1,7 @@
 import { createStyleSheet } from 'react-native-unistyles';
 
 export const stylesheet = createStyleSheet((theme) => ({
-  contentContainer: {
+  container: {
     backgroundColor: theme.colors.lightBackground,
     borderColor: theme.colors.onBackground,
     borderWidth: 1,
@@ -12,8 +12,11 @@ export const stylesheet = createStyleSheet((theme) => ({
     paddingLeft: 16,
     gap: 8,
   },
-  scrollContent: {
+  contentContainer: {
+    flex: 1,
+    flexDirection: 'row',
     gap: 8,
+    overflow: 'hidden',
   },
   inputTitle: {
     color: theme.colors.placeholder,

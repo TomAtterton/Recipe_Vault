@@ -2,6 +2,8 @@ import { createStyleSheet } from 'react-native-unistyles';
 
 export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
+    paddingTop: miniRuntime.insets.top + 40,
+    paddingBottom: miniRuntime.insets.bottom,
     flex: 1,
     marginHorizontal: 20,
   },
@@ -15,6 +17,7 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     textAlign: 'center',
   },
   subtitle: {
+    paddingTop: 20,
     textAlign: 'center',
   },
   buttonContainer: {
