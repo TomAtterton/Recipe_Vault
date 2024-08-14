@@ -1,14 +1,14 @@
-import { Keyboard, TouchableOpacity, View } from 'react-native';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
 import WebView from 'react-native-webview';
 import { ICON_SIZE, stylesheet } from './browserInput.style';
 import Animated, { SlideInRight } from 'react-native-reanimated';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
-import Input from '@/components/inputs';
 import IconButton from '@/components/buttons/IconButton';
 import LabelButton from '@/components/buttons/LabelButton';
 import { translate } from '@/core';
+import { useFloatingInput } from '@/providers/FloatingInputProvider';
 
 interface Props {
   onShowBookmarkModal: (item: { id?: string; name?: string }) => void;
@@ -33,16 +33,17 @@ const BrowserBar = ({
   isBackEnabled,
   isForwardEnabled,
 }: Props) => {
-  const [urlValue, setUrlValue] = useState('https://google.com');
   const { styles, theme } = useStyles(stylesheet);
 
-  const handleSubmit = useCallback(() => {
-    handleUrlSubmit(urlValue);
-  }, [urlValue, handleUrlSubmit]);
-
-  useEffect(() => {
-    setUrlValue(url);
-  }, [url]);
+  const handleSubmit = useCallback(
+    (value: string) => {
+      if (!value) {
+        return;
+      }
+      handleUrlSubmit(value);
+    },
+    [handleUrlSubmit]
+  );
 
   const isFocused = showBookmark;
 
@@ -54,6 +55,7 @@ const BrowserBar = ({
     return secondSlashIndex !== -1 ? simplified.slice(0, secondSlashIndex) : simplified;
   }, [url]);
 
+  const { showInput } = useFloatingInput();
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
@@ -71,68 +73,57 @@ const BrowserBar = ({
             iconSize={ICON_SIZE}
             onPress={handleBookmarkClick}
           />
-
-          {isFocused ? (
-            <Input
-              style={styles.input}
-              containerStyle={styles.inputContainer}
-              value={urlValue}
-              onChangeText={setUrlValue}
-              spellCheck={false}
-              selectTextOnFocus={true}
-              numberOfLines={1}
-              placeholder="Enter URL"
-              returnKeyType={'go'}
-              onSubmitEditing={handleSubmit}
-              blurOnSubmit
-              onFocus={() => {
-                setShowBookmark(true);
-              }}
-            />
-          ) : (
-            <>
-              <IconButton
-                buttonSize={'small'}
-                iconSize={ICON_SIZE}
-                disabled={!isBackEnabled}
-                iconSource={'arrow-left'}
-                onPress={() => {
-                  webviewRef.current?.goBack();
-                }}
-              />
-              <TouchableOpacity
-                style={styles.title}
-                onPress={() => {
-                  setShowBookmark(true);
-                }}
-              >
-                <Typography variant={'bodyMedium'} numberOfLines={1}>
-                  {titleUrl}
-                </Typography>
-              </TouchableOpacity>
-              <IconButton
-                disabled={!isForwardEnabled}
-                iconSource={'arrow-right'}
-                buttonSize={'small'}
-                iconSize={ICON_SIZE}
-                onPress={webviewRef.current?.goForward}
-              />
-              <IconButton
-                iconSource={'reload'}
-                buttonSize={'small'}
-                iconSize={ICON_SIZE}
-                onPress={webviewRef.current?.reload}
-              />
-            </>
-          )}
+          <IconButton
+            buttonSize={'small'}
+            iconSize={ICON_SIZE}
+            disabled={!isBackEnabled}
+            iconSource={'arrow-left'}
+            onPress={() => {
+              webviewRef.current?.goBack();
+            }}
+          />
+          <TouchableOpacity
+            style={styles.title}
+            onPress={() => {
+              setShowBookmark(true);
+              console.log('input', url);
+              showInput &&
+                showInput({
+                  placeholder: 'Enter URL',
+                  initialValue: url,
+                  onSubmit: handleSubmit,
+                  multiline: true,
+                  additionalInputProps: {
+                    autoCapitalize: 'none',
+                    autoCorrect: false,
+                    returnKeyType: 'next',
+                  },
+                });
+            }}
+          >
+            <Typography variant={'bodyMedium'} numberOfLines={1}>
+              {titleUrl}
+            </Typography>
+          </TouchableOpacity>
+          <IconButton
+            disabled={!isForwardEnabled}
+            iconSource={'arrow-right'}
+            buttonSize={'small'}
+            iconSize={ICON_SIZE}
+            onPress={webviewRef.current?.goForward}
+          />
+          <IconButton
+            iconSource={'reload'}
+            buttonSize={'small'}
+            iconSize={ICON_SIZE}
+            onPress={webviewRef.current?.reload}
+          />
         </View>
         {isFocused && (
           <AnimatedButton
             entering={SlideInRight}
             style={styles.cancelButton}
             onPress={() => {
-              Keyboard.dismiss();
-              setUrlValue(url);
               setShowBookmark(false);
             }}
             title={translate('default.cancel')}

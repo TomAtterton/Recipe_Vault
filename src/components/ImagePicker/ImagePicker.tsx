@@ -69,10 +69,7 @@ const ImagePicker = ({
             {children ? (
               children
             ) : (
-              <Image
-                source={{ uri: imageUri, resizeMode: isTemporary ? 'contain' : 'cover' }}
-                style={styles.image}
-              />
+              <Image source={{ uri: imageUri, resizeMode: 'contain' }} style={styles.image} />
             )}
             {onFullScreen && (
               <View style={styles.opacityBackground}>

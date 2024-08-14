@@ -2,6 +2,7 @@ import React, { createContext, useState, useCallback, ReactNode, FunctionCompone
 import FloatingInput from '@/components/FloatingInput';
 import { useFocusEffect } from '@react-navigation/native';
 import KeyboardManager from 'react-native-keyboard-manager';
+import { TextInputProps } from 'react-native';
 
 export interface FloatingInputOptions {
   placeholder?: string;
@@ -11,6 +12,7 @@ export interface FloatingInputOptions {
   onSubmit?: (text: string) => void;
   onRemove?: () => void;
   onDismiss?: (containsValue?: boolean) => void;
+  additionalInputProps?: TextInputProps;
 }
 
 interface FloatingInputContextProps {
@@ -24,45 +26,42 @@ interface FloatingInputProviderProps {
 }
 
 const FloatingInputProvider: FunctionComponent<FloatingInputProviderProps> = ({ children }) => {
-  const [placeholder, setPlaceholder] = useState('');
-  const [description, setDescription] = useState('');
-  const [multiline, setMultiline] = useState(false);
-  const [initialValue, setInitialValue] = useState('');
-  const [onSubmit, setOnSubmit] = useState<(text: string) => void>(() => () => {});
-  const [onDismiss, setOnDismiss] = useState<() => void>(() => {});
-  const [onRemove, setOnRemove] = useState<() => void>(() => () => {});
-  const [shouldFocus, setShouldFocus] = useState(false);
+  const [inputState, setInputState] = useState<
+    FloatingInputOptions & {
+      shouldFocus: boolean;
+    }
+  >();
 
   const showInput = useCallback((options: FloatingInputOptions) => {
-    setPlaceholder(options.placeholder || '');
-    setDescription(options.description || '');
-    setMultiline(options.multiline || false);
-    setInitialValue(options.initialValue || '');
-    setOnSubmit(() => options.onSubmit || (() => {}));
-    setOnRemove(() => options.onRemove || (() => {}));
-    setOnDismiss(() => () => {
-      options.onDismiss && options.onDismiss();
-      setShouldFocus(false);
+    setInputState({
+      placeholder: options.placeholder,
+      description: options.description,
+      multiline: options.multiline,
+      initialValue: options.initialValue || '',
+      onSubmit: options.onSubmit,
+      onRemove: options.onRemove,
+      onDismiss: () => {
+        options.onDismiss && options.onDismiss();
+        setInputState((prevState) => ({ ...prevState, shouldFocus: false }));
+      },
+      additionalInputProps: options.additionalInputProps || {},
+      shouldFocus: true,
     });
-    setShouldFocus(true);
   }, []);
 
   return (
-    <FloatingInputContext.Provider
-      value={{
-        showInput,
-      }}
-    >
+    <FloatingInputContext.Provider value={{ showInput }}>
       {children}
       <FloatingInput
-        placeholder={placeholder}
-        description={description}
-        multiline={multiline}
-        initialValue={initialValue}
-        shouldFocus={shouldFocus}
-        onSubmit={onSubmit}
-        onRemove={onRemove}
-        onDismiss={onDismiss}
+        placeholder={inputState?.placeholder || ''}
+        description={inputState?.description || ''}
+        multiline={inputState?.multiline || true}
+        initialValue={inputState?.initialValue || ''}
+        shouldFocus={inputState?.shouldFocus || false}
+        onSubmit={inputState?.onSubmit}
+        onRemove={inputState?.onRemove}
+        onDismiss={inputState?.onDismiss}
+        additionalInputProps={inputState?.additionalInputProps}
       />
     </FloatingInputContext.Provider>
   );
@@ -79,7 +78,6 @@ export const useFloatingInput = () => {
     useCallback(() => {
       KeyboardManager?.setEnable(false);
       KeyboardManager.setEnableAutoToolbar(false);
-      // KeyboardManager.resignFirstResponder();
       KeyboardManager.setShouldResignOnTouchOutside(false);
     }, [])
   );

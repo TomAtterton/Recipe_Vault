@@ -31,6 +31,7 @@ const FloatingInput = ({
   onSubmit,
   onRemove,
   shouldFocus,
+  additionalInputProps,
 }: FloatingInputOptions & {
   shouldFocus: boolean;
 }) => {
@@ -147,7 +148,7 @@ const FloatingInput = ({
             <Input
               ref={inputRef}
               placeholder={placeholder}
-              multiline={true}
+              multiline={multiline}
               textAlignVertical="top"
               value={text}
               onChangeText={setText}
@@ -166,6 +167,7 @@ const FloatingInput = ({
               onBlur={() => {
                 handleDismiss();
               }}
+              {...additionalInputProps}
             />
             {description && (
               <Typography variant={'bodySmallItalic'} style={styles.description}>
