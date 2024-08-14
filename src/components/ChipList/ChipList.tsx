@@ -51,23 +51,16 @@ const ChipList = ({
     [onDelete]
   );
 
-  console.log('hideSelection', hideSelection);
-  console.log('selectedItems', selectedItems);
-  console.log('onSelect', onSelect);
-  console.log('handleDelete', handleDelete);
   const renderSelectItem = useCallback(
-    ({ item }: { item: ChipItemType }) => {
-      console.log('Item render');
-      return (
-        <ChipItem
-          hideSelection={hideSelection}
-          item={item}
-          selectedItems={selectedItems}
-          onSelectItem={onSelect}
-          onDeleteItem={handleDelete}
-        />
-      );
-    },
+    ({ item }: { item: ChipItemType }) => (
+      <ChipItem
+        hideSelection={hideSelection}
+        item={item}
+        selectedItems={selectedItems}
+        onSelectItem={onSelect}
+        onDeleteItem={handleDelete}
+      />
+    ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [hideSelection, selectedItems]
   );
@@ -78,7 +71,6 @@ const ChipList = ({
     [chipListRef, data]
   );
 
-  console.log('data', data);
   return (
     <BottomSheet bottomSheetRef={chipListRef} snapPoints={['80%']}>
       <FlatList

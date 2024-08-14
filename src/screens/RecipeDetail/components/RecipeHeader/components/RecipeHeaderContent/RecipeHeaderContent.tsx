@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { View } from 'react-native';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
-import { stylesheet } from './recipeDescription.style';
+import { stylesheet } from './recipeHeaderContent.style';
 import Icon from '@/components/Icon';
 import IconButton from '@/components/buttons/IconButton';
 import CalendarPicker from '@/components/CalendarPicker';
@@ -11,19 +11,13 @@ import InfoLabelButton from '@/components/buttons/InfoLabelButton';
 import StarRating from '@/components/StarRating';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
-import { Ingredient } from '@/types';
+import { RecipeDetailType } from '@/types';
 import { openURL } from 'expo-linking';
+import useRecipeDetail from '@/hooks/recipe/useRecipeDetail';
+import debounce from 'lodash.debounce';
 
 interface Props {
-  prepTime?: string | null;
-  cookTime?: string | null;
-  name?: string;
-  id?: string;
-  source?: string | null;
-  note?: string | null;
-  onRatingChange: (value: number) => void;
-  currentRating?: number;
-  ingredients?: Ingredient[];
+  id: string;
 }
 
 const hasZeroOnly = (timeString: string) => {
@@ -31,17 +25,30 @@ const hasZeroOnly = (timeString: string) => {
   return zeroOnlyRegex.test(timeString);
 };
 
-const RecipeDescription = ({
-  id,
-  prepTime,
-  cookTime,
-  name,
-  source,
-  note,
-  onRatingChange,
-  currentRating,
-  ingredients,
-}: Props) => {
+const RecipeHeaderContent = ({ id }: Props) => {
+  const { data, onUpdateRecipe } = useRecipeDetail({
+    id,
+  });
+
+  const handleUpdateRecipe = useCallback(
+    (updateValues?: Partial<RecipeDetailType>) => {
+      return updateValues && onUpdateRecipe({ updateValues, shouldNavigate: false });
+    },
+    [onUpdateRecipe]
+  );
+  const { name, prepTime, performTime: cookTime, rating: currentRating, source, note } = data || {};
+
+  const debouncedUpdateRecipe = useMemo(() => {
+    return handleUpdateRecipe && debounce(handleUpdateRecipe, 500);
+  }, [handleUpdateRecipe]);
+
+  const onRatingChange = useCallback(
+    (value: number) => {
+      debouncedUpdateRecipe?.({ rating: value });
+    },
+    [debouncedUpdateRecipe]
+  );
+
   const { styles } = useStyles(stylesheet);
   const bottomSheetRef = React.useRef<BottomSheetRef>(null);
   const hasInfo = !!source || !!note;
@@ -49,7 +56,7 @@ const RecipeDescription = ({
 
   const handleAddGroceries = () => {
     navigate(Routes.AddGroceries, {
-      ingredients,
+      id,
     });
   };
 
@@ -88,7 +95,7 @@ const RecipeDescription = ({
           />
         )}
       </View>
-      <StarRating padding={40} onChange={onRatingChange} initialValue={currentRating} />
+      <StarRating padding={40} onChange={onRatingChange} initialValue={currentRating || 0} />
       {hasInfo && (
         <BottomSheet bottomSheetRef={bottomSheetRef} snapPoints={['30%']}>
           <View style={styles.infoContainer}>
@@ -131,4 +138,4 @@ const TimeContainer = ({ time, title }: { time: string; title: string }) => {
   );
 };
 
-export default RecipeDescription;
+export default RecipeHeaderContent;

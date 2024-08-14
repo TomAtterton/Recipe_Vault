@@ -194,7 +194,7 @@ const RecipeForm = ({
         {isNested ? (
           <>
             <NavBarButton iconSource={'arrow-left'} onPress={handleGoBack} />
-            {<NavBarButton iconSource={'bin'} onPress={handleDeleteRecipe} />}
+            {isEditing && <NavBarButton iconSource={'bin'} onPress={handleDeleteRecipe} />}
           </>
         ) : (
           <EditButton onPress={onClearForm} />

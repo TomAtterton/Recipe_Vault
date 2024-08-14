@@ -4,7 +4,6 @@ import { RecipeDetailStackParamList } from '@/navigation/recipeDetailNavigator';
 import { TabParamList } from '@/navigation/tabNavigator';
 import { Routes } from '@/navigation/Routes';
 import { RecipeFormType } from '@/utils/recipeFormUtil';
-import { Ingredient } from '@/types';
 import { RecipeDetectionStackParamList } from '@/navigation/recipeDetectionNavigator';
 
 export type RootStackParamList = RecipeDetailStackParamList &
@@ -31,7 +30,7 @@ export type RootStackParamList = RecipeDetailStackParamList &
     [Routes.JoinVault]: undefined;
     [Routes.ManageGroupUsers]: undefined;
     [Routes.AddGroceries]: {
-      ingredients?: Ingredient[];
+      id?: string | null;
     };
     [Routes.Profile]: undefined;
     [Routes.WelcomeOnboarding]: undefined;

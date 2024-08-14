@@ -1,69 +1,53 @@
-import React, { useCallback, useMemo } from 'react';
+import React from 'react';
 import { View } from 'react-native';
-import debounce from 'lodash.debounce';
 
 import Image from '@/components/Image';
-import { RecipeDetailType } from '@/types';
-import RecipeDescription from '@/screens/RecipeDetail/components/RecipeHeader/components/RecipeDescription';
-import useRecipeDetail from '@/hooks/recipe/useRecipeDetail';
+import RecipeHeaderContent from './components/RecipeHeaderContent';
+import useAnimatedValues from './useAnimatedVaules';
+import EditButton from './components/EditButton';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './recipeHeader.style';
+import Animated from 'react-native-reanimated';
+import NavBarButton from '@/components/buttons/NavBarButton';
 
-const RecipeHeader = ({ recipeId, image }: { recipeId: string; image: string | null }) => {
-  const { data, onUpdateRecipe } = useRecipeDetail({
-    id: recipeId,
-  });
-
+const RecipeHeader = ({
+  recipeId,
+  image,
+  isAnimated = false,
+}: {
+  recipeId: string;
+  image: string | null;
+  isAnimated: boolean;
+}) => {
   const { styles } = useStyles(stylesheet);
 
-  const handleUpdateRecipe = useCallback(
-    (updateValues?: Partial<RecipeDetailType>) => {
-      return updateValues && onUpdateRecipe({ updateValues, shouldNavigate: false });
-    },
-    [onUpdateRecipe]
-  );
-  const {
-    name,
-    id,
-    prepTime,
-    performTime: cookTime,
-    rating: currentRating,
-    source,
-    note,
-    // @ts-ignore
-    ingredients,
-  } = data || {};
+  const { animatedStyle, animatedImageScaleStyle, animatedNavBarStyle, top, goBack } =
+    useAnimatedValues(isAnimated);
 
-  const debouncedUpdateRecipe = useMemo(() => {
-    return handleUpdateRecipe && debounce(handleUpdateRecipe, 500);
-  }, [handleUpdateRecipe]);
+  const Container = isAnimated ? Animated.View : View;
 
-  const onRatingChange = useCallback(
-    (value: number) => {
-      debouncedUpdateRecipe?.({ rating: value });
-    },
-    [debouncedUpdateRecipe]
-  );
   return (
-    <View style={styles.container}>
+    <Container
+      style={isAnimated ? animatedStyle : styles.container}
+      pointerEvents={isAnimated ? 'box-none' : 'auto'}
+    >
       <Image
-        style={styles.image}
+        style={[styles.image, animatedImageScaleStyle]}
         source={{
           uri: image,
         }}
       />
-      <RecipeDescription
-        id={id}
-        prepTime={prepTime}
-        cookTime={cookTime}
-        name={name}
-        source={source}
-        note={note}
-        onRatingChange={onRatingChange}
-        currentRating={currentRating || 0}
-        ingredients={ingredients}
-      />
-    </View>
+      {isAnimated && (
+        <Animated.View
+          pointerEvents={'box-none'}
+          style={[styles.topNavigation, { top }, animatedNavBarStyle]}
+        >
+          <NavBarButton iconSource={'arrow-left'} onPress={goBack} />
+          <EditButton id={recipeId} />
+        </Animated.View>
+      )}
+      <RecipeHeaderContent id={recipeId} />
+    </Container>
   );
 };
 

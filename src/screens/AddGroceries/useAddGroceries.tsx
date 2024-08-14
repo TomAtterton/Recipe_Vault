@@ -1,30 +1,55 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { RouteProp } from '@/navigation/types';
 import { Routes } from '@/navigation/Routes';
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createMultipleReminders } from '@/utils/reminderUtils';
 import { showErrorMessage } from '@/utils/promptUtils';
+import useGetRecipeIngredients from '@/database/api/recipes/hooks/useGetRecipeIngredients';
+import { RouteProp } from '@/navigation/types';
+import { useBoundStore } from '@/store';
+import { parseMetrics, scaleAmount } from '@/utils/igredientsUtil';
+import { getRecipeServings } from '@/database/api/recipes';
 
 const useAddGroceries = () => {
   const route = useRoute<RouteProp<Routes.AddGroceries>>();
-  const params = route.params;
+  const { id } = route.params;
+
+  const { ingredients: data } = useGetRecipeIngredients(id) || {};
 
   const { navigate } = useNavigation();
+  const currentServings = useBoundStore((state) => state.currentServings);
+  const getParsedIngredients = useCallback(async () => {
+    const ingredients = data || [];
+    const initialServing = await getRecipeServings(id);
+    return ingredients.map((ingredient) => {
+      const nameWithoutParentheses = ingredient.text.replace(/\(.*?\)/g, '').trim();
 
-  const initialIngredients = useMemo(() => {
-    const ingredients = params?.ingredients || [];
-    return ingredients
-      .filter((ingredient) => ingredient.type !== 'section')
-      .map((ingredient) => {
-        const nameWithoutParentheses = ingredient.text.replace(/\(.*?\)/g, '').trim();
-        return {
-          name: nameWithoutParentheses,
-          isSelected: true, // All ingredients are selected by default
-        };
+      const { description, quantity, unitOfMeasure } = parseMetrics({
+        note: nameWithoutParentheses,
+        isMetric: true,
       });
-  }, [params?.ingredients]);
+      const amount = scaleAmount(quantity, currentServings, initialServing || 1);
 
-  const [ingredients, setIngredients] = useState(initialIngredients);
+      return {
+        name: `${amount}${unitOfMeasure ? ` ${unitOfMeasure}` : ''} ${description}`,
+        isSelected: true,
+      };
+    });
+  }, [currentServings, data, id]);
+
+  const [ingredients, setIngredients] = useState<
+    {
+      name: string;
+      isSelected: boolean;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    const updateIngredients = async () => {
+      const parsedIngredients = await getParsedIngredients();
+      setIngredients(parsedIngredients);
+    };
+    updateIngredients();
+  }, [getParsedIngredients]);
 
   const toggleIngredientSelection = (index: number): void => {
     const newIngredients = ingredients.map((item, idx) => {

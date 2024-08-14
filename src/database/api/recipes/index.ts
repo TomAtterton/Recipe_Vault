@@ -22,8 +22,9 @@ export const getRecipeCount = async () => {
   return result?.count || 0;
 };
 
-export const getRecipeServings = async (recipe_id: string) => {
+export const getRecipeServings = async (recipe_id?: string | null) => {
   try {
+    if (!recipe_id) throw new Error('No recipe id provided');
     const response = await sqlGet(SELECT_RECIPE_SERVINGS, [recipe_id]);
     // @ts-ignore
     return response?.servings || 1;
