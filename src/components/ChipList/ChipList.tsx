@@ -33,7 +33,6 @@ const ChipList = ({
   onUpdate,
 }: Props) => {
   const { styles } = useStyles(stylesheet);
-  console.log('List render');
   const handleDelete = useCallback(
     (item: ChipItemType) => {
       Alert.alert(

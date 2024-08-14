@@ -58,32 +58,44 @@ public func definition() -> ModuleDefinition {
 
         DispatchQueue.global().async {
 
-            guard let filePathURL = URL(string: filePath) else {
-                promise.reject(ExpoError(errorCode: 1, message: "Error converting filePath to URL."))
-                return
-            }
-
             var image: UIImage?
 
-            if filePathURL.scheme == "http" || filePathURL.scheme == "https" {
-                // Load image from URL
-                do {
-                    let imageData = try Data(contentsOf: filePathURL)
+            if filePath.starts(with: "data:image") {
+                // Handle base64 encoded image string
+                let base64String = filePath.components(separatedBy: ",").last ?? ""
+                if let imageData = Data(base64Encoded: base64String) {
                     image = UIImage(data: imageData)
-                } catch {
-                    promise.reject(ExpoError(errorCode: 5, message: "Failed to load image from URL."))
+                } else {
+                    promise.reject(ExpoError(errorCode: 6, message: "Failed to decode base64 image string."))
                     return
                 }
             } else {
-                // Load image from local file path
-                let localFilePath = filePathURL.path
-
-                guard FileManager.default.fileExists(atPath: localFilePath) else {
-                    promise.reject(ExpoError(errorCode: 2, message: "File does not exist at path."))
+                // Try to create a URL from the file path
+                guard let filePathURL = URL(string: filePath) else {
+                    promise.reject(ExpoError(errorCode: 1, message: "Error converting filePath to URL."))
                     return
                 }
 
-                image = UIImage(contentsOfFile: localFilePath)
+                if filePathURL.scheme == "http" || filePathURL.scheme == "https" {
+                    // Load image from URL
+                    do {
+                        let imageData = try Data(contentsOf: filePathURL)
+                        image = UIImage(data: imageData)
+                    } catch {
+                        promise.reject(ExpoError(errorCode: 5, message: "Failed to load image from URL."))
+                        return
+                    }
+                } else {
+                    // Load image from local file path
+                    let localFilePath = filePathURL.path
+
+                    guard FileManager.default.fileExists(atPath: localFilePath) else {
+                        promise.reject(ExpoError(errorCode: 2, message: "File does not exist at path."))
+                        return
+                    }
+
+                    image = UIImage(contentsOfFile: localFilePath)
+                }
             }
 
             guard let validImage = image else {
@@ -107,6 +119,7 @@ public func definition() -> ModuleDefinition {
             }
         }
     }
+
 }
 
 }
@@ -155,9 +168,17 @@ class CroppingViewControllerDelegate: NSObject, TOCropViewControllerDelegate {
             let height = image.size.height
             let fileType = fileURL.pathExtension.lowercased()
 
+            // Attempt to convert the image to a base64 string
+            let base64Image: String
+            if let jpegData = image.jpegData(compressionQuality: 1.0) {
+                base64Image = "data:image/jpeg;base64," + jpegData.base64EncodedString()
+            } else {
+                base64Image = ""  // Provide a default value if conversion fails
+            }
 
             let result: [String: Any] = [
                 "filePath": fileURL.path,
+                "base64Image": base64Image,
                 "fileType": fileType,
                 "width": width,
                 "height": height,
