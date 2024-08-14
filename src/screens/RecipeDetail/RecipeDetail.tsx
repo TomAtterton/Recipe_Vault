@@ -4,7 +4,7 @@ import React, { useCallback, useMemo } from 'react';
 import { MaterialTabBar, Tabs } from 'react-native-collapsible-tab-view';
 
 import type { RouteProp } from '@/navigation/types';
-import { RecipeHeader, AnimatedRecipeHeader } from '@/screens/RecipeDetail/components/RecipeHeader';
+import { RecipeHeader } from '@/screens/RecipeDetail/components/RecipeHeader';
 import Ingredients from '@/screens/RecipeDetail/components/Ingredients';
 import Instructions from '@/screens/RecipeDetail/components/Instructions';
 import EditButton from './components/RecipeHeader/components/EditButton';
@@ -29,7 +29,7 @@ const RecipeDetail = () => {
   const RECIPE_HEADER_HEIGHT = useMemo(() => height / 2.8 + height / 4, [height]);
 
   const handleRenderHeader = useCallback(
-    () => <AnimatedRecipeHeader recipeId={id} image={image} />,
+    () => <RecipeHeader recipeId={id} image={image} isAnimated={true} />,
     [id, image]
   );
 
@@ -47,7 +47,7 @@ const RecipeDetail = () => {
 
   return isiPadLandscape || isiPadPortrait ? (
     <View style={styles.container}>
-      <RecipeHeader recipeId={id} image={image} />
+      <RecipeHeader recipeId={id} image={image} isAnimated={false} />
       <Ingredients recipeId={id} data={data} />
       <Instructions recipeId={id} ingredients={data} />
       <View pointerEvents={'box-none'} style={styles.navBar}>

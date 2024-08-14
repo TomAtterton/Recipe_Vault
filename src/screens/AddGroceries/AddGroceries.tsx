@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, SafeAreaView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import Typography from '@/components/Typography';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import CheckBoxInput from '@/components/CheckBoxInput';
@@ -23,7 +23,7 @@ const AddGroceries = () => {
     isLoading,
   } = useAddGroceries();
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Typography style={styles.title} variant={'titleLarge'}>
         Add to groceries
       </Typography>
@@ -51,12 +51,7 @@ const AddGroceries = () => {
           }
         />
       </View>
-
-      <ScrollView
-        style={styles.scrollview}
-        contentContainerStyle={styles.scrollviewContent}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView showsVerticalScrollIndicator={false}>
         {ingredients.map((ingredient, index) => (
           <CheckBoxInput
             key={index}
@@ -74,7 +69,7 @@ const AddGroceries = () => {
         title={'Save'}
         onPress={handleSave}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

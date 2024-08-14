@@ -12,6 +12,7 @@ import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './ingredients.style';
 import { FlatList } from 'react-native';
+import { useBoundStore } from '@/store';
 
 interface IngredientsProps {
   recipeId: string;
@@ -21,9 +22,9 @@ interface IngredientsProps {
 const keyExtractor = (_: string | Ingredient) => (typeof _ === 'string' ? _ : _?.id);
 
 const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data }: IngredientsProps) => {
-  const [servings, setServings] = useState<number>(1);
   const initialServings = useRef(1);
   const [isMetric, setIsMetric] = useState<boolean>(true);
+  const setServings = useBoundStore((state) => state.setCurrentServings);
 
   useFocusEffect(
     useCallback(() => {
@@ -32,19 +33,12 @@ const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data }: Ingredients
         setServings(serving || 1);
         initialServings.current = serving || 1;
       });
-    }, [recipeId])
+    }, [recipeId, setServings])
   );
 
   const handleRenderHeader = useMemo(
-    () => (
-      <IngredientHeader
-        servings={servings}
-        setServings={setServings}
-        isMetric={isMetric}
-        setIsMetric={setIsMetric}
-      />
-    ),
-    [isMetric, servings]
+    () => <IngredientHeader isMetric={isMetric} setIsMetric={setIsMetric} />,
+    [isMetric]
   );
   const { styles, breakpoint } = useStyles(stylesheet);
 
@@ -59,37 +53,34 @@ const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data }: Ingredients
       }
       return (
         <IngredientItem
-          item={item}
-          servings={servings}
+          text={item?.text || ''}
           initialServings={initialServings.current}
           isMetric={isMetric}
         />
       );
     },
-    [isMetric, servings, styles.sectionHeader]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isMetric]
   );
-  const sections = useMemo(
-    () =>
-      data?.reduce((acc: (string | Ingredient)[], ingredient) => {
-        const title = ingredient?.title || '';
+  const sections = useMemo(() => {
+    return data?.reduce((acc: (string | Ingredient)[], ingredient) => {
+      const title = ingredient?.title || '';
 
-        if (title) {
-          const hasTitle = acc.find((item) => item === title);
+      if (title) {
+        const hasTitle = acc.find((item) => item === title);
 
-          if (!hasTitle) {
-            acc.push(title);
-          }
+        if (!hasTitle) {
+          acc.push(title);
         }
-        acc.push(ingredient);
-        return acc;
-      }, []),
-    [data]
-  );
+      }
+      acc.push(ingredient);
+      return acc;
+    }, []);
+  }, [data]);
 
   const isiPad = breakpoint === 'xl' || breakpoint === 'lg' || breakpoint === 'md';
 
   const ListComponent = isiPad ? FlatList : Tabs.FlatList;
-
   return (
     <ListComponent
       keyExtractor={keyExtractor}

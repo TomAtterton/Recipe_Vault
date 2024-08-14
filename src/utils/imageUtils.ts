@@ -1,3 +1,5 @@
+// src/utils/imageUtils.ts
+
 import {
   ImagePickerOptions,
   ImagePickerResult,
@@ -11,12 +13,35 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import { showErrorMessage } from '@/utils/promptUtils';
 import { cropImage } from '../../modules/expo-image-cropper';
 import { UIImagePickerPreferredAssetRepresentationMode } from 'expo-image-picker/src/ImagePicker.types';
+import { useBoundStore } from '@/store';
 
 const defaultImageOptions: ImagePickerOptions = {
   mediaTypes: MediaTypeOptions.Images,
   allowsMultipleSelection: false,
   quality: 0.8,
   preferredAssetRepresentationMode: UIImagePickerPreferredAssetRepresentationMode.Current,
+};
+
+const handlePermissions = async (permissionRequest: () => Promise<any>, errorMessage: string) => {
+  try {
+    await permissionRequest();
+  } catch (_) {
+    showErrorMessage(errorMessage);
+  }
+};
+
+const handleImageSelection = async (result: ImagePickerResult | string, isTemporary: boolean) => {
+  const imagePath = await handleResult(result);
+  if (imagePath) {
+    const { filePath, base64Image } = await cropImage({
+      uri: imagePath,
+      options: { isTemporary },
+    });
+    const shouldSync = useBoundStore.getState().shouldSync;
+    return shouldSync ? filePath : base64Image;
+  } else {
+    throw new Error('No image selected');
+  }
 };
 
 export const onOpenImageCropper = async (imageUri: string, isTemporary: boolean) => {
@@ -30,23 +55,15 @@ export const onOpenImageCropper = async (imageUri: string, isTemporary: boolean)
 
 export const onPickImageFromLibrary = async (isTemporary: boolean) => {
   try {
-    let result = await launchImageLibraryAsync(defaultImageOptions);
-    const imagePath = await handleResult(result);
-    if (imagePath) {
-      const { filePath } = await cropImage({ uri: imagePath, options: { isTemporary } });
-      return filePath;
-    } else {
-      throw new Error('No image selected');
-    }
+    const result = await launchImageLibraryAsync(defaultImageOptions);
+    return await handleImageSelection(result, isTemporary);
   } catch (e: unknown) {
-    // @ts-ignore
-    const errorCode = e?.code as PickerErrorCode;
+    const errorCode = (e as any)?.code;
     if (errorCode === 'E_NO_LIBRARY_PERMISSION') {
-      try {
-        await requestMediaLibraryPermissionsAsync();
-      } catch (_) {
-        showErrorMessage('Permission to access library was denied please enable in settings');
-      }
+      await handlePermissions(
+        requestMediaLibraryPermissionsAsync,
+        'Permission to access library was denied please enable in settings'
+      );
     }
     if (errorCode === 'E_PICKER_CANCELLED' || !errorCode) {
       return;
@@ -57,24 +74,15 @@ export const onPickImageFromLibrary = async (isTemporary: boolean) => {
 
 export const onPickImageFromCamera = async (isTemporary: boolean) => {
   try {
-    const result = await launchCameraAsync();
-    const imagePath = await handleResult(result);
-
-    if (imagePath) {
-      const { filePath } = await cropImage({ uri: imagePath, options: { isTemporary } });
-      return filePath;
-    } else {
-      throw new Error('No image selected');
-    }
+    const result = await launchCameraAsync(defaultImageOptions);
+    return await handleImageSelection(result, isTemporary);
   } catch (e: unknown) {
-    // @ts-ignore
-    const errorCode = e?.code as PickerErrorCode;
+    const errorCode = (e as any)?.code;
     if (errorCode === 'E_NO_CAMERA_PERMISSION' || errorCode === 'ERR_MISSING_CAMERA_PERMISSION') {
-      try {
-        await requestCameraPermissionsAsync();
-      } catch (_) {
-        showErrorMessage('Permission to access camera was denied please enable in settings');
-      }
+      await handlePermissions(
+        requestCameraPermissionsAsync,
+        'Permission to access camera was denied please enable in settings'
+      );
     }
     if (errorCode === 'E_PICKER_CANCELLED' || !errorCode) {
       return;
@@ -88,7 +96,6 @@ const handleResult = async (result: ImagePickerResult | string) => {
     if (typeof result === 'string') {
       return await handleManipulationResult(result);
     }
-
     const uri = result?.assets?.[0].uri || '';
     return await handleManipulationResult(uri);
   } catch (e) {

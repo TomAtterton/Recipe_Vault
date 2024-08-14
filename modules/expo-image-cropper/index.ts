@@ -9,6 +9,7 @@ export interface CropImageOptions {
 export interface CropImageResult {
   filePath: string;
   fileType: string;
+  base64Image: string;
   width: number;
   height: number;
   angle: number;

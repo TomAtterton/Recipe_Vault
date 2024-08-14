@@ -7,19 +7,23 @@ import Icon from '@/components/Icon';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './ingredientsHeader.style';
 import LabelButton from '@/components/buttons/LabelButton';
+import { useBoundStore } from '@/store';
 
 const IngredientHeader = ({
-  setServings,
-  servings,
   isMetric,
   setIsMetric,
 }: {
-  setServings: (servings: number) => void;
-  servings: number;
   isMetric: boolean;
   setIsMetric: (isMetric: boolean) => void;
 }) => {
   const { styles, theme } = useStyles(stylesheet);
+
+  const currentServings = useBoundStore((state) => state.currentServings);
+  const setServings = useBoundStore((state) => state.setCurrentServings);
+
+  const handleUpdateServing = (shouldMinus: boolean) => {
+    setServings(shouldMinus ? Math.max(1, currentServings - 1) : currentServings + 1);
+  };
 
   return (
     <View style={styles.headerContainer}>
@@ -50,17 +54,17 @@ const IngredientHeader = ({
       <View style={styles.servingsContainer}>
         <IconButton
           iconSource={'minus'}
-          onPress={() => setServings(Math.max(1, servings - 1))}
+          onPress={() => handleUpdateServing(true)}
           buttonSize={'small'}
         />
         <Icon name={'people-outline'} size={16} color={theme.colors.onBackground} />
         <Typography variant="titleSmall" style={styles.servingsText}>
-          {servings}
+          {currentServings}
         </Typography>
 
         <IconButton
           iconSource={'plus'}
-          onPress={() => setServings(servings + 1)}
+          onPress={() => handleUpdateServing(false)}
           buttonSize={'small'}
         />
       </View>

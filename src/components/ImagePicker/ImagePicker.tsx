@@ -52,6 +52,7 @@ const ImagePicker = ({
     const uri = await onPickImageFromCamera(!!isTemporary);
     onSelectImage(uri);
   };
+
   return (
     <View
       style={[
@@ -69,8 +70,7 @@ const ImagePicker = ({
               children
             ) : (
               <Image
-                // @ts-ignore
-                source={{ uri: imageUri, resizeMode: isTemporary && 'contain' }}
+                source={{ uri: imageUri, resizeMode: isTemporary ? 'contain' : 'cover' }}
                 style={styles.image}
               />
             )}
