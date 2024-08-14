@@ -27,8 +27,6 @@ const useEditRecipe = ({ id }: { id?: string | null }) => {
           Object.entries(recipeData || []).filter(([key]) => !(key in updateValues))
         );
 
-        console.log('filteredData', filteredData, recipeData);
-
         const mergedData = {
           ...filteredData,
           ...updateValues,
