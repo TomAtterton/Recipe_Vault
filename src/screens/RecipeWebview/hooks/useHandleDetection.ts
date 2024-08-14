@@ -4,6 +4,7 @@ import { translateWebview } from '@/screens/RecipeWebview/utils/translateWebview
 import { Routes } from '@/navigation/Routes';
 import { showErrorMessage } from '@/utils/promptUtils';
 import { useNavigation } from '@react-navigation/native';
+import { Keyboard } from 'react-native';
 
 const useHandleDetection = (uri: string) => {
   const navigation = useNavigation();
@@ -24,7 +25,7 @@ const useHandleDetection = (uri: string) => {
     if (recipeParseRef?.current) {
       try {
         const data = translateWebview(recipeParseRef?.current, uri);
-
+        Keyboard.dismiss();
         return navigation.navigate(Routes.AddRecipe, {
           data,
         });

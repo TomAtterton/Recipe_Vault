@@ -66,20 +66,17 @@ export const injectedJavaScript = `
   })();
 `;
 
-export const onHandleGoogleSearch = (url: string) => {
-  if (
-    !url.endsWith('.com') &&
-    !url.endsWith('.de') &&
-    !url.endsWith('.co.uk') &&
-    !url.endsWith('.nl') &&
-    !url.endsWith('.at')
-  ) {
-    url = 'https://www.google.com/search?q=' + url;
-  }
+const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
 
-  if (!url.startsWith('http') && !url.startsWith('https')) {
+export const onHandleGoogleSearch = (url: string) => {
+  console.log('url', url);
+
+  if (!urlRegex.test(url)) {
+    url = 'https://www.google.com/search?q=' + encodeURIComponent(url);
+  } else if (!url.startsWith('http') && !url.startsWith('https')) {
     url = 'https://' + url;
   }
+  console.log('url', url);
 
   return url;
 };

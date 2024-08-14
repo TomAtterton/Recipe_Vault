@@ -16,7 +16,12 @@ const useHandleUrl = (routeUrl?: string) => {
   const handleWebViewNavigationStateChange = (newNavState: WebViewNavigation) => {
     const { title, url, navigationType, canGoForward, canGoBack } = newNavState;
 
-    if (url !== uri) {
+    // Ignore click events
+    if (navigationType === 'click') {
+      return;
+    }
+
+    if (navigationType !== 'backforward' && url !== uri) {
       addHistory({ name: title || url, url });
     }
 
