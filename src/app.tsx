@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 
 import * as SplashScreen from 'expo-splash-screen';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -23,6 +23,7 @@ import { initPurchases } from '@/services/purchase';
 import { FloatingInputProvider } from '@/providers/FloatingInputProvider';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from '@/utils/promptUtils';
+import { clearCache } from '@candlefinance/faster-image';
 
 Sentry.init({
   dsn: Env.SENTRY_DSN,
@@ -33,7 +34,9 @@ const App = () => {
   initPurchases();
   const isDarkMode = useBoundStore((state) => state.darkMode);
   useInitialTheme(isDarkMode ? 'dark' : 'light');
-
+  useEffect(() => {
+    clearCache();
+  }, []);
   return (
     <GestureHandlerRootView style={styles.container}>
       <SafeAreaProvider>
