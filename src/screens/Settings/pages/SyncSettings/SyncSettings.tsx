@@ -15,18 +15,20 @@ import { onOpenDatabase } from '@/database';
 import { Env } from '@/core/env';
 import { onSignOut } from '@/services/auth';
 import { showErrorMessage } from '@/utils/promptUtils';
+import useIsLoggedIn from '@/hooks/common/useIsLoggedIn';
 
 const SyncSettings = () => {
   const { styles } = useStyles(stylesheet);
   const syncEnabled = useBoundStore((state) => state.shouldSync);
   const { goBack, navigate, reset } = useNavigation();
-  const profile = useBoundStore((state) => state.profile);
-  const userId = useBoundStore((state) => state.session?.user.id);
+  const groupName = useBoundStore((state) => state.profile.groupName);
   const setSyncEnabled = useBoundStore((state) => state.setShouldSync);
 
   const databaseStatus = useBoundStore((state) => state.databaseStatus);
 
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const isLoggedIn = useIsLoggedIn();
 
   const handleSignOut = async () => {
     try {
@@ -54,7 +56,7 @@ const SyncSettings = () => {
         <Typography variant={'titleItalicLarge'}>Cloud Sync Settings.</Typography>
         {syncEnabled && (
           <>
-            <InfoLabelButton title={'Current Vault.'} buttonTitle={profile?.groupName} />
+            <InfoLabelButton title={'Current Vault.'} buttonTitle={groupName} />
             <InfoLabelButton title={'Vault Status:'} buttonTitle={databaseStatus} />
           </>
         )}
@@ -71,13 +73,9 @@ const SyncSettings = () => {
             <SettingsButton
               title={'Advanced Sync Settings'}
               iconSource={'cog'}
-              onPress={() => navigate(Routes.Profile)}
+              onPress={() => navigate(Routes.AdvanceSyncSettings)}
             />
-            <SettingsButton
-              title={'Account Settings'}
-              iconSource={'info'}
-              onPress={() => navigate(Routes.AccountSettings)}
-            />
+
             <SettingsButton
               title={'Manage Group Users'}
               iconSource={'people'}
@@ -87,9 +85,9 @@ const SyncSettings = () => {
         ) : (
           <SettingsButton
             style={styles.enableSyncButton}
-            title={userId ? 'Enable Cloud Vault' : 'Enable Sync'}
+            title={isLoggedIn ? 'Enable Cloud Vault' : 'Enable Sync'}
             onPress={() => {
-              if (!userId) {
+              if (!isLoggedIn) {
                 navigate(Routes.Login, {
                   showSkip: false,
                 });
@@ -107,9 +105,17 @@ const SyncSettings = () => {
             iconSource={'cloud'}
           />
         )}
-        {userId && (
-          <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+        {isLoggedIn && (
+          <SettingsButton
+            title={'Account Settings'}
+            iconSource={'info'}
+            onPress={() => navigate(Routes.AccountSettings)}
+          />
+        )}
+        {isLoggedIn && (
+          <View style={styles.bottomContent}>
             <OutlineButton
+              contentStyle={styles.logoutButton}
               title={translate('settings.logout')}
               onPress={handleSignOut}
               isLoading={isLoading}

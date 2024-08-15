@@ -16,4 +16,12 @@ export const stylesheet = createStyleSheet((theme) => ({
   text: {
     color: theme.colors.primary,
   },
+  loading: {
+    position: 'absolute',
+    right: 16,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 }));

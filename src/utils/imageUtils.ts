@@ -33,12 +33,17 @@ const handlePermissions = async (permissionRequest: () => Promise<any>, errorMes
 const handleImageSelection = async (result: ImagePickerResult | string, isTemporary: boolean) => {
   const imagePath = await handleResult(result);
   if (imagePath) {
-    const { filePath, base64Image } = await cropImage({
+    const { filePath, base64Image, height, width } = await cropImage({
       uri: imagePath,
       options: { isTemporary },
     });
     const shouldSync = useBoundStore.getState().shouldSync;
-    return shouldSync ? filePath : base64Image;
+
+    if (shouldSync) {
+      return await handleManipulationResult(filePath, height, width);
+    }
+
+    return base64Image;
   } else {
     throw new Error('No image selected');
   }
@@ -94,23 +99,39 @@ export const onPickImageFromCamera = async (isTemporary: boolean) => {
 const handleResult = async (result: ImagePickerResult | string) => {
   try {
     if (typeof result === 'string') {
-      return await handleManipulationResult(result);
+      return result;
     }
-    const uri = result?.assets?.[0].uri || '';
-    return await handleManipulationResult(uri);
+    return result?.assets?.[0].uri || '';
   } catch (e) {
     throw new Error('Setting image failed');
   }
 };
 
-const handleManipulationResult = async (imageUri: string) => {
+const handleManipulationResult = async (imageUri: string, height: number, width: number) => {
+  // Calculate aspect ratio
+  const aspectRatio = width / height;
+  let newWidth = width;
+  let newHeight = height;
+
+  // Determine new dimensions while maintaining aspect ratio
+  if (width > 900 || height > 900) {
+    if (width > height) {
+      newWidth = 900;
+      newHeight = 900 / aspectRatio;
+    } else {
+      newHeight = 900;
+      newWidth = 900 * aspectRatio;
+    }
+  }
+
+  // Resize the image
   const imageManipulationResult = await ImageManipulator.manipulateAsync(
     imageUri,
     [
       {
         resize: {
-          width: 300 * 3,
-          height: 300 * 3,
+          width: newWidth,
+          height: newHeight,
         },
       },
     ],
@@ -119,5 +140,6 @@ const handleManipulationResult = async (imageUri: string) => {
       format: ImageManipulator.SaveFormat.WEBP,
     }
   );
+
   return imageManipulationResult?.uri;
 };

@@ -1,8 +1,9 @@
 import { createStyleSheet } from 'react-native-unistyles';
 
-export const stylesheet = createStyleSheet((theme) => ({
+export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
     flex: 1,
+    paddingTop: miniRuntime.insets.top,
   },
   contentContainer: {
     flex: 1,

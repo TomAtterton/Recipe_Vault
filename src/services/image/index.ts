@@ -17,14 +17,14 @@ export const uploadImage = async (
     },
   });
 
-  const profile = useBoundStore.getState().profile;
+  const groupId = useBoundStore.getState().profile.groupId;
 
   const publicId = previousUri
     ? previousUri.split('/').pop()?.split('.')[0]
     : Math.random().toString();
 
   const defaultOptions: UploadApiOptions = {
-    folder: `recipe-vault/${profile.groupId}/`,
+    folder: `recipe-vault/${groupId}/`,
     invalidate: true,
     overwrite: true,
     use_asset_folder_as_public_id_prefix: false,

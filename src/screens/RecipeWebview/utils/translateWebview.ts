@@ -1,13 +1,13 @@
 import { Ingredient, RecipeDetailType } from '@/types';
 import { randomUUID } from 'expo-crypto';
-import { useBoundStore } from '@/store';
 import { string } from 'zod';
+import { getUserId } from '@/hooks/common/useUserId';
 
 export const translateWebview = (text: string, url: string): Partial<RecipeDetailType> => {
   const recipe = JSON.parse(text);
   const cookTime = convertTimeToString(recipe?.cookTime);
   const prepTime = convertTimeToString(recipe?.prepTime);
-  const userId = useBoundStore.getState().profile.id;
+  const userId = getUserId();
 
   const recipeDetail: Partial<RecipeDetailType> = {
     id: randomUUID(),

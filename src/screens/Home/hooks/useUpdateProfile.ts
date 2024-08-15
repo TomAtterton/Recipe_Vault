@@ -3,9 +3,10 @@ import { useEffect } from 'react';
 import getProfile from '@/database/api/profile/getProfile';
 import { Env } from '@/core/env';
 import { showErrorMessage } from '@/utils/promptUtils';
+import useUserId from '@/hooks/common/useUserId';
 
 const useUpdateProfile = () => {
-  const userId = useBoundStore((state) => state.profile.id);
+  const userId = useUserId();
   const groupId = useBoundStore((state) => state.profile.groupId);
 
   useEffect(() => {

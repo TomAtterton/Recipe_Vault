@@ -89,7 +89,8 @@ export const onOpenDatabase = async ({
     if (database && shouldClose) {
       database?.closeSync();
     }
-    const newDatabase = await openDatabaseAsync(currentDatabaseName, {
+
+    const newDatabase = await openDatabaseAsync(`${currentDatabaseName}.db`, {
       enableChangeListener: true,
       ...options,
     });

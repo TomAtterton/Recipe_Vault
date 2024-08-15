@@ -13,6 +13,7 @@ import {
 } from '@/database/api/recipes/helpers/postRecipeHelper';
 import { database } from '@/database';
 import useHandlePaywall from '@/hooks/common/useHandlePaywall';
+import { getUserId } from '@/hooks/common/useUserId';
 
 // Extend or modify these as needed to match your exact schema and requirements
 interface RecipeDetails {
@@ -92,14 +93,15 @@ const usePostUpdateRecipes = () => {
         previousValues
       );
 
-      const profile = useBoundStore.getState().profile;
+      const groupId = useBoundStore.getState().profile.groupId;
+      const userId = getUserId();
 
       const recipe_id = id || randomUUID();
 
       const recipeDetails: any = {
         recipe_id,
-        group_id: profile?.groupId || Env.TEST_GROUP_ID,
-        user_id: profile?.id || Env.TEST_USER_ID,
+        group_id: groupId || Env.TEST_GROUP_ID,
+        user_id: userId || Env.TEST_USER_ID,
         name: values.name,
         description: values.description,
         imageUrl: imageUrl,

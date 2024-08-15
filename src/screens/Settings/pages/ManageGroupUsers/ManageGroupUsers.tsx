@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { getProfileGroupsWithId } from '@/services/group';
 import { useBoundStore } from '@/store';
 import { SafeAreaView, View } from 'react-native';
 import Typography from '@/components/Typography';
@@ -7,6 +6,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import * as React from 'react';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import { useNavigation } from '@react-navigation/native';
+import { getProfileGroupsWithId } from '@/services/profileGroup';
 
 type User = {
   id?: string | null;

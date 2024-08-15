@@ -8,7 +8,7 @@ export const Env = {
   TEST_LOGIN_PASSWORD: process.env.EXPO_PUBLIC_TEST_LOGIN_PASSWORD,
   TEST_USER_ID: 'test-user-id',
   TEST_GROUP_ID: '1234',
-  SQLITE_DB_NAME: 'local_vault.db',
+  SQLITE_DB_NAME: 'local_vault',
   SENTRY_DSN:
     'https://0a1dfbee6f4482e26138d899fc029561@o4506343650361344.ingest.sentry.io/4506744661278720',
   BETA_KEY: process.env.EXPO_PUBLIC_BETA_KEY || process.env.BETA_KEY,

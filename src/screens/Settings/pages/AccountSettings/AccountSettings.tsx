@@ -18,7 +18,8 @@ const AccountSettings = () => {
   const { styles } = useStyles(stylesheet);
   const { goBack } = useNavigation();
 
-  const profile = useBoundStore((state) => state.profile);
+  const name = useBoundStore((state) => state.profile.name);
+  const email = useBoundStore((state) => state.profile.email);
 
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -68,8 +69,8 @@ const AccountSettings = () => {
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
       <View style={styles.container}>
         <Typography variant={'titleItalicLarge'}>Account Settings.</Typography>
-        <InfoLabelButton title={'Name:'} buttonTitle={profile?.name} />
-        <InfoLabelButton title={'Email:'} buttonTitle={profile?.email} />
+        <InfoLabelButton title={'Name:'} buttonTitle={name} />
+        <InfoLabelButton title={'Email:'} buttonTitle={email} />
         <View style={styles.dangerZoneContainer}>
           <Typography variant={'titleLarge'} style={styles.dangerZoneTitle}>
             Danger Zone:
@@ -80,6 +81,7 @@ const AccountSettings = () => {
           <OutlineButton
             title={'Delete Account'}
             onPress={handleDeleteAccount}
+            style={styles.deleteButton}
             isLoading={isLoading}
           />
         </View>

@@ -9,13 +9,22 @@ import SquircleDynamicContainer from '@/components/SquircleDynamicContainer';
 
 interface Props extends PressableProps {
   style?: StyleProp<ViewStyle>;
+  contentStyle?: StyleProp<ViewStyle>;
   title: string;
   iconSource?: IconName;
   isLoading?: boolean;
   width?: number;
 }
 
-const OutlineButton = ({ width, style, title, iconSource, isLoading, ...props }: Props) => {
+const OutlineButton = ({
+  width,
+  style,
+  contentStyle,
+  title,
+  iconSource,
+  isLoading,
+  ...props
+}: Props) => {
   const { styles, theme } = useStyles(stylesheet);
   const hasIcon = !!iconSource;
   const buttonOpacity = props?.disabled ? 0.5 : 1;
@@ -36,6 +45,7 @@ const OutlineButton = ({ width, style, title, iconSource, isLoading, ...props }:
         }}
         style={({ pressed }) => [
           styles.contentContainer,
+          contentStyle,
           {
             justifyContent: hasIcon ? 'flex-start' : 'center',
             opacity: pressed ? 0.5 : buttonOpacity,
@@ -48,7 +58,9 @@ const OutlineButton = ({ width, style, title, iconSource, isLoading, ...props }:
           <Icon style={styles.icon} name={iconSource} size={24} color={theme.colors.primary} />
         )}
         <Typography style={styles.text}>{title}</Typography>
-        {isLoading ? <ActivityIndicator color={theme.colors.onBackground} /> : null}
+        {isLoading ? (
+          <ActivityIndicator style={styles.loading} color={theme.colors.onBackground} />
+        ) : null}
       </Pressable>
     </SquircleDynamicContainer>
   );

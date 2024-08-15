@@ -92,12 +92,12 @@ const RecipeWebview = ({
           mediaPlaybackRequiresUserAction={true}
           onNavigationStateChange={handleWebViewNavigationStateChange}
         />
+        {recipeDetected && <AddButton handleAddRecipe={handleAddRecipe} />}
         <BookmarkPage
           showBookmark={showBookmark}
           onLinkPress={handleLinkPress}
           onShowBookmarkModal={handleShowBookmarkModal}
         />
-        {recipeDetected && <AddButton handleAddRecipe={handleAddRecipe} />}
       </View>
     </>
   );

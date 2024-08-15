@@ -17,6 +17,8 @@ export const stylesheet = createStyleSheet((theme) => ({
   enableSyncButton: {
     marginTop: 20,
   },
+  bottomContent: { flex: 1, justifyContent: 'flex-end' },
+  logoutButton: { width: '100%' },
   dangerZoneTitle: {
     color: theme.colors.primary,
   },

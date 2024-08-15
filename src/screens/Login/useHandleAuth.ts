@@ -5,8 +5,8 @@ import { Routes } from '@/navigation/Routes';
 import { showErrorMessage } from '@/utils/promptUtils';
 import { useState } from 'react';
 import { onAppleAuthSignIn, onTestSignIn } from '@/services/auth';
-import { getProfileGroup } from '@/services/group';
 import { updateProfile } from '@/store';
+import { getProfileGroup } from '@/services/profileGroup';
 
 const useHandleAuth = () => {
   const { reset } = useNavigation();
@@ -20,6 +20,7 @@ const useHandleAuth = () => {
 
       updateProfile({
         id: data.user?.id,
+        name: profileName || '',
         email: data?.user?.email || '',
       });
 

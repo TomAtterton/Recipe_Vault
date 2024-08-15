@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { updateProfile, useBoundStore } from '@/store';
+import { updateProfile } from '@/store';
 import { Routes } from '@/navigation/Routes';
 import { useNavigation } from '@react-navigation/native';
 import { showErrorMessage } from '@/utils/promptUtils';
@@ -11,12 +11,13 @@ import { stylesheet } from './createVault.style';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import FormInput from '@/components/inputs/FormInput';
 import { useKeyboardForm } from '@/hooks/common/useKeyboardForm';
-import { createGroup } from '@/services/group';
 import { setupDatabase } from '@/utils/databaseUtils';
 import NavBarButton from '@/components/buttons/NavBarButton';
+import useUserId from '@/hooks/common/useUserId';
+import { onCreateGroup } from '@/services/group';
 
 const CreateVault = () => {
-  const userId = useBoundStore((state) => state.profile?.id);
+  const userId = useUserId();
   const { reset, goBack } = useNavigation();
 
   const [text, setText] = useState('');
@@ -40,7 +41,7 @@ const CreateVault = () => {
 
       const trimmedText = text.trim();
 
-      const groupId = await createGroup({
+      const groupId = await onCreateGroup({
         name: trimmedText,
         userId,
       });

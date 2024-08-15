@@ -4,6 +4,7 @@ import { Alert } from 'react-native';
 import { supabase } from '@/services';
 import { useBoundStore } from '@/store';
 import { translate } from '@/core';
+import { getUserId } from '@/hooks/common/useUserId';
 
 export const PurchaseCancelError = Purchases.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR;
 
@@ -47,7 +48,7 @@ export const handleProPlanPurchase = async (onContactCustomerSupport: () => void
     }
     await Purchases.purchaseStoreProduct(product);
     const groupId = useBoundStore.getState().profile?.groupId;
-    const profileId = useBoundStore.getState().profile.id;
+    const profileId = getUserId();
 
     const { error } = await supabase.from('pro_vaults').insert({
       updated_at: new Date().toISOString(),

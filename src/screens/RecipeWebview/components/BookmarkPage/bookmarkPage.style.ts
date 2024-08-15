@@ -10,6 +10,7 @@ export const stylesheet = createStyleSheet((theme) => ({
     right: 0,
     bottom: 0,
     backgroundColor: theme.colors.background,
+    zIndex: 100,
   },
   titleContainer: {
     flexDirection: 'row',

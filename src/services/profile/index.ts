@@ -1,5 +1,6 @@
 import { supabase } from '@/services';
 import { useBoundStore } from '@/store';
+import { getUserId } from '@/hooks/common/useUserId';
 
 type ProfileData = {
   name: string;
@@ -7,7 +8,7 @@ type ProfileData = {
 
 export const updateProfile = async ({ data }: { data: ProfileData }) => {
   try {
-    const userId = useBoundStore.getState().session?.user.id;
+    const userId = getUserId();
 
     if (!userId) {
       throw new Error('User not found');

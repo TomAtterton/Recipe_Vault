@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { updateProfile, useBoundStore } from '@/store';
+import { updateProfile } from '@/store';
 import { Routes } from '@/navigation/Routes';
 import { useNavigation } from '@react-navigation/native';
 import { showErrorMessage } from '@/utils/promptUtils';
@@ -11,15 +11,18 @@ import { stylesheet } from './joinVault.style';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import FormInput from '@/components/inputs/FormInput';
 import { useKeyboardForm } from '@/hooks/common/useKeyboardForm';
-import { createProfileGroup, getProfileGroupByGroupId } from '@/services/group';
+import { onGetGroupName } from '@/services/group';
 import { setupDatabase } from '@/utils/databaseUtils';
 import NavBarButton from '@/components/buttons/NavBarButton';
+import useUserId from '@/hooks/common/useUserId';
+import { createProfileGroup } from '@/services/profileGroup';
 
 const JoinVault = () => {
-  const userId = useBoundStore((state) => state.profile?.id);
+  const userId = useUserId();
   const { reset, goBack } = useNavigation();
 
-  const [text, setText] = useState('');
+  const [groupId, setGroupId] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState<string>('');
 
@@ -29,21 +32,21 @@ const JoinVault = () => {
     try {
       setIsLoading(true);
 
-      await createProfileGroup({
-        userId,
-        groupId: text,
-      });
-
-      const { groupName } = await getProfileGroupByGroupId({
-        groupId: text,
+      const { groupName } = await onGetGroupName({
+        groupId,
       });
 
       if (!groupName) {
         throw new Error('Group not found');
       }
 
+      await createProfileGroup({
+        userId,
+        groupId,
+      });
+
       updateProfile({
-        groupId: text,
+        groupId,
         groupName,
       });
 
@@ -62,9 +65,9 @@ const JoinVault = () => {
     }
   };
 
-  const handleTextChange = (newText: string) => {
-    if (errorMessages) setErrorMessages(''); // Clear error messages if any exist
-    setText(newText);
+  const handleTextChange = (newGroupId: string) => {
+    if (errorMessages) setErrorMessages('');
+    setGroupId(newGroupId);
   };
 
   useKeyboardForm();
@@ -82,7 +85,7 @@ const JoinVault = () => {
         </Typography>
       </View>
       <FormInput
-        value={text}
+        value={groupId}
         onChange={handleTextChange}
         placeholder={'Enter Vault Code'}
         multiline={false}
@@ -96,7 +99,7 @@ const JoinVault = () => {
           isLoading={isLoading}
           style={styles.button}
           title={'Join Vault'}
-          disabled={isLoading || text.length === 0}
+          disabled={isLoading || groupId.length === 0}
           onPress={handleUpdateProfile}
         />
       </View>

@@ -18,6 +18,7 @@ import { Env } from '@/core/env';
 import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 import { useRef } from 'react';
 import LabelButton from '@/components/buttons/LabelButton';
+import useIsLoggedIn from '@/hooks/common/useIsLoggedIn';
 
 const DatabaseSettings = () => {
   const { styles } = useStyles(stylesheet);
@@ -82,7 +83,7 @@ const DatabaseSettings = () => {
     }
   };
 
-  const isSyncEnabled = useBoundStore((state) => state.shouldSync);
+  const currentGroupId = useBoundStore((state) => state.profile.groupId);
 
   const { handleSwitchDatabase, groups } = useHandleSwitchDatabase();
 
@@ -103,6 +104,18 @@ const DatabaseSettings = () => {
     setSelectedDatabaseId(id);
   };
 
+  const isLoggedIn = useIsLoggedIn();
+
+  const handleCreateJoinVault = () => {
+    if (isLoggedIn) {
+      createJoinBottomSheetRef.current?.present();
+    } else {
+      navigate(Routes.Login, {
+        showSkip: false,
+      });
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
@@ -119,7 +132,7 @@ const DatabaseSettings = () => {
                     key={group.id}
                     title={'Cloud Vault:'}
                     buttonTitle={group.name}
-                    leftIconSource={isSyncEnabled ? 'star-bold' : undefined}
+                    leftIconSource={currentGroupId === group.id ? 'star-bold' : undefined}
                     iconSource={'cloud'}
                     onPress={() => handleManageDatabase(group.id)}
                   />
@@ -130,13 +143,10 @@ const DatabaseSettings = () => {
               title={'Local Vault:'}
               buttonTitle={'Local Vault'}
               iconSource={'vault'}
-              leftIconSource={!isSyncEnabled ? 'star-bold' : undefined}
+              leftIconSource={currentGroupId === Env.TEST_GROUP_ID ? 'star-bold' : undefined}
               onPress={() => handleManageDatabase(Env.TEST_GROUP_ID)}
             />
-            <LabelButton
-              title={'+ Create or Join a Vault'}
-              onPress={() => createJoinBottomSheetRef.current?.present()}
-            />
+            <LabelButton title={'+ Create or Join a Vault'} onPress={handleCreateJoinVault} />
           </ScrollView>
         </View>
         <View style={styles.dangerZoneContainer}>
