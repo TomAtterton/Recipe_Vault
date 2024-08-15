@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import Item from './components/Item/Item';
 import { stylesheet } from './editableSectionList.style';
@@ -121,4 +121,4 @@ const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveTex
   );
 };
 
-export default memo(EditableSectionList);
+export default EditableSectionList;

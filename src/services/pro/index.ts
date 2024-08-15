@@ -31,8 +31,7 @@ export const checkCanAddRecipe = async () => {
   try {
     const isPro = checkIfPro();
     const recipeCount = await getRecipeCount();
-
-    return isPro || recipeCount < 5;
+    return recipeCount < 5 || isPro;
   } catch (error) {
     throw new Error('Cloud sync is enabled and you have reached the maximum recipe limit.');
   }

@@ -13,7 +13,7 @@ const onImageUpload = async (uri?: string | null, previousUri?: string | null) =
       return uri;
     }
 
-    return uploadImage(uri, previousUri);
+    return await uploadImage(uri, previousUri);
   } catch (error) {
     throw new Error('Image upload failed');
   }

@@ -1,6 +1,5 @@
 import { Cloudinary } from '@cloudinary/url-gen';
 import { Env } from '@/core/env';
-// @ts-ignore
 import { upload, UploadApiOptions } from 'cloudinary-react-native';
 import { useBoundStore } from '@/store';
 import { supabase } from '@/services';

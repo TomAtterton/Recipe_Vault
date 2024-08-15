@@ -16,8 +16,7 @@ const useHandleUrl = (routeUrl?: string) => {
   const handleWebViewNavigationStateChange = (newNavState: WebViewNavigation) => {
     const { title, url, navigationType, canGoForward, canGoBack } = newNavState;
 
-    // Ignore click events
-    if (navigationType === 'click') {
+    if (navigationType === 'click' || navigationType === 'other') {
       return;
     }
 

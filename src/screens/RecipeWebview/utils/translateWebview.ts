@@ -1,6 +1,5 @@
 import { Ingredient, RecipeDetailType } from '@/types';
 import { randomUUID } from 'expo-crypto';
-import { string } from 'zod';
 import { getUserId } from '@/hooks/common/useUserId';
 
 export const translateWebview = (text: string, url: string): Partial<RecipeDetailType> => {
@@ -100,7 +99,7 @@ export const convertTimeToString = (time?: string | number): string => {
   if (!time) return '0 minutes';
 
   try {
-    if (time === typeof string && time?.startsWith('PT')) {
+    if (typeof time === 'string' && time.startsWith('PT')) {
       const timePattern = /PT(?:(\d+)H)?(?:(\d+)M)?/;
       const [, hours, minutes] = time.match(timePattern) ?? [];
       return formatTime(parseInt(hours || '0', 10), parseInt(minutes || '0', 10));

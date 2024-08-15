@@ -5,7 +5,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   name: 'Recipe Vault',
   description: `Recipe Vault Mobile App`,
   slug: 'recipeapp',
-  version: '0.0.30',
+  version: '0.0.31',
   runtimeVersion: '0.0.30',
   scheme: 'recipeapp',
   orientation: 'portrait',

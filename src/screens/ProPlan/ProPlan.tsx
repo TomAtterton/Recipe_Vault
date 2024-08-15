@@ -84,7 +84,7 @@ const PurchaseScreen = () => {
               onPress={handlePurchase}
               isLoading={isLoading}
             />
-            <LabelButton title={'Continue with free version'} onPress={goBack} />{' '}
+            <LabelButton title={'Continue with free version'} onPress={goBack} />
           </>
         ) : (
           <PrimaryButton title={'Login to upgrade'} onPress={goBack} />
