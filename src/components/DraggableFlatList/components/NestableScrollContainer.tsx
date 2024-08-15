@@ -1,6 +1,10 @@
 import React from 'react';
 import { LayoutChangeEvent, ScrollViewProps } from 'react-native';
-import Animated, { useAnimatedScrollHandler, AnimatedRef } from 'react-native-reanimated';
+import Animated, {
+  useAnimatedScrollHandler,
+  AnimatedRef,
+  useDerivedValue,
+} from 'react-native-reanimated';
 import {
   NestableScrollContainerProvider,
   useSafeNestableScrollContainerContext,
@@ -27,6 +31,13 @@ function NestableScrollContainerInner(props: ScrollViewProps) {
     props.onContentSizeChange?.(w, h);
   });
 
+  const isScrollEnabled = useDerivedValue(() => {
+    if (outerScrollEnabled.value === undefined) {
+      return true;
+    }
+    return outerScrollEnabled.value;
+  }, [outerScrollEnabled]);
+
   return (
     <Animated.ScrollView
       {...props}
@@ -34,7 +45,7 @@ function NestableScrollContainerInner(props: ScrollViewProps) {
       onLayout={onLayout}
       onScroll={handleContentScroll}
       onContentSizeChange={onContentSizeChange}
-      scrollEnabled={outerScrollEnabled}
+      scrollEnabled={isScrollEnabled}
       scrollEventThrottle={16}
     />
   );
@@ -44,7 +55,7 @@ export const NestableScrollContainer = React.forwardRef(
   (props: ScrollViewProps, forwardedRef?: React.ForwardedRef<Animated.ScrollView>) => {
     return (
       <NestableScrollContainerProvider
-        forwardedRef={(forwardedRef as AnimatedRef<Animated.ScrollView>) || undefined}
+        forwardedRef={forwardedRef as AnimatedRef<Animated.ScrollView>}
       >
         <NestableScrollContainerInner {...props} />
       </NestableScrollContainerProvider>

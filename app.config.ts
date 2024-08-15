@@ -103,12 +103,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     [
-      'expo-av',
-      {
-        microphonePermission: false,
-      },
-    ],
-    [
       'expo-calendar',
       {
         remindersPermission:

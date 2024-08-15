@@ -1,14 +1,16 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 import Animated, { useAnimatedRef, useSharedValue, AnimatedRef } from 'react-native-reanimated';
 
-type NestableScrollContainerContextVal = ReturnType<typeof useSetupNestableScrollContextValue>;
+type NestableScrollContainerContextVal = ReturnType<any>;
 const NestableScrollContainerContext = React.createContext<
   NestableScrollContainerContextVal | undefined
 >(undefined);
 
-function useSetupNestableScrollContextValue({
+export function NestableScrollContainerProvider({
+  children,
   forwardedRef,
 }: {
+  children: React.ReactNode;
   forwardedRef?: AnimatedRef<Animated.ScrollView>;
 }) {
   const outerScrollEnabled = useSharedValue(true);
@@ -18,32 +20,17 @@ function useSetupNestableScrollContextValue({
   const scrollOffsetY = useSharedValue(0);
   const listVerticalOffset = useSharedValue(0);
 
-  const contextVal = useMemo(
-    () => ({
-      outerScrollEnabled,
-      scrollableRef: forwardedRef ?? scrollableRef,
-      scrollViewSize,
-      containerSize,
-      scrollOffsetY,
-      listVerticalOffset,
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  return contextVal;
-}
-
-export function NestableScrollContainerProvider({
-  children,
-  forwardedRef,
-}: {
-  children: React.ReactNode;
-  forwardedRef?: AnimatedRef<Animated.ScrollView>;
-}) {
-  const contextVal = useSetupNestableScrollContextValue({ forwardedRef });
   return (
-    <NestableScrollContainerContext.Provider value={contextVal}>
+    <NestableScrollContainerContext.Provider
+      value={{
+        outerScrollEnabled,
+        scrollableRef: forwardedRef ?? scrollableRef,
+        scrollViewSize,
+        containerSize,
+        scrollOffsetY,
+        listVerticalOffset,
+      }}
+    >
       {children}
     </NestableScrollContainerContext.Provider>
   );

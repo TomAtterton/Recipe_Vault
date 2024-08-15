@@ -69,8 +69,6 @@ function DraggableFlatListInner<T>(props: DraggableFlatListProps<T>) {
     activationDistance: activationDistanceProp = DEFAULT_PROPS.activationDistance,
   } = props;
 
-  // const activeKey = useSharedValue<string | null>(null);
-
   const keyExtractor = useStableCallback((item: T, index: number) => {
     if (!props.keyExtractor) {
       throw new Error('You must provide a keyExtractor to DraggableFlatList');
