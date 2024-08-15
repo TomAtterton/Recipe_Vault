@@ -28,6 +28,7 @@ import { clearCache } from '@candlefinance/faster-image';
 Sentry.init({
   dsn: Env.SENTRY_DSN,
   debug: false,
+  enabled: !__DEV__,
 });
 
 const App = () => {
