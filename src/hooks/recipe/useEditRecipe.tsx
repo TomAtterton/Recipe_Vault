@@ -31,7 +31,6 @@ const useEditRecipe = ({ id }: { id?: string | null }) => {
           ...filteredData,
           ...updateValues,
         };
-        console.log('mergedData', mergedData);
 
         await onSubmit(mergedData, id, recipeData);
 

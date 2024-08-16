@@ -12,7 +12,7 @@ const useAddRecipe = ({
   data?: Partial<RecipeDetailType>;
   hasScanContent: boolean;
 }) => {
-  const { onSubmit, isLoading } = usePostUpdateRecipes();
+  const { onSubmit } = usePostUpdateRecipes();
 
   const navigation = useNavigation();
 
@@ -49,7 +49,6 @@ const useAddRecipe = ({
   };
   return {
     onAddRecipe,
-    isLoading,
     currentData,
   };
 };

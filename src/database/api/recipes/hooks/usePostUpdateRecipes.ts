@@ -83,7 +83,10 @@ const usePostUpdateRecipes = () => {
     previousValues?: Partial<RecipeDetailType>
   ) => {
     try {
-      await onCanAddRecipe();
+      // We are editing an existing recipe so no need to check for paywall
+      if (!id) {
+        await onCanAddRecipe();
+      }
 
       setIsLoading(true);
       const imageUrl = await onImageUpload(values?.image, previousValues?.image);
