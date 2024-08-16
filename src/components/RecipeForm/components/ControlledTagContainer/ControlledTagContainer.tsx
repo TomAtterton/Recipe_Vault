@@ -9,7 +9,7 @@ interface Props {
 }
 
 const ControlledTagContainer = ({ control }: Props) => {
-  const { data: tags, onUpdateTags, onDeleteTags } = useUpdateTags();
+  const { data: tags, onUpdateTags } = useUpdateTags();
 
   return (
     <ChipInput
@@ -18,7 +18,6 @@ const ControlledTagContainer = ({ control }: Props) => {
       title={'Recipe Tags'}
       currentData={tags}
       onUpdate={onUpdateTags}
-      onDelete={onDeleteTags}
     />
   );
 };

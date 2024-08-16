@@ -8,7 +8,7 @@ interface Props {
 }
 
 const ControlledCategoryContainer = ({ control }: Props) => {
-  const { data: categories, onUpdateCategory, onDeleteCategory } = useUpdateCategories();
+  const { data: categories, onUpdateCategory } = useUpdateCategories();
 
   return (
     <ChipInput
@@ -17,7 +17,6 @@ const ControlledCategoryContainer = ({ control }: Props) => {
       title={'Recipe Categories'}
       currentData={categories}
       onUpdate={onUpdateCategory}
-      onDelete={onDeleteCategory}
     />
   );
 };

@@ -191,14 +191,7 @@ const DatabaseSettings = () => {
       </BottomSheet>
 
       <BottomSheet bottomSheetRef={sharedVaultBottomSheetRef} title={'Manage Vault'}>
-        <View
-          style={{
-            flex: 1,
-            gap: 16,
-            paddingHorizontal: 20,
-            paddingTop: 20,
-          }}
-        >
+        <View style={styles.bottomSheetContainer}>
           <SettingsButton
             iconSource={'cloud'}
             title={'Switch Vault'}

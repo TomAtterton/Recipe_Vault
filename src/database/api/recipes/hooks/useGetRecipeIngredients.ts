@@ -3,7 +3,8 @@ import useDatabaseQuery from '@/database/hooks/useDatabaseQuery';
 import { SELECT_RECIPE_INGREDIENTS } from '@/database/api/recipes';
 
 const useGetRecipeIngredients = (recipeId?: string | null) => {
-  const { data } = useDatabaseQuery(SELECT_RECIPE_INGREDIENTS, [recipeId]);
+  const { data, error } = useDatabaseQuery(SELECT_RECIPE_INGREDIENTS, [recipeId]);
+
   const ingredients = useMemo(() => {
     if (data) {
       return data.map((ingredient) => {

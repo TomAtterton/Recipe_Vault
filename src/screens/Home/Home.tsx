@@ -15,6 +15,8 @@ import { checkIfPro } from '@/services/pro';
 import { stylesheet } from '@/screens/Home/home.style';
 import { useStyles } from 'react-native-unistyles';
 import CategorySelection from '@/components/CategorySelection';
+import { useFocusEffect } from '@react-navigation/native';
+import { syncWithSupabase } from '@/services/sync';
 
 const Home = () => {
   const {
@@ -39,6 +41,10 @@ const Home = () => {
   }, []);
 
   useDatabaseListener();
+
+  useFocusEffect(() => {
+    syncWithSupabase();
+  });
 
   return (
     <View style={[styles.container]}>

@@ -14,8 +14,9 @@ interface Props {
   selectedItems?: ChipItemType[];
   data?: ChipItemType[] | null;
   hideSelection?: boolean;
+  hideDelete?: boolean;
   onSelect?: (item: ChipItemType) => void;
-  onDelete: (item: ChipItemType) => Promise<void>;
+  onDelete?: (item: ChipItemType) => Promise<void>;
   onUpdate: (item: ChipItemType) => Promise<void>;
 }
 
@@ -33,8 +34,9 @@ const ChipList = ({
   onUpdate,
 }: Props) => {
   const { styles } = useStyles(stylesheet);
-  const handleDelete = useCallback(
-    (item: ChipItemType) => {
+  const handleDelete =
+    onDelete &&
+    ((item: ChipItemType) => {
       Alert.alert(
         `Delete item`,
         `\nAre you sure you want to delete ${item.name} ?\n\n This will remove it from all recipes.`,
@@ -46,9 +48,7 @@ const ChipList = ({
           { text: translate('default.ok'), style: 'destructive', onPress: () => onDelete(item) },
         ]
       );
-    },
-    [onDelete]
-  );
+    });
 
   const renderSelectItem = useCallback(
     ({ item }: { item: ChipItemType }) => (

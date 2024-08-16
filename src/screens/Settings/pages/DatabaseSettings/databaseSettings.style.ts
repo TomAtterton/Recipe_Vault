@@ -16,6 +16,12 @@ export const stylesheet = createStyleSheet((theme) => ({
   },
   vaultsScrollView: { flex: 1 },
   vaultsScrollViewContent: { flexGrow: 1 },
+  bottomSheetContainer: {
+    flex: 1,
+    gap: 16,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
   dangerZoneTitle: {
     color: theme.colors.primary,
   },

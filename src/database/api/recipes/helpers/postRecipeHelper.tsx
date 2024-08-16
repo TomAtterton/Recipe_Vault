@@ -24,78 +24,110 @@ export const checkMetaDataDuplicates = (
   data: Partial<RecipeDetailType>,
   previousData?: Partial<RecipeDetailType>
 ) => {
-  // Function to compare arrays for any kind of change, including reordering
-  const hasAnyChanges = (currentItems: any[], prevItems: any[], comparisonFields: string[]) => {
-    if (currentItems.length !== prevItems.length) return true; // Different sizes mean changes
-    for (let i = 0; i < currentItems.length; i++) {
-      const currentItem = currentItems[i];
-      const prevItem = prevItems[i];
-      // Check if the IDs match to detect reordering, then check each field for changes
-      if (
-        currentItem.id !== prevItem.id ||
-        comparisonFields.some((field) => {
-          if (!prevItem[field] && !currentItem[field]) return false;
-          return currentItem[field] !== prevItem[field];
-        })
-      ) {
-        return true;
+  // Function to compare arrays for any kind of change, including reordering and deletion
+  const compareAndFindChanges = (
+    currentItems: any[],
+    prevItems: any[],
+    comparisonFields: string[]
+  ) => {
+    const addedOrChanged = [];
+    const deleted = [];
+
+    const prevItemsMap = new Map(prevItems.map((item) => [item.id, item]));
+
+    currentItems.forEach((currentItem, index) => {
+      const prevItem = prevItemsMap.get(currentItem.id);
+
+      if (!prevItem) {
+        addedOrChanged.push(currentItem); // New item added
+        return;
       }
+
+      // Check if any field has changed
+      const hasChanged = comparisonFields.some((field) => {
+        if (!prevItem[field] && !currentItem[field]) return false;
+        return currentItem[field] !== prevItem[field];
+      });
+
+      // Check if the item has moved to a different position
+      const hasReordered = prevItems.indexOf(prevItem) !== index;
+
+      if (hasChanged || hasReordered) {
+        addedOrChanged.push(currentItem); // Item exists but has changed or reordered
+      }
+
+      prevItemsMap.delete(currentItem.id); // Remove processed item from the map
+    });
+
+    // Items left in prevItemsMap were deleted
+    for (const prevItem of prevItemsMap.values()) {
+      deleted.push(prevItem);
     }
-    return false;
+
+    // Return the new order if any changes, otherwise return an empty array
+    const result = addedOrChanged.length > 0 || deleted.length > 0 ? currentItems : [];
+
+    return { changed: result, deleted };
   };
 
   // Apply comparison for each category
-  const ingredientsChanged = hasAnyChanges(
+  const ingredientsComparison = compareAndFindChanges(
     data?.recipeIngredient || [],
     previousData?.recipeIngredient || [],
     ['title', 'text']
   );
-  const instructionsChanged = hasAnyChanges(
+  const instructionsComparison = compareAndFindChanges(
     data?.recipeInstructions || [],
     previousData?.recipeInstructions || [],
     ['title', 'text']
   );
-  const categoriesChanged = hasAnyChanges(
+  const categoriesComparison = compareAndFindChanges(
     data?.recipeCategory || [],
     previousData?.recipeCategory || [],
     ['name']
   );
-  const tagsChanged = hasAnyChanges(data?.recipeTags || [], previousData?.recipeTags || [], [
-    'name',
-  ]);
+  const tagsComparison = compareAndFindChanges(
+    data?.recipeTags || [],
+    previousData?.recipeTags || [],
+    ['name']
+  );
 
-  const transformRecipeIngredient = data?.recipeIngredient?.map((item) => {
-    return {
-      section_title: item.title,
-      text: item.text,
-      id: item.id,
-    };
-  }) as Ingredient[];
+  const transformRecipeIngredient = ingredientsComparison.changed.map((item) => ({
+    section_title: item.title,
+    text: item.text,
+    id: item.id,
+  })) as Ingredient[];
 
-  const transformRecipeInstructions = data?.recipeInstructions?.map((item) => {
-    return {
-      section_title: item.title,
-      text: item.text,
-      id: item.id,
-    };
-  }) as Instruction[];
+  const transformRecipeInstructions = instructionsComparison.changed.map((item) => ({
+    section_title: item.title,
+    text: item.text,
+    id: item.id,
+  })) as Instruction[];
 
-  const transformRecipeCategory = data?.recipeCategory?.map((item) => {
-    return {
-      category_id: item.id,
-    };
-  }) as Category[];
+  const transformRecipeCategory = categoriesComparison.changed.map((item) => ({
+    category_id: item.id,
+  })) as Category[];
 
-  const transformRecipeTags = data?.recipeTags?.map((item) => {
-    return {
-      tag_id: item.id,
-    };
-  }) as Tag[];
+  const transformRecipeTags = tagsComparison.changed.map((item) => ({
+    tag_id: item.id,
+  })) as Tag[];
 
   return {
-    ingredients: ingredientsChanged ? transformRecipeIngredient : [],
-    instructions: instructionsChanged ? transformRecipeInstructions : [],
-    categories: categoriesChanged ? transformRecipeCategory : [],
-    tags: tagsChanged ? transformRecipeTags : [],
+    ingredients: {
+      changed: transformRecipeIngredient,
+      deleted: ingredientsComparison.deleted,
+    },
+    instructions: {
+      changed: transformRecipeInstructions,
+      deleted: instructionsComparison.deleted,
+    },
+    categories: {
+      changed: transformRecipeCategory,
+      deleted: categoriesComparison.deleted,
+    },
+    tags: {
+      changed: transformRecipeTags,
+      deleted: tagsComparison.deleted,
+    },
   };
 };

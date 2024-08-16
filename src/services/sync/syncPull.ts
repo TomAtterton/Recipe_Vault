@@ -1,6 +1,5 @@
 import { supabase } from '@/services';
 import { database } from '@/database';
-import { SQLiteDatabase } from 'expo-sqlite/next';
 import { useBoundStore } from '@/store';
 import { syncDelete } from '@/services/sync/syncDelete';
 import { showErrorMessage } from '@/utils/promptUtils';
@@ -65,27 +64,30 @@ export const syncPull = async (forceAll?: boolean): Promise<void> => {
 };
 
 const updateLocalTable = async (tableName: TableName, records: GenericRecord[]): Promise<void> => {
-  const db = database as SQLiteDatabase;
+  if (!database) {
+    throw new Error('Database not initialized');
+  }
 
   try {
     for (const record of records) {
-      const existingRecord = await db.getFirstAsync(`SELECT id FROM ${tableName} WHERE id = ?`, [
-        record.id,
-      ]);
+      const existingRecord = await database.getFirstAsync(
+        `SELECT id FROM ${tableName} WHERE id = ?`,
+        [record.id]
+      );
 
       if (existingRecord) {
         const columns = Object.keys(record)
           .map((key) => `${key} = ?`)
           .join(', ');
 
-        await db.runAsync(`UPDATE ${tableName} SET ${columns} WHERE id = ?`, [
+        await database.runAsync(`UPDATE ${tableName} SET ${columns} WHERE id = ?`, [
           ...Object.values(record),
           record.id,
         ]);
       } else {
         const columns = Object.keys(record).join(', ');
         const placeholders = new Array(Object.keys(record).length).fill('?').join(', ');
-        await db.runAsync(
+        await database.runAsync(
           `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders})`,
           Object.values(record)
         );

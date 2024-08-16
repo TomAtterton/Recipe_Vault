@@ -13,7 +13,7 @@ interface ChipItemProps {
   hideSelection?: boolean;
   selectedItems?: ChipItemType[];
   onSelectItem?: (item: ChipItemType) => void;
-  onDeleteItem: (item: ChipItemType) => void;
+  onDeleteItem?: (item: ChipItemType) => void;
 }
 
 const ChipItem: React.FC<ChipItemProps> = ({
@@ -36,7 +36,7 @@ const ChipItem: React.FC<ChipItemProps> = ({
           <CheckBox label={item?.name} isSelected={isSelected} onPress={handleSelect} />
         )
       )}
-      <IconButton iconSource={'bin'} onPress={() => onDeleteItem(item)} />
+      {onDeleteItem && <IconButton iconSource={'bin'} onPress={() => onDeleteItem(item)} />}
     </View>
   );
 };

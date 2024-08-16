@@ -23,7 +23,7 @@ export const setDatabase = (db: SQLiteDatabase | undefined) => {
   database = db;
 };
 
-const DATABASE_VERSION = 2;
+const DATABASE_VERSION = 3;
 
 const initDatabase = async (db: SQLiteDatabase) => {
   // Always set these PRAGMA statements for each session
@@ -88,6 +88,10 @@ export const onOpenDatabase = async ({
   try {
     if (database && shouldClose) {
       database?.closeSync();
+    }
+
+    if (database?.databaseName === `${currentDatabaseName}.db`) {
+      return database;
     }
 
     const newDatabase = await openDatabaseAsync(`${currentDatabaseName}.db`, {

@@ -32,6 +32,7 @@
     "@lodev09/react-native-true-sheet": "^0.12.4",
     "@react-native-async-storage/async-storage": "^1.24.0",
     "@react-native-community/datetimepicker": "^8.2.0",
+    "@react-native-community/netinfo": "11.3.1",
     "@react-native-menu/menu": "^1.1.2",
     "@react-native-picker/picker": "^2.7.7",
     "@react-navigation/bottom-tabs": "^6.6.1",

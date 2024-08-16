@@ -19,7 +19,7 @@ interface Props {
   currentData?: ChipItemType[] | null;
   title: string;
   onUpdate: (item: ChipItemType) => Promise<void>;
-  onDelete: (item: ChipItemType) => Promise<void>;
+  onDelete?: (item: ChipItemType) => Promise<void>;
   control: controlType;
   name: controlNameType;
 }

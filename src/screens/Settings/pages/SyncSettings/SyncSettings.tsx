@@ -3,7 +3,7 @@ import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import SettingsButton from '@/components/buttons/SettingsButton';
 import * as React from 'react';
-import { setResetDatabase, setResetProfile, useBoundStore } from '@/store';
+import { useBoundStore } from '@/store';
 import InfoLabelButton from '@/components/buttons/InfoLabelButton';
 import { translate } from '@/core';
 import NavBarButton from '@/components/buttons/NavBarButton';
@@ -11,10 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { stylesheet } from './syncSettings.style';
 import OutlineButton from '@/components/buttons/OutlineButton';
 import { Routes } from '@/navigation/Routes';
-import { onOpenDatabase } from '@/database';
-import { Env } from '@/core/env';
 import { onSignOut } from '@/services/auth';
-import { showErrorMessage } from '@/utils/promptUtils';
 import useIsLoggedIn from '@/hooks/common/useIsLoggedIn';
 
 const SyncSettings = () => {
@@ -22,7 +19,6 @@ const SyncSettings = () => {
   const syncEnabled = useBoundStore((state) => state.shouldSync);
   const { goBack, navigate, reset } = useNavigation();
   const groupName = useBoundStore((state) => state.profile.groupName);
-  const setSyncEnabled = useBoundStore((state) => state.setShouldSync);
 
   const databaseStatus = useBoundStore((state) => state.databaseStatus);
 
@@ -34,12 +30,6 @@ const SyncSettings = () => {
     try {
       setIsLoading(true);
       await onSignOut();
-      setResetProfile();
-      setResetDatabase();
-      await onOpenDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
-      setSyncEnabled(false);
-    } catch (error) {
-      showErrorMessage(translate('error.default.error_message'), 3000);
     } finally {
       setIsLoading(false);
     }

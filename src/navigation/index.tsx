@@ -22,7 +22,6 @@ import Help from '@/screens/Help';
 import DatabaseEditor from '@/screens/Settings/pages/DatabaseSettings/DatabaseEditor';
 import AdvanceSyncSettings from '@/screens/Settings/pages/AdvanceSyncSettings';
 import ProPlan from '@/screens/ProPlan';
-import useHandleSession from '@/services/auth/hooks/useHandleSession';
 import { RecipeDetectionNavigator } from '@/navigation/recipeDetectionNavigator';
 import RecipeSettings from '@/screens/Settings/pages/RecipeSettings';
 import CreateVault from '@/screens/CreateVault';
@@ -39,7 +38,6 @@ const defaultOptions = {
 
 export const RootNavigator = () => {
   useHandleShare();
-  useHandleSession();
   return (
     <Stack.Navigator initialRouteName={Routes.Splashscreen} screenOptions={defaultOptions}>
       <Stack.Screen name={Routes.Splashscreen} component={Splashscreen} options={defaultOptions} />

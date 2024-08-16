@@ -2963,6 +2963,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/netinfo@npm:11.3.1":
+  version: 11.3.1
+  resolution: "@react-native-community/netinfo@npm:11.3.1"
+  peerDependencies:
+    react-native: ">=0.59"
+  checksum: 435601f7c7567a8610cfcb267f9d1ef4148cdb859b30d9220bfd345ba6ac5615db351b55040c7ff9379ebbe5b38f7ba14aaa03b22f0ea710a0c65efd02bcff0d
+  languageName: node
+  linkType: hard
+
 "@react-native-menu/menu@npm:^1.1.2":
   version: 1.1.2
   resolution: "@react-native-menu/menu@npm:1.1.2"
@@ -17056,6 +17065,7 @@ cloudinary-react-native@TomAtterton/cloudinary-react-native:
     "@react-native-async-storage/async-storage": ^1.24.0
     "@react-native-community/datetimepicker": ^8.2.0
     "@react-native-community/eslint-config": ^3.2.0
+    "@react-native-community/netinfo": 11.3.1
     "@react-native-menu/menu": ^1.1.2
     "@react-native-picker/picker": ^2.7.7
     "@react-native/babel-preset": ^0.75.0

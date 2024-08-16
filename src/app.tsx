@@ -10,20 +10,19 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 
 import '../src/theme/unistyles';
-import { darkNavigationTheme, lightNavigationTheme } from '@/theme/themes';
+import { darkNavigationTheme } from '@/theme/themes';
 
 SplashScreen.preventAutoHideAsync();
 
 import * as Sentry from '@sentry/react-native';
 import UpdateProvider from '@/providers/UpdateProvider';
-import { useInitialTheme } from 'react-native-unistyles';
-import { useBoundStore } from '@/store';
 import { Env } from '@/core/env';
 import { initPurchases } from '@/services/purchase';
 import { FloatingInputProvider } from '@/providers/FloatingInputProvider';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from '@/utils/promptUtils';
 import { clearCache } from '@candlefinance/faster-image';
+import useHandleSession from '@/services/auth/hooks/useHandleSession';
 
 Sentry.init({
   dsn: Env.SENTRY_DSN,
@@ -33,15 +32,17 @@ Sentry.init({
 
 const App = () => {
   initPurchases();
-  const isDarkMode = useBoundStore((state) => state.darkMode);
-  useInitialTheme(isDarkMode ? 'dark' : 'light');
+
   useEffect(() => {
     clearCache();
   }, []);
+
+  useHandleSession();
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <SafeAreaProvider>
-        <NavigationContainer theme={isDarkMode ? darkNavigationTheme : lightNavigationTheme}>
+        <NavigationContainer theme={darkNavigationTheme}>
           <UpdateProvider>
             <FloatingInputProvider>
               <RootNavigator />

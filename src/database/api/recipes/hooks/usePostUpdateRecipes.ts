@@ -4,16 +4,10 @@ import onImageUpload from '@/database/api/storage/useImageUpload';
 import { useBoundStore } from '@/store';
 import { Env } from '@/core/env';
 import { insertRecipe, updateRecipe, updateRelatedTable } from '@/database/api/recipes';
-import {
-  Category,
-  checkMetaDataDuplicates,
-  Ingredient,
-  Instruction,
-  Tag,
-} from '@/database/api/recipes/helpers/postRecipeHelper';
-import { database } from '@/database';
+import { checkMetaDataDuplicates } from '@/database/api/recipes/helpers/postRecipeHelper';
 import useHandlePaywall from '@/hooks/common/useHandlePaywall';
 import { getUserId } from '@/hooks/common/useUserId';
+import { sqlDelete } from '@/database/sql';
 
 // Extend or modify these as needed to match your exact schema and requirements
 interface RecipeDetails {
@@ -126,13 +120,13 @@ const usePostUpdateRecipes = () => {
         hasExistingRecipe: !!previousValues,
       });
 
-      setIsLoading(false);
       return recipe_id;
     } catch (error) {
       // @ts-ignore
       console.error('Error updating recipe', error?.message);
-      setIsLoading(false);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -151,51 +145,55 @@ async function updateRecipeAndRelatedTables({
   hasExistingRecipe,
 }: {
   recipeDetails: RecipeDetails;
-  ingredients: Ingredient[] | undefined[];
-  instructions: Instruction[] | undefined[];
-  categories: Category[] | undefined[];
-  tags: Tag[] | undefined[];
+  ingredients: any;
+  instructions: any;
+  categories: any;
+  tags: any;
   hasExistingRecipe: boolean;
 }) {
-  try {
-    await database?.withTransactionAsync(async () => {
-      // Insert or Update Recipe
-      await insertOrUpdateRecipe(recipeDetails, hasExistingRecipe);
-      // Shared recipe_id, assumed to be part of recipeDetails
-      const recipe_id = recipeDetails.recipe_id;
-      // Delete existing related records and insert new ones
-      if (ingredients && ingredients.length > 0) {
-        await updateRelatedTable('recipe_ingredients', ingredients, recipe_id);
-      }
-
-      if (instructions && instructions.length > 0) {
-        await updateRelatedTable('recipe_instructions', instructions, recipe_id);
-      }
-
-      if (categories && categories.length > 0) {
-        await updateRelatedTable('recipe_categories', categories, recipe_id);
-      }
-
-      if (tags && tags.length > 0) {
-        await updateRelatedTable('recipe_tags', tags, recipe_id);
-      }
-    });
-  } catch (error) {
-    throw error;
-  }
-}
-
-async function insertOrUpdateRecipe(recipeDetails: RecipeDetails, hasExistingRecipe: boolean) {
-  try {
-    if (hasExistingRecipe) {
-      // Update existing recipe
-      await updateRecipe(recipeDetails);
-    } else {
-      // Insert new recipe
-      await insertRecipe(recipeDetails);
+  const deleteRelatedRecords = async (table: string, items: any[]) => {
+    if (items && items.length > 0) {
+      const key = () => {
+        switch (table) {
+          case 'recipe_categories':
+            return 'category_id';
+          case 'recipe_tags':
+            return 'tag_id';
+          default:
+            return 'id';
+        }
+      };
+      await Promise.all(items.map((item) => item?.id && sqlDelete(table, item.id, key())));
     }
+  };
+
+  const updateRelatedRecords = async (
+    table: string,
+    data: {
+      changed: any[];
+      deleted: any[];
+    }
+  ) => {
+    await updateRelatedTable({
+      tableName: table,
+      data: data.changed,
+      recipe_id: recipeDetails.recipe_id,
+    });
+    await deleteRelatedRecords(table, data.deleted);
+  };
+
+  try {
+    await (hasExistingRecipe ? updateRecipe(recipeDetails) : insertRecipe(recipeDetails));
+
+    await Promise.all([
+      updateRelatedRecords('recipe_ingredients', ingredients),
+      updateRelatedRecords('recipe_instructions', instructions),
+      updateRelatedRecords('recipe_categories', categories),
+      updateRelatedRecords('recipe_tags', tags),
+    ]);
   } catch (error) {
-    throw error; // Rethrow the error for further handling
+    console.error('Error in updateRecipeAndRelatedTables', error);
+    throw error;
   }
 }
 

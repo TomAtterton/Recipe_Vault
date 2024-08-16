@@ -38,7 +38,7 @@ const IngredientItem = ({
   return (
     <View style={styles.container}>
       <Typography variant="bodyMedium" style={[styles.recipeText, { color: colors.primary }]}>
-        {`${amount}${unitOfMeasure ? ` ${unitOfMeasure}` : ''}`}
+        {`${amount === '0' ? '' : amount}${unitOfMeasure ? ` ${unitOfMeasure}` : ''}`}
         <Typography variant="bodyMedium" style={styles.recipeText}>
           {` ${description}`}
         </Typography>

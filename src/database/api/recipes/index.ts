@@ -105,12 +105,18 @@ export const insertRecipe = async ({
     last_made,
   });
 
-export const updateRelatedTable = async (tableName: string, data: any[], recipe_id: string) => {
-  if (!data.length) return;
-
+export const updateRelatedTable = async ({
+  tableName,
+  data,
+  recipe_id,
+}: {
+  tableName: string;
+  data?: any[];
+  recipe_id: string;
+}) => {
+  if (data && data.length === 0) return;
+  console.log('test');
   try {
-    await sqlDelete(tableName, recipe_id, 'recipe_id');
-
     const group_id = useBoundStore.getState().profile.groupId;
     const currentTimestamp = new Date().toISOString();
     const baseColumns = ['recipe_id', 'group_id', 'created_at', 'updated_at'];
@@ -119,21 +125,22 @@ export const updateRelatedTable = async (tableName: string, data: any[], recipe_
     let values: string[] = [];
     let placeholders: string[] = [];
 
-    data.forEach((item, index) => {
+    data?.forEach((item, index) => {
       let itemValues;
       switch (tableName) {
         case 'recipe_ingredients':
         case 'recipe_instructions':
-          specificColumns = ['section_title', 'text', 'id', 'is_modified', 'sequence'];
-          itemValues = [item.section_title || '', item.text, item.id, true, index];
+          specificColumns = ['id', 'section_title', 'text', 'is_modified', 'sequence'];
+          itemValues = [item?.id, item?.section_title || '', item.text, true, index];
           break;
+        // These values are always inserted never updated
         case 'recipe_categories':
           specificColumns = ['id', 'category_id', 'is_modified'];
-          itemValues = [randomUUID(), item.category_id, true];
+          itemValues = [randomUUID(), item?.category_id, true];
           break;
         case 'recipe_tags':
           specificColumns = ['id', 'tag_id', 'is_modified'];
-          itemValues = [randomUUID(), item.tag_id, true];
+          itemValues = [randomUUID(), item?.tag_id, true];
           break;
         default:
           throw new Error(`Unsupported table name: ${tableName}`);
@@ -147,7 +154,11 @@ export const updateRelatedTable = async (tableName: string, data: any[], recipe_
 
     const columns = [...baseColumns, ...specificColumns].join(', ');
     const placeholdersString = placeholders.join(', ');
-    const sql = `INSERT INTO ${tableName} (${columns}) VALUES ${placeholdersString}`;
+
+    const sql = `
+      INSERT OR REPLACE INTO ${tableName} (${columns})
+      VALUES ${placeholdersString}
+    `;
 
     await sqlExecute(sql, values);
   } catch (error) {
