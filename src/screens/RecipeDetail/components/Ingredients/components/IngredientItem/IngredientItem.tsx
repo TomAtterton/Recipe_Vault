@@ -35,13 +35,23 @@ const IngredientItem = ({
     return scaleAmount(quantity, currentServings, initialServings);
   }, [quantity, currentServings, initialServings]);
 
+  const formattedAmount = useMemo(() => {
+    if (!amount && !unitOfMeasure) return '';
+    if (!amount) return unitOfMeasure;
+    if (!unitOfMeasure) return amount;
+    return `${amount} ${unitOfMeasure}`;
+  }, [amount, unitOfMeasure]);
+
   return (
     <View style={styles.container}>
-      <Typography variant="bodyMedium" style={[styles.recipeText, { color: colors.primary }]}>
-        {`${amount === '0' ? '' : amount}${unitOfMeasure ? ` ${unitOfMeasure}` : ''}`}
-        <Typography variant="bodyMedium" style={styles.recipeText}>
-          {` ${description}`}
-        </Typography>
+      <Typography variant="bodyMedium" style={styles.recipeText}>
+        {formattedAmount && (
+          <Typography style={{ color: colors.primary }}>
+            {formattedAmount}
+            {description && ' '}
+          </Typography>
+        )}
+        {description}
       </Typography>
     </View>
   );

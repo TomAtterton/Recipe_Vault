@@ -43,23 +43,34 @@ export const parseMetrics = ({ note, isMetric }: { note: string; isMetric: boole
 };
 
 export const scaleAmount = (amount: number, servings: number, initialServings: number): string => {
+  if (amount === 0 || servings === 0 || initialServings === 0) {
+    return '0';
+  }
+
   const scaledAmount = amount * (servings / initialServings);
   const roundedAmount = Math.round(scaledAmount * 4) / 4; // Round to the nearest quarter
-  if (roundedAmount > 10) {
-    return roundedAmount.toFixed(0); // Fraction is not 1/4, 1/2, or 3/4, return as decimal
+
+  if (roundedAmount === 0) {
+    return '';
   }
+
+  if (roundedAmount > 10) {
+    return roundedAmount.toFixed(0);
+  }
+
   const wholeNumber = Math.floor(roundedAmount);
   const fraction = roundedAmount - wholeNumber;
+
   if (fraction === 0) {
-    return wholeNumber.toString(); // No fraction, return only the whole number
+    return wholeNumber.toString();
   } else if (fraction === 0.25) {
-    return wholeNumber ? `${wholeNumber} ¼` : 'A Quarter'; // Fraction is 1/4
+    return wholeNumber ? `${wholeNumber} ¼` : '¼';
   } else if (fraction === 0.5) {
-    return wholeNumber ? `${wholeNumber} ½` : 'Half an'; // Fraction is 1/2
+    return wholeNumber ? `${wholeNumber} ½` : '½';
   } else if (fraction === 0.75) {
-    return wholeNumber ? `${wholeNumber} ¾` : 'A Third'; // Fraction is 3/4
+    return wholeNumber ? `${wholeNumber} ¾` : '¾';
   } else {
-    return roundedAmount.toFixed(2); // Fraction is not 1/4, 1/2, or 3/4, return as decimal
+    return roundedAmount.toFixed(2);
   }
 };
 
