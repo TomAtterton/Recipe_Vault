@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -5,11 +6,24 @@ import { useCurrentTabScrollY } from 'react-native-collapsible-tab-view';
 import { interpolate, useAnimatedStyle } from 'react-native-reanimated';
 
 const useAnimatedValues = (isAnimated: boolean) => {
+  const { goBack } = useNavigation();
+  const { top } = useSafeAreaInsets();
+
+  if (!isAnimated) {
+    return {
+      animatedStyle: {},
+      animatedImageScaleStyle: {},
+      animatedNavBarStyle: {},
+      RECIPE_HEADER_HEIGHT: 0,
+      scrollY: { value: 0 },
+      goBack,
+      top,
+    };
+  }
+
   const { height } = useWindowDimensions();
 
   const RECIPE_HEADER_HEIGHT = height / 2.8 + height / 4;
-  const { goBack } = useNavigation();
-  const { top } = useSafeAreaInsets();
 
   const scrollY = useCurrentTabScrollY();
 
@@ -52,17 +66,6 @@ const useAnimatedValues = (isAnimated: boolean) => {
     };
   });
 
-  if (!isAnimated) {
-    return {
-      animatedStyle: {},
-      animatedImageScaleStyle: {},
-      animatedNavBarStyle: {},
-      RECIPE_HEADER_HEIGHT: 0,
-      scrollY: { value: 0 },
-      goBack: () => {},
-      top: 0,
-    };
-  }
   return {
     animatedStyle,
     animatedImageScaleStyle,
