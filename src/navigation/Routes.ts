@@ -9,7 +9,6 @@ export enum Routes {
   Onboarding = 'Onboarding',
   DatabaseSettings = 'DatabaseSettings',
   AccountSettings = 'AccountSettings',
-  DatabaseEditor = 'DatabaseEditor',
   AppSettings = 'AppSettings',
   SyncSettings = 'SyncSettings',
   AdvanceSyncSettings = 'AdvanceSyncSettings',

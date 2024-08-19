@@ -19,7 +19,6 @@ import SyncSettings from '@/screens/Settings/pages/SyncSettings';
 import AppSettings from '@/screens/Settings/pages/AppSettings';
 import Privacy from '@/screens/Privacy';
 import Help from '@/screens/Help';
-import DatabaseEditor from '@/screens/Settings/pages/DatabaseSettings/DatabaseEditor';
 import AdvanceSyncSettings from '@/screens/Settings/pages/AdvanceSyncSettings';
 import ProPlan from '@/screens/ProPlan';
 import { RecipeDetectionNavigator } from '@/navigation/recipeDetectionNavigator';
@@ -52,7 +51,6 @@ export const RootNavigator = () => {
       <Stack.Screen name={Routes.TabStack} component={TabNavigator} />
       <Stack.Screen name={Routes.RecipeDetailStack} component={RecipeDetailNavigator} />
       <Stack.Screen name={Routes.RecipeDetectionStack} component={RecipeDetectionNavigator} />
-      <Stack.Screen name={Routes.DatabaseEditor} component={DatabaseEditor} />
       <Stack.Screen name={Routes.AdvanceSyncSettings} component={AdvanceSyncSettings} />
 
       <Stack.Screen

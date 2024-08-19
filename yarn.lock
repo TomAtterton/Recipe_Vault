@@ -16463,17 +16463,6 @@ cloudinary-react-native@TomAtterton/cloudinary-react-native:
   languageName: node
   linkType: hard
 
-"react-native-fast-collapsible@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "react-native-fast-collapsible@npm:1.1.1"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-    react-native-reanimated: "*"
-  checksum: 2c9fd94e807d45d8d5be7d2a57ad85c1432d746fb30fbd0bb0cd821390aede1cec79a77ea53fc3765036c72fcdc354a8e34961a61edb628e6dc000f4a0b6d836
-  languageName: node
-  linkType: hard
-
 "react-native-fetch-api@npm:^3.0.0":
   version: 3.0.0
   resolution: "react-native-fetch-api@npm:3.0.0"
@@ -17157,7 +17146,6 @@ cloudinary-react-native@TomAtterton/cloudinary-react-native:
     react-native: ^0.75.0
     react-native-collapsible-tab-view: ^8.0.0
     react-native-confetti-cannon: ^1.5.2
-    react-native-fast-collapsible: ^1.1.1
     react-native-fetch-api: ^3.0.0
     react-native-gesture-handler: ^2.18.1
     react-native-get-random-values: ^1.11.0

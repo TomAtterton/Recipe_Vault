@@ -25,7 +25,6 @@ export type RootStackParamList = RecipeDetailStackParamList &
     [Routes.RecipeSettings]: undefined;
     [Routes.SyncSettings]: undefined;
     [Routes.AdvanceSyncSettings]: undefined;
-    [Routes.DatabaseEditor]: undefined;
     [Routes.CreateVault]: undefined;
     [Routes.JoinVault]: undefined;
     [Routes.ManageGroupUsers]: undefined;
