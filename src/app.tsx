@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 
 import * as SplashScreen from 'expo-splash-screen';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -21,7 +21,6 @@ import { initPurchases } from '@/services/purchase';
 import { FloatingInputProvider } from '@/providers/FloatingInputProvider';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from '@/utils/promptUtils';
-import { clearCache } from '@candlefinance/faster-image';
 import useHandleSession from '@/services/auth/hooks/useHandleSession';
 
 Sentry.init({
@@ -32,10 +31,6 @@ Sentry.init({
 
 const App = () => {
   initPurchases();
-
-  useEffect(() => {
-    clearCache();
-  }, []);
 
   useHandleSession();
 

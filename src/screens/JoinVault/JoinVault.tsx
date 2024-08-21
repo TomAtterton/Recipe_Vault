@@ -1,9 +1,8 @@
-import { View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { updateProfile } from '@/store';
 import { Routes } from '@/navigation/Routes';
 import { useNavigation } from '@react-navigation/native';
 import { showErrorMessage } from '@/utils/promptUtils';
-import Icon from '@/components/Icon';
 import Typography from '@/components/Typography';
 import React, { useState } from 'react';
 import { useStyles } from 'react-native-unistyles';
@@ -16,6 +15,7 @@ import { setupDatabase } from '@/utils/databaseUtils';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import useUserId from '@/hooks/common/useUserId';
 import { createProfileGroup } from '@/services/profileGroup';
+import ChefShare from '../../../assets/svgs/chef_share.svg';
 
 const JoinVault = () => {
   const userId = useUserId();
@@ -71,19 +71,24 @@ const JoinVault = () => {
   };
 
   useKeyboardForm();
+  const { height, width } = useWindowDimensions();
   return (
     <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Icon name={'share'} size={100} color={theme.colors.onBackground} />
-        <Typography variant={'titleLarge'} style={styles.title}>
-          {'Join Cloud Vault'}
-        </Typography>
-        <Typography style={styles.subtitle} variant={'bodyMediumItalic'}>
-          {
-            'Have a vault code? Enter it here to join a cloud vault and explore a world of recipes with up to two friends or family. If you don’t have one, consider creating your own vault!'
-          }
-        </Typography>
-      </View>
+      <ChefShare
+        height={height / 4}
+        width={width}
+        style={{
+          alignSelf: 'center',
+        }}
+      />
+      <Typography variant={'titleLarge'} style={styles.title}>
+        {'Join Cloud Vault'}
+      </Typography>
+      <Typography style={styles.subtitle} variant={'bodyMediumItalic'}>
+        {
+          'Have a vault code? Enter it here to join a cloud vault and explore a world of recipes with up to two friends or family. If you don’t have one, consider creating your own vault!'
+        }
+      </Typography>
       <FormInput
         value={groupId}
         onChange={handleTextChange}

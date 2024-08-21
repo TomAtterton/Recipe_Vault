@@ -33,7 +33,6 @@ export const syncPush = async () => {
       `SELECT * FROM ${tableName} WHERE is_modified IS NOT NULL AND is_modified = 1`
     );
 
-    console.log('records TABLE NAME', tableName, records);
     if (records && records.length > 0) {
       await handleUpdateRemoteTable(tableName, records);
     }

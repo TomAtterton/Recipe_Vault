@@ -7,12 +7,9 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     flex: 1,
     marginHorizontal: 20,
   },
-  titleContainer: {
-    alignItems: 'center',
-    gap: 20,
-  },
   title: {
     textAlign: 'center',
+    paddingVertical: 20,
   },
   subtitle: {
     textAlign: 'center',

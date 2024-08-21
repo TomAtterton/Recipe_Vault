@@ -66,11 +66,11 @@ const SyncSettings = () => {
               onPress={() => navigate(Routes.AdvanceSyncSettings)}
             />
 
-            <SettingsButton
-              title={'Manage Group Users'}
-              iconSource={'people'}
-              onPress={() => navigate(Routes.ManageGroupUsers)}
-            />
+            {/*<SettingsButton*/}
+            {/*  title={'Manage Group Users'}*/}
+            {/*  iconSource={'people'}*/}
+            {/*  onPress={() => navigate(Routes.ManageGroupUsers)}*/}
+            {/*/>*/}
           </>
         ) : (
           <SettingsButton

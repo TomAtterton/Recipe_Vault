@@ -1,9 +1,8 @@
-import { View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { updateProfile } from '@/store';
 import { Routes } from '@/navigation/Routes';
 import { useNavigation } from '@react-navigation/native';
 import { showErrorMessage } from '@/utils/promptUtils';
-import Icon from '@/components/Icon';
 import Typography from '@/components/Typography';
 import React, { useState } from 'react';
 import { useStyles } from 'react-native-unistyles';
@@ -15,6 +14,7 @@ import { setupDatabase } from '@/utils/databaseUtils';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import useUserId from '@/hooks/common/useUserId';
 import { onCreateGroup } from '@/services/group';
+import ChefMeals from '../../../assets/svgs/chef_meals.svg';
 
 const CreateVault = () => {
   const userId = useUserId();
@@ -73,23 +73,28 @@ const CreateVault = () => {
 
   useKeyboardForm();
 
+  const { height, width } = useWindowDimensions();
   return (
     <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Icon name={'cloud'} size={100} color={theme.colors.onBackground} />
-        <Typography variant={'titleLarge'} style={styles.title}>
-          {'Create Your Cloud Vault'}
-        </Typography>
-        <Typography style={styles.subtitle} variant={'bodyMediumItalic'}>
-          {
-            'Give your cloud vault a name. This is how it will appear to others when they join. Choose a name that’s easy to remember and reflects the essence of your culinary collection.'
-          }
-        </Typography>
-      </View>
+      <ChefMeals
+        height={height / 4}
+        width={width}
+        style={{
+          alignSelf: 'center',
+        }}
+      />
+      <Typography variant={'titleLarge'} style={styles.title}>
+        {'Create Your Cloud Vault'}
+      </Typography>
+      <Typography style={styles.subtitle} variant={'bodyMediumItalic'}>
+        {
+          'Give your cloud vault a name. This is how it will appear to others when they join. Choose a name that’s easy to remember and reflects the essence of your culinary collection.'
+        }
+      </Typography>
       <FormInput
         value={text}
         onChange={handleTextChange}
-        placeholder={'Name Your Vault'}
+        placeholder={'Enter vault name'}
         multiline={false}
         containerStyle={styles.input}
         maxLength={10}

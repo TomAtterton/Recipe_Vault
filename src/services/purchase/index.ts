@@ -39,6 +39,11 @@ export const initPurchases = async () => {
   }
 };
 
+export const getProPrice = async () => {
+  const products = await Purchases.getProducts(['recipevaultpropuchase']);
+  return products?.[0]?.priceString || '$19,99';
+};
+
 export const handleProPlanPurchase = async (onContactCustomerSupport: () => void) => {
   try {
     const products = await Purchases.getProducts(['recipevaultpropuchase']);

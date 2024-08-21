@@ -14,8 +14,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   backgroundColor: '#19120C',
 
   splash: {
-    image: './assets/splash.png',
-    resizeMode: 'contain',
+    image: './assets/splash.jpg',
+    resizeMode: 'cover',
     backgroundColor: '#19120C',
   },
   updates: {
@@ -41,7 +41,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       'expo-asset',
       {
-        assets: ['./assets/icon.png', './assets/splash.png'],
+        assets: ['./assets/icon.png', './assets/splash.jpg'],
       },
     ],
     './plugins/withPodfile',

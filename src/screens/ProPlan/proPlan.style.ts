@@ -1,16 +1,14 @@
 import { createStyleSheet } from 'react-native-unistyles';
 
-export const stylesheet = createStyleSheet((theme) => ({
+export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
     flex: 1,
+    paddingTop: miniRuntime.insets.top,
+    paddingBottom: miniRuntime.insets.bottom,
     marginHorizontal: 20,
   },
-  icon: {
-    alignSelf: 'center',
-    marginTop: 32,
-  },
   title: {
-    marginBottom: 16,
+    marginVertical: 16,
     textAlign: 'center',
   },
   subTitle: {
@@ -21,21 +19,31 @@ export const stylesheet = createStyleSheet((theme) => ({
   contentContainer: {
     flex: 1,
     gap: 16,
-    paddingTop: 20,
   },
   itemContainer: {
+    alignItems: 'center',
     flexDirection: 'row',
     gap: 16,
   },
-  itemText: {
-    flex: 1,
-  },
-  footerContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+  lifeTimePurchase: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     paddingBottom: 20,
   },
+  divider: {
+    width: 1,
+    backgroundColor: theme.colors.onBackground,
+    marginHorizontal: 8,
+  },
+  price: {
+    alignSelf: 'center',
+    color: theme.colors.primary,
+  },
+  itemText: {
+    flex: 1,
+    color: theme.colors.primary,
+  },
+  proButton: { marginBottom: 16 },
   footerText: {
     marginBottom: 16,
     color: theme.colors.primary,

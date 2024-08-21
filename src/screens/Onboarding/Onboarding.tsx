@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import {
-  SafeAreaView,
   ScrollView,
   View,
   NativeSyntheticEvent,
@@ -8,40 +7,40 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import Typography from '@/components/Typography';
-import Icon from '@/components/Icon';
 import LabelButton from '@/components/buttons/LabelButton';
 import CheckBox from '@/components/CheckBox';
 import { useStyles } from 'react-native-unistyles';
 
-import { IconName } from '@/components/Icon/types';
 import { stylesheet } from './onboarding.style';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
 import { setHasOnboarded, useBoundStore } from '@/store';
+import svgs from '@/theme/svgs';
+import { SvgProps } from 'react-native-svg';
 
 const onboardingData: {
-  icon: IconName;
+  Icon: React.FC<SvgProps>;
   title: string;
 }[] = [
   {
-    icon: 'safe',
+    Icon: svgs.ChefFire,
     title:
       'Welcome to recipe vault, where you can store all your favourite recipes locally and securely !',
   },
   {
-    icon: 'book-search',
+    Icon: svgs.ChefOk,
     title:
       'Dive into your personal library and explore! Easily search and filter your favourite recipes on your device!',
   },
   {
-    icon: 'list-check',
+    Icon: svgs.ChefShare,
     title:
       'Plan and shop with ease! Schedule meals for the week & add ingredients directly to your shopping list.',
   },
   {
-    icon: 'paper-plane',
+    Icon: svgs.ChefCut,
     title:
-      'Share your recipes and meal plans with up to 2 friends using our syncing feature and shared cloud vault.\n\nLimited to 5 recipes; upgrade to a pro vault to unlock unlimited storage!\n',
+      'Share your recipes and meal plans with up to 2 friends using our syncing feature and shared cloud vault.',
   },
 ];
 
@@ -69,13 +68,13 @@ const Onboarding = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView
         ref={scrollViewRef}
         horizontal={true}
         pagingEnabled={true}
         onScroll={handleScroll}
-        scrollEventThrottle={16} // Handle scroll event at every 16ms for smoother tracking
+        scrollEventThrottle={16}
         showsHorizontalScrollIndicator={false}
         style={styles.scrollView}
         contentContainerStyle={{ width: width * onboardingData.length }}
@@ -115,7 +114,6 @@ const Onboarding = () => {
               });
               return;
             }
-            /* Handle skip action */
             scrollViewRef.current?.scrollTo({
               x: width * (currentPage + 1),
               animated: true,
@@ -123,17 +121,17 @@ const Onboarding = () => {
           }}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
-const OnboardingView = ({ icon, title }: { icon: IconName; title: string }) => {
-  const { theme, styles } = useStyles(stylesheet);
-
+const OnboardingView = ({ Icon, title }: { Icon: React.FC<SvgProps>; title: string }) => {
+  const { styles } = useStyles(stylesheet);
+  const { height, width } = useWindowDimensions();
   return (
     <View style={styles.onboardingView}>
       <View style={styles.imageContainer}>
-        <Icon name={icon} size={120} color={theme.colors.onBackground} />
+        <Icon height={height / 3} width={width - 40} />
       </View>
       <Typography variant={'titleMedium'} style={styles.onboardingTitle}>
         {title}

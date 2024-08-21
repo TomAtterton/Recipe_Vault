@@ -8,13 +8,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useBoundStore } from '@/store';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './splashscreen.style';
-import Typography from '@/components/Typography';
 import { onOpenDatabase } from '@/database';
-import { Routes } from '@/navigation/Routes';
 import { Image } from 'expo-image';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import images from '@/theme/images';
 import { showErrorMessage } from '@/utils/promptUtils';
+import Typography from '@/components/Typography';
+import expoConstants from 'expo-constants';
+import images from '@/theme/images';
+import { Routes } from '@/navigation/Routes';
 
 const Splashscreen = () => {
   const hasHydrated = useHydration();
@@ -53,26 +53,18 @@ const Splashscreen = () => {
   }, [hideSplash, hasHydrated, reset, isAuthenticated, hasOnboarded, currentDatabaseName]);
 
   const { styles, theme } = useStyles(stylesheet);
-  const { bottom } = useSafeAreaInsets();
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={images.SPLASH_IMAGE} contentFit={'contain'} />
-      <View
-        style={[
-          styles.bottomContent,
-          {
-            paddingBottom: bottom,
-          },
-        ]}
-      >
-        <Typography style={styles.title} variant={'displayMedium'}>
-          Recipe Vault
-        </Typography>
+      <Image style={styles.image} source={images.SPLASHSCREEN} contentFit={'cover'} />
+      <View style={styles.bottomContent}>
         <ActivityIndicator
           style={styles.activityIndicator}
-          size={'large'}
+          size={'small'}
           color={theme.colors.primary}
         />
+        <Typography
+          variant={'titleSmall'}
+        >{`version ${expoConstants.expoConfig?.version}`}</Typography>
       </View>
     </View>
   );

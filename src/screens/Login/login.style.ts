@@ -5,7 +5,7 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     flex: 1,
     paddingTop: miniRuntime.insets.top + 40,
     paddingBottom: miniRuntime.insets.bottom,
-    marginHorizontal: 20,
+    paddingHorizontal: 20,
   },
   blur: {
     position: 'absolute',
@@ -16,17 +16,16 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   titleContainer: {
     flex: 1,
     alignItems: 'center',
-    gap: 20,
   },
   title: {
     textAlign: 'center',
-  },
-  subtitle: {
-    textAlign: 'center',
+    paddingVertical: 20,
   },
   featureContainer: {
-    gap: 20,
+    flex: 1,
+    gap: 12,
     paddingHorizontal: 20,
+    justifyContent: 'center',
   },
   rowContainer: {
     flexDirection: 'row',
@@ -35,10 +34,9 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     paddingLeft: 8,
     color: theme.colors.primary,
   },
-  proPlanTitle: {
-    paddingBottom: 8,
-    color: theme.colors.primary,
-    textAlign: 'center',
+  infoButton: {
+    position: 'absolute',
+    right: -10,
   },
   loginButtonContainer: {
     flex: 1,
@@ -51,14 +49,31 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     color: theme.colors.primary,
     paddingBottom: 20,
   },
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  divider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: theme.colors.onBackground,
+  },
+  dividerText: {
+    paddingHorizontal: 10,
+  },
   loginButton: {
-    width: miniRuntime.screen.width / 1.5,
+    backgroundColor: 'white',
     height: 50,
+    width: 50,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   backButton: {
     position: 'absolute',
     top: miniRuntime.insets.top,
-    left: 8,
+    left: 0,
   },
 
   image: {
@@ -74,5 +89,21 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: theme.colors.background40,
+  },
+  proPlanTitle: {
+    color: theme.colors.onBackground,
+    textAlign: 'center',
+    paddingBottom: 20,
+    paddingTop: 8,
+  },
+  proContentContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  proPlanDescription: {
+    color: theme.colors.onBackground80,
+    textAlign: 'center',
+    paddingBottom: 16,
+    paddingHorizontal: 20,
   },
 }));
