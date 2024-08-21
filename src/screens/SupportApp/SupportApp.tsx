@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, TouchableOpacity, ActivityIndicator, useWindowDimensions } from 'react-native';
 import {
   fetchProducts,
   PurchaseCancelError,
@@ -8,17 +8,19 @@ import {
 } from '@/services/purchase';
 import { useStyles } from 'react-native-unistyles';
 import Typography from '@/components/Typography';
-import { Image } from 'expo-image';
 import { stylesheet } from './supportApp.style';
-import images from '@/theme/images';
 import { translate } from '@/core';
 import { showErrorMessage } from '@/utils/promptUtils';
+import ChefOk from '../../../assets/svgs/chef_fire.svg';
+import ConfettiCannon from 'react-native-confetti-cannon';
+import { useNavigation } from '@react-navigation/native';
 
 const SupportApp = () => {
   const { styles } = useStyles(stylesheet);
   const [products, setProducts] = useState<PurchaseProduct[]>([]);
   const [hasMadePurchase, setHasMadePurchase] = useState(false); // New state to track if a purchase has been made
   const [isLoading, setIsLoading] = useState(false);
+  const confettiRef = useRef<ConfettiCannon>(null);
 
   useEffect(() => {
     fetchProducts().then((purchaseProducts) => {
@@ -31,6 +33,7 @@ const SupportApp = () => {
     try {
       setIsLoading(true);
       await purchaseProduct(option.product);
+      confettiRef?.current?.start();
       setHasMadePurchase(true); // Set purchaseMade to true after a successful purchase
     } catch (error) {
       // @ts-ignore
@@ -42,14 +45,23 @@ const SupportApp = () => {
       setIsLoading(false);
     }
   };
+  const { goBack } = useNavigation();
+  const { height, width } = useWindowDimensions();
 
   const renderContent = () => {
     if (isLoading) {
       return <ActivityIndicator />;
     }
-
     if (hasMadePurchase) {
-      return <Image style={styles.thankYouGif} source={{ uri: images.THANK_YOU_GIF_URL }} />;
+      return (
+        <ChefOk
+          width={height / 3}
+          height={width}
+          style={{
+            alignSelf: 'center',
+          }}
+        />
+      );
     } else if (products.length > 0) {
       return products.map((option) => (
         <TouchableOpacity
@@ -79,7 +91,21 @@ const SupportApp = () => {
       <Typography variant={'titleMedium'} style={styles.title}>
         {hasMadePurchase ? 'Thank you for your support!' : 'Support the app'}
       </Typography>
+
       {renderContent()}
+      <ConfettiCannon
+        ref={confettiRef}
+        count={100}
+        origin={{ x: -50, y: 10 }}
+        fadeOut={true}
+        autoStart={false}
+        onAnimationEnd={() => {
+          confettiRef.current?.stop();
+          setTimeout(() => {
+            setHasMadePurchase(false);
+          }, 1000);
+        }}
+      />
     </View>
   );
 };
