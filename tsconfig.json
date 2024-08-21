@@ -12,12 +12,9 @@
     "types": []
   },
   "exclude": [
+    "node_modules/cloudinary-react-native/*",
     "supabase",
-    "node_modules",
     "./shared/**",
-    "./node_modules",
-    "./node_modules/*",
-    "./node_modules/@types/node/index.d.ts",
     "babel.config.js",
     "metro.config.js",
     "docs",

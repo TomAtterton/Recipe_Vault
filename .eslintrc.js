@@ -1,9 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  // Configuration for JavaScript files
   extends: ['@react-native-community', 'plugin:prettier/recommended'],
+  plugins: ['@typescript-eslint', 'unused-imports'],
   rules: {
+    // Define Prettier rules once
     'prettier/prettier': [
       'error',
       {
@@ -17,64 +18,51 @@ module.exports = {
         arrowParens: 'always',
       },
     ],
+    // Unused imports rule for all JavaScript/TypeScript files
+    'unused-imports/no-unused-imports': 'error',
+    'unused-imports/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      },
+    ],
   },
   overrides: [
-    // Configuration for TypeScript files
+    // Specific rules for TypeScript files
     {
-      files: ['**/*.ts', '**/*.tsx', '**/*.js'],
-      plugins: ['@typescript-eslint', 'unused-imports'],
-      extends: ['@react-native-community', 'plugin:prettier/recommended'],
+      files: ['**/*.ts', '**/*.tsx'],
       parserOptions: {
         project: './tsconfig.json',
       },
       rules: {
-        'prettier/prettier': [
-          'error',
-          {
-            semi: true,
-            useTabs: false,
-            tabWidth: 2,
-            bracketSpacing: true,
-            jsxBracketSameLine: false,
-            printWidth: 100,
-            singleQuote: true,
-            arrowParens: 'always',
-          },
-        ],
-        'react/require-default-props': 'off', // Allow non-defined react props as undefined
         '@typescript-eslint/comma-dangle': 'off', // Avoid conflict rule between Eslint and Prettier
-        'unused-imports/no-unused-imports': 'error',
-        'unused-imports/no-unused-vars': [
-          'error',
-          {
-            argsIgnorePattern: '^_',
-            varsIgnorePattern: '^_',
-            caughtErrorsIgnorePattern: '^_',
-          },
-        ],
+        'react/require-default-props': 'off', // Allow non-defined react props as undefined
       },
     },
-    // Configuration for  translations files (i18next)
+    // Specific rules for translations JSON files
     {
       files: ['src/translations/*.json'],
       extends: ['plugin:i18n-json/recommended'],
       rules: {
-        'i18n-json/valid-json': 2,
+        'i18n-json/valid-json': 'error',
         'i18n-json/sorted-keys': [
-          2,
+          'error',
           {
             order: 'asc',
             indentSpaces: 2,
           },
         ],
         'i18n-json/identical-keys': [
-          2,
+          'error',
           {
             filePath: path.resolve('./src/translations/en.json'),
           },
         ],
+        // Override prettier for JSON formatting
         'prettier/prettier': [
-          0,
+          'error',
           {
             singleQuote: true,
             endOfLine: 'auto',

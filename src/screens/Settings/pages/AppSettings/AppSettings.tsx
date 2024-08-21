@@ -16,7 +16,7 @@ const AppSettings = () => {
 
   const navigation = useNavigation();
   const handleShowOnboarding = () => navigation.navigate(Routes.Onboarding);
-
+  const handleShowCredits = () => navigation.navigate(Routes.Credits);
   return (
     <SafeAreaView style={styles.container}>
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
@@ -32,6 +32,7 @@ const AppSettings = () => {
           onPress={handleShowOnboarding}
           iconSource={'hand'}
         />
+        <SettingsButton title={'Credits'} onPress={handleShowCredits} iconSource={'info-border'} />
       </View>
     </SafeAreaView>
   );

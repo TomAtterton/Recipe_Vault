@@ -6947,8 +6947,8 @@ __metadata:
   linkType: hard
 
 cloudinary-react-native@TomAtterton/cloudinary-react-native:
-  version: 1.0.2
-  resolution: "cloudinary-react-native@https://github.com/TomAtterton/cloudinary-react-native.git#commit=e899e4e110f3a8ffa96abbed8706f476f4b93c2d"
+  version: 1.0.3
+  resolution: "cloudinary-react-native@https://github.com/TomAtterton/cloudinary-react-native.git#commit=1bfca62d237e0342d63cb0248f215a42063d1d44"
   dependencies:
     "@cloudinary/url-gen": ^1.10.0
     "@expo/webpack-config": ^18.0.1
@@ -6986,7 +6986,7 @@ cloudinary-react-native@TomAtterton/cloudinary-react-native:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 95886498639400d82587f98ce5bddda5d1f20fbb2411c6719c7b6b6624818641fef76f013aef4f9d561d334bcab3239a110a337a28381468388a066239eddc4b
+  checksum: 9a987ecf993b765457783f0bbacedfe561ae2bf18f76c9f100099d916bb670872bf949eeb8d67e85102437b23ddbfbae1a63d602591baf2bb1e70114604d1f34
   languageName: node
   linkType: hard
 
@@ -8372,9 +8372,9 @@ cloudinary-react-native@TomAtterton/cloudinary-react-native:
   linkType: hard
 
 "electron-to-chromium@npm:^1.5.4":
-  version: 1.5.8
-  resolution: "electron-to-chromium@npm:1.5.8"
-  checksum: b9200c76fdeb4fc47deb3ea08e2eee65fa86dcc69ce4c78b0ff944b78ecca5635e39e68a2c0bbea40c2fac2893dd73e06ff9fb8df07fd33ea16432cd2dc5d05b
+  version: 1.5.13
+  resolution: "electron-to-chromium@npm:1.5.13"
+  checksum: f18ac84dd3bf9a200654a6a9292b9ec4bced0cf9bd26cec9941b775f4470c581c9d043e70b37a124d9752dcc0f47fc96613d52b2defd8e59632852730cb418b9
   languageName: node
   linkType: hard
 
@@ -14293,14 +14293,14 @@ cloudinary-react-native@TomAtterton/cloudinary-react-native:
   linkType: hard
 
 "mini-css-extract-plugin@npm:^2.5.2":
-  version: 2.9.0
-  resolution: "mini-css-extract-plugin@npm:2.9.0"
+  version: 2.9.1
+  resolution: "mini-css-extract-plugin@npm:2.9.1"
   dependencies:
     schema-utils: ^4.0.0
     tapable: ^2.2.1
   peerDependencies:
     webpack: ^5.0.0
-  checksum: ae192c67ba85ac8bffeab66774635bf90181f00d5dd6cf95412426192599ddf5506fb4b1550acbd7a5476476e39db53c770dd40f8378f7baf5de96e3fec4e6e9
+  checksum: 036b0fbb207cf9a56e2f5f5dce5e35100cbd255e5b5a920a5357ec99215af16a77136020729b2d004a041d04ebb0a544b2f442535cbb982704dcd50297014c9e
   languageName: node
   linkType: hard
 

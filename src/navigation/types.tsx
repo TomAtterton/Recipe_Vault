@@ -16,6 +16,7 @@ export type RootStackParamList = RecipeDetailStackParamList &
     };
     [Routes.ProPlan]: undefined;
     [Routes.ImageDetection]: undefined;
+    [Routes.Credits]: undefined;
     [Routes.Privacy]: undefined;
     [Routes.Help]: undefined;
     [Routes.Onboarding]: undefined;

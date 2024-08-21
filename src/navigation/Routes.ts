@@ -31,4 +31,5 @@ export enum Routes {
   ImageDetection = 'ImageDetection',
   CreateVault = 'CreateVault',
   JoinVault = 'JoinVault',
+  Credits = 'Credits',
 }
