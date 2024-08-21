@@ -121,7 +121,7 @@ const useHandleSwitchDatabase = () => {
       ]
     );
   };
-  return { handleSwitchDatabase, groups };
+  return { handleSwitchDatabase, availableGroups: groups };
 };
 
 export default useHandleSwitchDatabase;

@@ -10,12 +10,25 @@ export const stylesheet = createStyleSheet((theme) => ({
     alignSelf: 'flex-start',
   },
   vaultsContainer: {
-    paddingTop: 8,
-    flex: 0.5,
-    gap: 8,
+    flex: 1,
+    gap: 16,
   },
-  vaultsScrollView: { flex: 1 },
-  vaultsScrollViewContent: { flexGrow: 1 },
+
+  vaultTitle: {
+    color: theme.colors.primary,
+  },
+  vaultItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 12,
+    borderColor: theme.colors.onBackground,
+    borderWidth: 1,
+    borderRadius: 8,
+  },
+  addVaultButton: {
+    marginBottom: 20,
+  },
   bottomSheetContainer: {
     flex: 1,
     gap: 16,
@@ -26,8 +39,7 @@ export const stylesheet = createStyleSheet((theme) => ({
     color: theme.colors.primary,
   },
   dangerZoneContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    paddingTop: 20,
     gap: 16,
     paddingBottom: 20,
   },

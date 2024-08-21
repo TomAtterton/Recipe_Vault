@@ -29,6 +29,7 @@ import AccountSettings from '@/screens/Settings/pages/AccountSettings';
 import ManageGroupUsers from '@/screens/Settings/pages/ManageGroupUsers';
 import WelcomeOnboarding from '@/screens/WelcomeOnboarding';
 import Credits from '@/screens/Credits';
+import AdvanceDatabaseSettings from '@/screens/Settings/pages/DatabaseSettings/AdvanceDatabaseSettings';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,11 @@ export const RootNavigator = () => {
       <Stack.Screen name={Routes.Splashscreen} component={Splashscreen} options={defaultOptions} />
       <Stack.Screen name={Routes.Onboarding} component={Onboarding} options={defaultOptions} />
       <Stack.Screen name={Routes.Credits} component={Credits} options={defaultOptions} />
+      <Stack.Screen
+        name={Routes.AdvanceVaultSettings}
+        component={AdvanceDatabaseSettings}
+        options={defaultOptions}
+      />
       <Stack.Screen name={Routes.Login} component={Login} options={defaultOptions} />
       <Stack.Screen name={Routes.Profile} component={Profile} options={defaultOptions} />
       <Stack.Screen

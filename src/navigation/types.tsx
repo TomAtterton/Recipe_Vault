@@ -19,6 +19,7 @@ export type RootStackParamList = RecipeDetailStackParamList &
     [Routes.Credits]: undefined;
     [Routes.Privacy]: undefined;
     [Routes.Help]: undefined;
+    [Routes.AdvanceVaultSettings]: undefined;
     [Routes.Onboarding]: undefined;
     [Routes.DatabaseSettings]: undefined;
     [Routes.AccountSettings]: undefined;

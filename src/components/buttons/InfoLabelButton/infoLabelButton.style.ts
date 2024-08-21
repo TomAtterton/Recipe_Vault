@@ -13,7 +13,7 @@ export const stylesheet = createStyleSheet((theme) => ({
     color: theme.colors.typography,
   },
   rightContent: {
-    flex: 1,
+    flex: 0.8,
     gap: 8,
     flexDirection: 'row',
     justifyContent: 'flex-end',
