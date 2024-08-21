@@ -22,6 +22,8 @@ import { FloatingInputProvider } from '@/providers/FloatingInputProvider';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from '@/utils/promptUtils';
 import useHandleSession from '@/services/auth/hooks/useHandleSession';
+import { ErrorBoundary } from '@sentry/react-native';
+import ErrorScreen from '@/screens/ErrorScreen';
 
 Sentry.init({
   dsn: Env.SENTRY_DSN,
@@ -38,12 +40,19 @@ const App = () => {
     <GestureHandlerRootView style={styles.container}>
       <SafeAreaProvider>
         <NavigationContainer theme={darkNavigationTheme}>
-          <UpdateProvider>
-            <FloatingInputProvider>
-              <RootNavigator />
-            </FloatingInputProvider>
-          </UpdateProvider>
-          <Toast config={toastConfig} />
+          <ErrorBoundary
+            fallback={({ error, resetError }) => (
+              <ErrorScreen error={error} resetError={resetError} />
+            )}
+            showDialog={true}
+          >
+            <UpdateProvider>
+              <FloatingInputProvider>
+                <RootNavigator />
+              </FloatingInputProvider>
+            </UpdateProvider>
+            <Toast config={toastConfig} />
+          </ErrorBoundary>
         </NavigationContainer>
       </SafeAreaProvider>
     </GestureHandlerRootView>
