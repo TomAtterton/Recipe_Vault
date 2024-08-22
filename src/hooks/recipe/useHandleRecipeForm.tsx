@@ -130,6 +130,7 @@ const useHandleRecipeForm = ({
             style: 'destructive',
             onPress: () => {
               setIsDirty(false);
+              goBack();
             },
           },
         ]

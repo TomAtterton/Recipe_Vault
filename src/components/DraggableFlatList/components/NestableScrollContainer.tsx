@@ -3,7 +3,7 @@ import { LayoutChangeEvent, ScrollViewProps } from 'react-native';
 import Animated, {
   useAnimatedScrollHandler,
   AnimatedRef,
-  useDerivedValue,
+  useAnimatedProps,
 } from 'react-native-reanimated';
 import {
   NestableScrollContainerProvider,
@@ -11,7 +11,7 @@ import {
 } from '../context/nestableScrollContainerContext';
 import { useStableCallback } from '../hooks/useStableCallback';
 
-function NestableScrollContainerInner(props: ScrollViewProps) {
+const NestableScrollContainerInner = (props: ScrollViewProps) => {
   const { scrollOffsetY, scrollableRef, outerScrollEnabled, containerSize, scrollViewSize } =
     useSafeNestableScrollContainerContext();
 
@@ -31,12 +31,11 @@ function NestableScrollContainerInner(props: ScrollViewProps) {
     props.onContentSizeChange?.(w, h);
   });
 
-  const isScrollEnabled = useDerivedValue(() => {
-    if (outerScrollEnabled.value === undefined) {
-      return true;
-    }
-    return outerScrollEnabled.value;
-  }, [outerScrollEnabled]);
+  const animatedProps = useAnimatedProps(() => {
+    return {
+      scrollEnabled: outerScrollEnabled.value,
+    };
+  });
 
   return (
     <Animated.ScrollView
@@ -45,20 +44,18 @@ function NestableScrollContainerInner(props: ScrollViewProps) {
       onLayout={onLayout}
       onScroll={handleContentScroll}
       onContentSizeChange={onContentSizeChange}
-      scrollEnabled={isScrollEnabled}
+      animatedProps={animatedProps}
       scrollEventThrottle={16}
     />
   );
-}
+};
 
 export const NestableScrollContainer = React.forwardRef(
-  (props: ScrollViewProps, forwardedRef?: React.ForwardedRef<Animated.ScrollView>) => {
-    return (
-      <NestableScrollContainerProvider
-        forwardedRef={forwardedRef as AnimatedRef<Animated.ScrollView>}
-      >
-        <NestableScrollContainerInner {...props} />
-      </NestableScrollContainerProvider>
-    );
-  }
+  (props: ScrollViewProps, forwardedRef?: React.ForwardedRef<Animated.ScrollView>) => (
+    <NestableScrollContainerProvider
+      forwardedRef={forwardedRef as AnimatedRef<Animated.ScrollView>}
+    >
+      <NestableScrollContainerInner {...props} />
+    </NestableScrollContainerProvider>
+  )
 );

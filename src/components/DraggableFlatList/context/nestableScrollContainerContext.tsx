@@ -1,7 +1,20 @@
 import React, { useContext } from 'react';
-import Animated, { useAnimatedRef, useSharedValue, AnimatedRef } from 'react-native-reanimated';
+import Animated, {
+  useAnimatedRef,
+  useSharedValue,
+  AnimatedRef,
+  SharedValue,
+} from 'react-native-reanimated';
 
-type NestableScrollContainerContextVal = ReturnType<any>;
+type NestableScrollContainerContextVal = {
+  outerScrollEnabled: SharedValue<boolean>;
+  scrollableRef: AnimatedRef<Animated.ScrollView>;
+  scrollViewSize: SharedValue<number>;
+  containerSize: SharedValue<number>;
+  scrollOffsetY: SharedValue<number>;
+  listVerticalOffset: SharedValue<number>;
+};
+
 const NestableScrollContainerContext = React.createContext<
   NestableScrollContainerContextVal | undefined
 >(undefined);
@@ -37,8 +50,7 @@ export function NestableScrollContainerProvider({
 }
 
 export function useNestableScrollContainerContext() {
-  const value = useContext(NestableScrollContainerContext);
-  return value;
+  return useContext(NestableScrollContainerContext);
 }
 
 export function useSafeNestableScrollContainerContext() {

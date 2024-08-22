@@ -7,7 +7,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
 import { RouteProp } from '@/navigation/types';
 
-import styles from './scanImageContent.style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ImageZoom } from 'src/components/ImageZoom';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -21,6 +20,7 @@ import PrimaryButton from '@/components/buttons/PrimaryButton';
 import IconButton from '@/components/buttons/IconButton';
 import { useKeyboardForm } from '@/hooks/common/useKeyboardForm';
 import { translate } from '@/core';
+import { stylesheet } from './scanImageContent.style';
 
 const ScanImageContainer = () => {
   const {
@@ -29,14 +29,12 @@ const ScanImageContainer = () => {
   const [value, setValue] = useState<string>(currentValue);
   const [showFullScreen, setShowFullScreen] = useState(false);
 
+  const { styles } = useStyles(stylesheet);
+
   const { height } = useWindowDimensions();
 
   const translateY = useSharedValue(height * 2);
-  const { top, bottom } = useSafeAreaInsets();
-
-  const {
-    theme: { colors },
-  } = useStyles();
+  const { top } = useSafeAreaInsets();
 
   const { handleSave } = useHandleForm({ id, formId, isEditing, value });
 
@@ -85,15 +83,7 @@ const ScanImageContainer = () => {
 
   return (
     <>
-      <View
-        style={[
-          styles.container,
-          {
-            paddingTop: top,
-            paddingBottom: bottom,
-          },
-        ]}
-      >
+      <View style={styles.container}>
         <LiveImagePicker onFullScreen={() => setShowFullScreen(true)} />
         <FormInput
           value={value}
@@ -101,39 +91,15 @@ const ScanImageContainer = () => {
           onChange={handleChangeText}
           multiline
           scrollEnabled={true}
-          containerStyle={{
-            flex: 1,
-          }}
+          containerStyle={styles.input}
         />
-        <PrimaryButton
-          style={{
-            marginTop: 20,
-          }}
-          onPress={handleSave}
-          title={'Save'}
-        />
+        <PrimaryButton style={styles.saveButton} onPress={handleSave} title={'Save'} />
         <LabelButton onPress={navigation.goBack} title={translate('default.cancel')} />
       </View>
-      <Animated.View
-        style={[
-          {
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            top: 0,
-            backgroundColor: colors.background,
-          },
-          animatedStyles,
-        ]}
-      >
+      <Animated.View style={[styles.imageZoomContainer, animatedStyles]}>
         {!!image && <ImageZoom uri={image} minScale={1} maxScale={2} />}
         <IconButton
-          style={{
-            position: 'absolute',
-            right: 0,
-            top: top + 20,
-          }}
+          style={styles.close}
           iconSource={'close'}
           onPress={() => setShowFullScreen(false)}
         />

@@ -13,7 +13,7 @@ const ErrorScreen = ({ error, resetError }: { error: Error; resetError: () => vo
     <View style={styles.container}>
       <ChefFire />
       <Typography variant={'titleMedium'}>{'Something went wrong'}</Typography>
-      <Typography variant={'bodyMediumItalic'}>{error.message}</Typography>
+      <Typography variant={'bodyMediumItalic'}>{`Error: ${error.message}`}</Typography>
       <PrimaryButton title={'Reload'} onPress={resetError} />
       <LabelButton title={'Report'} onPress={() => openURL('mailto:hello@tomatterton.com')} />
     </View>

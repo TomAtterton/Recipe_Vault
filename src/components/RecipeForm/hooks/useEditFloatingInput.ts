@@ -13,7 +13,7 @@ const useEditFloatingInput = () => {
     ) => {
       showInput &&
         showInput({
-          placeholder: 'Edit',
+          placeholder: 'Enter text here... ',
           initialValue: value,
           multiline: true,
           onSubmit: (title) => {
