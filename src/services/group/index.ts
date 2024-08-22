@@ -52,3 +52,15 @@ export const onGetGroupName = async ({ groupId }: { groupId: string }) => {
     return {};
   }
 };
+
+export const onDeleteGroup = async ({ groupId }: { groupId: string }) => {
+  try {
+    const { error: groupError } = await supabase.from('groups').delete().eq('id', groupId);
+
+    if (groupError) {
+      throw new Error('Error deleting group');
+    }
+  } catch (e) {
+    throw e;
+  }
+};

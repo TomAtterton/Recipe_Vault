@@ -24,7 +24,6 @@ const initialProfileState = {
   session: null,
   profile: {
     id: Env.TEST_USER_ID,
-    cloudId: '',
     name: '',
     email: '',
     avatarId: '',

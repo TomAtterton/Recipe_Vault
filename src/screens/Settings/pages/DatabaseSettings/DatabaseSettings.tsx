@@ -24,7 +24,7 @@ const DatabaseSettingsScreen = () => {
   const createJoinBottomSheetRef = useRef<BottomSheetRef>(null);
   const manageVaultBottomSheetRef = useRef<BottomSheetRef>(null);
 
-  const groupId = useBoundStore((state) => state.profile.groupId);
+  const currentGroupId = useBoundStore((state) => state.profile.groupId);
   const databaseName = useBoundStore((state) => state.currentDatabaseName);
   const { handleSwitchDatabase, availableGroups } = useHandleSwitchDatabase();
 
@@ -48,21 +48,22 @@ const DatabaseSettingsScreen = () => {
     }
   };
 
-  const isLocalVault = groupId === Env.TEST_GROUP_ID;
+  const isLocalVault = currentGroupId === Env.TEST_GROUP_ID;
 
   return (
     <SafeAreaView style={styles.container}>
       <NavBarButton style={styles.backButton} iconSource="arrow-left" onPress={goBack} />
       <View style={styles.container}>
-        <Typography variant="titleLarge">Vault Settings</Typography>
+        <Typography variant="titleLarge">Vault Settings.</Typography>
         <InfoLabelButton title="Current Vault:" buttonTitle={databaseName} />
         <InfoLabelButton title="Synced to Cloud:" buttonTitle={isLocalVault ? 'false' : 'true'} />
-        <LabelButton
-          style={styles.addVaultButton}
-          title="+ Create or Join a Vault"
-          onPress={handleCreateOrJoinVault}
-        />
-
+        {availableGroups && availableGroups.length < 3 && (
+          <LabelButton
+            style={styles.addVaultButton}
+            title="+ Create or Join a Vault"
+            onPress={handleCreateOrJoinVault}
+          />
+        )}
         <View style={styles.vaultsContainer}>
           <SettingsButton
             title="Switch Vault"
@@ -75,7 +76,7 @@ const DatabaseSettingsScreen = () => {
               onPress={async () => {
                 await Share.share({
                   title: 'Share database code with a friend',
-                  message: groupId || '',
+                  message: currentGroupId || '',
                 });
               }}
               iconSource="paper-plane"
@@ -98,7 +99,6 @@ const DatabaseSettingsScreen = () => {
           <SettingsButton iconSource="cloud" title="Join a Vault" onPress={navigateToJoinVault} />
         </View>
       </BottomSheet>
-
       <BottomSheet
         bottomSheetRef={manageVaultBottomSheetRef}
         title="Switch Vault"
@@ -109,19 +109,24 @@ const DatabaseSettingsScreen = () => {
             Cloud Vaults
           </Typography>
           {availableGroups.length > 0
-            ? availableGroups.map((group) => (
-                <TouchableOpacity
-                  key={group.id}
-                  style={styles.vaultItem}
-                  onPress={async () => {
-                    await handleSwitchDatabase(group.id);
-                    manageVaultBottomSheetRef.current?.dismiss();
-                  }}
-                >
-                  <Icon name="cloud" size={18} color="white" />
-                  <Typography>{group.name}</Typography>
-                </TouchableOpacity>
-              ))
+            ? availableGroups.map((group) => {
+                if (group.id === currentGroupId) {
+                  return null;
+                }
+                return (
+                  <TouchableOpacity
+                    key={group.id}
+                    style={styles.vaultItem}
+                    onPress={async () => {
+                      await handleSwitchDatabase(group.id);
+                      manageVaultBottomSheetRef.current?.dismiss();
+                    }}
+                  >
+                    <Icon name="cloud" size={18} color="white" />
+                    <Typography>{group.name}</Typography>
+                  </TouchableOpacity>
+                );
+              })
             : null}
           <Typography variant="titleMedium" style={styles.vaultTitle}>
             Local Vault

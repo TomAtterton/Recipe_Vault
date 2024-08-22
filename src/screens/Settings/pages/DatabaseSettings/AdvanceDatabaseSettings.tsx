@@ -10,6 +10,9 @@ import SettingsButton from '@/components/buttons/SettingsButton';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import * as React from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { onDeleteGroup } from '@/services/group';
+import { setResetDatabase, updateProfile, useBoundStore } from '@/store';
+import { Env } from '@/core/env';
 
 const AdvanceDatabaseSettings = () => {
   const handleResetDatabase = async () => {
@@ -67,8 +70,55 @@ const AdvanceDatabaseSettings = () => {
       showErrorMessage(translate('prompt.clear_database.error_message'));
     }
   };
+  const currentGroupId = useBoundStore((state) => state.profile.groupId);
+  const currentDatabaseName = useBoundStore((state) => state.currentDatabaseName);
+
+  const handleDeleteCloudVault = async () => {
+    try {
+      Alert.alert(
+        translate(`Delete Cloud Vault: ${currentDatabaseName}`),
+        translate(
+          '\nAre you sure you want to delete your cloud data?\n\n You cannot reverse this! Any Purchases made will be lost.'
+        ),
+        [
+          {
+            text: translate('default.cancel'),
+            style: 'cancel',
+          },
+          {
+            text: translate('default.ok'),
+            onPress: async () => {
+              if (database?.databaseName) {
+                await onDeleteGroup({ groupId: currentGroupId });
+                await database.closeAsync();
+                await deleteDatabaseAsync(database?.databaseName);
+
+                updateProfile({
+                  groupId: Env.TEST_GROUP_ID,
+                  groupName: Env.SQLITE_DB_NAME,
+                  groupRole: 'read_write',
+                });
+                setResetDatabase();
+                await onOpenDatabase({
+                  currentDatabaseName: Env.SQLITE_DB_NAME,
+                  shouldClose: false,
+                });
+
+                showSuccessMessage('Cloud vault deleted successfully');
+              }
+            },
+          },
+        ]
+      );
+    } catch (error) {
+      console.log('error', error);
+      showErrorMessage('Error deleting cloud vault');
+    }
+  };
+
   const { styles } = useStyles(stylesheet);
   const { goBack } = useNavigation();
+
   return (
     <SafeAreaView style={styles.container}>
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
@@ -91,6 +141,13 @@ const AdvanceDatabaseSettings = () => {
             onPress={handleResetDatabase}
             iconSource={'bin'}
           />
+          {currentGroupId !== Env.TEST_GROUP_ID && (
+            <SettingsButton
+              title={'Delete Cloud Vault'}
+              onPress={handleDeleteCloudVault}
+              iconSource={'bin'}
+            />
+          )}
         </View>
       </View>
     </SafeAreaView>

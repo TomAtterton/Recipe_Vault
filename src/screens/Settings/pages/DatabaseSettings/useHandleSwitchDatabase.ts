@@ -6,8 +6,8 @@ import { showErrorMessage } from '@/utils/promptUtils';
 import { checkIfPro } from '@/services/pro';
 import { syncWithSupabase } from '@/services/sync';
 import { Routes } from '@/navigation/Routes';
-import { useNavigation } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useCallback, useState } from 'react';
 import { Alert } from 'react-native';
 import useUserId from '@/hooks/common/useUserId';
 import { getProfileGroups, getProfileGroupWithUserId } from '@/services/profileGroup';
@@ -21,19 +21,17 @@ const useHandleSwitchDatabase = () => {
 
   const [groups, setGroups] = useState<{ id: string; name: string }[]>([]);
 
-  useEffect(() => {
-    getProfileGroups({ userId })
-      .then((_) => {
+  useFocusEffect(
+    useCallback(() => {
+      getProfileGroups({ userId }).then((_) => {
         const parsedGroups = _.map((group) => ({
           id: group.group_id || '',
           name: group?.groups?.name || '',
         }));
         setGroups(parsedGroups);
-      })
-      .catch((error) => {
-        console.log('error', error);
       });
-  }, [userId]);
+    }, [userId])
+  );
 
   const handleEnableCloudDatabase = async (id: string) => {
     try {

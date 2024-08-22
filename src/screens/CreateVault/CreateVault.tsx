@@ -24,7 +24,7 @@ const CreateVault = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState<string>('');
 
-  const { styles, theme } = useStyles(stylesheet);
+  const { styles } = useStyles(stylesheet);
 
   const handleUpdateProfile = async () => {
     try {
