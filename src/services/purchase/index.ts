@@ -27,7 +27,7 @@ export type PurchaseProduct = {
   product: PurchasesStoreProduct;
 };
 
-export const initPurchases = async () => {
+export const initPurchases = () => {
   const apiKey = Env.REVENUE_CAT_API_KEY;
   if (apiKey) {
     Purchases.configure({

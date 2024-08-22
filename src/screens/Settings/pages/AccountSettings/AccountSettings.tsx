@@ -9,7 +9,7 @@ import NavBarButton from '@/components/buttons/NavBarButton';
 import { useNavigation } from '@react-navigation/native';
 import { stylesheet } from './accountSettings.style';
 import OutlineButton from '@/components/buttons/OutlineButton';
-import { database, onOpenDatabase } from '@/database';
+import { onOpenDatabase } from '@/database';
 import { Env } from '@/core/env';
 import { onDeleteUser, onSignOut } from '@/services/auth';
 import { showErrorMessage } from '@/utils/promptUtils';
@@ -44,13 +44,12 @@ const AccountSettings = () => {
                 throw new Error(translate('error.delete_account.error_message'));
               }
 
-              database?.closeSync();
               await onSignOut();
+
               setResetProfile();
               setResetDatabase();
 
               await onOpenDatabase({
-                shouldClose: false,
                 currentDatabaseName: Env.SQLITE_DB_NAME,
               });
             } catch (error) {

@@ -33,7 +33,6 @@ Sentry.init({
 
 const App = () => {
   initPurchases();
-
   useHandleSession();
 
   return (

@@ -79,6 +79,7 @@ const createTables = async (db?: SQLiteDatabase) => {
 export const onOpenDatabase = async ({
   currentDatabaseName,
   shouldClose = true,
+
   options,
 }: {
   currentDatabaseName: string;
@@ -86,18 +87,17 @@ export const onOpenDatabase = async ({
   options?: SQLiteOpenOptions;
 }) => {
   try {
-    if (database && shouldClose) {
-      database?.closeSync();
-    }
+    if (!currentDatabaseName) throw new Error('Database name not provided');
 
-    if (database?.databaseName === `${currentDatabaseName}.db`) {
-      return database;
+    if (shouldClose) {
+      database?.closeSync();
     }
 
     const newDatabase = await openDatabaseAsync(`${currentDatabaseName}.db`, {
       enableChangeListener: true,
       ...options,
     });
+
     setDatabase(newDatabase);
     await initDatabase(newDatabase);
   } catch (e) {

@@ -81,6 +81,8 @@ const ScanImageContainer = () => {
     };
   });
 
+  const isSaveEnabled = value?.trim()?.length > 0;
+
   return (
     <>
       <View style={styles.container}>
@@ -93,7 +95,12 @@ const ScanImageContainer = () => {
           scrollEnabled={true}
           containerStyle={styles.input}
         />
-        <PrimaryButton style={styles.saveButton} onPress={handleSave} title={'Save'} />
+        <PrimaryButton
+          style={styles.saveButton}
+          onPress={handleSave}
+          title={'Save'}
+          disabled={!isSaveEnabled}
+        />
         <LabelButton onPress={navigation.goBack} title={translate('default.cancel')} />
       </View>
       <Animated.View style={[styles.imageZoomContainer, animatedStyles]}>
