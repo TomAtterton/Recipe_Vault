@@ -26,7 +26,6 @@
   "dependencies": {
     "@bacons/link-assets": "^1.1.0",
     "@candlefinance/faster-image": "^1.6.2",
-    "@cloudinary/url-gen": "^1.20.0",
     "@expo/config-plugins": "^8.0.8",
     "@hookform/resolvers": "^3.9.0",
     "@likashefqet/react-native-image-zoom": "^2.2.0",
@@ -48,7 +47,6 @@
     "aes-js": "^3.1.2",
     "base-64": "^1.0.0",
     "base64-arraybuffer": "^1.0.2",
-    "cloudinary-react-native": "TomAtterton/cloudinary-react-native",
     "convert": "^5.3.0",
     "cross-env": "^7.0.3",
     "date-fns": "^3.6.0",
