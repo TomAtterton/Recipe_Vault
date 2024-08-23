@@ -45,6 +45,7 @@ const useRecipeDetail = ({ id }: { id?: string | null }) => {
               params: {
                 id,
                 image: mergedData?.image || null,
+                servings: mergedData?.servings || 1,
               },
             });
         }

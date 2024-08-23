@@ -13,6 +13,7 @@ const useGetMealplan = ({ startDate, endDate }: { startDate?: string; endDate?: 
       image: item.image,
       date: item.date,
       entryType: item.type,
+      servings: item.servings,
     }));
   }, [data]);
 

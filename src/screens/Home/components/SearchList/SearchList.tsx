@@ -29,6 +29,7 @@ const SearchList = ({ data }: { data?: Partial<RecipeDetailType>[] }) => {
           params: {
             id: item.id,
             image: item?.image || null,
+            servings: item?.servings || 1,
           },
         })
       }

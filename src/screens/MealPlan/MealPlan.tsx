@@ -23,6 +23,7 @@ export type MealPlanType = {
   text?: string;
   recipeId?: string;
   image?: string;
+  servings?: number;
   id: string;
   recipe?: RecipeDetailType;
 };

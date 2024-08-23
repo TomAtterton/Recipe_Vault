@@ -40,6 +40,7 @@ const useAddRecipe = ({
           params: {
             id: recipeId,
             image: updateValues?.image || null,
+            servings: updateValues?.servings || 1,
           },
         });
       }

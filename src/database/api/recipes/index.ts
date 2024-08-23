@@ -35,7 +35,7 @@ export const getRecipeServings = async (recipe_id?: string | null) => {
 };
 
 export const SELECT_TRY_SOMETHING =
-  'SELECT id, name, description, rating, cook_time, image\n' +
+  'SELECT id, name, description, rating, cook_time, servings, image\n' +
   'FROM recipes \n' +
   'ORDER BY created_at DESC\n' +
   'LIMIT 5;';

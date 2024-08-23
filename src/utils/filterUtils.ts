@@ -52,7 +52,7 @@ export const generateFilterSelect = (
   let whereClause = conditions.length ? 'WHERE ' + conditions.join(' AND ') : '';
 
   return (
-    'SELECT DISTINCT recipes.id, recipes.name, recipes.description, recipes.rating, ' +
+    'SELECT DISTINCT recipes.id, recipes.name, recipes.description, recipes.rating, recipes.servings, ' +
     'recipes.cook_time, recipes.prep_time, recipes.image, recipes.last_made FROM recipes ' +
     joinClause +
     ' ' +

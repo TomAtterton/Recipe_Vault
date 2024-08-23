@@ -38,6 +38,7 @@ const TrySomethingCarousel = ({ onSeeAll }: { onSeeAll: () => void }) => {
               params: {
                 id: item.id,
                 image: item?.image || null,
+                servings: item?.servings || 1,
               },
             })
           }

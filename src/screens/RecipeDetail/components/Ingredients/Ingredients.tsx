@@ -1,38 +1,38 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Tabs } from 'react-native-collapsible-tab-view';
-
-import IngredientItem from '@/screens/RecipeDetail/components/Ingredients/components/IngredientItem';
-
-import IngredientHeader from './components/IngredientsHeader';
-
-import { Ingredient } from '@/types';
+import { FlatList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { getRecipeServings } from '@/database/api/recipes';
+import { useBoundStore } from '@/store';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
+
+import IngredientItem from '@/screens/RecipeDetail/components/Ingredients/components/IngredientItem';
+import IngredientHeader from './components/IngredientsHeader';
+import { Ingredient } from '@/types';
+import { getRecipeServings } from '@/database/api/recipes';
 import { stylesheet } from './ingredients.style';
-import { FlatList } from 'react-native';
-import { useBoundStore } from '@/store';
 
 interface IngredientsProps {
   recipeId: string;
   data: Ingredient[];
+  initialServings: number;
 }
 
-const keyExtractor = (_: string | Ingredient) => (typeof _ === 'string' ? _ : _?.id);
-
-const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data }: IngredientsProps) => {
-  const initialServings = useRef(1);
+const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data, initialServings }) => {
   const [isMetric, setIsMetric] = useState<boolean>(true);
+
   const setServings = useBoundStore((state) => state.setCurrentServings);
+  const { styles, breakpoint } = useStyles(stylesheet);
 
   useFocusEffect(
     useCallback(() => {
-      getRecipeServings(recipeId).then((serving) => {
-        if (!serving) return;
-        setServings(serving || 1);
-        initialServings.current = serving || 1;
-      });
+      const fetchServings = async () => {
+        const serving = await getRecipeServings(recipeId);
+        if (serving) {
+          setServings(serving);
+        }
+      };
+      fetchServings();
     }, [recipeId, setServings])
   );
 
@@ -40,13 +40,12 @@ const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data }: Ingredients
     () => <IngredientHeader isMetric={isMetric} setIsMetric={setIsMetric} />,
     [isMetric]
   );
-  const { styles, breakpoint } = useStyles(stylesheet);
 
   const handleRenderIngredient = useCallback(
     ({ item }: { item: string | Ingredient }) => {
       if (typeof item === 'string') {
         return (
-          <Typography variant={'titleItalicLarge'} style={styles.sectionHeader}>
+          <Typography variant="titleItalicLarge" style={styles.sectionHeader}>
             {item}
           </Typography>
         );
@@ -54,36 +53,34 @@ const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data }: Ingredients
       return (
         <IngredientItem
           text={item?.text || ''}
-          initialServings={initialServings.current}
+          initialServings={initialServings || 1}
           isMetric={isMetric}
         />
       );
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isMetric]
+    [initialServings, isMetric, styles.sectionHeader]
   );
-  const sections = useMemo(() => {
-    return data?.reduce((acc: (string | Ingredient)[], ingredient) => {
-      const title = ingredient?.title || '';
 
-      if (title) {
-        const hasTitle = acc.find((item) => item === title);
-
-        if (!hasTitle) {
+  const sections = useMemo(
+    () =>
+      data.reduce((acc: (string | Ingredient)[], ingredient) => {
+        const title = ingredient?.title || '';
+        if (title && !acc.includes(title)) {
           acc.push(title);
         }
-      }
-      acc.push(ingredient);
-      return acc;
-    }, []);
-  }, [data]);
+        acc.push(ingredient);
+        return acc;
+      }, []),
+    [data]
+  );
 
-  const isiPad = breakpoint === 'xl' || breakpoint === 'lg' || breakpoint === 'md';
+  const ListComponent = useMemo(() => {
+    return ['xl', 'lg', 'md'].includes(breakpoint) ? FlatList : Tabs.FlatList;
+  }, [breakpoint]);
 
-  const ListComponent = isiPad ? FlatList : Tabs.FlatList;
   return (
     <ListComponent
-      keyExtractor={keyExtractor}
+      keyExtractor={(_, index) => index.toString()}
       style={styles.container}
       contentContainerStyle={styles.contentContainerStyle}
       ListHeaderComponent={handleRenderHeader}

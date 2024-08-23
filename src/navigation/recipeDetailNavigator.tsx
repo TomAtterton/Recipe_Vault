@@ -10,7 +10,7 @@ import { ScanImageDataType } from '@/screens/ScanImageContent/scanImageUtil';
 import ScanImageContent from '@/screens/ScanImageContent';
 
 export type RecipeDetailStackParamList = {
-  [Routes.RecipeDetails]: { id: string; image: string | null };
+  [Routes.RecipeDetails]: { id: string; image: string | null; servings: number };
   [Routes.EditRecipe]: {
     id?: string | null;
     scanContent?: {
