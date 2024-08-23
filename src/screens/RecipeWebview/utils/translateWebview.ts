@@ -86,10 +86,10 @@ const convertRecipeYield = (recipeYield?: string | number | string[]): number =>
     return recipeYield;
   } else if (typeof recipeYield === 'string') {
     const firstNumber = recipeYield.match(/\d+/);
-    return firstNumber ? parseInt(firstNumber[0]) : 0;
+    return firstNumber ? parseInt(firstNumber[0], 10) : 0;
   } else if (Array.isArray(recipeYield)) {
     const firstNumber = recipeYield[0].match(/\d+/);
-    return firstNumber ? parseInt(firstNumber[0]) : 0;
+    return firstNumber ? parseInt(firstNumber[0], 10) : 0;
   } else {
     return 0;
   }

@@ -102,14 +102,14 @@ const Groceries = () => {
       if (isLoading) {
         return (
           <View style={styles.loadingContainer}>
-            <Shimmer style={{ borderRadius: 10 }} width={44} height={44} />
-            <Shimmer style={{ borderRadius: 10 }} width={width / 1.4} height={48} />
+            <Shimmer style={styles.shimmer} width={44} height={44} />
+            <Shimmer style={styles.shimmer} width={width / 1.4} height={48} />
           </View>
         );
       }
       return <GroceryItem item={item} onCompleted={onCompleted} onEdit={handleEdit} />;
     },
-    [isLoading, onCompleted, handleEdit, styles.loadingContainer, width]
+    [isLoading, onCompleted, handleEdit, styles.loadingContainer, styles.shimmer, width]
   );
 
   return (

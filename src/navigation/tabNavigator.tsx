@@ -9,6 +9,8 @@ import { TabBar } from '@/navigation/TabBar';
 import AddRecipe from '@/screens/AddRecipe';
 import { ScanImageDataType } from '@/screens/ScanImageContent/scanImageUtil';
 import { RecipeDetailType } from '@/types';
+import { useCallback } from 'react';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs/src/types';
 
 export type TabParamList = {
   [Routes.Home]: undefined;
@@ -30,22 +32,30 @@ export type TabParamList = {
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
-export const TabNavigator = () => (
-  <Tab.Navigator
-    tabBar={(props) => <TabBar {...props} />}
-    screenOptions={() => ({
-      headerShown: false,
-    })}
-  >
-    <Tab.Screen key={Routes.Home} name={Routes.Home} component={Home} />
-    <Tab.Screen key={Routes.RecipeWebview} name={Routes.RecipeWebview} component={RecipeWebview} />
-    <Tab.Screen
-      key={Routes.AddRecipe}
-      name={Routes.AddRecipe}
-      // @ts-ignore
-      component={AddRecipe}
-    />
-    <Tab.Screen key={Routes.MealPlan} name={Routes.MealPlan} component={RecipeSchedule} />
-    <Tab.Screen key={Routes.Groceries} name={Routes.Groceries} component={Groceries} />
-  </Tab.Navigator>
-);
+const screenOptions = {
+  headerShown: false,
+};
+
+export const TabNavigator = () => {
+  const renderTabBar = useCallback((props: BottomTabBarProps) => {
+    return <TabBar {...props} />;
+  }, []);
+  return (
+    <Tab.Navigator tabBar={renderTabBar} screenOptions={screenOptions}>
+      <Tab.Screen key={Routes.Home} name={Routes.Home} component={Home} />
+      <Tab.Screen
+        key={Routes.RecipeWebview}
+        name={Routes.RecipeWebview}
+        component={RecipeWebview}
+      />
+      <Tab.Screen
+        key={Routes.AddRecipe}
+        name={Routes.AddRecipe}
+        // @ts-ignore
+        component={AddRecipe}
+      />
+      <Tab.Screen key={Routes.MealPlan} name={Routes.MealPlan} component={RecipeSchedule} />
+      <Tab.Screen key={Routes.Groceries} name={Routes.Groceries} component={Groceries} />
+    </Tab.Navigator>
+  );
+};

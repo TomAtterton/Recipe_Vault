@@ -1,7 +1,6 @@
 import { View } from 'react-native';
 import Typography from '@/components/Typography';
 import * as React from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import { useNavigation } from '@react-navigation/native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -10,19 +9,13 @@ import { openURL } from 'expo-linking';
 import { Routes } from '@/navigation/Routes';
 
 const Help = () => {
-  const { top } = useSafeAreaInsets();
   const { navigate, goBack } = useNavigation();
   const { styles } = useStyles(stylesheet);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        marginTop: top,
-      }}
-    >
+    <View style={styles.container}>
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
-      <View style={styles.container}>
+      <View style={styles.contentContainer}>
         <Typography variant={'titleItalicLarge'}>Help.</Typography>
         <SettingsButton
           title={'Privacy'}
@@ -48,6 +41,10 @@ const Help = () => {
 
 const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
+    flex: 1,
+    marginTop: miniRuntime.insets.top,
+  },
+  contentContainer: {
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: miniRuntime.insets.top + 32,

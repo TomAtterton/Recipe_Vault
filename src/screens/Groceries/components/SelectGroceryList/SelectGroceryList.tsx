@@ -39,9 +39,10 @@ const SelectGroceryList = ({ onClose }: Props) => {
     onClose();
   };
 
-  const handleOpenSettings = async () => {
+  const handleOpenSettings = useCallback(async () => {
     await openURL('x-apple-reminderkit://');
-  };
+  }, []);
+
   const appState = useRef(AppState.currentState);
   useEffect(() => {
     const subscription = AppState.addEventListener('change', async (nextAppState) => {
@@ -63,6 +64,16 @@ const SelectGroceryList = ({ onClose }: Props) => {
       subscription.remove();
     };
   }, []);
+
+  const renderListEmptyComponent = useCallback(() => {
+    return (
+      <View style={styles.emptyContainer}>
+        <Typography variant={'titleMedium'}>No available reminder lists</Typography>
+        <OutlineButton title={'Create a new list'} onPress={handleOpenSettings} />
+      </View>
+    );
+  }, [styles.emptyContainer, handleOpenSettings]);
+
   return (
     <View style={styles.container}>
       <Typography variant={'titleMedium'}>
@@ -74,12 +85,7 @@ const SelectGroceryList = ({ onClose }: Props) => {
         contentContainerStyle={styles.listContentContainer}
         data={allReminders}
         renderItem={handleRenderItem}
-        ListEmptyComponent={() => (
-          <View style={styles.emptyContainer}>
-            <Typography variant={'titleMedium'}>No available reminder lists</Typography>
-            <OutlineButton title={'Create a new list'} onPress={handleOpenSettings} />
-          </View>
-        )}
+        ListEmptyComponent={renderListEmptyComponent}
       />
       {allReminders?.length > 0 && (
         <OutlineButton

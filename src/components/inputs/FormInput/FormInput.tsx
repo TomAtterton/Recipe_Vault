@@ -66,12 +66,7 @@ const FormInput = ({
   const ContainerView = useMemo(() => (onEdit ? TouchableOpacity : View), [onEdit]);
 
   return (
-    <View
-      style={{
-        flex: 1,
-      }}
-    >
-      {/*// @ts-ignore*/}
+    <View style={styles.container}>
       <ContainerView
         onPress={handleEdit}
         style={[

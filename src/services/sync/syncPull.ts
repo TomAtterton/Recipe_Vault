@@ -130,7 +130,6 @@ const fetchChanges = async (
     case 'categories':
     case 'tags':
     case 'mealplans':
-    //
     case 'recipes':
     case 'recipe_instructions':
     case 'recipe_categories':

@@ -2,23 +2,35 @@ import { createHash } from 'https://deno.land/std@0.104.0/hash/mod.ts';
 
 const handler = async (req: Request) => {
   try {
-    // Parse the request body to get public_id
-    const { public_id, folder, ...extraParams } = await req.json();
+    // Parse the request body to get parameters
+    const { public_id, ...extraParams } = await req.json();
 
-    // Define your Cloudinary API key and secret
-    const apiKey = Deno.env.get('CLOUDINARY_API_KEY');
-    const apiSecret = Deno.env.get('CLOUDINARY_API_SECRET');
+    if (!public_id) {
+      return new Response(JSON.stringify({ error: 'public_id is required' }), {
+        headers: { 'Content-Type': 'application/json' },
+        status: 400,
+      });
+    }
+
+    // Retrieve Cloudinary API key and secret from environment variables
+    const apiKey = Deno.env.get('CLOUDINARY_API_KEY') || '';
+    const apiSecret = Deno.env.get('CLOUDINARY_API_SECRET') || '';
+
+    if (!apiKey || !apiSecret) {
+      return new Response(JSON.stringify({ error: 'Cloudinary API credentials are missing' }), {
+        headers: { 'Content-Type': 'application/json' },
+        status: 500,
+      });
+    }
 
     // Get the current timestamp
     const timestamp = Math.floor(Date.now() / 1000);
 
-    // Collect the parameters
+    // Collect the parameters with only public_id and timestamp
     const params: { [key: string]: string } = {
-      eager: 'w_400,h_300,c_pad|w_260,h_200,c_crop',
       timestamp: timestamp.toString(),
       public_id,
-      folder,
-      ...extraParams,
+      ...extraParams, // Include only additional params provided
     };
 
     // Sort the parameters alphabetically and create the query string
@@ -40,8 +52,8 @@ const handler = async (req: Request) => {
       timestamp: params.timestamp,
       public_id: params.public_id,
       api_key: apiKey,
-      eager: params.eager,
       signature: signature,
+      ...extraParams, // Include any additional params that were provided
     };
 
     // Respond with the final parameters

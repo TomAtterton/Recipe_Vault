@@ -7,6 +7,9 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     flex: 1,
     marginHorizontal: 20,
   },
+  chefMealImage: {
+    alignSelf: 'center',
+  },
   title: {
     textAlign: 'center',
     paddingVertical: 20,

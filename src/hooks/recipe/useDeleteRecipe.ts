@@ -1,9 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
-import { Routes } from '@/navigation/Routes';
 import useDeleteRecipeApi from '@/database/api/recipes/hooks/useDeleteRecipeSupabase';
 import { showErrorMessage, showSuccessMessage } from '@/utils/promptUtils';
+import { deleteImage } from '@/services/image';
 import { syncWithSupabase } from '@/services/sync';
+import { Routes } from '@/navigation/Routes';
 
 const useDeleteRecipe = () => {
   const { deleteRecipe } = useDeleteRecipeApi();
@@ -11,13 +12,19 @@ const useDeleteRecipe = () => {
 
   const navigation = useNavigation();
 
-  const onDeleteRecipe = async (id?: string | null) => {
+  const onDeleteRecipe = async ({
+    id,
+    previousImage,
+  }: {
+    id?: string | null;
+    previousImage: string;
+  }) => {
     try {
       setDeleting(true);
 
       // Perform the actual deletion
+      !!id && deleteImage(id, previousImage);
       !!id && (await deleteRecipe({ id }));
-
       navigation.navigate(Routes.Home);
       syncWithSupabase();
       // Show success message

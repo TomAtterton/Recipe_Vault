@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { randomUUID } from 'expo-crypto';
-import onImageUpload from '@/database/api/storage/useImageUpload';
 import { useBoundStore } from '@/store';
 import { Env } from '@/core/env';
 import { insertRecipe, updateRecipe, updateRelatedTable } from '@/database/api/recipes';
@@ -8,6 +7,7 @@ import { checkMetaDataDuplicates } from '@/database/api/recipes/helpers/postReci
 import useHandlePaywall from '@/hooks/common/useHandlePaywall';
 import { getUserId } from '@/hooks/common/useUserId';
 import { sqlDelete } from '@/database/sql';
+import { uploadImage } from '@/services/image';
 
 // Extend or modify these as needed to match your exact schema and requirements
 interface RecipeDetails {
@@ -83,7 +83,12 @@ const usePostUpdateRecipes = () => {
       }
 
       setIsLoading(true);
-      const imageUrl = await onImageUpload(values?.image, previousValues?.image);
+      const recipe_id = id || randomUUID();
+
+      const imageUrl = await uploadImage({
+        uri: values?.image || '',
+        recipeId: recipe_id,
+      });
 
       const { instructions, ingredients, categories, tags } = checkMetaDataDuplicates(
         values,
@@ -92,8 +97,6 @@ const usePostUpdateRecipes = () => {
 
       const groupId = useBoundStore.getState().profile.groupId;
       const userId = getUserId();
-
-      const recipe_id = id || randomUUID();
 
       const recipeDetails: any = {
         recipe_id,

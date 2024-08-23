@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React, { useMemo } from 'react';
 import { Tabs } from 'react-native-collapsible-tab-view';
 import { Ingredient, Instruction } from '@/types';
 import useGetRecipeInstructions from '@/database/api/recipes/hooks/useGetRecipeInstructions';
@@ -14,7 +13,6 @@ interface InstructionsProps {
   ingredients: Ingredient[];
 }
 
-let currentIndex = 0;
 type StepInstruction =
   | ({
       step: number;
@@ -29,23 +27,30 @@ const Instructions: React.FC<InstructionsProps> = ({
 }: InstructionsProps) => {
   const { instructions: data } = useGetRecipeInstructions(recipeId);
 
-  const sections = data?.reduce((acc: (string | StepInstruction)[], instruction, index) => {
-    const title = instruction?.title || '';
-    currentIndex = index === 0 ? 1 : currentIndex + 1;
-    if (title) {
-      const hasTitle = acc.find((item) => item === title);
+  const sections = useMemo(() => {
+    let currentIndex = 1; // Start at 1 to ensure the first step is correctly indexed
 
-      if (!hasTitle) {
-        currentIndex = 1;
-        acc.push(title);
-      }
-    }
+    return (
+      data?.reduce((acc: (string | StepInstruction)[], instruction) => {
+        const title = instruction?.title || '';
 
-    acc.push({ ...instruction, step: currentIndex });
-    return acc;
-  }, []);
+        if (title) {
+          const hasTitle = acc.find((item) => item === title);
+          if (!hasTitle) {
+            acc.push(title);
+            currentIndex = 1; // Reset index for new sections
+          }
+        }
+
+        acc.push({ ...instruction, step: currentIndex });
+        currentIndex++; // Increment the index for the next step
+        return acc;
+      }, []) || []
+    );
+  }, [data]);
 
   const { styles, breakpoint } = useStyles(stylesheet);
+
   const handleRenderInstruction = ({ item }: { item: StepInstruction }) => {
     if (typeof item === 'string') {
       return (
@@ -66,8 +71,8 @@ const Instructions: React.FC<InstructionsProps> = ({
   };
 
   const isiPad = breakpoint === 'xl' || breakpoint === 'lg' || breakpoint === 'md';
-
   const ListComponent = isiPad ? FlatList : Tabs.FlatList;
+
   return (
     <ListComponent
       keyExtractor={keyExtractor}
