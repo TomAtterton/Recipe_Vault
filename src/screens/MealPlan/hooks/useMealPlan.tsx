@@ -10,8 +10,8 @@ type GroupedDataType = {
 
 const useMealPlan = () => {
   const today = useMemo(() => new Date(), []);
-  const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
-  const [weekOffset, setWeekOffset] = useState(0);
+  const [currentDate, setCurrentDate] = useState<string>(today.toISOString().split('T')[0]);
+  const [weekOffset, setWeekOffset] = useState<number>(0);
 
   useFocusEffect(
     useCallback(() => {
@@ -30,9 +30,10 @@ const useMealPlan = () => {
     return `${start} - ${end}`;
   }, [startDateOfWeek]);
 
-  const getCurrentDateByDay = (day: number) => {
-    return format(addDays(startDateOfWeek, day), 'yyyy-MM-dd');
-  };
+  const getCurrentDateByDay = useCallback(
+    (day: number): string => format(addDays(startDateOfWeek, day), 'yyyy-MM-dd'),
+    [startDateOfWeek]
+  );
 
   const { data } = useGetMealplan({
     startDate: format(startDateOfWeek, 'yyyy-MM-dd'),
@@ -41,15 +42,27 @@ const useMealPlan = () => {
 
   const groupedData: GroupedDataType = useMemo(() => {
     const list: GroupedDataType = {};
+    const order = ['breakfast', 'lunch', 'dinner'];
 
     if (data) {
       data.forEach((item) => {
         const day = item.date ? format(new Date(item.date), 'EEEE') : undefined;
 
-        if (day && !list[day]) {
-          list[day] = [];
+        if (day) {
+          if (!list[day]) {
+            list[day] = [];
+          }
+
+          // Insert the item in the correct position based on entryType
+          const index = list[day].findIndex(
+            (meal) => order.indexOf(meal.entryType) > order.indexOf(item.entryType)
+          );
+          if (index === -1) {
+            list[day].push(item as MealPlanType);
+          } else {
+            list[day].splice(index, 0, item as MealPlanType);
+          }
         }
-        day && item && list[day].push(item as MealPlanType);
       });
     }
 
