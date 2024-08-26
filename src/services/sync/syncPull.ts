@@ -3,6 +3,7 @@ import { database } from '@/database';
 import { useBoundStore } from '@/store';
 import { syncDelete } from '@/services/sync/syncDelete';
 import { showErrorMessage } from '@/utils/promptUtils';
+import { getLastSynced } from '@/services/sync/utils';
 
 export const TABLE_NAMES = [
   'profile',
@@ -27,17 +28,12 @@ interface GenericRecord {
   [key: string]: any; // Add specific properties for your records here
 }
 
-// We use an old timestamp here to make sure you fetch all data on the first sync
-const oldTimestamp = '2021-01-01T00:00:00.000Z';
-
 /**
  * Pulls all changes from the remote database and updates the local database
  */
 export const syncPull = async (forceAll?: boolean): Promise<void> => {
   try {
-    const lastSynced = forceAll
-      ? oldTimestamp
-      : useBoundStore.getState()?.lastSynced || oldTimestamp;
+    const lastSynced = getLastSynced(forceAll);
 
     const changes: GenericRecord[][] = await Promise.all(
       TABLE_NAMES.map((tableName) => fetchChanges(tableName, lastSynced))

@@ -1,8 +1,7 @@
 import { useBoundStore } from '@/store';
 import { database } from '@/database';
 import { supabase } from '@/services';
-
-const oldTimestamp = '2021-01-01T00:00:00.000Z';
+import { getLastSynced } from '@/services/sync/utils';
 
 export const syncDelete = async (lastSynced?: string): Promise<void> => {
   try {
@@ -19,9 +18,7 @@ const onDeleteLocalTable = async (lastSynced?: string) => {
     throw new Error('Database not initialized');
   }
   try {
-    const last_updated_at = lastSynced
-      ? lastSynced
-      : useBoundStore.getState()?.lastSynced || oldTimestamp;
+    const last_updated_at = lastSynced ? lastSynced : getLastSynced();
 
     const groupId = useBoundStore.getState()?.profile?.groupId || '';
 
