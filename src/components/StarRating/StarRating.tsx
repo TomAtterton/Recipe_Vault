@@ -19,9 +19,10 @@ export type Props = {
   initialValue?: number;
   onChange: (rating: number) => void;
   padding?: number;
+  disabled?: boolean;
 };
 
-const StarRating = ({ style, initialValue = 0, onChange, padding = 0 }: Props) => {
+const StarRating = ({ style, initialValue = 0, onChange, padding = 0, disabled }: Props) => {
   const selectedStarIndex = useSharedValue(initialValue);
 
   useEffect(() => {
@@ -63,9 +64,15 @@ const StarRating = ({ style, initialValue = 0, onChange, padding = 0 }: Props) =
   }, [selectedStarIndex, containerWidth]);
   return (
     <GestureDetector gesture={gestures}>
-      <Animated.View style={animatedStyle} pointerEvents={'box-none'}>
+      <Animated.View style={animatedStyle} pointerEvents={disabled ? 'none' : 'box-none'}>
         <Canvas
-          style={[styles.container, style]}
+          style={[
+            styles.container,
+            style,
+            {
+              opacity: disabled ? 0.5 : 1,
+            },
+          ]}
           onLayout={(e) => {
             containerWidth.value = e.nativeEvent.layout.width + padding;
           }}

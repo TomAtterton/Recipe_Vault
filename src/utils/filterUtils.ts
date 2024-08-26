@@ -1,4 +1,5 @@
 export type FilterObjectType = {
+  hasNotRated: boolean;
   rating: number | null;
   tags: string[];
 };
@@ -36,9 +37,13 @@ export const generateFilterSelect = (
     conditions.push(`recipe_categories.category_id IN ('${categoriesIds.join("','")}')`);
   }
 
-  // Handle rating filter
-  if (rating !== null) {
-    conditions.push(`recipes.rating = ${rating}`);
+  if (filter.hasNotRated) {
+    conditions.push('recipes.rating = 0');
+  } else {
+    // Handle rating filter
+    if (rating !== null) {
+      conditions.push(`recipes.rating = ${rating}`);
+    }
   }
 
   // Handle tags filter

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View } from 'react-native';
 
 import FilterOptions from 'src/screens/Home/components/FilterOptions';
@@ -29,22 +29,21 @@ const Home = () => {
     data,
   } = useSearchRecipe();
 
-  const [showingSearch, setShowingSearch] = useState(false);
   const { styles } = useStyles(stylesheet);
 
+  const [showingSearch, setShowingSearch] = useState(false);
   const onSearchFocus = useCallback(() => {
     setShowingSearch(true);
   }, []);
 
-  useEffect(() => {
-    checkIfPro();
-  }, []);
-
   useDatabaseListener();
 
-  useFocusEffect(() => {
-    syncWithSupabase();
-  });
+  useFocusEffect(
+    useCallback(() => {
+      checkIfPro();
+      syncWithSupabase();
+    }, [])
+  );
 
   return (
     <View style={[styles.container]}>

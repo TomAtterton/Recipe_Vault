@@ -19,6 +19,7 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     alignItems: 'center',
   },
   counter: {
+    backgroundColor: theme.colors.primary,
     height: 20,
     width: 20,
     position: 'absolute',
@@ -30,6 +31,10 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   },
   container: {
     height: miniRuntime.screen.height * 0.8,
+  },
+  checkbox: {
+    flex: 0,
+    marginBottom: 16,
   },
   selectedIcon: {
     marginRight: 20,

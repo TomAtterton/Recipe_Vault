@@ -19,12 +19,11 @@ import PrimaryButton from '@/components/buttons/PrimaryButton';
 import StarRating from '@/components/StarRating';
 import { stylesheet } from './filterOptions.style';
 
-export const defaultFilterOptions = () => ({
-  cooked: false,
-  notCooked: false,
+export const defaultFilterOptions = {
+  hasNotRated: false,
   rating: null,
   tags: [],
-});
+};
 
 const keyExtractor = (item: Tag) => item.id || '';
 
@@ -38,6 +37,7 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
   const optionsRef = React.useRef<BottomSheetRef>(null);
 
   const [filterOptions, setFilterOptions] = useState<FilterObjectType>({
+    hasNotRated: currentFilters?.hasNotRated || false,
     rating: currentFilters?.rating || null,
     tags: currentFilters?.tags || [],
   });
@@ -78,7 +78,9 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
 
   const onReset = useCallback(() => {
     setFilterOptions(defaultFilterOptions);
-  }, []);
+    onUpdateFilter(defaultFilterOptions);
+    optionsRef.current?.dismiss();
+  }, [onUpdateFilter]);
 
   const activeFilterCount = useMemo(() => {
     return Object.values(currentFilters || {}).filter(
@@ -90,6 +92,14 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
 
   const { styles, theme } = useStyles(stylesheet);
 
+  const hasChanged = useMemo(() => {
+    return (
+      filterOptions?.hasNotRated !== currentFilters?.hasNotRated ||
+      filterOptions?.rating !== currentFilters?.rating ||
+      filterOptions?.tags?.length !== currentFilters?.tags?.length
+    );
+  }, [currentFilters, filterOptions]);
+
   return (
     <>
       <View style={styles.filterButton}>
@@ -99,7 +109,7 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
           iconColor={theme.colors.onBackground}
         />
         {!!activeFilterCount && (
-          <View style={[styles.counter, { backgroundColor: theme.colors.primary }]}>
+          <View style={styles.counter}>
             <Typography
               variant={'titleSmall'}
               style={{
@@ -127,8 +137,15 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
             <Typography style={styles.contentTitle} variant={'titleMedium'}>
               Rating
             </Typography>
+            <CheckBox
+              style={styles.checkbox}
+              isSelected={filterOptions?.hasNotRated}
+              label={'No Rating'}
+              onPress={() => updateFilterOption('hasNotRated', !filterOptions?.hasNotRated)}
+            />
             <StarRating
               padding={40}
+              disabled={filterOptions?.hasNotRated}
               initialValue={filterOptions?.rating || 0}
               onChange={(rating) => updateFilterOption('rating', rating)}
             />
@@ -147,7 +164,12 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
               </>
             )}
           </View>
-          <PrimaryButton style={styles.saveButton} onPress={onSaved} title={'Save'} />
+          <PrimaryButton
+            disabled={!hasChanged}
+            style={styles.saveButton}
+            onPress={onSaved}
+            title={'Save'}
+          />
         </View>
       </BottomSheet>
     </>
