@@ -8,7 +8,7 @@ import Typography from '@/components/Typography';
 import { RecipeDetailType } from '@/types';
 import SquircleImage from '@/components/SquircleImage';
 
-type Props = Partial<RecipeDetailType> & { onPress?: () => void };
+type Props = RecipeDetailType & { onPress?: () => void };
 
 const shortenPerformTime = (performTime: string) => {
   // perform time will return 1 hour, 2 hours , 20 minutes , 1 min but I want to shorten it to 1h, 2h, 20m, 1m

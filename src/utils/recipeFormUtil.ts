@@ -129,7 +129,7 @@ export const generateSectionData = (data: any[]) => {
 export const defaultValues = {
   title: '',
   description: '',
-  imageUrl: null,
+  imageUrl: '',
   servings: 1,
   recipeIngredient: [],
   recipeInstructions: [],
@@ -142,7 +142,7 @@ export const defaultValues = {
   recipeTags: [],
 };
 
-export const transformDefaultValues = (data?: Partial<RecipeDetailType>) => {
+export const transformDefaultValues = (data?: RecipeDetailType) => {
   return {
     title: data?.name || '',
     imageUrl: data?.image || '',

@@ -53,7 +53,7 @@ const ScanImageContainer = () => {
 
   const image = useBoundStore((state) => state.scannedImage);
 
-  const navigation = useNavigation();
+  const { goBack } = useNavigation();
 
   const handleInputLayout = useCallback(() => {
     // When the input size (textarea) changes, it updates the keyboard position.
@@ -101,7 +101,7 @@ const ScanImageContainer = () => {
           title={'Save'}
           disabled={!isSaveEnabled}
         />
-        <LabelButton onPress={navigation.goBack} title={translate('default.cancel')} />
+        <LabelButton onPress={goBack} title={translate('default.cancel')} />
       </View>
       <Animated.View style={[styles.imageZoomContainer, animatedStyles]}>
         {!!image && <ImageZoom uri={image} minScale={1} maxScale={2} />}

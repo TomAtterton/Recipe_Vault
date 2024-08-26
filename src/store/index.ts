@@ -10,6 +10,7 @@ import { createGroceryListSlice, GroceryListSlice } from '@/store/groceryList';
 import { Reminder } from 'expo-calendar';
 import { AppSlice, createAppSlice } from '@/store/app';
 import { createCurrentRecipeSlice, CurrentRecipeSlice } from '@/store/currentRecipe';
+import { createRecipeFormSlice, RecipeFormSlice } from '@/store/recipeForm';
 
 export const useBoundStore = create<
   ProfileSlice &
@@ -18,7 +19,8 @@ export const useBoundStore = create<
     ScanImageSlice &
     GroceryListSlice &
     AppSlice &
-    CurrentRecipeSlice
+    CurrentRecipeSlice &
+    RecipeFormSlice
 >()(
   persist(
     (set, get, store) => ({
@@ -29,6 +31,7 @@ export const useBoundStore = create<
       ...createGroceryListSlice(set, get, store),
       ...createAppSlice(set, get, store),
       ...createCurrentRecipeSlice(set, get, store),
+      ...createRecipeFormSlice(set, get, store),
     }),
     {
       name: 'bound-store',

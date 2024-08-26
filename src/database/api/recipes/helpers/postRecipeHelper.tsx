@@ -1,4 +1,4 @@
-import { RecipeDetailType } from '@/database/api/recipes/hooks/usePostUpdateRecipes';
+import { RecipeDetailType } from '@/types';
 
 export interface Ingredient {
   section_title: string;
@@ -21,8 +21,8 @@ export interface Tag {
 }
 
 export const checkMetaDataDuplicates = (
-  data: Partial<RecipeDetailType>,
-  previousData?: Partial<RecipeDetailType>
+  data: RecipeDetailType,
+  previousData?: RecipeDetailType | null
 ) => {
   // Function to compare arrays for any kind of change, including reordering and deletion
   const compareAndFindChanges = (

@@ -2,7 +2,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 
 import { Routes } from '@/navigation/Routes';
-import { ScanImageDataType } from '@/screens/ScanImageContent/scanImageUtil';
 import { RecipeDetailType } from '@/types';
 import AddRecipe from '@/screens/AddRecipe';
 import ImageDetection from '@/screens/ImageDetection';
@@ -11,13 +10,8 @@ export type RecipeDetectionStackParamList = {
   [Routes.AddRecipe]: {
     type?: string;
     id?: string | null;
-    scanContent?: {
-      data: {
-        [key: string]: ScanImageDataType;
-      };
-    };
     isNested?: boolean;
-    data?: Partial<RecipeDetailType>;
+    data?: RecipeDetailType;
   };
   [Routes.ImageDetection]: undefined;
 };

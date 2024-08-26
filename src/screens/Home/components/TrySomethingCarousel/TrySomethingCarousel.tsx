@@ -19,15 +19,14 @@ import OutlineButton from '@/components/buttons/OutlineButton';
 import { useStyles } from 'react-native-unistyles';
 import { translate } from '@/core';
 
-const keyExtractor = (_: Partial<RecipeDetailType>, index: number) =>
-  `item-${(_?.id || '') + index}`;
+const keyExtractor = (_: RecipeDetailType, index: number) => `item-${(_?.id || '') + index}`;
 
 const TrySomethingCarousel = ({ onSeeAll }: { onSeeAll: () => void }) => {
   const { data } = useTrySomethingRecipe();
   const { navigate } = useNavigation();
 
   const renderItem = useCallback(
-    ({ item }: { item: Partial<RecipeDetailType> }) => {
+    ({ item }: { item: RecipeDetailType }) => {
       return (
         <HorizontalCard
           {...item}

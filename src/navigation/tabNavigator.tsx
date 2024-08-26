@@ -24,7 +24,7 @@ export type TabParamList = {
       };
     };
     isNested?: boolean;
-    data?: Partial<RecipeDetailType>;
+    data?: RecipeDetailType;
   };
   [Routes.RecipeWebview]: undefined;
   [Routes.Groceries]: undefined;

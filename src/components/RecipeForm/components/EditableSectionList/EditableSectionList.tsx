@@ -1,9 +1,9 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { View } from 'react-native';
 import Item from './components/Item/Item';
 import { stylesheet } from './editableSectionList.style';
 import useEditSectionList from './hooks/useEditSectionList';
-import { useFieldArray } from 'react-hook-form';
+import { useController, useFieldArray } from 'react-hook-form';
 import {
   controlNameType,
   controlType,
@@ -33,6 +33,10 @@ interface Props {
 const keyExtractor = (item: DraggableListItem, index: number) => item?.id + index;
 
 const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveText }: Props) => {
+  const {
+    fieldState: { error },
+  } = useController({ control, name });
+
   const { fields, append, remove, move, update } = useFieldArray({
     control,
     name,
@@ -43,6 +47,14 @@ const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveTex
     onAppend: append,
     onEdit,
   });
+
+  const errorMessage = useMemo(() => {
+    if (error) {
+      // @ts-ignore
+      return error?.message || error?.find((_) => _?.text).text?.message;
+    }
+    return '';
+  }, [error]);
 
   const handleEdit = useCallback(
     (item: DraggableListItem, index: number | undefined) => {
@@ -80,9 +92,14 @@ const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveTex
 
   const { styles } = useStyles(stylesheet);
 
+  const errorBorderStyle = useMemo(
+    () => (errorMessage ? styles.errorBorder : null),
+    [errorMessage, styles.errorBorder]
+  );
+
   return (
     <>
-      <View style={styles.contentContainer}>
+      <View style={[styles.contentContainer, errorBorderStyle]}>
         <View style={styles.headerContainer}>
           <Typography style={styles.title} variant="titleLarge">
             {title}
@@ -117,6 +134,11 @@ const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveTex
         />
         <ListButton iconSource={'add-outline'} title={'section'} onPress={onAddSectionItem} />
       </View>
+      {!!errorMessage && (
+        <Typography variant={'titleSmall'} style={styles.error}>
+          {errorMessage}
+        </Typography>
+      )}
     </>
   );
 };

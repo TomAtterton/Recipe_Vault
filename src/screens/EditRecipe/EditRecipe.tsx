@@ -4,27 +4,23 @@ import useDeleteRecipe from '@/hooks/recipe/useDeleteRecipe';
 import { useRoute } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
 import { RouteProp } from '@/navigation/types';
-import useEditRecipe from '@/hooks/recipe/useEditRecipe';
 import RecipeForm from '@/components/RecipeForm';
+import useRecipeDetail from '@/hooks/recipe/useRecipeDetail';
 
 const EditRecipe = ({}) => {
   const {
-    params: { id, scanContent },
+    params: { id },
   } = useRoute<RouteProp<Routes.EditRecipe>>();
 
-  const { data, onUpdateRecipe } = useEditRecipe({ id });
-
+  const { data, onUpdateRecipe } = useRecipeDetail({ id });
   const { onDeleteRecipe } = useDeleteRecipe();
 
-  // @ts-ignore
-  const previousImage = data?.image || '';
-  const handleDeleteRecipe = () => onDeleteRecipe({ id, previousImage });
+  const handleDeleteRecipe = () => onDeleteRecipe({ id, previousImage: data?.image || '' });
 
   return (
     <RecipeForm
       id={id}
       buttonTitle="Update recipe"
-      scanContent={scanContent}
       onSubmitForm={onUpdateRecipe}
       data={data}
       isEditing={true}

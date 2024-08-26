@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { randomUUID } from 'expo-crypto';
 import { useBoundStore } from '@/store';
 import { Env } from '@/core/env';
@@ -8,73 +7,16 @@ import useHandlePaywall from '@/hooks/common/useHandlePaywall';
 import { getUserId } from '@/hooks/common/useUserId';
 import { sqlDelete } from '@/database/sql';
 import { uploadImage } from '@/services/image';
-
-// Extend or modify these as needed to match your exact schema and requirements
-interface RecipeDetails {
-  recipe_id: string;
-  group_id: string | null;
-  user_id: string | null;
-  name: string;
-  description: string;
-  imageUrl: string;
-  prep_time: string;
-  cook_time: string;
-  servings: number;
-  rating: number;
-  source: string;
-  note: string;
-  last_made: Date | null;
-}
-
-export type RecipeDetailType = {
-  id: string;
-  userId: string;
-  name: string;
-  description: string;
-  rating?: number | null;
-  dateAdded?: string | null;
-  dateUpdated?: string | null;
-  image?: string | null;
-  note?: string | null;
-  lastMade?: string | null;
-  source?: string | null;
-  performTime?: string | null;
-  prepTime?: string | null;
-  servings?: number | null;
-  recipeTags?: {
-    id: string;
-    name?: string | null;
-  }[];
-  recipeCategory?: {
-    id: string;
-    name?: string | null;
-  }[];
-  recipeIngredient?: {
-    title?: string | null;
-    id: string;
-    text: string;
-    // isEditing: boolean;
-    // TODO fix this weird naming
-    type?: 'section' | 'ingredient'; // Add the type property to Ingredient type
-  }[];
-  recipeInstructions?: {
-    title?: string | null;
-    id: string;
-    text: string;
-    // TODO fix this weird naming
-    type?: 'section' | 'ingredient'; // Add the type property to Ingredient type
-  }[];
-};
+import { RecipeDetailType } from '@/types';
+import { TRecipeDatabase } from '@/database/types/recipes';
 
 const usePostUpdateRecipes = () => {
-  const [isLoading, setIsLoading] = useState(false);
-
   const { onCanAddRecipe } = useHandlePaywall();
 
   const onSubmit = async (
-    values: Partial<RecipeDetailType>,
+    values: RecipeDetailType,
     id?: string | null,
-    previousValues?: Partial<RecipeDetailType>
+    previousValues?: RecipeDetailType | null
   ) => {
     try {
       // We are editing an existing recipe so no need to check for paywall
@@ -82,7 +24,6 @@ const usePostUpdateRecipes = () => {
         await onCanAddRecipe();
       }
 
-      setIsLoading(true);
       const recipe_id = id || randomUUID();
 
       const imageUrl = await uploadImage({
@@ -98,20 +39,23 @@ const usePostUpdateRecipes = () => {
       const groupId = useBoundStore.getState().profile.groupId;
       const userId = getUserId();
 
-      const recipeDetails: any = {
-        recipe_id,
+      const recipeDetails: TRecipeDatabase = {
+        id: recipe_id,
         group_id: groupId || Env.TEST_GROUP_ID,
         user_id: userId || Env.TEST_USER_ID,
         name: values.name,
         description: values.description,
-        imageUrl: imageUrl,
-        prep_time: values.prepTime,
-        cook_time: values.performTime,
+        image: imageUrl,
+        prep_time: values?.prepTime || null,
+        cook_time: values?.performTime || null,
         servings: values.servings || 1,
-        rating: values.rating,
-        source: values.source,
-        note: values.note,
-        last_made: values?.lastMade,
+        rating: values?.rating || 0,
+        source: values?.source || '',
+        note: values?.note || '',
+        last_made: values?.lastMade || null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        date_added: null,
       };
 
       await updateRecipeAndRelatedTables({
@@ -128,14 +72,11 @@ const usePostUpdateRecipes = () => {
       // @ts-ignore
       console.error('Error updating recipe', error?.message);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return {
     onSubmit,
-    isLoading,
   };
 };
 
@@ -147,7 +88,7 @@ async function updateRecipeAndRelatedTables({
   tags,
   hasExistingRecipe,
 }: {
-  recipeDetails: RecipeDetails;
+  recipeDetails: TRecipeDatabase;
   ingredients: any;
   instructions: any;
   categories: any;
@@ -180,7 +121,7 @@ async function updateRecipeAndRelatedTables({
     await updateRelatedTable({
       tableName: table,
       data: data.changed,
-      recipe_id: recipeDetails.recipe_id,
+      recipe_id: recipeDetails.id,
     });
     await deleteRelatedRecords(table, data.deleted);
   };

@@ -1,15 +1,17 @@
-export interface RecipeDetails {
-  recipe_id: string;
-  group_id: string | null;
-  user_id: string | null;
-  name: string;
-  description: string;
-  imageUrl: string;
-  prep_time: string;
-  cook_time: string;
-  servings: number;
-  rating: number;
-  source: string;
-  note: string;
-  last_made: Date | null;
-}
+import { Tables } from '@/database/types/database-generated.types';
+
+export type TRecipeDatabase = Tables<'recipes'>;
+export type TRecipeIngredientsDatabase = Tables<'recipe_ingredients'>;
+export type TRecipeInstructionsDatabase = Tables<'recipe_instructions'>;
+export type TRecipeTagsDatabase = Tables<'recipe_tags'>;
+export type TRecipeCategoriesDatabase = Tables<'recipe_categories'>;
+
+export type TRecipeDetailsDatabase = TRecipeDatabase & {
+  recipe_ingredients: TRecipeIngredientsDatabase[];
+  recipe_instructions: TRecipeInstructionsDatabase[];
+  recipe_tags: TRecipeTagsDatabase[];
+  recipe_categories: TRecipeCategoriesDatabase[];
+};
+
+export type TCategoriesDatabase = Tables<'categories'>[];
+export type TTagsDatabase = Tables<'tags'>[];

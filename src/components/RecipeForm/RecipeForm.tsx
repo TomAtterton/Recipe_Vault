@@ -5,7 +5,6 @@ import HourMinutePicker from 'src/components/HourMinutePicker';
 import { stylesheet } from './recipeForm.styles';
 import { RecipeDetailType } from '@/types';
 import { Alert, View } from 'react-native';
-import { ScanImageDataType } from '@/screens/ScanImageContent/scanImageUtil';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import { useStyles } from 'react-native-unistyles';
 import { useScrollToTop } from '@react-navigation/native';
@@ -27,17 +26,12 @@ import { NestableScrollContainer } from '@/components/DraggableFlatList';
 export type onUpdateRecipeProps = ({
   updateValues,
 }: {
-  updateValues: Partial<RecipeDetailType>;
+  updateValues: RecipeDetailType;
 }) => Promise<void>;
 
 interface Props {
   id?: string | null;
-  scanContent?: {
-    data: {
-      [key: string]: ScanImageDataType;
-    };
-  };
-  data?: Partial<RecipeDetailType>;
+  data?: RecipeDetailType;
   onSubmitForm: onUpdateRecipeProps;
   buttonTitle: string;
   isEditing?: boolean;
@@ -47,7 +41,6 @@ interface Props {
 
 const RecipeForm = ({
   id,
-  scanContent,
   data,
   onSubmitForm,
   buttonTitle,
@@ -56,11 +49,7 @@ const RecipeForm = ({
   onDeleteRecipe,
 }: Props) => {
   const { control, onSubmit, scrollViewRef, onClearForm, isSubmitting, handleGoBack } =
-    useHandleRecipeForm({
-      scannedData: scanContent?.data,
-      data,
-      onSubmitForm,
-    });
+    useHandleRecipeForm({ data, onSubmitForm });
 
   const { handleScanLiveText } = useScanImageParser({
     id,
@@ -165,6 +154,7 @@ const RecipeForm = ({
           type={'instruction'}
           onScanLiveText={handleScanLiveText}
         />
+
         <ControlledCategoryContainer control={control} />
         <ControlledTagContainer control={control} />
         <ControlledInput

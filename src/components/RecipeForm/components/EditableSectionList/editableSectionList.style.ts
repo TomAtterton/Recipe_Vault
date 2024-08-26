@@ -6,6 +6,10 @@ export const stylesheet = createStyleSheet((theme) => ({
     paddingHorizontal: 16,
     borderRadius: 10,
   },
+  errorBorder: {
+    borderColor: theme.colors.error,
+    borderWidth: 1,
+  },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -33,5 +37,9 @@ export const stylesheet = createStyleSheet((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  error: {
+    color: theme.colors.error,
+    textAlign: 'center',
   },
 }));

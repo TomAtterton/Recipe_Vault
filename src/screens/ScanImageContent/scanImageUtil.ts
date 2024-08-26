@@ -29,7 +29,7 @@ export const parseTextToData = (id: keyof RecipeFormType, value: string) => {
           return {
             title: isSection ? ingredient : '',
             id: randomUUID(),
-            text: isSection ? null : ingredient,
+            text: isSection ? '' : ingredient,
             type: isSection ? 'section' : 'ingredient',
           };
         })
@@ -37,13 +37,13 @@ export const parseTextToData = (id: keyof RecipeFormType, value: string) => {
       return newIngredients as Ingredient[];
     }
     case 'recipeInstructions': {
-      const newInstructions = formatValue.split('\n').map((ingredient) => {
-        const isSection = ingredient.includes(':');
+      const newInstructions = formatValue.split('\n').map((instruction) => {
+        const isSection = instruction.includes(':');
 
         return {
-          title: isSection ? ingredient : '',
+          title: isSection ? instruction : '',
           id: randomUUID(),
-          text: isSection ? '' : ingredient,
+          text: isSection ? '' : instruction,
           type: isSection ? 'section' : 'ingredient',
         };
       }) as Instruction[];
@@ -61,9 +61,14 @@ export const parseTextToData = (id: keyof RecipeFormType, value: string) => {
 export const onConvertIngredientInstructionToText = (itemState: DraggableListItem[]) => {
   return itemState
     .map((_) => {
-      const value = _?.text;
-      const sectionTitle = _?.title;
-      return value === '' ? sectionTitle + ':' : value;
+      if (_.type === 'section') {
+        const sectionTitle = _.title;
+        if (sectionTitle?.endsWith(':')) {
+          return sectionTitle;
+        }
+        return sectionTitle + ':';
+      }
+      return _.text;
     })
     .join('\n');
 };

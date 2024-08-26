@@ -1,36 +1,34 @@
-import { useState } from 'react';
 import { Alert } from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback } from 'react';
 
 import {
   transformDefaultValues,
   recipeFormSchema,
-  defaultValues,
   parseSectionData,
   RecipeFormType,
 } from '@/utils/recipeFormUtil';
+
 import { RecipeDetailType } from '@/types';
 import { onUpdateRecipeProps } from '@/components/RecipeForm/RecipeForm';
 import { showErrorMessage } from '@/utils/promptUtils';
 import { setScannedImage } from '@/store';
 import { translate } from '@/core';
 import Animated, { useAnimatedRef } from 'react-native-reanimated';
+import { SubmitErrorHandler } from 'react-hook-form/dist/types/form';
+import useHandleFormData from '@/hooks/recipe/useHandleFormData';
 
 const useHandleRecipeForm = ({
-  scannedData,
   data,
   onSubmitForm,
 }: {
   scannedData?: Partial<RecipeFormType>;
-  data?: Partial<RecipeDetailType>;
+  data?: RecipeDetailType;
   onSubmitForm: onUpdateRecipeProps;
 }) => {
   const scrollViewRef = useAnimatedRef<Animated.ScrollView>();
-  const transformedValues = useMemo(() => transformDefaultValues(data), [data]);
-  const [isDirty, setIsDirty] = useState(false);
 
   const {
     control,
@@ -42,37 +40,17 @@ const useHandleRecipeForm = ({
   } = useForm<RecipeFormType>({
     resolver: zodResolver(recipeFormSchema),
     mode: 'onSubmit',
-    defaultValues,
+    defaultValues: transformDefaultValues(data),
     shouldFocusError: true,
   });
 
-  useFocusEffect(
-    useCallback(() => {
-      clearErrors();
-    }, [clearErrors])
-  );
-
-  useEffect(() => {
-    if (transformedValues) {
-      Object.entries(transformedValues).forEach(([key, value]) => {
-        setValue(key as keyof RecipeFormType, value);
-      });
-    }
-  }, [setValue, transformedValues]);
-
-  useEffect(() => {
-    if (scannedData) {
-      Object.entries(scannedData).forEach(([key, value]) => {
-        setValue(key as keyof RecipeFormType, value);
-      });
-    }
-  }, [scannedData, setValue]);
-
-  useEffect(() => {
-    if (Object.keys(dirtyFields).length > 0) {
-      setIsDirty(true);
-    }
-  }, [dirtyFields]);
+  const { onClearForm } = useHandleFormData({
+    setValue,
+    reset,
+    formDefaultValues: control._defaultValues,
+    data,
+    clearErrors,
+  });
 
   const onSubmit: SubmitHandler<RecipeFormType> = async (formData: RecipeFormType) => {
     try {
@@ -94,8 +72,7 @@ const useHandleRecipeForm = ({
         updateValues: formattedObject,
       });
       setScannedImage('');
-      reset();
-      setIsDirty(false);
+      onClearForm();
     } catch (e) {
       // @ts-ignore
       showErrorMessage(e?.message || 'Something went wrong', 3000);
@@ -104,16 +81,14 @@ const useHandleRecipeForm = ({
     }
   };
 
-  const onClearForm = () => {
-    reset();
-    clearErrors();
-    setIsDirty(false);
-  };
+  const onError: SubmitErrorHandler<RecipeFormType> = useCallback(() => {
+    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+  }, [scrollViewRef]);
 
   const { goBack } = useNavigation();
 
   const handleGoBack = () => {
-    if (!isDirty) {
+    if (Object.keys(dirtyFields).length === 0) {
       goBack();
     } else {
       Alert.alert(
@@ -129,7 +104,6 @@ const useHandleRecipeForm = ({
             text: translate('prompt.discard_changes.discard'),
             style: 'destructive',
             onPress: () => {
-              setIsDirty(false);
               goBack();
             },
           },
@@ -141,7 +115,7 @@ const useHandleRecipeForm = ({
   return {
     handleGoBack,
     control,
-    onSubmit: handleSubmit(onSubmit),
+    onSubmit: handleSubmit(onSubmit, onError),
     isSubmitting,
     scrollViewRef,
     onClearForm,
