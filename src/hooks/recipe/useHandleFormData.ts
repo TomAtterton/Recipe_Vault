@@ -6,6 +6,8 @@ import { useBoundStore } from '@/store';
 import { UseFormReset, UseFormSetValue } from 'react-hook-form/dist/types/form';
 import { RecipeDetailType } from '@/types';
 
+let oldWebRecipe: RecipeDetailType | null | undefined = null;
+
 const useHandleFormData = ({
   setValue,
   reset,
@@ -34,13 +36,19 @@ const useHandleFormData = ({
         });
         setScannedRecipe(undefined);
       }
+
       if (isEqual(formDefaultValues, defaultValues) && !isClearingForm) {
         if (data) {
           reset(transformDefaultValues(data));
         } else {
           webRecipe && reset(transformDefaultValues(webRecipe));
+          oldWebRecipe = webRecipe;
         }
       } else {
+        if (!!oldWebRecipe && !isEqual(oldWebRecipe, webRecipe)) {
+          oldWebRecipe = webRecipe;
+          reset(transformDefaultValues(webRecipe));
+        }
         setIsClearingForm(false);
       }
       clearErrors();

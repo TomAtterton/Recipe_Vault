@@ -2,6 +2,7 @@ import { Ingredient, RecipeDetailType } from '@/types';
 import { randomUUID } from 'expo-crypto';
 import { getUserId } from '@/hooks/common/useUserId';
 import { Env } from '@/core/env';
+import { decode } from 'html-entities';
 
 export const translateWebview = (text: string, url: string): RecipeDetailType => {
   const recipe = JSON.parse(text);
@@ -32,44 +33,64 @@ export const translateWebview = (text: string, url: string): RecipeDetailType =>
   };
 };
 
-function decodeHtmlEntity(str: string): string {
-  return str.replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(dec));
-}
-
 export const convertRecipeIngredientInstructions = (
   recipeIngredientInstructions:
+    | string
     | string[]
     | { text: string }[]
     | { itemListElement: { text: string }[] }[]
 ): Ingredient[] => {
   let sectionTitle = '';
 
-  const mapInstruction = (text: string): Ingredient | [] => {
-    const decodedText = decodeHtmlEntity(text);
-    const type = decodedText.endsWith(':') ? 'section' : 'ingredient';
-    sectionTitle = type === 'section' ? decodedText : sectionTitle;
-    return decodedText && decodedText !== sectionTitle
-      ? {
-          title: sectionTitle,
-          id: randomUUID(),
-          text: decodedText,
-          type,
-        }
-      : [];
+  const mapInstruction = (text: string): Ingredient | null => {
+    // Strip HTML tags
+    const strippedText = text.replace(/<\/?[^>]+(>|$)/g, '').trim();
+
+    // Decode HTML entities
+    const decodedText = decodeHtmlEntity(strippedText);
+
+    if (!decodedText) return null;
+
+    const isSection = decodedText.endsWith(':');
+    if (isSection) {
+      sectionTitle = decodedText;
+      return null;
+    }
+
+    return {
+      title: sectionTitle,
+      id: randomUUID(),
+      text: decodedText,
+      type: 'ingredient',
+    };
   };
 
-  return recipeIngredientInstructions.flatMap((ingredientInstruction) => {
-    if (typeof ingredientInstruction === 'string') {
-      return mapInstruction(ingredientInstruction);
-    } else if ('text' in ingredientInstruction) {
-      return mapInstruction(ingredientInstruction.text);
-    } else if ('itemListElement' in ingredientInstruction) {
-      return ingredientInstruction.itemListElement.flatMap((item) => mapInstruction(item.text));
-    } else {
-      return [];
+  // Handle input that is a raw HTML string
+  if (typeof recipeIngredientInstructions === 'string') {
+    const instructionsArray = recipeIngredientInstructions
+      .split(/<\/?p[^>]*>/gi)
+      .map((text) => decodeHtmlEntity(text))
+      .filter((text) => text.length > 0);
+
+    return instructionsArray.flatMap(mapInstruction).filter(Boolean) as Ingredient[];
+  }
+
+  // Handle structured input (arrays)
+  return recipeIngredientInstructions.flatMap((instruction) => {
+    if (typeof instruction === 'string') {
+      return mapInstruction(instruction) ?? [];
+    } else if ('text' in instruction) {
+      return mapInstruction(instruction.text) ?? [];
+    } else if ('itemListElement' in instruction) {
+      return instruction.itemListElement.flatMap((item) => mapInstruction(item.text) ?? []);
     }
+    return [];
   });
 };
+
+function decodeHtmlEntity(str: string): string {
+  return decode(str);
+}
 
 const convertImage = (
   image?: string | ({ url: string } | string)[] | { url: string }
