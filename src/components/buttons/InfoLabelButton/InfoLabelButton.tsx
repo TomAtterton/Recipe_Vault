@@ -38,7 +38,9 @@ const InfoLabelButton = ({
       // copy to clipboard if no onPress is provided
       !!buttonTitle && (await Clipboard.setStringAsync(buttonTitle || ''));
       showSuccessMessage('Copied to clipboard');
-    } catch (e) {}
+    } catch (error) {
+      // swallow error
+    }
   };
 
   return (

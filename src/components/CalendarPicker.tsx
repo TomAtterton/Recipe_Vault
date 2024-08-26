@@ -158,9 +158,6 @@ const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     right: 0,
     marginHorizontal: 16,
   },
-  saveTitle: {
-    fontWeight: 'bold',
-  },
 }));
 
 export default CalendarPicker;

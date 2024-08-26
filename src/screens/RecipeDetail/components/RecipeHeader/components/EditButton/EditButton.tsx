@@ -7,7 +7,7 @@ import NavBarButton from '@/components/buttons/NavBarButton';
 
 interface Props {
   id?: string;
-  debouncedUpdateRecipe?: (data?: Partial<RecipeDetailType>) => void;
+  debouncedUpdateRecipe?: (data?: RecipeDetailType) => void;
 }
 
 const EditButton = ({ id }: Props) => {

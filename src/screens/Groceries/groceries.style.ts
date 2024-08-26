@@ -12,6 +12,9 @@ export const stylesheet = createStyleSheet(() => ({
     paddingHorizontal: 20,
     paddingTop: 20,
   },
+  shimmer: {
+    borderRadius: 10,
+  },
   listContentContainer: {
     flexGrow: 1,
     paddingBottom: 80,

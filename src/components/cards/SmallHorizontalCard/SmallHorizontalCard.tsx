@@ -78,6 +78,7 @@ const SmallHorizontalCard = ({ item }: Props) => {
             params: {
               id: item.recipeId,
               image: item?.image || null,
+              servings: item?.servings || 1,
             },
           })
         }

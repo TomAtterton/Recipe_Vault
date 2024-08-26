@@ -25,7 +25,7 @@ const AdvanceSyncSettings = () => {
         <Typography variant={'titleItalicLarge'}>Advance Sync Settings.</Typography>
         <InfoLabelButton title={'Current Vault.'} buttonTitle={profile?.groupName} />
         <InfoLabelButton title={translate('settings.group_id')} buttonTitle={profile?.groupId} />
-        <InfoLabelButton title={translate('settings.user_id')} buttonTitle={profile?.id} />
+        {/*<InfoLabelButton title={translate('settings.user_id')} buttonTitle={profile?.id} />*/}
         <InfoLabelButton
           title={translate('settings.database.last_synced')}
           buttonTitle={lastSynced || 'has not synced'}

@@ -21,7 +21,7 @@ import { Routes } from '@/navigation/Routes';
 const RecipeDetail = () => {
   useKeepAwake();
   const {
-    params: { id, image },
+    params: { id, image, servings },
   } = useRoute<RouteProp<Routes.RecipeDetails>>();
 
   const { height } = useWindowDimensions();
@@ -48,7 +48,7 @@ const RecipeDetail = () => {
   return isiPadLandscape || isiPadPortrait ? (
     <View style={styles.container}>
       <RecipeHeader recipeId={id} image={image} isAnimated={false} />
-      <Ingredients recipeId={id} data={data} />
+      <Ingredients recipeId={id} data={data} initialServings={servings} />
       <Instructions recipeId={id} ingredients={data} />
       <View pointerEvents={'box-none'} style={styles.navBar}>
         <NavBarButton iconSource={'arrow-left'} onPress={goBack} />
@@ -80,7 +80,7 @@ const RecipeDetail = () => {
       renderHeader={handleRenderHeader}
     >
       <Tabs.Tab name="Ingredients" label={'Ingredients'} key={'ingredients'}>
-        <Ingredients recipeId={id} data={data} />
+        <Ingredients recipeId={id} data={data} initialServings={servings} />
       </Tabs.Tab>
       <Tabs.Tab name="Instructions" label={'Instructions'} key={'instructions'}>
         <Instructions recipeId={id} ingredients={data} />

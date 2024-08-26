@@ -28,6 +28,7 @@ const useFilterRecipes = ({ categories, filterOptions, search }: Props) => {
   const data = useMemo(
     () =>
       recipes?.map((recipe) => ({
+        ...recipe,
         id: recipe.id,
         name: recipe.name,
         description: recipe.description,

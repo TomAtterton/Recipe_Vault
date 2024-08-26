@@ -76,13 +76,7 @@ const CreateVault = () => {
   const { height, width } = useWindowDimensions();
   return (
     <View style={styles.container}>
-      <ChefMeals
-        height={height / 4}
-        width={width}
-        style={{
-          alignSelf: 'center',
-        }}
-      />
+      <ChefMeals height={height / 4} width={width} style={styles.chefMealImage} />
       <Typography variant={'titleLarge'} style={styles.title}>
         {'Create Your Cloud Vault'}
       </Typography>

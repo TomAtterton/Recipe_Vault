@@ -2,13 +2,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useCallback } from 'react';
 import { Routes } from '@/navigation/Routes';
 import { RecipeDetailType } from '@/types';
-import useGetRecipeDetails from '@/database/api/recipes/hooks/useGetRecipeDetails';
 import usePostUpdateRecipes from '@/database/api/recipes/hooks/usePostUpdateRecipes';
 import { showErrorMessage, showSuccessMessage } from '@/utils/promptUtils';
+import useGetRecipeDetailsCombined from '@/database/api/recipes/hooks/useGetRecipeDetailsCombined';
 
 const useRecipeDetail = ({ id }: { id?: string | null }) => {
   const navigation = useNavigation();
-  const { data: recipeData } = useGetRecipeDetails({ id });
+  const { data: recipeData } = useGetRecipeDetailsCombined({ id });
 
   const { onSubmit } = usePostUpdateRecipes();
 
@@ -30,7 +30,7 @@ const useRecipeDetail = ({ id }: { id?: string | null }) => {
         const mergedData = {
           ...filteredData,
           ...updateValues,
-        };
+        } as RecipeDetailType;
 
         await onSubmit(mergedData, id, recipeData);
 
@@ -45,11 +45,11 @@ const useRecipeDetail = ({ id }: { id?: string | null }) => {
               params: {
                 id,
                 image: mergedData?.image || null,
+                servings: mergedData?.servings || 1,
               },
             });
         }
       } catch (e) {
-        console.log('error', e);
         if (showBanner) {
           showErrorMessage('Error updating recipe');
         }

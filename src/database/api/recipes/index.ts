@@ -1,9 +1,9 @@
-import { RecipeDetails } from '@/database/types/recipes';
 import { database } from '@/database';
 import { sqlDelete, sqlExecute, sqlInsert, sqlUpdate, sqlGet } from '@/database/sql';
 import { useBoundStore } from '@/store';
 import { TableNames } from '@/database/api/types';
 import { randomUUID } from 'expo-crypto';
+import { TRecipeDatabase } from '@/database/types/recipes';
 
 export const deleteRecipe = async ({ id }: { id: string }) => sqlDelete(TableNames.recipes, id);
 
@@ -35,18 +35,18 @@ export const getRecipeServings = async (recipe_id?: string | null) => {
 };
 
 export const SELECT_TRY_SOMETHING =
-  'SELECT id, name, description, rating, cook_time, image\n' +
+  'SELECT id, name, description, rating, cook_time, servings, image\n' +
   'FROM recipes \n' +
   'ORDER BY created_at DESC\n' +
   'LIMIT 5;';
 
 export const updateRecipe = async ({
-  recipe_id,
+  id: recipe_id,
   group_id,
   user_id,
   name,
   description,
-  imageUrl,
+  image,
   prep_time,
   cook_time,
   servings,
@@ -54,7 +54,7 @@ export const updateRecipe = async ({
   source,
   note,
   last_made,
-}: RecipeDetails) =>
+}: TRecipeDatabase) =>
   sqlUpdate(
     TableNames.recipes,
     {
@@ -62,7 +62,7 @@ export const updateRecipe = async ({
       user_id,
       name,
       description,
-      image: imageUrl,
+      image,
       prep_time,
       cook_time,
       servings,
@@ -75,12 +75,12 @@ export const updateRecipe = async ({
   );
 
 export const insertRecipe = async ({
-  recipe_id,
+  id: recipe_id,
   group_id,
   user_id,
   name,
   description,
-  imageUrl,
+  image,
   prep_time,
   cook_time,
   servings,
@@ -88,14 +88,14 @@ export const insertRecipe = async ({
   source,
   note,
   last_made,
-}: RecipeDetails) =>
+}: TRecipeDatabase) =>
   sqlInsert(TableNames.recipes, {
     id: recipe_id,
     group_id,
     user_id,
     name,
     description,
-    image: imageUrl,
+    image,
     prep_time,
     cook_time,
     servings,

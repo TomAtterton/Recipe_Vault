@@ -21,6 +21,7 @@ export const TabBar = ({ state, descriptors, navigation, insets }: BottomTabBarP
   const { styles, theme } = useStyles(stylesheet);
   const tabBarHeight = 45 + insets.bottom;
   const darkMode = useBoundStore((_) => _.darkMode);
+
   return (
     <BlurView
       tint={darkMode ? 'dark' : 'light'}

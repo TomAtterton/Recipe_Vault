@@ -1,16 +1,19 @@
 import { Ingredient, RecipeDetailType } from '@/types';
 import { randomUUID } from 'expo-crypto';
 import { getUserId } from '@/hooks/common/useUserId';
+import { Env } from '@/core/env';
 
-export const translateWebview = (text: string, url: string): Partial<RecipeDetailType> => {
+export const translateWebview = (text: string, url: string): RecipeDetailType => {
   const recipe = JSON.parse(text);
   const cookTime = convertTimeToString(recipe?.cookTime);
   const prepTime = convertTimeToString(recipe?.prepTime);
+
   const userId = getUserId();
 
-  const recipeDetail: Partial<RecipeDetailType> = {
+  return {
     id: randomUUID(),
-    userId,
+    userId: userId || Env.TEST_USER_ID,
+    description: recipe?.description || '',
     name: recipe?.name || '',
     rating: 0,
     dateAdded: '',
@@ -27,7 +30,6 @@ export const translateWebview = (text: string, url: string): Partial<RecipeDetai
     recipeIngredient: convertRecipeIngredientInstructions(recipe?.recipeIngredient),
     recipeInstructions: convertRecipeIngredientInstructions(recipe?.recipeInstructions),
   };
-  return recipeDetail;
 };
 
 function decodeHtmlEntity(str: string): string {
@@ -86,10 +88,10 @@ const convertRecipeYield = (recipeYield?: string | number | string[]): number =>
     return recipeYield;
   } else if (typeof recipeYield === 'string') {
     const firstNumber = recipeYield.match(/\d+/);
-    return firstNumber ? parseInt(firstNumber[0]) : 0;
+    return firstNumber ? parseInt(firstNumber[0], 10) : 0;
   } else if (Array.isArray(recipeYield)) {
     const firstNumber = recipeYield[0].match(/\d+/);
-    return firstNumber ? parseInt(firstNumber[0]) : 0;
+    return firstNumber ? parseInt(firstNumber[0], 10) : 0;
   } else {
     return 0;
   }

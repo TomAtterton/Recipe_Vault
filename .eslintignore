@@ -9,6 +9,6 @@ ios/
 docs/
 cli/
 supabase/
-src/database/types/database.types.ts
+src/database/types/database-generated.types.ts
 scripts/
 lint-staged.config.js

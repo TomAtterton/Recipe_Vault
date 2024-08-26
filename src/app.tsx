@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 
 import * as SplashScreen from 'expo-splash-screen';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -35,16 +35,24 @@ const App = () => {
   initPurchases();
   useHandleSession();
 
+  const renderErrorScreen = useCallback(
+    ({
+      error,
+      resetError,
+    }: {
+      error: Error;
+      componentStack: string;
+      eventId: string;
+      resetError(): void;
+    }) => <ErrorScreen error={error} resetError={resetError} />,
+    []
+  );
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <SafeAreaProvider>
         <NavigationContainer theme={darkNavigationTheme}>
-          <ErrorBoundary
-            fallback={({ error, resetError }) => (
-              <ErrorScreen error={error} resetError={resetError} />
-            )}
-            showDialog={true}
-          >
+          <ErrorBoundary fallback={renderErrorScreen} showDialog={true}>
             <UpdateProvider>
               <FloatingInputProvider>
                 <RootNavigator />

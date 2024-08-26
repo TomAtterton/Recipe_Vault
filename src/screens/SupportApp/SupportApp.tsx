@@ -13,7 +13,6 @@ import { translate } from '@/core';
 import { showErrorMessage } from '@/utils/promptUtils';
 import ChefOk from '../../../assets/svgs/chef_fire.svg';
 import ConfettiCannon from 'react-native-confetti-cannon';
-import { useNavigation } from '@react-navigation/native';
 
 const SupportApp = () => {
   const { styles } = useStyles(stylesheet);
@@ -45,7 +44,6 @@ const SupportApp = () => {
       setIsLoading(false);
     }
   };
-  const { goBack } = useNavigation();
   const { height, width } = useWindowDimensions();
 
   const renderContent = () => {

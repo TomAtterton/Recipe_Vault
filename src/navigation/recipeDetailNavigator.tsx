@@ -6,19 +6,13 @@ import RecipeDetail from 'src/screens/RecipeDetail';
 import { Routes } from '@/navigation/Routes';
 import { RecipeDetailType } from '@/types';
 import { RecipeFormType } from '@/utils/recipeFormUtil';
-import { ScanImageDataType } from '@/screens/ScanImageContent/scanImageUtil';
 import ScanImageContent from '@/screens/ScanImageContent';
 
 export type RecipeDetailStackParamList = {
-  [Routes.RecipeDetails]: { id: string; image: string | null };
+  [Routes.RecipeDetails]: { id: string; image: string | null; servings: number };
   [Routes.EditRecipe]: {
     id?: string | null;
-    scanContent?: {
-      data: {
-        [key: string]: ScanImageDataType;
-      };
-    };
-    data?: Partial<RecipeDetailType>;
+    data?: RecipeDetailType;
   };
   [Routes.ScanImageContent]: {
     id?: string | null;

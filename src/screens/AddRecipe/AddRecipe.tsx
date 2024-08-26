@@ -8,19 +8,15 @@ import RecipeForm from '@/components/RecipeForm';
 
 const AddRecipe = ({}) => {
   const { params } = useRoute<RouteProp<Routes.AddRecipe>>();
-
-  const { id, scanContent, data, isNested } = params || {};
-  const hasScanContent = !!scanContent;
-
-  const { onAddRecipe, currentData } = useAddRecipe({ data, hasScanContent });
+  const { id, data, isNested } = params || {};
+  const { onAddRecipe } = useAddRecipe();
 
   return (
     <RecipeForm
       id={id}
+      data={data}
       buttonTitle="Add recipe"
-      scanContent={scanContent}
       onSubmitForm={onAddRecipe}
-      data={currentData}
       isNested={isNested}
     />
   );

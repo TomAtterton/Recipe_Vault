@@ -2,8 +2,20 @@ const path = require('path');
 
 module.exports = {
   extends: ['@react-native-community', 'plugin:prettier/recommended'],
-  plugins: ['@typescript-eslint', 'unused-imports'],
+  plugins: [
+    '@typescript-eslint',
+    'unused-imports',
+    'react-native-unistyles',
+    'eslint-plugin-react-compiler',
+  ],
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
   rules: {
+    'react-native-unistyles/no-unused-styles': 'warn',
+    'react-compiler/react-compiler': 'warn',
     // Define Prettier rules once
     'prettier/prettier': [
       'error',

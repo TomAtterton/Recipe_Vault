@@ -12,14 +12,13 @@ import EmptyList from '@/components/EmptyList';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './searchList.style';
 
-const keyExtractor = (_: Partial<RecipeDetailType>, index: number) =>
-  `item-${(_?.id || '') + index}`;
+const keyExtractor = (_: RecipeDetailType, index: number) => `item-${(_?.id || '') + index}`;
 
-const SearchList = ({ data }: { data?: Partial<RecipeDetailType>[] }) => {
+const SearchList = ({ data }: { data?: RecipeDetailType[] }) => {
   const { navigate } = useNavigation();
   const { styles, breakpoint } = useStyles(stylesheet);
 
-  const renderItem = ({ item }: { item: Partial<RecipeDetailType> }) => (
+  const renderItem = ({ item }: { item: RecipeDetailType }) => (
     <HorizontalCard
       {...item}
       onPress={() =>
@@ -29,6 +28,7 @@ const SearchList = ({ data }: { data?: Partial<RecipeDetailType>[] }) => {
           params: {
             id: item.id,
             image: item?.image || null,
+            servings: item?.servings || 1,
           },
         })
       }
