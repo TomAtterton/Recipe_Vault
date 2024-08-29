@@ -24,6 +24,7 @@ export const checkIfPro = async () => {
     }
   } catch (error) {
     // swallow error
+    return false;
   }
 };
 

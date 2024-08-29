@@ -8,6 +8,8 @@ import {
   requestCameraPermissionsAsync,
   requestMediaLibraryPermissionsAsync,
   MediaTypeOptions,
+  getMediaLibraryPermissionsAsync,
+  getCameraPermissionsAsync,
 } from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { showErrorMessage } from '@/utils/promptUtils';
@@ -58,18 +60,41 @@ export const onOpenImageCropper = async (imageUri: string, isTemporary: boolean)
   }
 };
 
+const checkAndRequestPermissions = async (
+  requestPermission: () => Promise<any>,
+  getPermission: () => Promise<any>,
+  permissionMessage: string
+) => {
+  const { status: existingStatus } = await getPermission();
+  let finalStatus = existingStatus;
+
+  if (existingStatus !== 'granted') {
+    const { status } = await requestPermission();
+    finalStatus = status;
+  }
+
+  if (finalStatus !== 'granted') {
+    await handlePermissions(requestPermission, permissionMessage);
+    return false;
+  }
+
+  return true;
+};
+
 export const onPickImageFromLibrary = async (isTemporary: boolean) => {
   try {
+    const hasPermission = await checkAndRequestPermissions(
+      requestMediaLibraryPermissionsAsync,
+      getMediaLibraryPermissionsAsync,
+      'Permission to access library was denied, please enable it in settings'
+    );
+
+    if (!hasPermission) return;
+
     const result = await launchImageLibraryAsync(defaultImageOptions);
     return await handleImageSelection(result, isTemporary);
   } catch (e: unknown) {
     const errorCode = (e as any)?.code;
-    if (errorCode === 'E_NO_LIBRARY_PERMISSION') {
-      await handlePermissions(
-        requestMediaLibraryPermissionsAsync,
-        'Permission to access library was denied please enable in settings'
-      );
-    }
     if (errorCode === 'E_PICKER_CANCELLED' || !errorCode) {
       return;
     }
@@ -79,23 +104,24 @@ export const onPickImageFromLibrary = async (isTemporary: boolean) => {
 
 export const onPickImageFromCamera = async (isTemporary: boolean) => {
   try {
+    const hasPermission = await checkAndRequestPermissions(
+      requestCameraPermissionsAsync,
+      getCameraPermissionsAsync,
+      'Permission to access camera was denied, please enable it in settings'
+    );
+
+    if (!hasPermission) return;
+
     const result = await launchCameraAsync(defaultImageOptions);
     return await handleImageSelection(result, isTemporary);
   } catch (e: unknown) {
     const errorCode = (e as any)?.code;
-    if (errorCode === 'E_NO_CAMERA_PERMISSION' || errorCode === 'ERR_MISSING_CAMERA_PERMISSION') {
-      await handlePermissions(
-        requestCameraPermissionsAsync,
-        'Permission to access camera was denied please enable in settings'
-      );
-    }
     if (errorCode === 'E_PICKER_CANCELLED' || !errorCode) {
       return;
     }
     showErrorMessage('Error picking image');
   }
 };
-
 const handleResult = async (result: ImagePickerResult | string) => {
   try {
     if (typeof result === 'string') {
