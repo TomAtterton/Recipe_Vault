@@ -1,0 +1,49 @@
+diff --git a/package.json b/package.json
+index 202b5aff1d83bbbe4418c811be088b7e256eb99c..7142de86c8e5757ed8c039cbdc93df8522bd3a6c 100644
+--- a/package.json
++++ b/package.json
+@@ -40,7 +40,7 @@
+   },
+   "sideEffects": false,
+   "dependencies": {
+-    "@expo/config-plugins": "^5.0.1",
++    "@expo/config-plugins": "^8.0.8",
+     "xcode": "^3.0.1"
+   },
+   "peerDependencies": {
+diff --git a/src/withShareExtensionXcodeTarget.ts b/src/withShareExtensionXcodeTarget.ts
+index 4cbdfd22420f0f6be2d7242225473199e6dfefb5..b1e31912e44992f0a7ea900eedd86fe343b6ed9a 100644
+--- a/src/withShareExtensionXcodeTarget.ts
++++ b/src/withShareExtensionXcodeTarget.ts
+@@ -28,8 +28,17 @@ export const withShareExtensionXcodeTarget: ConfigPlugin = (config) => {
+ 
+     const pbxProject = config.modResults;
+ 
+-    const target = pbxProject.addTarget(extensionName, 'app_extension', extensionName);
++    let target = pbxProject.getTarget('com.apple.product-type.app-extension');
++    if (target) {
++      console.log(`Found existing target with name: ${extensionName}`);
++      return config;
++    }
++
++    console.log(`Making new target with name: ${extensionName}...`);
+ 
++    if (!target) {
++      target = pbxProject.addTarget(extensionName, 'app_extension', extensionName);
++    }
+     // Add a new PBXSourcesBuildPhase for our ShareViewController
+     // (we can't add it to the existing one because an extension is kind of an extra app)
+     pbxProject.addBuildPhase([], 'PBXSourcesBuildPhase', 'Sources', target.uuid);
+@@ -69,6 +78,7 @@ export const withShareExtensionXcodeTarget: ConfigPlugin = (config) => {
+           buildSettingsObj['SWIFT_EMIT_LOC_STRINGS'] = 'YES';
+           buildSettingsObj['SWIFT_VERSION'] = '5.0';
+           buildSettingsObj['TARGETED_DEVICE_FAMILY'] = `"1,2"`;
++          buildSettingsObj['DEVELOPMENT_TEAM'] = config.extra?.ios?.teamId;
+         }
+       }
+     }
+@@ -76,3 +86,4 @@ export const withShareExtensionXcodeTarget: ConfigPlugin = (config) => {
+     return config;
+   });
+ };
++

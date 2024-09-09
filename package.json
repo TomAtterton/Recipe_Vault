@@ -12,7 +12,7 @@
     "submit-build": "eas build --profile production --platform ios --clear-cache --auto-submit",
     "submit-build-local": "eas build --profile production --platform ios --local",
     "postinstall": "husky install && patch-package",
-    "version": "yarn run prebuild && git add .",
+    "version": "bun run prebuild && git add .",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "type-check": "tsc --noemit",
     "lint:translations": "eslint ./src/translations/ --fix --ext .json  ",
@@ -20,7 +20,7 @@
     "prettier": "prettier --config .prettierrc.js 'src/**/*.ts' --write",
     "update:stagining": "eas update --channel staging",
     "upload-sourcemaps": "npx sentry-expo-upload-sourcemaps dist",
-    "update-expo": "yarn add expo && npx expo install --fix",
+    "update-expo": "bun add expo && npx expo install --fix",
     "devtools": "npx react-devtools"
   },
   "dependencies": {
@@ -158,6 +158,7 @@
     "jest-expo": "~51.0.4",
     "lint-staged": "^15.2.10",
     "metro-babel-register": "^0.80.12",
+    "metro-minify-terser": "^0.80.12",
     "np": "^10.0.7",
     "prettier": "^3.3.3",
     "react-native-svg-transformer": "^1.5.0",
@@ -166,15 +167,13 @@
     "ts-jest": "^29.2.5",
     "typescript": "~5.5.4"
   },
-  "packageManager": "yarn@3.6.4",
-  "resolutions": {
-    "expo-apple-authentication@^6.4.1": "patch:expo-apple-authentication@npm%3A6.4.1#./.yarn/patches/expo-apple-authentication-npm-6.4.1-7163d83225.patch"
-  },
+  "trustedDependencies": ["@sentry/cli"],
   "expo": {
     "doctor": {
       "reactNativeDirectoryCheck": {
         "enabled": true
       }
     }
-  }
+  },
+  "patchedDependencies": { "expo-config-plugin-ios-share-extension@0.0.4": "patches/expo-config-plugin-ios-share-extension@0.0.4.patch" }
 }

@@ -23,7 +23,6 @@ const CalendarPicker = ({ title, id, initialValue = new Date() }: Props) => {
   const bottomSheetModalRef = useRef<BottomSheetRef>(null);
   const [selectDate, setSelectDate] = useState(initialValue);
   const [entryType, setEntryType] = useState<'dinner' | 'breakfast' | 'lunch'>('dinner');
-  const {} = useStyles();
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();

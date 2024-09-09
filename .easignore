@@ -33,8 +33,6 @@ modules/**/android/build
 
 # debug
 npm-debug.*
-yarn-debug.*
-yarn-error.*
 
 # macOS
 .DS_Store
@@ -46,9 +44,3 @@ yarn-error.*
 .idea
 
 .pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions

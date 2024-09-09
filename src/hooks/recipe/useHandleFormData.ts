@@ -28,50 +28,74 @@ const useHandleFormData = ({
 
   const [isClearingForm, setIsClearingForm] = useState(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      if (scannedData) {
-        Object.entries(scannedData).forEach(([key, value]) => {
-          setValue(key as keyof RecipeFormType, value);
-        });
-        setScannedRecipe(undefined);
-      }
+  // Function to reset form with the appropriate values (data, webRecipe, etc.)
+  const handleResetForm = (sourceData: RecipeDetailType | null | undefined) => {
+    if (sourceData) {
+      reset(transformDefaultValues(sourceData));
+    } else {
+      reset(defaultValues);
+    }
+    clearErrors();
+  };
 
-      if (isEqual(formDefaultValues, defaultValues) && !isClearingForm) {
-        if (data) {
-          reset(transformDefaultValues(data));
+  // Check if the webRecipe has changed and needs resetting
+  const handleWebRecipeChange = () => {
+    if (oldWebRecipe && !isEqual(oldWebRecipe, webRecipe)) {
+      oldWebRecipe = webRecipe;
+      handleResetForm(webRecipe);
+    }
+  };
+
+  // Populate form from scanned data
+  const populateFromScannedData = () => {
+    if (scannedData) {
+      Object.entries(scannedData).forEach(([key, value]) => {
+        setValue(key as keyof RecipeFormType, value);
+      });
+      setScannedRecipe(undefined);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(
+      () => {
+        populateFromScannedData();
+
+        if (isEqual(formDefaultValues, defaultValues) && !isClearingForm) {
+          if (data) {
+            handleResetForm(data);
+          } else {
+            handleResetForm(webRecipe);
+            oldWebRecipe = webRecipe;
+          }
         } else {
-          webRecipe && reset(transformDefaultValues(webRecipe));
-          oldWebRecipe = webRecipe;
+          handleWebRecipeChange();
+          setIsClearingForm(false);
         }
-      } else {
-        if (!!oldWebRecipe && !isEqual(oldWebRecipe, webRecipe)) {
-          oldWebRecipe = webRecipe;
-          reset(transformDefaultValues(webRecipe));
-        }
-        setIsClearingForm(false);
-      }
-      clearErrors();
-    }, [
-      scannedData,
-      formDefaultValues,
-      isClearingForm,
-      clearErrors,
-      setScannedRecipe,
-      setValue,
-      data,
-      reset,
-      webRecipe,
-    ]),
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [
+        scannedData,
+        formDefaultValues,
+        isClearingForm,
+        clearErrors,
+        setScannedRecipe,
+        setValue,
+        data,
+        reset,
+        webRecipe,
+      ],
+    ),
   );
 
   const onClearForm = () => {
     setScannedRecipe(undefined);
     setWebRecipe(undefined);
     setIsClearingForm(false);
-    reset(defaultValues);
-    clearErrors();
+    handleResetForm(null);
   };
+
   return { onClearForm };
 };
+
 export default useHandleFormData;

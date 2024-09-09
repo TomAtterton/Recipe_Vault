@@ -11,11 +11,14 @@ interface Props {
 }
 
 const EditButton = ({ id }: Props) => {
-  const navigation = useNavigation();
+  const { navigate } = useNavigation();
 
   const onEdit = useCallback(() => {
-    id && navigation.navigate(Routes.EditRecipe, { id });
-  }, [navigation, id]);
+    return navigate(Routes.RecipeDetailStack, {
+      screen: Routes.EditRecipe,
+      params: { id },
+    });
+  }, [navigate, id]);
   return (
     <MenuView
       actions={[
