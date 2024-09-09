@@ -57,8 +57,12 @@ const NumberPicker = ({
       <InfoLabelButton title={title} buttonTitle={buttonTitle} onPress={handlePresentModalPress} />
       <BottomSheet bottomSheetRef={bottomSheetModalRef}>
         <View style={styles.contentContainer}>
-          <Typography style={styles.title}>{title}</Typography>
-          <Typography style={styles.description}>{description}</Typography>
+          <Typography variant={'titleMedium'} style={styles.title}>
+            {title}
+          </Typography>
+          <Typography variant={'bodyMediumItalic'} style={styles.description}>
+            {description}
+          </Typography>
           <Picker
             selectedValue={selectedNumber}
             onValueChange={(value) => {

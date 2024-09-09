@@ -19,12 +19,9 @@ export const stylesheet = createStyleSheet((theme) => ({
     fontWeight: 'bold',
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 8,
   },
   description: {
-    fontSize: 16,
     marginBottom: 16,
   },
   saveButton: {
