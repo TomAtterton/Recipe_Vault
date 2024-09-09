@@ -24,7 +24,7 @@ const useRecipeDetail = ({ id }: { id?: string | null }) => {
     }) => {
       try {
         const filteredData = Object.fromEntries(
-          Object.entries(recipeData || []).filter(([key]) => !(key in updateValues))
+          Object.entries(recipeData || []).filter(([key]) => !(key in updateValues)),
         );
 
         const mergedData = {
@@ -53,9 +53,10 @@ const useRecipeDetail = ({ id }: { id?: string | null }) => {
         if (showBanner) {
           showErrorMessage('Error updating recipe');
         }
+        console.log('Error updating recipe', e);
       }
     },
-    [id, navigation, onSubmit, recipeData]
+    [id, navigation, onSubmit, recipeData],
   );
 
   return {

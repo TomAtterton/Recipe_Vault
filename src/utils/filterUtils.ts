@@ -7,7 +7,7 @@ export type FilterObjectType = {
 export const generateFilterSelect = (
   categoriesIds: string[],
   filter: FilterObjectType,
-  searchText: string | null // Add a searchText parameter to the filter
+  searchText: string | null, // Add a searchText parameter to the filter
 ) => {
   const { rating, tags } = filter;
 

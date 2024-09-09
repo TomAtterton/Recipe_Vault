@@ -21,7 +21,7 @@ const useScanImageParser = ({ isEditing, id }: { id?: string | null; isEditing?:
         formId,
       });
     },
-    [id, isEditing, navigation]
+    [id, isEditing, navigation],
   );
 
   return {

@@ -32,9 +32,10 @@ const SmallHorizontalCard = ({ item }: Props) => {
         await onDeleteMealPlan({ id });
       } catch (e) {
         showErrorMessage('Something went wrong');
+        console.log('Error deleting meal plan', e);
       }
     },
-    [onDeleteMealPlan]
+    [onDeleteMealPlan],
   );
 
   const icon: Partial<IconName> = useMemo(() => {

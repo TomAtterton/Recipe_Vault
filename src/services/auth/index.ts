@@ -15,6 +15,7 @@ export const onDisconnect = async () => {
     await onOpenDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
   } catch (error) {
     showErrorMessage(translate('error.default.error_message'), 3000);
+    console.log('Error disconnecting account', error);
   }
 };
 

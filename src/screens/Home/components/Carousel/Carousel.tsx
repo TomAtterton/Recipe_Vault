@@ -20,7 +20,7 @@ const Carousel = <T,>({
 }: CarouselProps<T>) => {
   const snapPoints = useMemo(
     () => data?.map((_, i) => i * (itemWidth + gap)),
-    [data, gap, itemWidth]
+    [data, gap, itemWidth],
   );
 
   return (

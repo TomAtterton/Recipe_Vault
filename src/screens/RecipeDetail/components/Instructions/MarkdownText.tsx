@@ -16,7 +16,7 @@ const MarkdownText = ({ text, ingredients }: Props) => {
   const parsedIngredients = useMemo(() => ingredientsParsed(ingredients), [ingredients]);
   const markdownText = useMemo(
     () => parseRecipeTextToMarkdown(text, parsedIngredients),
-    [text, parsedIngredients]
+    [text, parsedIngredients],
   );
   const { styles } = useStyles(stylesheet);
 

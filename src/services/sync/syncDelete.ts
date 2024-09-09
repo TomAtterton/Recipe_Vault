@@ -55,7 +55,7 @@ const onDeleteRemoteTable = async () => {
     }
 
     const deletedRecords = (await database.getAllAsync(
-      `SELECT * FROM deleted_records WHERE is_modified = 1`
+      `SELECT * FROM deleted_records WHERE is_modified = 1`,
     )) as any[];
 
     if (deletedRecords && deletedRecords.length === 0) {

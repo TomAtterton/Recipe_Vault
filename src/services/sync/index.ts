@@ -33,5 +33,5 @@ export const syncWithSupabase = debounce(
     await performSync();
   },
   1000,
-  { leading: true, trailing: false }
+  { leading: true, trailing: false },
 );

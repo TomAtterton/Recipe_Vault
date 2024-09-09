@@ -94,7 +94,7 @@ const BookmarkPage = ({ showBookmark, onLinkPress, onShowBookmarkModal }: Props)
       styles.clearTitle,
       styles.deleteAllHistoryButton,
       styles.titleContainer,
-    ]
+    ],
   );
 
   const translateY = useSharedValue(height - top - SEARCH_BAR_HEIGHT);

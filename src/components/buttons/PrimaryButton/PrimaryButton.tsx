@@ -58,7 +58,7 @@ const PrimaryButton = forwardRef<View, Props>(
         </TouchableOpacity>
       </SquircleDynamicContainer>
     );
-  }
+  },
 );
 
 export default PrimaryButton;

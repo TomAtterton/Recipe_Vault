@@ -44,7 +44,7 @@ const useHandleCopyPaste = ({ onCallback, setValue, value, formId }: Props) => {
 const handleContent = (
   content: string,
   formId: keyof RecipeFormType,
-  setValue: (value: string) => void
+  setValue: (value: string) => void,
 ) => {
   switch (formId) {
     case 'title':
@@ -71,7 +71,7 @@ const formatContent = (content: string) => {
       line
         .replace(/•/g, '')
         .replace(/^\d+\./g, '')
-        .trim()
+        .trim(),
     )
     .join('\n');
 };

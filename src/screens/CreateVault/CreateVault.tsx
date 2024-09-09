@@ -33,7 +33,7 @@ const CreateVault = () => {
       // if text contains anything other than letters setErrorMessage
       if (text.match(/[^a-zA-Z]/)) {
         setErrorMessages(
-          'Please use only letters for your vault name. Numbers and Special characters are not allowed.'
+          'Please use only letters for your vault name. Numbers and Special characters are not allowed.',
         );
         setIsLoading(false);
         return;

@@ -50,8 +50,8 @@ export const useBoundStore = create<
         darkMode: state.darkMode,
         databaseStatus: state.databaseStatus,
       }),
-    }
-  )
+    },
+  ),
 );
 export const resetAllSlices = () => {
   sliceResetFns.forEach((resetFn) => {

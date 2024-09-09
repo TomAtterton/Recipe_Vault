@@ -16,7 +16,7 @@ const initialGroceryListState = {
 };
 
 export const createGroceryListSlice: StateCreator<GroceryListSlice, [], [], GroceryListSlice> = (
-  set
+  set,
 ) => {
   sliceResetFns.add(() => set(initialGroceryListState));
   return {

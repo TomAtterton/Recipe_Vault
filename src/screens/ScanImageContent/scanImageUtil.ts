@@ -11,7 +11,7 @@ export const formatText = (text: string): string =>
     .map((_) =>
       _.replace(/•/g, '')
         .replace(/^\d+\./g, '')
-        .trim()
+        .trim(),
     )
     .join('\n');
 
@@ -49,7 +49,7 @@ export const parseTextToData = (id: keyof RecipeFormType, value: string) => {
       }) as Instruction[];
 
       const filteredInstructions = newInstructions.filter(
-        (instruction) => instruction !== undefined
+        (instruction) => instruction !== undefined,
       );
 
       return filteredInstructions as Instruction[];

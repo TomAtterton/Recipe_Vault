@@ -79,7 +79,7 @@ export const useFloatingInput = () => {
       KeyboardManager?.setEnable(false);
       KeyboardManager.setEnableAutoToolbar(false);
       KeyboardManager.setShouldResignOnTouchOutside(false);
-    }, [])
+    }, []),
   );
 
   return context;

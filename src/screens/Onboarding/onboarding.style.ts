@@ -35,5 +35,5 @@ export const stylesheet = createStyleSheet(
       flexDirection: 'row',
       gap: 20,
     },
-  })
+  }),
 );

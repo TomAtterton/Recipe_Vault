@@ -24,6 +24,7 @@ export const checkIfPro = async () => {
     }
   } catch (error) {
     // swallow error
+    console.log('Error checking if user is pro', error);
     return false;
   }
 };
@@ -34,6 +35,7 @@ export const checkCanAddRecipe = async () => {
     const recipeCount = await getRecipeCount();
     return recipeCount < 5 || isPro;
   } catch (error) {
+    console.log('Error checking if user can add recipe', error);
     throw new Error('Cloud sync is enabled and you have reached the maximum recipe limit.');
   }
 };

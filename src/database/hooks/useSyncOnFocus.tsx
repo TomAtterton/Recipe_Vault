@@ -11,7 +11,7 @@ const useSyncOnFocus = () => {
       if (shouldSync) {
         syncWithSupabase();
       }
-    }, [shouldSync])
+    }, [shouldSync]),
   );
 };
 

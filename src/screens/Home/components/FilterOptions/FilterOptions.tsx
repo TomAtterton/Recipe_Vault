@@ -49,7 +49,7 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
         [option]: value,
       }));
     },
-    []
+    [],
   );
 
   const { data } = useGetTags();
@@ -68,7 +68,7 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
 
       return <CheckBox isSelected={isSelected} label={item.name || ''} onPress={handleSelect} />;
     },
-    [filterOptions?.tags, updateFilterOption]
+    [filterOptions?.tags, updateFilterOption],
   );
 
   const onSaved = useCallback(() => {
@@ -86,7 +86,7 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
     return Object.values(currentFilters || {}).filter(
       (value) =>
         // @ts-ignore
-        value !== null && value !== false && value?.length !== 0 && value !== '' && value !== 0
+        value !== null && value !== false && value?.length !== 0 && value !== '' && value !== 0,
     ).length;
   }, [currentFilters]);
 

@@ -16,7 +16,7 @@ const usePostUpdateRecipes = () => {
   const onSubmit = async (
     values: RecipeDetailType,
     id?: string | null,
-    previousValues?: RecipeDetailType | null
+    previousValues?: RecipeDetailType | null,
   ) => {
     try {
       // We are editing an existing recipe so no need to check for paywall
@@ -33,7 +33,7 @@ const usePostUpdateRecipes = () => {
 
       const { instructions, ingredients, categories, tags } = checkMetaDataDuplicates(
         values,
-        previousValues
+        previousValues,
       );
 
       const groupId = useBoundStore.getState().profile.groupId;
@@ -116,7 +116,7 @@ async function updateRecipeAndRelatedTables({
     data: {
       changed: any[];
       deleted: any[];
-    }
+    },
   ) => {
     await updateRelatedTable({
       tableName: table,

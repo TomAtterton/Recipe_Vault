@@ -19,7 +19,7 @@ export const recipeFormSchema = z.object({
         title: z.optional(z.string()).nullish(),
         text: z.string(),
         type: z.union([z.literal('section'), z.literal('ingredient')]).optional(),
-      })
+      }),
     )
     .nonempty('Ingredients are required.'),
   recipeInstructions: z
@@ -29,7 +29,7 @@ export const recipeFormSchema = z.object({
         title: z.optional(z.string()).nullish(),
         text: z.string(),
         type: optional(z.string()),
-      })
+      }),
     )
     .nonempty('Instructions are required.'),
   prepTime: z
@@ -45,8 +45,8 @@ export const recipeFormSchema = z.object({
           {
             message:
               'Invalid prep time format. Use a number followed by a period and a unit (e.g., "minutes", "hours"). Or none',
-          }
-        )
+          },
+        ),
     )
     .nullish(),
   cookTime: z.optional(
@@ -61,9 +61,9 @@ export const recipeFormSchema = z.object({
         {
           message:
             'Invalid cook time format. Use a number followed by a period and a unit (e.g., "minutes", "hours"). Or none',
-        }
+        },
       )
-      .nullish()
+      .nullish(),
   ),
 
   source: z.optional(z.string()).nullish(),
@@ -74,8 +74,8 @@ export const recipeFormSchema = z.object({
         z.object({
           id: z.optional(z.string()).nullish(),
           name: z.optional(z.string()).nullish(),
-        })
-      )
+        }),
+      ),
     )
     .nullish(),
   recipeTags: z
@@ -84,8 +84,8 @@ export const recipeFormSchema = z.object({
         z.object({
           id: z.optional(z.string()).nullish(),
           name: z.optional(z.string()).nullish(),
-        })
-      )
+        }),
+      ),
     )
     .nullish(),
   note: z.optional(z.string()).nullish(),

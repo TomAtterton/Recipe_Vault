@@ -40,6 +40,7 @@ const InfoLabelButton = ({
       showSuccessMessage('Copied to clipboard');
     } catch (error) {
       // swallow error
+      console.log('Error copying to clipboard', error);
     }
   };
 

@@ -16,7 +16,7 @@ const LiveImagePicker = ({ onFullScreen }: Props) => {
         onFullScreen?.();
       }
     },
-    [onFullScreen]
+    [onFullScreen],
   );
 
   return (

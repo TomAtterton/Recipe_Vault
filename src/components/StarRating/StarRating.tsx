@@ -96,7 +96,7 @@ const Star = ({ index, selectedStarIndex }: { index: number; selectedStarIndex: 
   } = useStyles();
 
   const color = useDerivedValue(() =>
-    selectedStarIndex.value <= index ? colors.onBackground : colors.primary
+    selectedStarIndex.value <= index ? colors.onBackground : colors.primary,
   );
 
   return (

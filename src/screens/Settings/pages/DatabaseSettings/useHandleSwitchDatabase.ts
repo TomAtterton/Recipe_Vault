@@ -30,7 +30,7 @@ const useHandleSwitchDatabase = () => {
         }));
         setGroups(parsedGroups);
       });
-    }, [userId])
+    }, [userId]),
   );
 
   const handleEnableCloudDatabase = async (id: string) => {
@@ -89,6 +89,7 @@ const useHandleSwitchDatabase = () => {
       setSyncEnabled(false);
       await onOpenDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
     } catch (error) {
+      console.log('error', error);
       showErrorMessage(translate('error.default.error_message', 3000));
     }
   };
@@ -116,7 +117,7 @@ const useHandleSwitchDatabase = () => {
             }
           },
         },
-      ]
+      ],
     );
   };
   return { handleSwitchDatabase, availableGroups: groups };

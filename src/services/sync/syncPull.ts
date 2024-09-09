@@ -36,7 +36,7 @@ export const syncPull = async (forceAll?: boolean): Promise<void> => {
     const lastSynced = getLastSynced(forceAll);
 
     const changes: GenericRecord[][] = await Promise.all(
-      TABLE_NAMES.map((tableName) => fetchChanges(tableName, lastSynced))
+      TABLE_NAMES.map((tableName) => fetchChanges(tableName, lastSynced)),
     );
 
     for (let i = 0; i < TABLE_NAMES.length; i++) {
@@ -68,7 +68,7 @@ const updateLocalTable = async (tableName: TableName, records: GenericRecord[]):
     for (const record of records) {
       const existingRecord = await database.getFirstAsync(
         `SELECT id FROM ${tableName} WHERE id = ?`,
-        [record.id]
+        [record.id],
       );
 
       if (existingRecord) {
@@ -85,7 +85,7 @@ const updateLocalTable = async (tableName: TableName, records: GenericRecord[]):
         const placeholders = new Array(Object.keys(record).length).fill('?').join(', ');
         await database.runAsync(
           `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders})`,
-          Object.values(record)
+          Object.values(record),
         );
       }
     }
@@ -96,7 +96,7 @@ const updateLocalTable = async (tableName: TableName, records: GenericRecord[]):
 
 const fetchChanges = async (
   tableName: TableName,
-  last_updated_at: string
+  last_updated_at: string,
 ): Promise<GenericRecord[]> => {
   const groupId = useBoundStore.getState()?.profile?.groupId || '';
   const profileId = useBoundStore.getState()?.profile?.id || '';

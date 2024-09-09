@@ -45,7 +45,7 @@ const App = () => {
       eventId: string;
       resetError(): void;
     }) => <ErrorScreen error={error} resetError={resetError} />,
-    []
+    [],
   );
 
   return (

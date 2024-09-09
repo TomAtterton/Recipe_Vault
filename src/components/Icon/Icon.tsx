@@ -6,7 +6,7 @@ import React from 'react';
 export const IconMoon = createIconSetFromIcoMoon(
   require('../../../assets/icomoon/selection.json'),
   'icomoon',
-  require('../../../assets/fonts/icomoon.ttf')
+  require('../../../assets/fonts/icomoon.ttf'),
 );
 
 interface Props extends TextProps {

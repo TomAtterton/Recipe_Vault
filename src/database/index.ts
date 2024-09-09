@@ -31,7 +31,7 @@ const initDatabase = async (db: SQLiteDatabase) => {
   await db.execAsync('PRAGMA foreign_keys = ON');
   // @ts-ignore
   let { user_version: currentDbVersion } = await db.getFirstAsync<{ user_version: number }>(
-    'PRAGMA user_version'
+    'PRAGMA user_version',
   );
 
   if (currentDbVersion >= DATABASE_VERSION) {

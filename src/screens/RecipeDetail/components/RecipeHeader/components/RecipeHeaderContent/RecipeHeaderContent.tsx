@@ -34,7 +34,7 @@ const RecipeHeaderContent = ({ id }: Props) => {
     (updateValues?: Partial<RecipeDetailType>) => {
       return updateValues && onUpdateRecipe({ updateValues, shouldNavigate: false });
     },
-    [onUpdateRecipe]
+    [onUpdateRecipe],
   );
   const { name, prepTime, performTime: cookTime, rating: currentRating, source, note } = data || {};
 
@@ -46,7 +46,7 @@ const RecipeHeaderContent = ({ id }: Props) => {
     (value: number) => {
       debouncedUpdateRecipe?.({ rating: value });
     },
-    [debouncedUpdateRecipe]
+    [debouncedUpdateRecipe],
   );
 
   const { styles } = useStyles(stylesheet);

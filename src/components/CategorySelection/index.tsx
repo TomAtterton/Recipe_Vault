@@ -19,7 +19,7 @@ const CategorySelection = ({ selectedCategories, onSetCategories }: Props) => {
         const handlePress = () => {
           if (selectedCategories.includes(category?.id)) {
             return onSetCategories(
-              selectedCategories.filter((item: string) => item !== category.id)
+              selectedCategories.filter((item: string) => item !== category.id),
             );
           }
           return onSetCategories([...selectedCategories, category.id]);

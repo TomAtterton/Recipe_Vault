@@ -16,7 +16,7 @@ const initialRecipeFormState = {
 };
 
 export const createRecipeFormSlice: StateCreator<RecipeFormSlice, [], [], RecipeFormSlice> = (
-  set
+  set,
 ) => {
   sliceResetFns.add(() => set(initialRecipeFormState));
   return {

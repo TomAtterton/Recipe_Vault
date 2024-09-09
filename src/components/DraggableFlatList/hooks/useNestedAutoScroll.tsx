@@ -69,7 +69,7 @@ export function useNestedAutoScroll({ hoverOffset }: { hoverOffset: DerivedValue
         scrollTarget.value = outerScrollOffset.value;
       }
     },
-    [activeCellSize]
+    [activeCellSize],
   );
 
   useDerivedValue(() => {

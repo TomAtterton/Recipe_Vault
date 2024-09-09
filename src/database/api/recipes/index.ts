@@ -71,7 +71,7 @@ export const updateRecipe = async ({
       note,
       last_made,
     },
-    recipe_id
+    recipe_id,
   );
 
 export const insertRecipe = async ({
@@ -148,7 +148,7 @@ export const updateRelatedTable = async ({
 
       values.push(...baseValues, ...itemValues);
       placeholders.push(
-        `(${new Array(baseValues.length + itemValues.length).fill('?').join(',')})`
+        `(${new Array(baseValues.length + itemValues.length).fill('?').join(',')})`,
       );
     });
 

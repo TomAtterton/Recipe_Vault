@@ -46,7 +46,7 @@ const ChipInput = ({ style, control, name, title, currentData, onUpdate, onDelet
         field.onChange([...fieldValues, option]);
       }
     },
-    [field, fieldValues]
+    [field, fieldValues],
   );
 
   const values = useMemo(() => {

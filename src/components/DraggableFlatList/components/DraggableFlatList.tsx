@@ -1,7 +1,7 @@
 import React, { useCallback, useLayoutEffect, useState } from 'react';
 import { ListRenderItem, FlatListProps, LayoutChangeEvent, FlatList } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
-import Animated, { useSharedValue } from 'react-native-reanimated';
+import Animated, { AnimatedProps, useSharedValue } from 'react-native-reanimated';
 import CellRendererComponent from './CellRendererComponent';
 import { DEFAULT_PROPS } from '../constants';
 import RowItem from './RowItem';
@@ -15,7 +15,7 @@ import useHandlePan from './useHandlePan';
 import { typedMemo } from '@/components/DraggableFlatList/utils';
 import useHandleScroll from '@/components/DraggableFlatList/components/useHandleScroll';
 
-type RNGHFlatListProps<T> = Animated.AnimateProps<FlatListProps<T>>;
+type RNGHFlatListProps<T> = AnimatedProps<FlatListProps<T>>;
 
 type OnViewableItemsChangedCallback<T> = Exclude<
   FlatListProps<T>['onViewableItemsChanged'],
@@ -23,7 +23,7 @@ type OnViewableItemsChangedCallback<T> = Exclude<
 >;
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList) as unknown as <T>(
-  props: RNGHFlatListProps<T>
+  props: RNGHFlatListProps<T>,
 ) => React.ReactElement;
 
 function DraggableFlatListInner<T>(props: DraggableFlatListProps<T>) {
@@ -77,7 +77,7 @@ function DraggableFlatListInner<T>(props: DraggableFlatListProps<T>) {
   });
 
   useLayoutEffect(() => {
-    props.data.forEach((d, i) => {
+    (props?.data || []).forEach((d, i) => {
       const key = keyExtractor(d, i);
       keyToIndexRef.current.set(key, i);
     });
@@ -127,17 +127,17 @@ function DraggableFlatListInner<T>(props: DraggableFlatListProps<T>) {
         keyToIndexRef.current.set(key, index);
       }
 
-      return (
+      return props?.renderItem ? (
         <RowItem
           item={item}
           itemKey={key}
-          renderItem={props.renderItem}
+          renderItem={props?.renderItem}
           drag={handleDrag}
           activeKey={activeKey}
         />
-      );
+      ) : null;
     },
-    [keyExtractor, keyToIndexRef, props.renderItem, handleDrag, activeKey]
+    [keyExtractor, keyToIndexRef, props.renderItem, handleDrag, activeKey],
   );
 
   const { panGesture } = useHandlePan({
@@ -165,7 +165,7 @@ function DraggableFlatListInner<T>(props: DraggableFlatListProps<T>) {
         <CellRendererComponent keyExtractor={keyExtractor} activeKey={activeKey} {...cellProps} />
       );
     },
-    [activeKey, keyExtractor]
+    [activeKey, keyExtractor],
   );
 
   return (
@@ -205,5 +205,5 @@ function DraggableFlatList<T>(props: DraggableFlatListProps<T>) {
 }
 
 export default DraggableFlatList as <T>(
-  props: DraggableFlatListProps<T>
+  props: DraggableFlatListProps<T>,
 ) => ReturnType<typeof DraggableFlatList>;

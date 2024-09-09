@@ -20,6 +20,7 @@ export const requestReminderPermission = async () => {
 
     return status === 'granted';
   } catch (error) {
+    console.log('Error requesting reminder permission', error);
     return false;
   }
 };

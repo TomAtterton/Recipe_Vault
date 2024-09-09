@@ -62,7 +62,7 @@ const useHandleFormData = ({
       data,
       reset,
       webRecipe,
-    ])
+    ]),
   );
 
   const onClearForm = () => {

@@ -39,7 +39,7 @@ const AdvanceDatabaseSettings = () => {
               }
             },
           },
-        ]
+        ],
       );
     } catch (error) {
       console.log('error', error);
@@ -63,7 +63,7 @@ const AdvanceDatabaseSettings = () => {
               showSuccessMessage(translate('prompt.clear_database.success_message'));
             },
           },
-        ]
+        ],
       );
     } catch (error) {
       console.log('error', error);
@@ -78,7 +78,7 @@ const AdvanceDatabaseSettings = () => {
       Alert.alert(
         translate(`Delete Cloud Vault: ${currentDatabaseName}`),
         translate(
-          '\nAre you sure you want to delete your cloud data?\n\n You cannot reverse this! Any Purchases made will be lost.'
+          '\nAre you sure you want to delete your cloud data?\n\n You cannot reverse this! Any Purchases made will be lost.',
         ),
         [
           {
@@ -108,7 +108,7 @@ const AdvanceDatabaseSettings = () => {
               }
             },
           },
-        ]
+        ],
       );
     } catch (error) {
       console.log('error', error);

@@ -20,7 +20,7 @@ export const parseMetrics = ({ note, isMetric }: { note: string; isMetric: boole
       if (!unitsSet.has(unitOfMeasure)) {
         value = convert(quantity, unitOfMeasure as any).to(
           'best',
-          isMetric ? 'metric' : 'imperial'
+          isMetric ? 'metric' : 'imperial',
         );
       }
 
@@ -35,6 +35,7 @@ export const parseMetrics = ({ note, isMetric }: { note: string; isMetric: boole
         unitOfMeasure: value?.unit,
       };
     } catch (error) {
+      console.log('Error converting units', error);
       return parsedIngredient;
     }
   }

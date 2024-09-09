@@ -27,7 +27,8 @@ const defaultImageOptions: ImagePickerOptions = {
 const handlePermissions = async (permissionRequest: () => Promise<any>, errorMessage: string) => {
   try {
     await permissionRequest();
-  } catch (_) {
+  } catch (e) {
+    console.log('Error requesting permissions', e);
     showErrorMessage(errorMessage);
   }
 };
@@ -56,6 +57,7 @@ export const onOpenImageCropper = async (imageUri: string, isTemporary: boolean)
     const { filePath } = await cropImage({ uri: imageUri, options: { isTemporary } });
     return handleResult(filePath);
   } catch (e) {
+    console.log('Error cropping image', e);
     return imageUri;
   }
 };
@@ -63,7 +65,7 @@ export const onOpenImageCropper = async (imageUri: string, isTemporary: boolean)
 const checkAndRequestPermissions = async (
   requestPermission: () => Promise<any>,
   getPermission: () => Promise<any>,
-  permissionMessage: string
+  permissionMessage: string,
 ) => {
   const { status: existingStatus } = await getPermission();
   let finalStatus = existingStatus;
@@ -86,7 +88,7 @@ export const onPickImageFromLibrary = async (isTemporary: boolean) => {
     const hasPermission = await checkAndRequestPermissions(
       requestMediaLibraryPermissionsAsync,
       getMediaLibraryPermissionsAsync,
-      'Permission to access library was denied, please enable it in settings'
+      'Permission to access library was denied, please enable it in settings',
     );
 
     if (!hasPermission) return;
@@ -107,7 +109,7 @@ export const onPickImageFromCamera = async (isTemporary: boolean) => {
     const hasPermission = await checkAndRequestPermissions(
       requestCameraPermissionsAsync,
       getCameraPermissionsAsync,
-      'Permission to access camera was denied, please enable it in settings'
+      'Permission to access camera was denied, please enable it in settings',
     );
 
     if (!hasPermission) return;
@@ -129,6 +131,7 @@ const handleResult = async (result: ImagePickerResult | string) => {
     }
     return result?.assets?.[0].uri || '';
   } catch (e) {
+    console.log('Error setting image', e);
     throw new Error('Setting image failed');
   }
 };
@@ -164,7 +167,7 @@ const handleManipulationResult = async (imageUri: string, height: number, width:
     {
       compress: 0.8,
       format: ImageManipulator.SaveFormat.WEBP,
-    }
+    },
   );
 
   return imageManipulationResult?.uri;

@@ -23,6 +23,6 @@ export const useKeyboardForm = () => {
   useFocusEffect(
     useCallback(() => {
       setupKeyboard();
-    }, [setupKeyboard])
+    }, [setupKeyboard]),
   );
 };

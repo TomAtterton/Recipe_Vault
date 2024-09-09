@@ -95,12 +95,12 @@ const DayPlan = React.memo(
         const selectDate = getCurrentDateByDay(index);
         navigate(Routes.Search, { selectDate, entryType: event });
       },
-      [getCurrentDateByDay, index, navigate]
+      [getCurrentDateByDay, index, navigate],
     );
 
     const handleRenderItem = useCallback(
       ({ item }: { item: MealPlanType }) => <SmallHorizontalCard item={item} />,
-      []
+      [],
     );
 
     return (
@@ -132,7 +132,7 @@ const DayPlan = React.memo(
         />
       </Animated.View>
     );
-  }
+  },
 );
 
 export default WeekListWithRecipes;

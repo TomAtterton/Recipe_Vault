@@ -37,7 +37,7 @@ const NumberPicker = ({
 
   const buttonTitle = useMemo(
     () => selectedNumber + (valueSuffix ? ' ' + valueSuffix : ''),
-    [selectedNumber, valueSuffix]
+    [selectedNumber, valueSuffix],
   );
 
   const handlePresentModalPress = () => {

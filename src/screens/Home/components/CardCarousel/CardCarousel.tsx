@@ -41,10 +41,10 @@ const CardCarousel = <T,>({
       return isLoading ? (
         <Shimmer style={styles.shimmer} width={shimmerSize.width} height={shimmerSize.height} />
       ) : (
-        renderItem?.(info) ?? null
+        (renderItem?.(info) ?? null)
       );
     },
-    [isLoading, renderItem, shimmerSize.height, shimmerSize.width]
+    [isLoading, renderItem, shimmerSize.height, shimmerSize.width],
   );
 
   // @ts-ignore

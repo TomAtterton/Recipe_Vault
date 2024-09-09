@@ -8,7 +8,7 @@ import useSQLSyncQuery from '@/database/sql/hooks/useSQLSyncQuery';
  */
 const useDatabaseQuery = (
   sqlStatement: string,
-  parameters: any[] = []
+  parameters: any[] = [],
   // options: Omit<SQLWatchOptions, 'signal'> = {}
 ) => {
   const { data, isLoading, error } = useSQLSyncQuery(sqlStatement, parameters);

@@ -7,7 +7,11 @@ module.exports = {
     'unused-imports',
     'react-native-unistyles',
     'eslint-plugin-react-compiler',
+    'jest', // Add jest plugin here
   ],
+  env: {
+    'jest/globals': true, // Add jest environment here
+  },
   parserOptions: {
     ecmaFeatures: {
       jsx: true,

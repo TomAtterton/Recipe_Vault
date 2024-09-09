@@ -14,6 +14,7 @@ const useUpdateTags = () => {
       tag?.name && (await onAddTags({ name: tag.name }));
     } catch (e) {
       showErrorMessage('Error adding category');
+      console.log('Error adding category', e);
     }
   };
 
@@ -22,6 +23,7 @@ const useUpdateTags = () => {
       await onDeleteTags({ id: tag.id });
     } catch (e) {
       showErrorMessage('Error deleting category');
+      console.log('Error deleting category', e);
     }
   };
 

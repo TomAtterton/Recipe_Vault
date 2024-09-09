@@ -18,7 +18,7 @@ const SelectGroceryList = ({ onClose }: Props) => {
   const [allReminders, setAllReminders] = useState<Reminder[]>([]);
   const groceryListId = useBoundStore((state) => state.groceryId);
   const [selectedGroceryId, setSelectedReminder] = useState<string | null | undefined>(
-    groceryListId
+    groceryListId,
   );
 
   const { styles } = useStyles(stylesheet);
@@ -31,7 +31,7 @@ const SelectGroceryList = ({ onClose }: Props) => {
         label={item.title}
       />
     ),
-    [selectedGroceryId]
+    [selectedGroceryId],
   );
 
   const handleSave = () => {

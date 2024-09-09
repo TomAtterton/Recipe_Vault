@@ -27,14 +27,14 @@ module.exports = (config) =>
            */
           const contents = (await readFile(file)).replace(
             /pod 'IQKeyboardManagerSwift', :git => 'https:\/\/github.com\/douglasjunior\/IQKeyboardManager.git', :branch => 'react-native-keyboard-manager'\n\n/g,
-            ''
+            '',
           );
           /*
            * Now re-adds the content
            */
           await saveFile(
             file,
-            `pod 'IQKeyboardManagerSwift', :git => 'https://github.com/douglasjunior/IQKeyboardManager.git', :branch => 'react-native-keyboard-manager'\n\n${contents}`
+            `pod 'IQKeyboardManagerSwift', :git => 'https://github.com/douglasjunior/IQKeyboardManager.git', :branch => 'react-native-keyboard-manager'\n\n${contents}`,
           );
           return config;
         },

@@ -54,7 +54,7 @@ export const sqlInsert = async (table: string, values: Record<string, any>) => {
 
     await database.runAsync(
       `insert into ${table} (${columns}) values (${placeholders})`,
-      parameters
+      parameters,
     );
   } catch (e) {
     console.log('error inserting', e);

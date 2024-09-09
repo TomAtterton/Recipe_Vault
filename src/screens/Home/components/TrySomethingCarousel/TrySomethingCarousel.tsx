@@ -44,7 +44,7 @@ const TrySomethingCarousel = ({ onSeeAll }: { onSeeAll: () => void }) => {
         />
       );
     },
-    [navigate]
+    [navigate],
   );
   const { styles, theme } = useStyles(stylesheet);
   return (

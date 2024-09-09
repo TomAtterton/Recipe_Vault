@@ -23,7 +23,7 @@ const SquircleImage = ({ width, height, cornerRadius, ...props }: Props) => {
         cornerSmoothing: 1,
         preserveSmoothing: true, // defaults to false
       }),
-    [width, height, cornerRadius]
+    [width, height, cornerRadius],
   );
 
   const { theme } = useStyles();
@@ -35,14 +35,14 @@ const SquircleImage = ({ width, height, cornerRadius, ...props }: Props) => {
       position: 'absolute',
       overflow: 'hidden',
     }),
-    [width, height]
+    [width, height],
   );
   const canvasStyle = useMemo(
     () => ({
       width: width * 1.05,
       height: height * 1.05,
     }),
-    [width, height]
+    [width, height],
   );
 
   return (

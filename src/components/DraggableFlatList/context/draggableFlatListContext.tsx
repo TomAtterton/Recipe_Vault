@@ -23,7 +23,7 @@ export default function DraggableFlatListProvider<T>({
       activeKey,
       keyExtractor,
     }),
-    [activeKey, keyExtractor]
+    [activeKey, keyExtractor],
   );
 
   return (

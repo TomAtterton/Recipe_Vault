@@ -57,5 +57,5 @@ export const NestableScrollContainer = React.forwardRef(
     >
       <NestableScrollContainerInner {...props} />
     </NestableScrollContainerProvider>
-  )
+  ),
 );

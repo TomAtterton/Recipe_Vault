@@ -20,7 +20,7 @@ export type RecipeSearchItemType = {
 const useFilterRecipes = ({ categories, filterOptions, search }: Props) => {
   const select = useMemo(
     () => generateFilterSelect(categories, filterOptions, search),
-    [categories, filterOptions, search]
+    [categories, filterOptions, search],
   );
 
   const { data: recipes } = useDatabaseQuery(select, []);
@@ -37,7 +37,7 @@ const useFilterRecipes = ({ categories, filterOptions, search }: Props) => {
         prepTime: recipe.prep_time,
         image: recipe.image,
       })),
-    [recipes]
+    [recipes],
   );
 
   return {

@@ -37,7 +37,7 @@ const SquircleDynamicContainer = forwardRef<View, Props>(
           setDefaultWidth(e.nativeEvent.layout.width);
         }
       },
-      [animatedWidth, animationDuration, width]
+      [animatedWidth, animationDuration, width],
     );
 
     return (
@@ -62,7 +62,7 @@ const SquircleDynamicContainer = forwardRef<View, Props>(
         </View>
       </Animated.View>
     );
-  }
+  },
 );
 
 const multiplier = 1.05;
@@ -90,9 +90,9 @@ const Squircle = ({
           cornerRadius: 12,
           cornerSmoothing: 1,
           preserveSmoothing: true, // defaults to false
-        })
+        }),
       ),
-    [defaultWidth, height]
+    [defaultWidth, height],
   );
 
   const clip = usePathValue((pathValue) => {
@@ -102,7 +102,7 @@ const Squircle = ({
         { scaleX: animatedWidth.value / defaultWidth },
         { translateY: 1 },
         { translateX: 1 },
-      ])
+      ]),
     );
     // @ts-ignore
   }, path);
@@ -112,7 +112,7 @@ const Squircle = ({
       height: height * multiplier,
       width: defaultWidth * multiplier,
     }),
-    [defaultWidth, height]
+    [defaultWidth, height],
   );
   return (
     <View style={styles.squircleContainer}>

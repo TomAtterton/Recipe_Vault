@@ -71,7 +71,7 @@ const Groceries = () => {
           onRemove: () => onEdit(item, true),
         });
     },
-    [onEdit, showInput]
+    [onEdit, showInput],
   );
 
   const handleAdd = () => {
@@ -109,7 +109,7 @@ const Groceries = () => {
       }
       return <GroceryItem item={item} onCompleted={onCompleted} onEdit={handleEdit} />;
     },
-    [isLoading, onCompleted, handleEdit, styles.loadingContainer, styles.shimmer, width]
+    [isLoading, onCompleted, handleEdit, styles.loadingContainer, styles.shimmer, width],
   );
 
   return (

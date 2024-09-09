@@ -40,7 +40,7 @@ const FloatingInput = ({
   const maxHeightTextInput = useMemo(() => screenHeight / 2.3, [screenHeight]);
   const maxHeight = useMemo(
     () => maxHeightTextInput + BOTTOM_ACTION_BAR_HEIGHT + 20,
-    [maxHeightTextInput]
+    [maxHeightTextInput],
   );
 
   const { state, height } = useAnimatedKeyboard();
@@ -86,7 +86,7 @@ const FloatingInput = ({
     const value = interpolate(
       state.value,
       [0, 1, 2, 3, 4],
-      [MIN_HEIGHT, -height.value, -height.value, MIN_HEIGHT, MIN_HEIGHT]
+      [MIN_HEIGHT, -height.value, -height.value, MIN_HEIGHT, MIN_HEIGHT],
     );
     const opacity = interpolate(state.value, [0, 1, 2, 3, 4], [0, 1, 1, 0, 0]);
     return {

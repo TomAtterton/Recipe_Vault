@@ -16,12 +16,12 @@ const useMealPlan = () => {
   useFocusEffect(
     useCallback(() => {
       setCurrentDate(new Date().toISOString().split('T')[0]);
-    }, [])
+    }, []),
   );
 
   const startDateOfWeek = useMemo(
     () => startOfWeek(addWeeks(today, weekOffset), { weekStartsOn: 1 }),
-    [weekOffset, today]
+    [weekOffset, today],
   );
 
   const currentWeek = useMemo(() => {
@@ -32,7 +32,7 @@ const useMealPlan = () => {
 
   const getCurrentDateByDay = useCallback(
     (day: number): string => format(addDays(startDateOfWeek, day), 'yyyy-MM-dd'),
-    [startDateOfWeek]
+    [startDateOfWeek],
   );
 
   const { data } = useGetMealplan({
@@ -55,7 +55,7 @@ const useMealPlan = () => {
 
           // Insert the item in the correct position based on entryType
           const index = list[day].findIndex(
-            (meal) => order.indexOf(meal.entryType) > order.indexOf(item.entryType)
+            (meal) => order.indexOf(meal.entryType) > order.indexOf(item.entryType),
           );
           if (index === -1) {
             list[day].push(item as MealPlanType);

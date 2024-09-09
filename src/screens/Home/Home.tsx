@@ -42,7 +42,7 @@ const Home = () => {
     useCallback(() => {
       checkIfPro();
       syncWithSupabase();
-    }, [])
+    }, []),
   );
 
   return (

@@ -107,7 +107,7 @@ const useHandleRecipeForm = ({
               goBack();
             },
           },
-        ]
+        ],
       );
     }
   };

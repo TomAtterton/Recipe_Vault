@@ -26,7 +26,7 @@ interface Props {
     value: string,
     onChange: (value: string) => void,
     onRemove?: () => void,
-    onDismiss?: () => void
+    onDismiss?: () => void,
   ) => void;
 }
 
@@ -70,31 +70,31 @@ const EditableSectionList = ({ onEdit, control, name, title, type, onScanLiveTex
             });
           },
           () => remove(index),
-          () => {}
+          () => {},
         );
     },
-    [onEdit, remove, update]
+    [onEdit, remove, update],
   );
 
   const handleRenderItem = useCallback(
     ({ item, drag, isActive, getIndex }: RenderItemParams<DraggableListItem>) => (
       <Item item={item} drag={drag} isActive={isActive} onEdit={handleEdit} getIndex={getIndex} />
     ),
-    [handleEdit]
+    [handleEdit],
   );
 
   const onDragEnd = useCallback(
     ({ from, to }: { from: number; to: number }) => {
       move(from, to);
     },
-    [move]
+    [move],
   );
 
   const { styles } = useStyles(stylesheet);
 
   const errorBorderStyle = useMemo(
     () => (errorMessage ? styles.errorBorder : null),
-    [errorMessage, styles.errorBorder]
+    [errorMessage, styles.errorBorder],
   );
 
   return (

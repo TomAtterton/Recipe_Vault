@@ -14,7 +14,7 @@ const useEditSectionList = ({
     value: string,
     onChange: (value: string) => void,
     onRemove?: () => void,
-    onDismiss?: () => void
+    onDismiss?: () => void,
   ) => void;
 }) => {
   const isIngredient = useMemo(() => type === 'ingredient', [type]);

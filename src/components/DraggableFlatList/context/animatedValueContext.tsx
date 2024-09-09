@@ -62,7 +62,7 @@ function useSetupAnimatedValues<T>() {
         outerScrollInit.value = outerScrollOffset.value;
       }
     },
-    [outerScrollOffset]
+    [outerScrollOffset],
   );
 
   const placeholderOffset = useSharedValue(0);
@@ -92,7 +92,7 @@ function useSetupAnimatedValues<T>() {
     const offsetRelativeToScrollTop = touchPositionDiff.value + activeCellOffset.value;
     const constrained = Math.min(
       containerMinusActiveCell,
-      Math.max(scrollOffset.value, offsetRelativeToScrollTop)
+      Math.max(scrollOffset.value, offsetRelativeToScrollTop),
     );
 
     const maxTranslateNegative = -activeCellOffset.value;
@@ -170,6 +170,6 @@ function useSetupAnimatedValues<T>() {
       autoScrollDistance,
       viewableIndexMin,
       viewableIndexMax,
-    ]
+    ],
   );
 }

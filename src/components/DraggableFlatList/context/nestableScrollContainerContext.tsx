@@ -57,7 +57,7 @@ export function useSafeNestableScrollContainerContext() {
   const value = useNestableScrollContainerContext();
   if (!value) {
     throw new Error(
-      'useSafeNestableScrollContainerContext must be called within a NestableScrollContainerContext.Provider'
+      'useSafeNestableScrollContainerContext must be called within a NestableScrollContainerContext.Provider',
     );
   }
   return value;

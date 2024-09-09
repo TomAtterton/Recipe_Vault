@@ -35,7 +35,7 @@ const AddGroceries = () => {
               ingredients.map((ingredient) => ({
                 ...ingredient,
                 isSelected: true,
-              }))
+              })),
             )
           }
         />
@@ -46,7 +46,7 @@ const AddGroceries = () => {
               ingredients.map((ingredient) => ({
                 ...ingredient,
                 isSelected: false,
-              }))
+              })),
             )
           }
         />

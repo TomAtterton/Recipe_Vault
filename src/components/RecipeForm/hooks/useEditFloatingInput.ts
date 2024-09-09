@@ -9,7 +9,7 @@ const useEditFloatingInput = () => {
       value: string,
       callbackEdit?: (value: string) => void,
       callbackRemove?: () => void,
-      callbackDismiss?: () => void
+      callbackDismiss?: () => void,
     ) => {
       showInput &&
         showInput({
@@ -27,7 +27,7 @@ const useEditFloatingInput = () => {
           },
         });
     },
-    [showInput]
+    [showInput],
   );
 
   return {

@@ -14,7 +14,7 @@ const ControlledImagePicker = ({ control, name }: Props) => {
     (imageUri?: string | null) => {
       field.onChange(imageUri); // Update the field value
     },
-    [field]
+    [field],
   );
 
   // @ts-ignore

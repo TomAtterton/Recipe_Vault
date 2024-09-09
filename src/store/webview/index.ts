@@ -28,7 +28,7 @@ const initialWebviewState = {
 
 export const createWebviewSlice: StateCreator<WebviewSlice, [], [], WebviewSlice> = (
   set,
-  getState
+  getState,
 ) => {
   sliceResetFns.add(() => set(initialWebviewState));
 

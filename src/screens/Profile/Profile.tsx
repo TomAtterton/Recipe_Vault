@@ -34,7 +34,7 @@ const Profile = () => {
 
       if (name.match(/[^a-zA-Z0-9]/)) {
         throw new Error(
-          'Please use only letters for your username. Special characters are not allowed.'
+          'Please use only letters for your username. Special characters are not allowed.',
         );
       }
       const lowerCaseName = name.trim().toLowerCase();

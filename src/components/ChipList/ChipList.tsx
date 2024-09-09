@@ -46,7 +46,7 @@ const ChipList = ({
             style: 'cancel',
           },
           { text: translate('default.ok'), style: 'destructive', onPress: () => onDelete(item) },
-        ]
+        ],
       );
     });
 
@@ -61,13 +61,13 @@ const ChipList = ({
       />
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [hideSelection, selectedItems]
+    [hideSelection, selectedItems],
   );
 
   const onRenderCategoryHeader = useCallback(
     () => <ChipListHeader itemsRef={chipListRef} items={data} onUpdateItem={onUpdate} />,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [chipListRef, data]
+    [chipListRef, data],
   );
 
   return (

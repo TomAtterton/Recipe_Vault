@@ -30,7 +30,7 @@ const useHandleSession = () => {
         setSession(newSession);
       }
     },
-    [currentAccessToken, isConnected]
+    [currentAccessToken, isConnected],
   );
 
   useEffect(() => {

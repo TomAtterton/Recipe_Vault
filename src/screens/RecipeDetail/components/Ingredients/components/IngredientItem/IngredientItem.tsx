@@ -24,7 +24,7 @@ const IngredientItem = ({
         note: text,
         isMetric: isMetric,
       }) || {},
-    [text, isMetric]
+    [text, isMetric],
   );
   const {
     styles,

@@ -20,7 +20,7 @@ const ControlledInput = ({ name, onEdit, control, ...inputProps }: ControlledInp
     (e: string) => {
       field?.onChange && field.onChange(e);
     },
-    [field]
+    [field],
   );
   return (
     <FormInput

@@ -33,12 +33,12 @@ const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data, initialServin
         }
       };
       fetchServings();
-    }, [recipeId, setServings])
+    }, [recipeId, setServings]),
   );
 
   const handleRenderHeader = useMemo(
     () => <IngredientHeader isMetric={isMetric} setIsMetric={setIsMetric} />,
-    [isMetric]
+    [isMetric],
   );
 
   const handleRenderIngredient = useCallback(
@@ -58,7 +58,7 @@ const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data, initialServin
         />
       );
     },
-    [initialServings, isMetric, styles.sectionHeader]
+    [initialServings, isMetric, styles.sectionHeader],
   );
 
   const sections = useMemo(
@@ -71,7 +71,7 @@ const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data, initialServin
         acc.push(ingredient);
         return acc;
       }, []),
-    [data]
+    [data],
   );
 
   const ListComponent = useMemo(() => {

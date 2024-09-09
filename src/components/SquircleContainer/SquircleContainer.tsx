@@ -54,7 +54,7 @@ export const SquircleContentContainer = forwardRef<View, Props>(
           cornerRadius: 12,
           cornerSmoothing: 1,
           preserveSmoothing: true, // defaults to false
-        })
+        }),
       );
     }, [height, width]);
 
@@ -76,7 +76,7 @@ export const SquircleContentContainer = forwardRef<View, Props>(
           // },
           { translateY: 1 },
           { translateX: 1 },
-        ])
+        ]),
       );
       // @ts-ignore
     }, path);
@@ -86,7 +86,7 @@ export const SquircleContentContainer = forwardRef<View, Props>(
         animatedWidth.value = withTiming(e.nativeEvent.layout.width, { duration: 400 });
         animatedHeight.value = withTiming(e.nativeEvent.layout.height, { duration: 400 });
       },
-      [animatedHeight, animatedWidth]
+      [animatedHeight, animatedWidth],
     );
 
     return (
@@ -130,7 +130,7 @@ export const SquircleContentContainer = forwardRef<View, Props>(
         </View>
       </View>
     );
-  }
+  },
 );
 
 export const Squircle = ({ width, height, cornerRadius = 10, x, y, showBorder, color }: Props) => {

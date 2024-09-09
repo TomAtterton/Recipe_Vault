@@ -28,7 +28,7 @@ const useGroceryList = () => {
   useFocusEffect(
     useCallback(() => {
       handleRefresh(true);
-    }, [handleRefresh])
+    }, [handleRefresh]),
   );
 
   const fetchList = useCallback(async () => {

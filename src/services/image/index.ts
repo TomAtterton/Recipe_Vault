@@ -8,7 +8,7 @@ const handleCloudinaryRequest = async (endpoint: string, formData: FormData) => 
     {
       method: 'POST',
       body: formData,
-    }
+    },
   );
 
   const result = await response.json();

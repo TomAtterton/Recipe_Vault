@@ -27,7 +27,7 @@ const EditButton = ({ onPress }: Props) => {
       checkIfPro().then((_) => {
         setIsPro(_);
       });
-    }, [])
+    }, []),
   );
 
   const menuActions = [

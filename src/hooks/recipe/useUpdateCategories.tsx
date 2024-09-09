@@ -14,6 +14,7 @@ const useUpdateCategories = () => {
       category?.name && (await addCategory({ name: category.name }));
     } catch (e) {
       showErrorMessage('Error adding category');
+      console.log('Error adding category', e);
     }
   };
 
@@ -22,6 +23,7 @@ const useUpdateCategories = () => {
       await onDeleteCategory({ id: category.id });
     } catch (e) {
       showErrorMessage('Error deleting category');
+      console.log('Error deleting category', e);
     }
   };
 

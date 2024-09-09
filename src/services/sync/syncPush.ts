@@ -30,7 +30,7 @@ export const syncPush = async () => {
   }
   for (const tableName of TABLE_NAMES) {
     const records: GenericRecord[] = await database.getAllAsync(
-      `SELECT * FROM ${tableName} WHERE is_modified IS NOT NULL AND is_modified = 1`
+      `SELECT * FROM ${tableName} WHERE is_modified IS NOT NULL AND is_modified = 1`,
     );
 
     if (records && records.length > 0) {

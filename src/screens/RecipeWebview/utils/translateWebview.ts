@@ -38,7 +38,7 @@ export const convertRecipeIngredientInstructions = (
     | string
     | string[]
     | { text: string }[]
-    | { itemListElement: { text: string }[] }[]
+    | { itemListElement: { text: string }[] }[],
 ): Ingredient[] => {
   let sectionTitle = '';
 
@@ -93,7 +93,7 @@ function decodeHtmlEntity(str: string): string {
 }
 
 const convertImage = (
-  image?: string | ({ url: string } | string)[] | { url: string }
+  image?: string | ({ url: string } | string)[] | { url: string },
 ): string | undefined => {
   if (typeof image === 'string') {
     return image;
@@ -142,8 +142,8 @@ const formatTime = (hours: number, minutes: number): string => {
   return hours > 0 && minutes > 0
     ? `${hoursString} ${minutesString}`
     : hours > 0
-    ? hoursString
-    : minutes > 0
-    ? minutesString
-    : '0 minutes';
+      ? hoursString
+      : minutes > 0
+        ? minutesString
+        : '0 minutes';
 };

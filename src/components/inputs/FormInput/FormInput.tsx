@@ -38,7 +38,7 @@ const FormInput = ({
   const handlerScanLiveText = useCallback(
     // @ts-ignore
     () => onScanLiveText && onScanLiveText(name, value),
-    [name, value, onScanLiveText]
+    [name, value, onScanLiveText],
   );
 
   const { styles, theme } = useStyles(stylesheet);

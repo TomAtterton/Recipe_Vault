@@ -43,7 +43,7 @@ function useSetupRefs<T>() {
       keyToIndexRef,
       propsRef,
     }),
-    []
+    [],
   );
 
   return refs;

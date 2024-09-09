@@ -53,7 +53,7 @@ const useSQLSyncQuery = (query: string, params: SQLiteBindParams) => {
   useFocusEffect(
     useCallback(() => {
       fetchDatabase();
-    }, [fetchDatabase])
+    }, [fetchDatabase]),
   );
 
   useEffect(() => {

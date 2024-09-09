@@ -54,12 +54,13 @@ const AccountSettings = () => {
               });
             } catch (error) {
               showErrorMessage(translate('error.default.error_title'));
+              console.log('Error deleting account', error);
             } finally {
               setIsLoading(false);
             }
           },
         },
-      ]
+      ],
     );
   };
 

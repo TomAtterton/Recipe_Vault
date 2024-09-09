@@ -30,7 +30,7 @@ const RecipeDetail = () => {
 
   const handleRenderHeader = useCallback(
     () => <RecipeHeader recipeId={id} image={image} isAnimated={true} />,
-    [id, image]
+    [id, image],
   );
 
   const { top } = useSafeAreaInsets();

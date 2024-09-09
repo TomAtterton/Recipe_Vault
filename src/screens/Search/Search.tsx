@@ -36,7 +36,7 @@ const Search = ({}) => {
         console.log('error', e);
       }
     },
-    [addMealPlan, entryType, goBack, selectDate]
+    [addMealPlan, entryType, goBack, selectDate],
   );
 
   const handleRenderItem = useCallback(
@@ -51,7 +51,7 @@ const Search = ({}) => {
         }
       />
     ),
-    [handleAddToMealPlan]
+    [handleAddToMealPlan],
   );
 
   return (

@@ -22,13 +22,13 @@ export interface Tag {
 
 export const checkMetaDataDuplicates = (
   data: RecipeDetailType,
-  previousData?: RecipeDetailType | null
+  previousData?: RecipeDetailType | null,
 ) => {
   // Function to compare arrays for any kind of change, including reordering and deletion
   const compareAndFindChanges = (
     currentItems: any[],
     prevItems: any[],
-    comparisonFields: string[]
+    comparisonFields: string[],
   ) => {
     const addedOrChanged = [];
     const deleted = [];
@@ -74,22 +74,22 @@ export const checkMetaDataDuplicates = (
   const ingredientsComparison = compareAndFindChanges(
     data?.recipeIngredient || [],
     previousData?.recipeIngredient || [],
-    ['title', 'text']
+    ['title', 'text'],
   );
   const instructionsComparison = compareAndFindChanges(
     data?.recipeInstructions || [],
     previousData?.recipeInstructions || [],
-    ['title', 'text']
+    ['title', 'text'],
   );
   const categoriesComparison = compareAndFindChanges(
     data?.recipeCategory || [],
     previousData?.recipeCategory || [],
-    ['name']
+    ['name'],
   );
   const tagsComparison = compareAndFindChanges(
     data?.recipeTags || [],
     previousData?.recipeTags || [],
-    ['name']
+    ['name'],
   );
 
   const transformRecipeIngredient = ingredientsComparison.changed.map((item) => ({

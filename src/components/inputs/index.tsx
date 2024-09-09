@@ -63,7 +63,7 @@ const Input = forwardRef<TextInput, Props>(
         )}
       </View>
     );
-  }
+  },
 );
 
 export default Input;

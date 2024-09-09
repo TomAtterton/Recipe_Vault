@@ -46,7 +46,7 @@ const SwipeableView = ({ style, onSwipeRight, onSwipeLeft, children }: Props) =>
         </View>
       );
     },
-    [colors.errorContainer]
+    [colors.errorContainer],
   );
 
   const renderLeftActions = useCallback(
@@ -68,7 +68,7 @@ const SwipeableView = ({ style, onSwipeRight, onSwipeLeft, children }: Props) =>
         </View>
       );
     },
-    [colors.errorContainer, colors.primary]
+    [colors.errorContainer, colors.primary],
   );
   const swipeRef = React.useRef<Swipeable>(null);
   return (

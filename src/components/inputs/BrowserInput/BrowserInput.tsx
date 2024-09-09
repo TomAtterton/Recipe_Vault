@@ -42,7 +42,7 @@ const BrowserBar = ({
       }
       handleUrlSubmit(value);
     },
-    [handleUrlSubmit]
+    [handleUrlSubmit],
   );
 
   const isFocused = showBookmark;

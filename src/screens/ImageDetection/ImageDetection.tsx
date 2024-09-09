@@ -51,6 +51,7 @@ const ImageDetection = () => {
       });
     } catch (error) {
       showErrorMessage('Error detecting text from image');
+      console.log('Error detecting text from image', error);
     } finally {
       setIsLoading(false);
     }

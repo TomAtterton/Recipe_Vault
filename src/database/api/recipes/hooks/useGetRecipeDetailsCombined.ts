@@ -61,11 +61,12 @@ const useGetRecipeDetailsCombined = ({ id }: { id?: string | null }) => {
               const transformedData = transformData(data, categories, tags);
               console.log('transformedData', transformedData);
               setRecipeData(transformedData);
-            }
+            },
           );
         });
       } catch (error) {
         showErrorMessage('Error fetching recipe details');
+        console.log('Error fetching recipe details', error);
       }
     };
 
@@ -82,7 +83,7 @@ const useGetRecipeDetailsCombined = ({ id }: { id?: string | null }) => {
 export const transformData = (
   recipe: TRecipeDetailsDatabase,
   categories: TCategoriesDatabase,
-  tags: TTagsDatabase
+  tags: TTagsDatabase,
 ) =>
   ({
     id: recipe.id,
@@ -130,6 +131,6 @@ export const transformData = (
         name: categoryDetail?.name,
       };
     }),
-  } as RecipeDetailType);
+  }) as RecipeDetailType;
 
 export default useGetRecipeDetailsCombined;
