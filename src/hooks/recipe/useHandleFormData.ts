@@ -6,8 +6,6 @@ import { useBoundStore } from '@/store';
 import { UseFormReset, UseFormSetValue } from 'react-hook-form/dist/types/form';
 import { RecipeDetailType } from '@/types';
 
-let oldWebRecipe: RecipeDetailType | null | undefined = null;
-
 const useHandleFormData = ({
   setValue,
   reset,
@@ -21,8 +19,6 @@ const useHandleFormData = ({
   data?: RecipeDetailType;
   clearErrors: () => void;
 }) => {
-  const webRecipe = useBoundStore((state) => state.webRecipe);
-  const setWebRecipe = useBoundStore((state) => state.setWebRecipe);
   const setScannedRecipe = useBoundStore((state) => state.setScannedRecipe);
   const scannedData = useBoundStore((state) => state.scannedRecipe);
 
@@ -36,14 +32,6 @@ const useHandleFormData = ({
       reset(defaultValues);
     }
     clearErrors();
-  };
-
-  // Check if the webRecipe has changed and needs resetting
-  const handleWebRecipeChange = () => {
-    if (oldWebRecipe && !isEqual(oldWebRecipe, webRecipe)) {
-      oldWebRecipe = webRecipe;
-      handleResetForm(webRecipe);
-    }
   };
 
   // Populate form from scanned data
@@ -64,12 +52,8 @@ const useHandleFormData = ({
         if (isEqual(formDefaultValues, defaultValues) && !isClearingForm) {
           if (data) {
             handleResetForm(data);
-          } else {
-            handleResetForm(webRecipe);
-            oldWebRecipe = webRecipe;
           }
         } else {
-          handleWebRecipeChange();
           setIsClearingForm(false);
         }
       },
@@ -83,14 +67,12 @@ const useHandleFormData = ({
         setValue,
         data,
         reset,
-        webRecipe,
       ],
     ),
   );
 
   const onClearForm = () => {
     setScannedRecipe(undefined);
-    setWebRecipe(undefined);
     setIsClearingForm(false);
     handleResetForm(null);
   };

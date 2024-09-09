@@ -8,8 +8,7 @@ import useGetRecipeDetailsCombined from '@/database/api/recipes/hooks/useGetReci
 
 const useRecipeDetail = ({ id }: { id?: string | null }) => {
   const navigation = useNavigation();
-  const { data: recipeData } = useGetRecipeDetailsCombined({ id });
-
+  const { data: recipeData, isLoading } = useGetRecipeDetailsCombined({ id });
   const { onSubmit } = usePostUpdateRecipes();
 
   const onUpdateRecipe = useCallback(
@@ -62,6 +61,7 @@ const useRecipeDetail = ({ id }: { id?: string | null }) => {
   return {
     onUpdateRecipe,
     data: recipeData,
+    isLoading,
   };
 };
 

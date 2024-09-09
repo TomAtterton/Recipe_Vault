@@ -1,11 +1,10 @@
 import { useCallback, useRef, useState } from 'react';
 import { WebViewMessageEvent } from 'react-native-webview/src/WebViewTypes';
 import { translateWebview } from '@/screens/RecipeWebview/utils/translateWebview';
-import { Routes } from '@/navigation/Routes';
 import { showErrorMessage } from '@/utils/promptUtils';
 import { useNavigation } from '@react-navigation/native';
 import { Keyboard } from 'react-native';
-import { useBoundStore } from '@/store';
+import { navigateToAddRecipe } from '@/navigation/helper';
 
 const useHandleDetection = (uri: string) => {
   const navigation = useNavigation();
@@ -22,14 +21,16 @@ const useHandleDetection = (uri: string) => {
     setRecipeDetected(containsRecipe);
   }, []);
 
-  const setWebRecipe = useBoundStore((state) => state.setWebRecipe);
   const handleAddRecipe = async () => {
     if (recipeParseRef?.current) {
       try {
         const data = translateWebview(recipeParseRef?.current, uri);
         Keyboard.dismiss();
-        setWebRecipe(data);
-        return navigation.navigate(Routes.AddRecipe, {});
+        return navigateToAddRecipe({
+          navigation,
+          params: { data },
+          shouldReplace: true,
+        });
       } catch (error) {
         console.log('error', error);
         showErrorMessage('Error parsing recipe');

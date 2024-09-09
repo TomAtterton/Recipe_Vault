@@ -5,12 +5,12 @@ import { useState } from 'react';
 import { useStyles } from 'react-native-unistyles';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import { useNavigation } from '@react-navigation/native';
-import { Routes } from '@/navigation/Routes';
 import { fetchTextFromImage } from '../../../modules/expo-vision';
 import { showErrorMessage, showSuccessMessage } from '@/utils/promptUtils';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import { stylesheet } from './imageDetection.style';
 import { generateRecipe } from '@/services/textRecognition';
+import { navigateToAddRecipe } from '@/navigation/helper';
 
 const ImageDetection = () => {
   const [image, setImage] = useState<string | undefined | null>(null);
@@ -19,7 +19,7 @@ const ImageDetection = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const { navigate, goBack } = useNavigation();
+  const navigation = useNavigation();
 
   const handleDetect = async () => {
     try {
@@ -33,21 +33,17 @@ const ImageDetection = () => {
 
         showSuccessMessage('Text detected from image');
 
-        return navigate(Routes.RecipeDetectionStack, {
-          screen: Routes.AddRecipe,
-          params: {
-            data,
-            isNested: true,
-          },
+        return navigateToAddRecipe({
+          navigation,
+          params: { data, isNested: true },
+          shouldReplace: true,
         });
       }
 
-      navigate(Routes.RecipeDetectionStack, {
-        screen: Routes.AddRecipe,
-        params: {
-          data: parsedRecipe,
-          isNested: true,
-        },
+      navigateToAddRecipe({
+        navigation,
+        params: { data: parsedRecipe, isNested: true },
+        shouldReplace: true,
       });
     } catch (error) {
       showErrorMessage('Error detecting text from image');
@@ -81,7 +77,11 @@ const ImageDetection = () => {
           />
         )}
       </View>
-      <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
+      <NavBarButton
+        style={styles.backButton}
+        iconSource={'arrow-left'}
+        onPress={navigation.goBack}
+      />
     </View>
   );
 };

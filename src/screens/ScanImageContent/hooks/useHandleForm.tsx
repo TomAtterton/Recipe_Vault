@@ -4,6 +4,7 @@ import { Routes } from '@/navigation/Routes';
 import { useNavigation } from '@react-navigation/native';
 import { RecipeFormType } from '@/utils/recipeFormUtil';
 import { useBoundStore } from '@/store';
+import { navigateToAddRecipe } from '@/navigation/helper';
 
 interface Props {
   id?: string | null;
@@ -27,7 +28,7 @@ const useHandleForm = ({ id, formId, isEditing, value }: Props) => {
         params: { id },
       });
     }
-    return navigation.navigate(Routes.AddRecipe, { id });
+    return navigateToAddRecipe({ navigation, params: { id } });
   }, [formId, id, isEditing, navigation, setScannedRecipe, value]);
 
   return {

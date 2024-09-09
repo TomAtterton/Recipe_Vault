@@ -18,12 +18,13 @@ import Typography from '@/components/Typography';
 import OutlineButton from '@/components/buttons/OutlineButton';
 import { useStyles } from 'react-native-unistyles';
 import { translate } from '@/core';
+import { navigateToAddRecipe } from '@/navigation/helper';
 
 const keyExtractor = (_: RecipeDetailType, index: number) => `item-${(_?.id || '') + index}`;
 
 const TrySomethingCarousel = ({ onSeeAll }: { onSeeAll: () => void }) => {
   const { data } = useTrySomethingRecipe();
-  const { navigate } = useNavigation();
+  const navigation = useNavigation();
 
   const renderItem = useCallback(
     ({ item }: { item: RecipeDetailType }) => {
@@ -32,7 +33,7 @@ const TrySomethingCarousel = ({ onSeeAll }: { onSeeAll: () => void }) => {
           {...item}
           onPress={() =>
             item.id &&
-            navigate(Routes.RecipeDetailStack, {
+            navigation.navigate(Routes.RecipeDetailStack, {
               screen: Routes.RecipeDetails,
               params: {
                 id: item.id,
@@ -44,7 +45,7 @@ const TrySomethingCarousel = ({ onSeeAll }: { onSeeAll: () => void }) => {
         />
       );
     },
-    [navigate],
+    [navigation],
   );
   const { styles, theme } = useStyles(stylesheet);
   return (
@@ -66,7 +67,13 @@ const TrySomethingCarousel = ({ onSeeAll }: { onSeeAll: () => void }) => {
             <Typography variant={'bodyMedium'}>{translate('home.empty.title')}</Typography>
             <OutlineButton
               title={translate('home.empty.button')}
-              onPress={() => navigate(Routes.AddRecipe, {})}
+              onPress={() =>
+                navigateToAddRecipe({
+                  navigation,
+                  params: {},
+                  shouldReplace: true,
+                })
+              }
             />
           </View>
         }
