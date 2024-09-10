@@ -7,13 +7,16 @@ import { useState } from 'react';
 import { onAppleAuthSignIn, onTestSignIn } from '@/services/auth';
 import { updateProfile } from '@/store';
 import { getProfileGroup } from '@/services/profileGroup';
+import { onError } from '@/utils/errorUtils';
 
 const useHandleAuth = () => {
   const { reset } = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
+
   const handleUpdateProfile = async (data: { user: User | null; session: Session | null }) => {
     try {
       setIsLoading(true);
+
       const { groupId, profileName } = await getProfileGroup({
         userId: data.user?.id,
       });
@@ -40,6 +43,7 @@ const useHandleAuth = () => {
         });
       }
     } catch (e) {
+      onError(e);
       // @ts-ignore
       showErrorMessage(e?.message || translate('error_messages.default'));
     } finally {
@@ -61,7 +65,7 @@ const useHandleAuth = () => {
       if (e?.code === 'ERR_REQUEST_CANCELED') {
         showErrorMessage(translate('error_messages.cancelled_sign_in'));
       } else {
-        console.log('e', e);
+        onError(e);
         // @ts-ignore
         showErrorMessage(e?.message || translate('error_messages.default'));
       }

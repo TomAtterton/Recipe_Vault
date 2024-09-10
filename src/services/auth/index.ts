@@ -32,10 +32,7 @@ export const onTestSignIn = async () => {
 
 export const onAppleAuthSignIn = async () => {
   const credential = await AppleAuthentication.signInAsync({
-    requestedScopes: [
-      AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-      AppleAuthentication.AppleAuthenticationScope.EMAIL,
-    ],
+    requestedScopes: [AppleAuthentication.AppleAuthenticationScope.EMAIL],
   });
   if (credential.identityToken) {
     const { error, data } = await supabase.auth.signInWithIdToken({

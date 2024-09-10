@@ -7,6 +7,9 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     paddingBottom: miniRuntime.insets.bottom,
     paddingHorizontal: 20,
   },
+  headerImage: {
+    alignSelf: 'center',
+  },
   blur: {
     position: 'absolute',
     width: '100%',

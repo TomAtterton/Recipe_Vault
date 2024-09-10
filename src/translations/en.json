@@ -40,7 +40,15 @@
     }
   },
   "login": {
-    "test_login_title": "Test Login"
+    "test_login_title": "Test Login",
+    "title": "Login to create a Cloud Vault!",
+    "feature1": "Sync recipes to the cloud",
+    "feature2": "Share your vault with up to 2 friends and family",
+    "feature3": "Join shared vaults of other users",
+    "feature4": "Plan your meals with friends",
+    "loginWith": "Login with",
+    "or": "or",
+    "button": "Continue with local vault"
   },
   "prompt": {
     "clear_database": {

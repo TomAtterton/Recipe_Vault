@@ -16,6 +16,7 @@ import LabelButton from '@/components/buttons/LabelButton';
 import IconButton from '@/components/buttons/IconButton';
 import { BottomSheetRef } from '@/components/BottomSheet';
 import LimitationBottomSheet from '@/screens/Login/components/LimitationBottomSheet';
+import { translate } from '@/core';
 
 const Login = () => {
   const { onAppleLogin, onTestLogin, isLoading } = useHandleAuth();
@@ -33,22 +34,16 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      <ChefCut
-        height={height / 4}
-        width={width}
-        style={{
-          alignSelf: 'center',
-        }}
-      />
+      <ChefCut height={height / 4} width={width} style={styles.headerImage} />
       <View style={styles.titleContainer}>
         <Typography variant={'titleItalicLarge'} style={styles.title}>
-          Login to create a Cloud Vault!
+          {translate('login.title')}
         </Typography>
         <View style={styles.featureContainer}>
           <View style={styles.rowContainer}>
             <Icon name={'cloud'} size={20} color={theme.colors.onBackground} />
             <Typography variant={'bodyMedium'} style={styles.rowTitle}>
-              {'Sync recipes to the cloud'}
+              {translate('login.feature1')}
             </Typography>
             <IconButton
               iconSource={'info-border'}
@@ -64,19 +59,19 @@ const Login = () => {
           <View style={styles.rowContainer}>
             <Icon name={'paper-plane'} size={20} color={theme.colors.onBackground} />
             <Typography variant={'bodyMedium'} style={styles.rowTitle}>
-              {'Share your vault with up to 2 friends and family'}
+              {translate('login.feature2')}
             </Typography>
           </View>
           <View style={styles.rowContainer}>
             <Icon name={'people'} size={20} color={theme.colors.onBackground} />
             <Typography variant={'bodyMedium'} style={styles.rowTitle}>
-              {'Join shared vaults of other users'}
+              {translate('login.feature3')}
             </Typography>
           </View>
           <View style={styles.rowContainer}>
             <Icon name={'calendar'} size={20} color={theme.colors.onBackground} />
             <Typography variant={'bodyMedium'} style={styles.rowTitle}>
-              {'Plan your meals with friends'}
+              {translate('login.feature4')}
             </Typography>
           </View>
         </View>
@@ -86,7 +81,7 @@ const Login = () => {
         <View style={styles.dividerContainer}>
           <View style={styles.divider} />
           <Typography variant={'bodyMedium'} style={styles.dividerText}>
-            login with
+            {translate('login.loginWith')}
           </Typography>
           <View style={styles.divider} />
         </View>
@@ -104,11 +99,11 @@ const Login = () => {
           <View style={styles.dividerContainer}>
             <View style={styles.divider} />
             <Typography variant={'bodyMedium'} style={styles.dividerText}>
-              or
+              {translate('login.or')}
             </Typography>
             <View style={styles.divider} />
           </View>
-          <LabelButton onPress={handleSkip} title={'Continue with local vault'} />
+          <LabelButton onPress={handleSkip} title={translate('login.button')} />
         </View>
       </View>
       {!showSkip && (
