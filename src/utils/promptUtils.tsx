@@ -8,6 +8,8 @@ export const showSuccessMessage = (message: string) => {
     type: 'success',
     text2: message,
     visibilityTime: 2000,
+    autoHide: true,
+    swipeable: true,
   });
 };
 
@@ -16,6 +18,8 @@ export const showErrorMessage = (message: string, duration?: number) => {
     type: 'error',
     text2: message,
     visibilityTime: duration || 2000,
+    autoHide: true,
+    swipeable: true,
   });
 };
 

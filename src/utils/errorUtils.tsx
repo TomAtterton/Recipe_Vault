@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/react-native';
+
 export const extractError = (data: unknown): string => {
   if (typeof data === 'string') {
     return data;
@@ -20,4 +22,8 @@ export const extractError = (data: unknown): string => {
     return `${messages.join('')} `;
   }
   return 'Something went wrong ';
+};
+
+export const onError = (error: any) => {
+  Sentry.captureException(error);
 };

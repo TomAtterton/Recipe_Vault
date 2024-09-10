@@ -7,10 +7,22 @@ import SettingsButton from '@/components/buttons/SettingsButton';
 import { openURL } from 'expo-linking';
 import { Routes } from '@/navigation/Routes';
 import BackButton from '@/components/BackButton';
+import { handleMail } from '@/utils/mailUtils';
 
 const Help = () => {
   const { navigate } = useNavigation();
   const { styles } = useStyles(stylesheet);
+
+  const handleContactUs = () =>
+    handleMail({
+      headerText: `
+      Hi,
+      
+      I'm reaching out for help with Recipe Vault. Here's my issue:
+      
+      [Please describe your issue here]
+    `,
+    });
 
   return (
     <View style={styles.container}>
@@ -30,7 +42,7 @@ const Help = () => {
         />
         <SettingsButton
           title={'Contact Us'}
-          onPress={() => openURL('mailto:hello@tomatterton.com')}
+          onPress={handleContactUs} // Updated to call the new handler
           iconSource={'paper-plane'}
         />
       </View>

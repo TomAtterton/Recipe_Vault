@@ -62,6 +62,7 @@
     "expo-constants": "^16.0.2",
     "expo-crypto": "^13.0.2",
     "expo-dev-client": "^4.0.26",
+    "expo-device": "~6.0.2",
     "expo-font": "^12.0.10",
     "expo-haptics": "^13.0.1",
     "expo-image": "^1.12.15",
@@ -167,7 +168,9 @@
     "ts-jest": "^29.2.5",
     "typescript": "~5.5.4"
   },
-  "trustedDependencies": ["@sentry/cli"],
+  "trustedDependencies": [
+    "@sentry/cli"
+  ],
   "expo": {
     "doctor": {
       "reactNativeDirectoryCheck": {
@@ -175,5 +178,7 @@
       }
     }
   },
-  "patchedDependencies": { "expo-config-plugin-ios-share-extension@0.0.4": "patches/expo-config-plugin-ios-share-extension@0.0.4.patch" }
+  "patchedDependencies": {
+    "expo-config-plugin-ios-share-extension@0.0.4": "patches/expo-config-plugin-ios-share-extension@0.0.4.patch"
+  }
 }

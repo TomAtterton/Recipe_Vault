@@ -4,18 +4,27 @@ import Typography from '@/components/Typography';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import LabelButton from '@/components/buttons/LabelButton';
 import React from 'react';
-import { openURL } from 'expo-linking';
+
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { handleMail } from '@/utils/mailUtils';
 
 const ErrorScreen = ({ error, resetError }: { error: Error; resetError: () => void }) => {
   const { styles } = useStyles(stylesheet);
+
+  const handleReport = () =>
+    handleMail({
+      headerText:
+        'Hello,\n      \n      I would like to report an issue with Recipe Vault. Here are the details:',
+      errorMessage: error?.message,
+    });
+
   return (
     <View style={styles.container}>
       <ChefFire />
       <Typography variant={'titleMedium'}>{'Something went wrong'}</Typography>
       <Typography variant={'bodyMediumItalic'}>{`Error: ${error?.message}`}</Typography>
       <PrimaryButton title={'Reload'} onPress={resetError} />
-      <LabelButton title={'Report'} onPress={() => openURL('mailto:hello@tomatterton.com')} />
+      <LabelButton title={'Report'} onPress={handleReport} />
     </View>
   );
 };
