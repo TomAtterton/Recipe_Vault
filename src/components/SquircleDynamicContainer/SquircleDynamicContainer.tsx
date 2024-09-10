@@ -1,14 +1,21 @@
-import { Canvas, Path, processTransform3d, Skia, usePathValue } from '@shopify/react-native-skia';
+import {
+  Canvas,
+  Path,
+  processTransform3d,
+  Skia,
+  SkPath,
+  usePathValue,
+} from '@shopify/react-native-skia';
 import React, { forwardRef, useCallback, useMemo, useState } from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import { View } from 'react-native';
-import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
+import { StyleProp, View, ViewStyle } from 'react-native';
+import Animated, { SharedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 import { getSvgPath } from '@/utils/figma-squircle';
 import { LayoutChangeEvent } from 'react-native/Libraries/Types/CoreEventTypes';
 
 interface Props {
-  style?: any;
-  contentContainerStyle?: any;
+  style?: StyleProp<ViewStyle>;
+  contentContainerStyle?: StyleProp<ViewStyle>;
   shouldFill?: boolean;
   width?: number;
   height: number;
@@ -67,45 +74,44 @@ const SquircleDynamicContainer = forwardRef<View, Props>(
 
 const multiplier = 1.05;
 
-const Squircle = ({
-  animatedWidth,
-  height,
-  shouldFill,
-  color,
-  defaultWidth,
-}: {
-  animatedWidth: any;
+interface SquircleProps {
+  animatedWidth: SharedValue<number>;
   height: number;
   shouldFill?: boolean;
   color?: string;
   defaultWidth: number;
-}) => {
+}
+
+const Squircle = ({ animatedWidth, height, shouldFill, color, defaultWidth }: SquircleProps) => {
   const { styles, theme } = useStyles(stylesheet);
-  const path = useMemo(
-    () =>
-      Skia.Path.MakeFromSVGString(
-        getSvgPath({
-          width: defaultWidth,
-          height: height,
-          cornerRadius: 12,
-          cornerSmoothing: 1,
-          preserveSmoothing: true, // defaults to false
-        }),
-      ),
-    [defaultWidth, height],
+  const path = useMemo(() => {
+    const skPath = Skia.Path.MakeFromSVGString(
+      getSvgPath({
+        width: defaultWidth,
+        height: height,
+        cornerRadius: 12,
+        cornerSmoothing: 1,
+        preserveSmoothing: true, // defaults to false
+      }),
+    );
+    return skPath || undefined;
+  }, [defaultWidth, height]);
+
+  const transformPath = useCallback(
+    (pathValue: SkPath) => {
+      'worklet';
+      pathValue.transform(
+        processTransform3d([
+          { scaleX: animatedWidth.value / defaultWidth },
+          { translateY: 1 },
+          { translateX: 1 },
+        ]),
+      );
+    },
+    [animatedWidth, defaultWidth],
   );
 
-  const clip = usePathValue((pathValue) => {
-    'worklet';
-    pathValue.transform(
-      processTransform3d([
-        { scaleX: animatedWidth.value / defaultWidth },
-        { translateY: 1 },
-        { translateX: 1 },
-      ]),
-    );
-    // @ts-ignore
-  }, path);
+  const clip = usePathValue(transformPath, path);
 
   const canvasStyle = useMemo(
     () => ({

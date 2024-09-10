@@ -97,7 +97,7 @@ const RecipeHeaderContent = ({ id }: Props) => {
       </View>
       <StarRating padding={40} onChange={onRatingChange} initialValue={currentRating || 0} />
       {hasInfo && (
-        <BottomSheet bottomSheetRef={bottomSheetRef} snapPoints={['30%']}>
+        <BottomSheet bottomSheetRef={bottomSheetRef} snapPoints={['40%']}>
           <View style={styles.infoContainer}>
             {!!source && (
               <InfoLabelButton

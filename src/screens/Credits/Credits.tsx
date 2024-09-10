@@ -1,7 +1,8 @@
 import React from 'react';
-import { Linking, ScrollView, SafeAreaView } from 'react-native';
+import { Linking, ScrollView, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import Typography from '@/components/Typography';
+import BackButton from '@/components/BackButton';
 
 const creditsData = [
   {
@@ -20,24 +21,22 @@ const creditsData = [
     name: '',
     url: '',
   },
-  // Add more credits here as needed
 ];
 
 const Credits = () => {
   const { styles } = useStyles(stylesheet);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView style={styles.contentContainer}>
         <Typography variant={'titleItalicLarge'} style={styles.title}>
           Credits.
         </Typography>
         {creditsData.map((credit, index) => (
           <Typography key={index} variant={'bodyMediumItalic'} style={styles.creditText}>
-            {credit.description}
+            {`${credit.description} `}
             {credit.name && (
               <>
-                {' '}
                 <Typography
                   style={styles.link}
                   onPress={() => credit.url && Linking.openURL(credit.url)}
@@ -49,13 +48,15 @@ const Credits = () => {
           </Typography>
         ))}
       </ScrollView>
-    </SafeAreaView>
+      <BackButton />
+    </View>
   );
 };
 
-const stylesheet = createStyleSheet((theme) => ({
+const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
     flex: 1,
+    paddingTop: miniRuntime.insets.top + 60,
   },
   contentContainer: {
     flex: 1,

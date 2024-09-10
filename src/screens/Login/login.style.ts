@@ -38,6 +38,11 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     position: 'absolute',
     right: -10,
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 20,
+  },
   loginButtonContainer: {
     flex: 1,
     alignItems: 'center',
@@ -98,12 +103,16 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   },
   proContentContainer: {
     flex: 1,
+    gap: 16,
     justifyContent: 'center',
   },
   proPlanDescription: {
     color: theme.colors.onBackground80,
     textAlign: 'center',
-    paddingBottom: 16,
     paddingHorizontal: 20,
+  },
+  proPlanButton: {
+    height: 50,
+    paddingBottom: miniRuntime.insets.bottom,
   },
 }));

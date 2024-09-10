@@ -14,7 +14,8 @@ import ChefCut from '../../../assets/svgs/chef_cut.svg';
 import Apple from '../../../assets/svgs/apple.svg';
 import LabelButton from '@/components/buttons/LabelButton';
 import IconButton from '@/components/buttons/IconButton';
-import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
+import { BottomSheetRef } from '@/components/BottomSheet';
+import LimitationBottomSheet from '@/screens/Login/components/LimitationBottomSheet';
 
 const Login = () => {
   const { onAppleLogin, onTestLogin, isLoading } = useHandleAuth();
@@ -89,13 +90,7 @@ const Login = () => {
           </Typography>
           <View style={styles.divider} />
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            gap: 20,
-          }}
-        >
+        <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={onAppleLogin} style={styles.loginButton}>
             <Apple />
           </TouchableOpacity>
@@ -124,27 +119,7 @@ const Login = () => {
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
       )}
-      <BottomSheet bottomSheetRef={bottomsheetRef} snapPoints={['40%']}>
-        <Typography variant={'titleItalicLarge'} style={styles.proPlanTitle}>
-          Why the limitation ?
-        </Typography>
-        <View style={styles.proContentContainer}>
-          <Typography variant={'bodyMedium'} style={styles.proPlanDescription}>
-            Our goal is to give everyone a taste by offering 5 recipe slots for free, you can
-            explore the benefits of cloud syncing and see how it fits into your cooking routine.
-          </Typography>
-          <Typography variant={'bodyMedium'} style={styles.proPlanDescription}>
-            If you find that 5 slots aren’t enough, you can always upgrade to our Pro Vault at a
-            later point.
-          </Typography>
-          <LabelButton
-            title={'Learn more about pro vaults'}
-            onPress={() => {
-              navigate(Routes.ProPlan);
-            }}
-          />
-        </View>
-      </BottomSheet>
+      <LimitationBottomSheet bottomsheetRef={bottomsheetRef} />
     </View>
   );
 };

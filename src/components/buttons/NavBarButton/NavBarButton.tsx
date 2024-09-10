@@ -6,12 +6,12 @@ import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './navBarButton.style';
 import { IconButtonProps } from '@/components/buttons/IconButton/IconButton';
 
-interface Props extends IconButtonProps {
+export interface NavBarProps extends IconButtonProps {
   style?: StyleProp<ViewStyle>;
   iconSource: IconName;
 }
 
-const NavBarButton = ({ iconSource, ...props }: Props) => {
+const NavBarButton = ({ iconSource, ...props }: NavBarProps) => {
   const { styles } = useStyles(stylesheet);
 
   return <IconButton iconSource={iconSource} {...props} style={[props.style, styles.container]} />;
