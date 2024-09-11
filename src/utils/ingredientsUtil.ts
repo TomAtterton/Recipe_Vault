@@ -4,9 +4,7 @@ import { parseIngredient } from 'parse-ingredient';
 const unitsSet = new Set(['tbsp', 'tsp', 'tablespoons', 'teaspoons', 'tablespoon', 'teaspoon']);
 
 export const parseMetrics = ({ note, isMetric }: { note: string; isMetric: boolean }): any | {} => {
-  const trimmedNote = note?.replace(/\/(\d+fl oz|[^/ ]*)/g, '').trim();
-  const parsedIngredient = trimmedNote ? parseIngredient(trimmedNote)[0] : null;
-
+  const parsedIngredient = note ? parseIngredient(note)[0] : null;
   if (!parsedIngredient) return {};
 
   const { quantity, unitOfMeasure, description } = parsedIngredient;

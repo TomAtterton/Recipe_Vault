@@ -6,7 +6,7 @@ import { showErrorMessage } from '@/utils/promptUtils';
 import useGetRecipeIngredients from '@/database/api/recipes/hooks/useGetRecipeIngredients';
 import { RouteProp } from '@/navigation/types';
 import { useBoundStore } from '@/store';
-import { parseMetrics, scaleAmount } from '@/utils/igredientsUtil';
+import { parseMetrics, scaleAmount } from '@/utils/ingredientsUtil';
 import { getRecipeServings } from '@/database/api/recipes';
 import { translate } from '@/core';
 

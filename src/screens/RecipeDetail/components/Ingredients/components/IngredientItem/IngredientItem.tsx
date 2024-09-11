@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 
-import { parseMetrics, scaleAmount } from '@/utils/igredientsUtil';
+import { parseMetrics, scaleAmount } from '@/utils/ingredientsUtil';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './ingredientItem.style';

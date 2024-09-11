@@ -67,7 +67,7 @@ const stylesheet = createStyleSheet((theme) => ({
     color: theme.colors.onBackground,
   },
   strongContainer: {
-    maxHeight: 18,
+    marginTop: -3,
   },
   strong: {
     ...theme.fonts.bodyMedium,
