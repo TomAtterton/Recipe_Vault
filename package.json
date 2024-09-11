@@ -21,7 +21,9 @@
     "update:stagining": "eas update --channel staging",
     "upload-sourcemaps": "npx sentry-expo-upload-sourcemaps dist",
     "update-expo": "bun add expo && npx expo install --fix",
-    "devtools": "npx react-devtools"
+    "devtools": "npx react-devtools",
+    "upgrade-maestro": "curl -fsSL \"https://get.maestro.mobile.dev\" | bash",
+    "run-e2e": "maestro test .maestro"
   },
   "dependencies": {
     "@bacons/link-assets": "^1.1.0",

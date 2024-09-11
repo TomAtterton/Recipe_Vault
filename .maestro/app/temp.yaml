@@ -1,0 +1,9 @@
+# Currently there is a bug in maestro so we add a random yaml to support this.
+appId: com.tomatterton.recipeapp
+---
+- clearState
+- launchApp
+- runFlow: onboarding.yaml
+- assertVisible: "Login to create a Cloud Vault!"
+- tapOn: Continue
+

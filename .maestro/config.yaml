@@ -1,0 +1,8 @@
+flows:
+  - "app/*"
+
+executionOrder:
+  continueOnFailure: false # default is true
+  flowsOrder:
+#    - onboarding
+    - add_recipe

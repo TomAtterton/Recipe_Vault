@@ -1,0 +1,23 @@
+appId: com.tomatterton.recipeapp
+---
+- clearState
+- launchApp
+- runFlow: onboarding.yaml
+- tapOn:
+    point: "30%,96%"
+- tapOn: "google.com/"
+- tapOn:
+    point: "95%,51%"
+- inputText: "Chicken recipes"
+- tapOn: "Submit"
+- tapOn: "Read more"
+- tapOn: "Read more"
+- tapOn: "Reject all"
+- tapOn:
+    point: "23%,67%"
+- tapOn: "Add Recipe"
+- scrollUntilVisible:
+    element: "Add recipe"
+    direction: "DOWN"
+- tapOn: "Add recipe"
+- assertVisible: "Recipe added successfully"
