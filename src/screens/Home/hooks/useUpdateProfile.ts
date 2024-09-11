@@ -20,7 +20,7 @@ const useUpdateProfile = () => {
           });
         })
         .catch((e) => {
-          showErrorMessage(e?.message || translate('error.default.error_message'));
+          showErrorMessage(e?.message || translate('error_messages.default'));
           console.log('e', e);
         });
     }

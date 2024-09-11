@@ -29,10 +29,10 @@ const Search = ({}) => {
           date: selectDate,
           entryType: entryType,
         });
-        showSuccessMessage('Meal plan added successfully');
+        showSuccessMessage(translate('mealplan.add_success'));
         goBack();
       } catch (e) {
-        showErrorMessage(translate('error.default.error_message'));
+        showErrorMessage(translate('default.error_message'));
         console.log('error', e);
       }
     },

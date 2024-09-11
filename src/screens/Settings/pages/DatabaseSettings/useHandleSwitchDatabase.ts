@@ -72,7 +72,7 @@ const useHandleSwitchDatabase = () => {
       }
     } catch (error) {
       console.log('error', error);
-      showErrorMessage(translate('error.default.error_message', 3000));
+      showErrorMessage(translate('default.error_message'));
     }
   };
 
@@ -90,7 +90,7 @@ const useHandleSwitchDatabase = () => {
       await onOpenDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
     } catch (error) {
       console.log('error', error);
-      showErrorMessage(translate('error.default.error_message', 3000));
+      showErrorMessage(translate('default.error_message'));
     }
   };
 
@@ -98,10 +98,12 @@ const useHandleSwitchDatabase = () => {
     const isLocal = id === Env.TEST_GROUP_ID;
 
     Alert.alert(
-      isLocal ? 'Switch to local vault?' : 'Switch to cloud vault?',
       isLocal
-        ? 'Will disable cloud sync and switch to local vault.'
-        : 'Will enable cloud sync and switch to cloud vault.',
+        ? translate('prompt.switch_vault.local_title')
+        : translate('prompt.switch_vault.cloud_title'),
+      isLocal
+        ? translate('prompt.switch_vault.local_message')
+        : translate('prompt.switch_vault.cloud_message'),
       [
         {
           text: translate('default.cancel'),

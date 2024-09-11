@@ -71,7 +71,20 @@
     "or": "or",
     "button": "Continue with local vault"
   },
+  "mealplan": {
+    "add_success": "Meal plan created successfully"
+  },
+  "support_app": {
+    "title": "Support the App",
+    "thank_you": "Thank you for supporting the app!"
+  },
   "prompt": {
+    "switch_vault": {
+      "local_title": "Switch to Local Vault",
+      "cloud_title": "Switch to Cloud Vault",
+      "local_message": "Are you sure you want to switch to your local vault?",
+      "cloud_message": "Are you sure you want to switch to your cloud vault?"
+    },
     "clear_database": {
       "error_message": "There was an issue clearing the database.",
       "message": "Are you sure you want to clear the database?",
@@ -98,7 +111,33 @@
     "reset_database": {
       "message": "Are you sure you want to reset the database?",
       "title": "Reset Database"
+    },
+    "delete_cloud_vault": {
+      "title": "Delete Cloud Vault: {{currentDatabaseName}}",
+      "message": "\nAre you sure you want to delete your cloud data?\n\n You cannot reverse this! Any Purchases made will be lost."
     }
+  },
+  "advance_settings": {
+    "title": "Advance Database Settings.",
+    "danger_zone": "Danger Zone",
+    "danger_zone_description": "Having trouble with your database? Be careful with these settings. This action is irreversible.",
+    "clear_all_recipes": "Clear All Recipes",
+    "delete_reset_vault": "Delete & Reset Vault",
+    "delete_cloud_vault": "Delete Cloud Vault",
+    "success": {
+      "deleting_vault": "Your vault has been deleted."
+    },
+    "errors": {
+      "deleting_vault": "There was an issue deleting your vault."
+    }
+  },
+  "account_settings": {
+    "title": "Account Settings.",
+    "name": "Name",
+    "email": "Email",
+    "danger_zone": "Danger Zone",
+    "danger_zone_description": "Be careful with these settings. This action is irreversible.",
+    "delete_account": "Delete Account"
   },
   "limitation": {
     "title": "Why the limitation ?",

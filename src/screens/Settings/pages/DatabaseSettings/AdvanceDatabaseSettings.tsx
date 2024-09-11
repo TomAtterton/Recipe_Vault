@@ -76,10 +76,8 @@ const AdvanceDatabaseSettings = () => {
   const handleDeleteCloudVault = async () => {
     try {
       Alert.alert(
-        translate(`Delete Cloud Vault: ${currentDatabaseName}`),
-        translate(
-          '\nAre you sure you want to delete your cloud data?\n\n You cannot reverse this! Any Purchases made will be lost.',
-        ),
+        translate('prompt.delete_cloud_vault.title', { currentDatabaseName }),
+        translate('prompt.delete_cloud_vault.message'),
         [
           {
             text: translate('default.cancel'),
@@ -104,7 +102,7 @@ const AdvanceDatabaseSettings = () => {
                   shouldClose: false,
                 });
 
-                showSuccessMessage('Cloud vault deleted successfully');
+                showSuccessMessage(translate('advance_settings.success.deleting_vault'));
               }
             },
           },
@@ -112,7 +110,7 @@ const AdvanceDatabaseSettings = () => {
       );
     } catch (error) {
       console.log('error', error);
-      showErrorMessage('Error deleting cloud vault');
+      showErrorMessage(translate('advance_settings.errors.deleting_vault'));
     }
   };
 
@@ -123,27 +121,27 @@ const AdvanceDatabaseSettings = () => {
     <SafeAreaView style={styles.container}>
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
       <View style={styles.container}>
-        <Typography variant={'titleLarge'}>Advance Database Settings.</Typography>
+        <Typography variant={'titleLarge'}>{translate('advance_settings.title')}</Typography>
         <View style={styles.dangerZoneContainer}>
           <Typography variant={'titleLarge'} style={styles.dangerZoneTitle}>
-            Danger Zone:
+            {translate('advance_settings.danger_zone')}
           </Typography>
           <Typography variant={'bodyMedium'}>
-            Having trouble with the app? Try these options:
+            {translate('advance_settings.danger_zone_description')}
           </Typography>
           <SettingsButton
-            title={'Clear All Recipes'}
+            title={translate('advance_settings.clear_all_recipes')}
             onPress={handleClearDatabase}
             iconSource={'bin'}
           />
           <SettingsButton
-            title={'Delete and Reset Vault'}
+            title={translate('advance_settings.delete_reset_vault')}
             onPress={handleResetDatabase}
             iconSource={'bin'}
           />
           {currentGroupId !== Env.TEST_GROUP_ID && (
             <SettingsButton
-              title={'Delete Cloud Vault'}
+              title={translate('advance_settings.delete_cloud_vault')}
               onPress={handleDeleteCloudVault}
               iconSource={'bin'}
             />

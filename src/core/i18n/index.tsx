@@ -5,14 +5,24 @@ import { resources } from './resources';
 
 export * from './utils';
 
+export const defaultNS = 'translation';
+
 i18n.use(initReactI18next).init({
   resources,
   lng: 'en',
+  ns: [defaultNS],
   fallbackLng: 'en',
-  compatibilityJSON: 'v3',
+  defaultNS,
   interpolation: {
-    escapeValue: false, // escape passed in values to avoid XSS injections
+    escapeValue: false,
   },
 });
 
 export default i18n;
+
+declare module 'i18next' {
+  interface CustomTypeOptions {
+    defaultNS: typeof defaultNS;
+    resources: (typeof resources)['en'];
+  }
+}

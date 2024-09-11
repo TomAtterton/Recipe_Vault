@@ -52,7 +52,7 @@ const TrySomethingCarousel = ({ onSeeAll }: { onSeeAll: () => void }) => {
     <Animated.View style={styles.container} {...HomeAnimation.trySomethingCarousel}>
       <CardCarousel
         keyExtractor={keyExtractor}
-        title={translate('home.try_something.title')}
+        title={translate('home.try_something_title')}
         onSeeAll={onSeeAll}
         showSeeAll={true}
         shimmerSize={{ height: CONTAINER_HEIGHT / 1.5, width: CONTAINER_WIDTH }}

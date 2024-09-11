@@ -77,7 +77,7 @@ const SupportApp = () => {
       return (
         <View>
           <Typography variant={'titleLarge'} style={styles.thankYouText}>
-            {translate('error.default.error_message')}
+            {translate('default.error_message')}
           </Typography>
         </View>
       );
@@ -87,7 +87,7 @@ const SupportApp = () => {
   return (
     <View style={styles.container}>
       <Typography variant={'titleMedium'} style={styles.title}>
-        {hasMadePurchase ? 'Thank you for your support!' : 'Support the app'}
+        {hasMadePurchase ? translate('support_app.thank_you') : translate('support_app.title')}
       </Typography>
 
       {renderContent()}
