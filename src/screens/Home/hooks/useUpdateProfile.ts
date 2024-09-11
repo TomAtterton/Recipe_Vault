@@ -4,6 +4,7 @@ import getProfile from '@/database/api/profile/getProfile';
 import { Env } from '@/core/env';
 import { showErrorMessage } from '@/utils/promptUtils';
 import useUserId from '@/hooks/common/useUserId';
+import { translate } from '@/core';
 
 const useUpdateProfile = () => {
   const userId = useUserId();
@@ -19,7 +20,7 @@ const useUpdateProfile = () => {
           });
         })
         .catch((e) => {
-          showErrorMessage(e?.message || 'Error');
+          showErrorMessage(e?.message || translate('error.default.error_message'));
           console.log('e', e);
         });
     }

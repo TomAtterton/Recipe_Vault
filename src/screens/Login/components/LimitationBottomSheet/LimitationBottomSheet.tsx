@@ -7,6 +7,7 @@ import React, { useMemo } from 'react';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from '@/screens/Login/login.style';
 import { useNavigation } from '@react-navigation/native';
+import { translate } from '@/core';
 
 const LimitationBottomSheet = ({
   bottomsheetRef,
@@ -20,31 +21,29 @@ const LimitationBottomSheet = ({
 
   const snapPoints = useMemo(() => [height * 0.4], [height]);
 
+  const handleRenderFooter = () => (
+    <LabelButton
+      style={styles.proPlanButton}
+      title={translate('limitation.button')}
+      onPress={() => {
+        navigate(Routes.ProPlan);
+      }}
+    />
+  );
+
   return (
     <BottomSheet
       bottomSheetRef={bottomsheetRef}
       snapPoints={snapPoints}
-      title={'Why the limitation ?'}
-      FooterComponent={() => {
-        return (
-          <LabelButton
-            style={styles.proPlanButton}
-            title={'Learn more about pro vaults'}
-            onPress={() => {
-              navigate(Routes.ProPlan);
-            }}
-          />
-        );
-      }}
+      title={translate('limitation.title')}
+      FooterComponent={handleRenderFooter}
     >
       <View style={styles.proContentContainer}>
         <Typography variant={'bodyMedium'} style={styles.proPlanDescription}>
-          Our goal is to give everyone a taste by offering 5 recipe slots for free, you can explore
-          the benefits of cloud syncing and see how it fits into your cooking routine.
+          {translate('limitation.description1')}
         </Typography>
         <Typography variant={'bodyMedium'} style={styles.proPlanDescription}>
-          If you find that 5 slots aren’t enough, you can always upgrade to our Pro Vault at a later
-          point.
+          {translate('limitation.description2')}
         </Typography>
       </View>
     </BottomSheet>

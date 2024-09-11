@@ -18,6 +18,7 @@ import LabelButton from '@/components/buttons/LabelButton';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import StarRating from '@/components/StarRating';
 import { stylesheet } from './filterOptions.style';
+import { translate } from '@/core';
 
 export const defaultFilterOptions = {
   hasNotRated: false,
@@ -130,12 +131,16 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
       >
         <View style={styles.container}>
           <View style={styles.header}>
-            <Typography variant={'titleLarge'}>Filter Options</Typography>
-            <LabelButton onPress={onReset} hitSlop={styles.resetButtonHitSlop} title={'reset'} />
+            <Typography variant={'titleLarge'}>{translate('filter.title')}</Typography>
+            <LabelButton
+              onPress={onReset}
+              hitSlop={styles.resetButtonHitSlop}
+              title={translate('filter.reset')}
+            />
           </View>
           <View style={styles.content}>
             <Typography style={styles.contentTitle} variant={'titleMedium'}>
-              Rating
+              {translate('filter.rating')}
             </Typography>
             <CheckBox
               style={styles.checkbox}
@@ -152,7 +157,7 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
             {data && data.length > 0 && (
               <>
                 <Typography style={styles.contentTitle} variant={'titleMedium'}>
-                  Tags
+                  {translate('filter.tags')}
                 </Typography>
                 <FlatList
                   keyExtractor={keyExtractor}
@@ -168,7 +173,7 @@ const FilterOptions = ({ currentFilters, onUpdateFilter }: Props) => {
             disabled={!hasChanged}
             style={styles.saveButton}
             onPress={onSaved}
-            title={'Save'}
+            title={translate('filter.save')}
           />
         </View>
       </BottomSheet>

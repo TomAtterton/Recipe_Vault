@@ -11,10 +11,25 @@
     "dismiss": "dismiss",
     "error_message": "Something went wrong",
     "error_title": "Error",
-    "ok": "ok"
+    "ok": "ok",
+    "see_all": "See All",
+    "continue": "Continue"
   },
   "empty": {
     "no_results": "No results found."
+  },
+  "join_vault": {
+    "placeholder": "Enter Vault Code",
+    "button": "Join Vault",
+    "description": "Have a vault code? Enter it here to join a cloud vault and explore a world of recipes with up to two friends or family. If you don’t have one, consider creating your own vault!",
+    "title": "Join a Vault"
+  },
+  "filter": {
+    "title": "Filter Options",
+    "reset": "Reset",
+    "rating": "Rating",
+    "tags": "Tags",
+    "save": "Save"
   },
   "error_messages": {
     "cancelled_sign_in": "Sign in was cancelled.",
@@ -37,7 +52,13 @@
     "search": {
       "button": "Search",
       "placeholder": "Search for recipes"
-    }
+    },
+    "try_something_title": "try something new"
+  },
+  "image_detection": {
+    "success": "Text detected from image",
+    "error": "Error detecting text from image",
+    "generate": "Generate Recipe"
   },
   "login": {
     "test_login_title": "Test Login",
@@ -78,6 +99,12 @@
       "message": "Are you sure you want to reset the database?",
       "title": "Reset Database"
     }
+  },
+  "limitation": {
+    "title": "Why the limitation ?",
+    "description1": "Our goal is to give everyone a taste by offering 5 recipe slots for free, you can explore the benefits of cloud syncing and see how it fits into your cooking routine.",
+    "description2": "If you find that 5 slots aren’t enough, you can always upgrade to our Pro Vault at a later point.",
+    "button": "Learn more about pro vaults"
   },
   "settings": {
     "about": "About",
