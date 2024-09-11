@@ -7,6 +7,7 @@ import * as React from 'react';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import { useNavigation } from '@react-navigation/native';
 import { getProfileGroupsWithId } from '@/services/profileGroup';
+import { translate } from '@/core';
 
 type User = {
   id?: string | null;
@@ -34,11 +35,13 @@ const ManageGroupUsers = () => {
     <SafeAreaView style={styles.container}>
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
       <View style={styles.container}>
-        <Typography variant={'titleItalicLarge'}>Manage Vault Users.</Typography>
+        <Typography variant={'titleItalicLarge'}>
+          {translate('manage_group_users.title')}
+        </Typography>
         <Typography
           style={styles.title}
           variant={'titleMedium'}
-        >{`Vault: ${groupName}`}</Typography>
+        >{`${translate('manage_group_users.vault_title')}${groupName}`}</Typography>
         <View>
           {users?.map((user) => (
             <View key={user.id} style={styles.item}>

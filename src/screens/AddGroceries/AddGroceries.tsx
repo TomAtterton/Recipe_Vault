@@ -8,6 +8,7 @@ import { useStyles } from 'react-native-unistyles';
 import LabelButton from '@/components/buttons/LabelButton';
 import { useKeyboardForm } from '@/hooks/common/useKeyboardForm';
 import useAddGroceries from '@/screens/AddGroceries/useAddGroceries';
+import { translate } from '@/core';
 
 const AddGroceries = () => {
   useKeyboardForm();
@@ -25,11 +26,11 @@ const AddGroceries = () => {
   return (
     <View style={styles.container}>
       <Typography style={styles.title} variant={'titleLarge'}>
-        Add to groceries
+        {translate('add_groceries.title')}
       </Typography>
       <View style={styles.selectContainer}>
         <LabelButton
-          title={'Select All /'}
+          title={translate('add_groceries.select_all')}
           onPress={() =>
             setIngredients(
               ingredients.map((ingredient) => ({
@@ -40,7 +41,7 @@ const AddGroceries = () => {
           }
         />
         <LabelButton
-          title={' Deselect All'}
+          title={translate('add_groceries.deselect_all')}
           onPress={() =>
             setIngredients(
               ingredients.map((ingredient) => ({
@@ -66,7 +67,7 @@ const AddGroceries = () => {
       <PrimaryButton
         isLoading={isLoading}
         style={styles.button}
-        title={'Save'}
+        title={translate('add_groceries.save_button')}
         onPress={handleSave}
       />
     </View>

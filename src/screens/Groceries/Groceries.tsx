@@ -21,6 +21,7 @@ import OutlineButton from '@/components/buttons/OutlineButton';
 import Shimmer from '@/components/Shimmer';
 import { requestReminderPermission } from '@/utils/reminderUtils';
 import { useFloatingInput } from '@/providers/FloatingInputProvider';
+import { translate } from '@/core';
 
 const keyExtractor = (item: Reminder, index: number) => `${item?.id}` + index;
 
@@ -62,7 +63,7 @@ const Groceries = () => {
     (item: Reminder) => {
       showInput &&
         showInput({
-          placeholder: 'Edit Grocery',
+          placeholder: translate('groceries.edit_placeholder'),
           initialValue: item?.title,
           onSubmit: (title) => {
             const trimmedTitle = title.trim();
@@ -77,7 +78,7 @@ const Groceries = () => {
   const handleAdd = () => {
     showInput &&
       showInput({
-        placeholder: 'Add Grocery',
+        placeholder: translate('groceries.add_placeholder'),
         initialValue: '',
         onSubmit: (title) => {
           onAdd(title);
@@ -90,9 +91,12 @@ const Groceries = () => {
       <View style={[styles.emptyContainer]}>
         <Icon name={'shopping-cart'} size={40} color={theme.colors.onBackground} />
         <Typography variant={'titleMedium'} style={styles.emptyTitle}>
-          No Groceries make sure to add some groceries to your list or choose a different list.
+          {translate('groceries.empty_message')}
         </Typography>
-        <OutlineButton title={'Choose Grocery List'} onPress={handleShowGrocerySelection} />
+        <OutlineButton
+          title={translate('groceries.choose_list_button')}
+          onPress={handleShowGrocerySelection}
+        />
       </View>
     );
   }, [styles.emptyContainer, styles.emptyTitle, theme.colors.onBackground]);
@@ -155,7 +159,11 @@ const Groceries = () => {
             },
           ]}
         >
-          <AddButton style={styles.addButton} title={'Add Grocery'} onPress={handleAdd} />
+          <AddButton
+            style={styles.addButton}
+            title={translate('groceries.add_button')}
+            onPress={handleAdd}
+          />
         </BlurView>
       )}
       <BottomSheet bottomSheetRef={bottomSheetRef} snapPoints={['80%']}>

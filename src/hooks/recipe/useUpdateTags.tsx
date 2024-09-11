@@ -3,6 +3,7 @@ import useGetTags from '@/database/api/tags/useGetTags';
 import usePostTags from '@/database/api/tags/usePostTags';
 import useDeleteTags from '@/database/api/tags/useDeleteTags';
 import { showErrorMessage } from '@/utils/promptUtils';
+import { translate } from '@/core';
 
 const useUpdateTags = () => {
   const { data } = useGetTags();
@@ -13,8 +14,8 @@ const useUpdateTags = () => {
     try {
       tag?.name && (await onAddTags({ name: tag.name }));
     } catch (e) {
-      showErrorMessage('Error adding category');
-      console.log('Error adding category', e);
+      showErrorMessage(translate('tags.error_adding'));
+      console.log(translate('tags.error_adding'), e);
     }
   };
 
@@ -22,8 +23,8 @@ const useUpdateTags = () => {
     try {
       await onDeleteTags({ id: tag.id });
     } catch (e) {
-      showErrorMessage('Error deleting category');
-      console.log('Error deleting category', e);
+      showErrorMessage(translate('tags.error_deleting'));
+      console.log(translate('tags.error_deleting'), e);
     }
   };
 

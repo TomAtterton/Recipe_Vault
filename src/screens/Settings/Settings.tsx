@@ -13,6 +13,7 @@ import { requestReview } from 'expo-store-review';
 import SupportApp from '@/screens/SupportApp';
 import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 import { useRef } from 'react';
+import { translate } from '@/core';
 
 const Settings = () => {
   const { styles } = useStyles(stylesheet);
@@ -39,39 +40,44 @@ const Settings = () => {
     >
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
       <View style={styles.contentContainer}>
-        <Typography variant={'titleItalicLarge'}>Settings.</Typography>
+        <Typography variant={'titleItalicLarge'}>{translate('app_settings.title')}</Typography>
         <SettingsButton
-          title={'General'}
+          title={translate('general_settings.general')}
           onPress={() => navigate(Routes.AppSettings)}
           iconSource={'settings'}
         />
         <SettingsButton
-          title={'Recipes'}
+          title={translate('general_settings.recipes')}
           onPress={() => navigate(Routes.RecipeSettings)}
           iconSource={'hamburger'}
         />
         <SettingsButton
-          title={'Vaults'}
+          title={translate('general_settings.vaults')}
           onPress={() => navigate(Routes.DatabaseSettings)}
           iconSource={'safe'}
         />
-        <SettingsButton title={'Cloud Sync'} onPress={handleSyncDatabase} iconSource={'cloud'} />
+        <SettingsButton
+          title={translate('general_settings.cloud_sync')}
+          onPress={handleSyncDatabase}
+          iconSource={'cloud'}
+        />
 
-        <SettingsButton title={'Help'} onPress={() => navigate(Routes.Help)} iconSource={'more'} />
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'flex-end',
-            marginBottom: 40,
-            gap: 20,
-          }}
-        >
+        <SettingsButton
+          title={translate('general_settings.help')}
+          onPress={() => navigate(Routes.Help)}
+          iconSource={'more'}
+        />
+        <View style={styles.bottomContainer}>
           <SettingsButton
-            title={'Support App'}
+            title={translate('general_settings.support_app')}
             onPress={handleSupportApp}
             iconSource={'ufo-flying'}
           />
-          <SettingsButton title={'Review App'} onPress={requestReview} iconSource={'appstore'} />
+          <SettingsButton
+            title={translate('general_settings.review_app')}
+            onPress={requestReview}
+            iconSource={'appstore'}
+          />
           <BottomSheet bottomSheetRef={bottomSheetRef} snapPoints={['50%']}>
             <SupportApp />
           </BottomSheet>

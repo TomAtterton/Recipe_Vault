@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Keyboard } from 'react-native';
 import { navigateToAddRecipe } from '@/navigation/helper';
 import { onError } from '@/utils/errorUtils';
+import { translate } from '@/core';
 
 const useHandleDetection = (uri: string) => {
   const navigation = useNavigation();
@@ -35,10 +36,10 @@ const useHandleDetection = (uri: string) => {
       } catch (error) {
         console.log('error', error);
         onError(error);
-        showErrorMessage('Error parsing recipe');
+        showErrorMessage(translate('recipe_detection.error_parsing_recipe'));
       }
     }
-    showErrorMessage('No recipe detected');
+    showErrorMessage(translate('recipe_detection.no_recipe_detected'));
   };
 
   return {

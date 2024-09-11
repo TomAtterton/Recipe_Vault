@@ -5,6 +5,7 @@ import { RecipeDetailType } from '@/types';
 import usePostUpdateRecipes from '@/database/api/recipes/hooks/usePostUpdateRecipes';
 import { showErrorMessage, showSuccessMessage } from '@/utils/promptUtils';
 import useGetRecipeDetailsCombined from '@/database/api/recipes/hooks/useGetRecipeDetailsCombined';
+import { translate } from '@/core';
 
 const useRecipeDetail = ({ id }: { id?: string | null }) => {
   const navigation = useNavigation();
@@ -34,7 +35,7 @@ const useRecipeDetail = ({ id }: { id?: string | null }) => {
         await onSubmit(mergedData, id, recipeData);
 
         if (showBanner) {
-          showSuccessMessage('Recipe updated successfully');
+          showSuccessMessage(translate('recipe_detail.update_success'));
         }
         if (shouldNavigate) {
           navigation.navigate(Routes.Home);
@@ -50,7 +51,7 @@ const useRecipeDetail = ({ id }: { id?: string | null }) => {
         }
       } catch (e) {
         if (showBanner) {
-          showErrorMessage('Error updating recipe');
+          showErrorMessage(translate('recipe_detail.update_error'));
         }
         console.log('Error updating recipe', e);
       }

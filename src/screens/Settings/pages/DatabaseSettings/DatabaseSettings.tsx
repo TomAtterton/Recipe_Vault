@@ -16,6 +16,7 @@ import { useRef } from 'react';
 import useIsLoggedIn from '@/hooks/common/useIsLoggedIn';
 import LabelButton from '@/components/buttons/LabelButton';
 import Icon from '@/components/Icon';
+import { translate } from '@/core';
 
 const DatabaseSettingsScreen = () => {
   const { styles } = useStyles(stylesheet);
@@ -54,25 +55,31 @@ const DatabaseSettingsScreen = () => {
     <SafeAreaView style={styles.container}>
       <NavBarButton style={styles.backButton} iconSource="arrow-left" onPress={goBack} />
       <View style={styles.container}>
-        <Typography variant="titleLarge">Vault Settings.</Typography>
-        <InfoLabelButton title="Current Vault:" buttonTitle={databaseName} />
-        <InfoLabelButton title="Synced to Cloud:" buttonTitle={isLocalVault ? 'false' : 'true'} />
+        <Typography variant="titleLarge">{translate('database_settings.title')}</Typography>
+        <InfoLabelButton
+          title={translate('database_settings.current_vault')}
+          buttonTitle={databaseName}
+        />
+        <InfoLabelButton
+          title={translate('database_settings.synced_to_cloud')}
+          buttonTitle={isLocalVault ? 'false' : 'true'}
+        />
         {availableGroups && availableGroups.length < 3 && (
           <LabelButton
             style={styles.addVaultButton}
-            title="+ Create or Join a Vault"
+            title={translate('database_settings.add_vault_button')}
             onPress={handleCreateOrJoinVault}
           />
         )}
         <View style={styles.vaultsContainer}>
           <SettingsButton
-            title="Switch Vault"
+            title={translate('database_settings.switch_vault')}
             onPress={() => manageVaultBottomSheetRef.current?.present()}
             iconSource="vault"
           />
           {!isLocalVault && (
             <SettingsButton
-              title="Share Vault"
+              title={translate('database_settings.share_vault')}
               onPress={async () => {
                 await Share.share({
                   title: 'Share database code with a friend',
@@ -83,30 +90,37 @@ const DatabaseSettingsScreen = () => {
             />
           )}
           <SettingsButton
-            title="Advanced Vault Settings"
+            title={translate('database_settings.advanced_vault_settings')}
             onPress={() => navigate(Routes.AdvanceVaultSettings)}
             iconSource="cog"
           />
         </View>
       </View>
-      <BottomSheet bottomSheetRef={createJoinBottomSheetRef} title="Add a Vault">
+      <BottomSheet
+        bottomSheetRef={createJoinBottomSheetRef}
+        title={translate('database_settings.add_vault_bottom_sheet_title')}
+      >
         <View style={styles.bottomSheetContainer}>
           <SettingsButton
             iconSource="cloud"
-            title="Create a New Vault"
+            title={translate('database_settings.create_vault')}
             onPress={navigateToCreateVault}
           />
-          <SettingsButton iconSource="cloud" title="Join a Vault" onPress={navigateToJoinVault} />
+          <SettingsButton
+            iconSource="cloud"
+            title={translate('database_settings.join_vault')}
+            onPress={navigateToJoinVault}
+          />
         </View>
       </BottomSheet>
       <BottomSheet
         bottomSheetRef={manageVaultBottomSheetRef}
-        title="Switch Vault"
+        title={translate('database_settings.switch_vault_bottom_sheet_title')}
         snapPoints={['80%']}
       >
         <View style={styles.bottomSheetContainer}>
           <Typography variant="titleMedium" style={styles.vaultTitle}>
-            Cloud Vaults
+            {translate('database_settings.cloud_vaults')}
           </Typography>
           {availableGroups.length > 0
             ? availableGroups.map((group) => {
@@ -129,7 +143,7 @@ const DatabaseSettingsScreen = () => {
               })
             : null}
           <Typography variant="titleMedium" style={styles.vaultTitle}>
-            Local Vault
+            {translate('database_settings.local_vault')}
           </Typography>
           <TouchableOpacity
             style={styles.vaultItem}
@@ -139,7 +153,7 @@ const DatabaseSettingsScreen = () => {
             }}
           >
             <Icon name="vault" size={18} color="white" />
-            <Typography>Local Vault</Typography>
+            <Typography>{translate('database_settings.local_vault')}</Typography>
           </TouchableOpacity>
         </View>
       </BottomSheet>

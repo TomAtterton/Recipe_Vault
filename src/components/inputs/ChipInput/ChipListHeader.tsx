@@ -17,7 +17,7 @@ const ChipListHeader = ({
 }: {
   items?: ChipItemType[] | null;
   onUpdateItem: (item: ChipItemType) => Promise<void>;
-  itemsRef: React.RefObject<BottomSheetRef>; // Renamed categoriesRef to itemsRef
+  itemsRef: React.RefObject<BottomSheetRef>;
 }) => {
   const [newItem, setNewItem] = useState('');
   const [showAddItemInput, setShowAddItemInput] = useState(false);
@@ -50,8 +50,7 @@ const ChipListHeader = ({
 
     if (itemExists) {
       setNewItem('');
-
-      showErrorMessage('Item already exists');
+      showErrorMessage(translate('chip_list_header.item_exists'));
       return;
     }
 
@@ -66,7 +65,7 @@ const ChipListHeader = ({
   return (
     <View style={styles.listHeaderContainer}>
       {!showAddItemInput ? (
-        <AddButton title={'Add new item'} onPress={handleAddNewItem} />
+        <AddButton title={translate('chip_list_header.add_new_item')} onPress={handleAddNewItem} />
       ) : (
         <>
           <FormInput
@@ -74,7 +73,7 @@ const ChipListHeader = ({
             autoFocus={true}
             value={newItem}
             onChange={setNewItem}
-            placeholder="New Item"
+            placeholder={translate('chip_list_header.new_item_placeholder')}
             style={styles.newCategoryInput}
             onSubmitEditing={handleSaveNewItem}
           />

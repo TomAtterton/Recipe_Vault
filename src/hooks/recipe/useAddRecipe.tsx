@@ -3,17 +3,17 @@ import { useNavigation } from '@react-navigation/native';
 import { RecipeDetailType } from '@/types';
 import usePostUpdateRecipes from '@/database/api/recipes/hooks/usePostUpdateRecipes';
 import { showSuccessMessage } from '@/utils/promptUtils';
+import { translate } from '@/core';
 
 const useAddRecipe = () => {
   const { onSubmit } = usePostUpdateRecipes();
-
   const navigation = useNavigation();
 
   const onAddRecipe = async ({ updateValues }: { updateValues: RecipeDetailType }) => {
     try {
       const recipeId = await onSubmit(updateValues);
 
-      showSuccessMessage('Recipe added successfully');
+      showSuccessMessage(translate('recipe.add_success')); // Localized success message
 
       navigation.navigate(Routes.Home);
 
@@ -31,6 +31,7 @@ const useAddRecipe = () => {
       throw e;
     }
   };
+
   return {
     onAddRecipe,
   };

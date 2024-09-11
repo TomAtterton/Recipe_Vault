@@ -11,6 +11,7 @@ import IconButton from '@/components/buttons/IconButton';
 import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import { showErrorMessage, showSuccessMessage } from '@/utils/promptUtils';
+import { translate } from '@/core';
 
 interface Props {
   title?: string;
@@ -39,9 +40,9 @@ const CalendarPicker = ({ title, id, initialValue = new Date() }: Props) => {
         date: format(selectDate, 'yyyy-MM-dd'),
         entryType: entryType,
       });
-      showSuccessMessage('Meal plan added successfully');
+      showSuccessMessage(translate('calendar_picker.success_message'));
     } catch (e) {
-      showErrorMessage('Something went wrong');
+      showErrorMessage(translate('calendar_picker.error_message'));
       console.log('error', e);
     }
   }, [addMealPlan, entryType, id, selectDate, title]);
@@ -66,10 +67,10 @@ const CalendarPicker = ({ title, id, initialValue = new Date() }: Props) => {
       <BottomSheet bottomSheetRef={bottomSheetModalRef} snapPoints={['40%']}>
         <View style={styles.contentContainer}>
           <Typography variant={'titleLarge'} style={styles.title}>
-            Add to meal plan!
+            {translate('calendar_picker.title')}
           </Typography>
           <View style={styles.datePickerContainer}>
-            <Typography variant={'titleMedium'}>Date:</Typography>
+            <Typography variant={'titleMedium'}>{translate('calendar_picker.date')}</Typography>
             <RNDateTimePicker
               style={styles.datePicker}
               value={selectDate}
@@ -86,15 +87,15 @@ const CalendarPicker = ({ title, id, initialValue = new Date() }: Props) => {
             actions={[
               {
                 id: 'dinner',
-                title: 'Dinner',
+                title: translate('calendar_picker.dinner'),
               },
               {
                 id: 'lunch',
-                title: 'Lunch',
+                title: translate('calendar_picker.lunch'),
               },
               {
                 id: 'breakfast',
-                title: 'Breakfast',
+                title: translate('calendar_picker.breakfast'),
               },
             ]}
             onPressAction={({ nativeEvent }) => {
@@ -104,7 +105,9 @@ const CalendarPicker = ({ title, id, initialValue = new Date() }: Props) => {
             }}
           >
             <View style={styles.chowMomentsContainer}>
-              <Typography variant={'titleMedium'}>{'Chow Moments: '}</Typography>
+              <Typography variant={'titleMedium'}>
+                {translate('calendar_picker.chow_moments')}
+              </Typography>
               <Typography
                 variant={'bodyLarge'}
                 style={[styles.entryTypeText, { color: colors.primary }]}
@@ -117,7 +120,7 @@ const CalendarPicker = ({ title, id, initialValue = new Date() }: Props) => {
         <PrimaryButton
           style={[styles.saveButton]}
           onPress={handleSavePress}
-          title={'Save to meal plan'}
+          title={translate('calendar_picker.save_button')}
         />
       </BottomSheet>
     </View>

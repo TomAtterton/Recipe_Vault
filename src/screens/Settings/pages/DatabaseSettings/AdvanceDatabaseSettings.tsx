@@ -35,7 +35,7 @@ const AdvanceDatabaseSettings = () => {
                   currentDatabaseName: database.databaseName,
                   shouldClose: false,
                 });
-                showSuccessMessage('Database reset successfully');
+                showSuccessMessage(translate('prompt.clear_database.success_message')); // Update this if you want a specific message
               }
             },
           },
@@ -43,9 +43,10 @@ const AdvanceDatabaseSettings = () => {
       );
     } catch (error) {
       console.log('error', error);
-      showErrorMessage('Error resetting database');
+      showErrorMessage(translate('prompt.clear_database.error_message')); // Localized error message
     }
   };
+
   const handleClearDatabase = async () => {
     try {
       Alert.alert(
@@ -70,6 +71,7 @@ const AdvanceDatabaseSettings = () => {
       showErrorMessage(translate('prompt.clear_database.error_message'));
     }
   };
+
   const currentGroupId = useBoundStore((state) => state.profile.groupId);
   const currentDatabaseName = useBoundStore((state) => state.currentDatabaseName);
 

@@ -8,6 +8,7 @@ import { openURL } from 'expo-linking';
 import { Routes } from '@/navigation/Routes';
 import BackButton from '@/components/BackButton';
 import { handleMail } from '@/utils/mailUtils';
+import { translate } from '@/core';
 
 const Help = () => {
   const { navigate } = useNavigation();
@@ -15,34 +16,28 @@ const Help = () => {
 
   const handleContactUs = () =>
     handleMail({
-      headerText: `
-      Hi,
-      
-      I'm reaching out for help with Recipe Vault. Here's my issue:
-      
-      [Please describe your issue here]
-    `,
+      headerText: translate('help.mail_template'),
     });
 
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
-        <Typography variant={'titleItalicLarge'}>Help.</Typography>
+        <Typography variant={'titleItalicLarge'}>{translate('help.title')}</Typography>
         <SettingsButton
-          title={'Privacy'}
+          title={translate('help.privacy')}
           onPress={() => navigate(Routes.Privacy)}
           iconSource={'hand'}
         />
         <SettingsButton
-          title={'Terms and Conditions'}
+          title={translate('help.terms_conditions')}
           onPress={() =>
             openURL('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/')
           }
           iconSource={'info-border'}
         />
         <SettingsButton
-          title={'Contact Us'}
-          onPress={handleContactUs} // Updated to call the new handler
+          title={translate('help.contact_us')}
+          onPress={handleContactUs}
           iconSource={'paper-plane'}
         />
       </View>

@@ -11,6 +11,7 @@ import { useBoundStore } from '@/store';
 import { showErrorMessage } from '@/utils/promptUtils';
 import { updateProfile } from '@/services/profile';
 import { Routes } from '@/navigation/Routes';
+import { translate } from '@/core';
 
 const Profile = () => {
   const { reset } = useNavigation();
@@ -33,9 +34,7 @@ const Profile = () => {
       setIsLoading(true);
 
       if (name.match(/[^a-zA-Z0-9]/)) {
-        throw new Error(
-          'Please use only letters for your username. Special characters are not allowed.',
-        );
+        throw new Error(translate('profile.error_message'));
       }
       const lowerCaseName = name.trim().toLowerCase();
 
@@ -68,24 +67,22 @@ const Profile = () => {
   return (
     <View style={styles.container}>
       <Typography variant={'titleLarge'} style={styles.title}>
-        {'Off to a great start!'}
+        {translate('profile.title')}
       </Typography>
       <Typography style={styles.subtitle} variant={'bodyMediumItalic'}>
-        {
-          'Now enter a username to get started. This will be visible to others in your shared vault.'
-        }
+        {translate('profile.subtitle')}
       </Typography>
       <FormInput
         value={name}
         onChange={handleTextChange}
-        placeholder={'Enter username'}
+        placeholder={translate('profile.placeholder')}
         multiline={false}
         containerStyle={styles.input}
         maxLength={20}
         errorMessage={errorMessages}
       />
       <PrimaryButton
-        title={'Continue'}
+        title={translate('profile.button')}
         onPress={handleSubmit}
         disabled={name.length < 3}
         isLoading={isLoading}

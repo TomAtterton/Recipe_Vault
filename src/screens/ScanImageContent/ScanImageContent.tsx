@@ -98,7 +98,7 @@ const ScanImageContainer = () => {
         <PrimaryButton
           style={styles.saveButton}
           onPress={handleSave}
-          title={'Save'}
+          title={translate('default.save')}
           disabled={!isSaveEnabled}
         />
         <LabelButton onPress={goBack} title={translate('default.cancel')} />

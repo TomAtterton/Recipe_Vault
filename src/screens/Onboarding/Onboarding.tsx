@@ -17,6 +17,7 @@ import { Routes } from '@/navigation/Routes';
 import { setHasOnboarded, useBoundStore } from '@/store';
 import svgs from '@/theme/svgs';
 import { SvgProps } from 'react-native-svg';
+import { translate } from '@/core';
 
 const onboardingData: {
   Icon: React.FC<SvgProps>;
@@ -24,23 +25,19 @@ const onboardingData: {
 }[] = [
   {
     Icon: svgs.ChefFire,
-    title:
-      'Welcome to recipe vault, where you can store all your favourite recipes locally and securely !',
+    title: translate('onboarding.welcome_message'),
   },
   {
     Icon: svgs.ChefOk,
-    title:
-      'Dive into your personal library and explore! Easily search and filter your favourite recipes on your device!',
+    title: translate('onboarding.explore_message'),
   },
   {
     Icon: svgs.ChefShare,
-    title:
-      'Plan and shop with ease! Schedule meals for the week & add ingredients directly to your shopping list.',
+    title: translate('onboarding.plan_message'),
   },
   {
     Icon: svgs.ChefCut,
-    title:
-      'Share your recipes and meal plans with up to 2 friends using our syncing feature and shared cloud vault.',
+    title: translate('onboarding.share_message'),
   },
 ];
 
@@ -98,7 +95,7 @@ const Onboarding = () => {
           ))}
         </View>
         <LabelButton
-          title={isFinalPage ? 'continue' : 'skip'}
+          title={isFinalPage ? translate('default.continue') : translate('default.skip')}
           onPress={() => {
             if (isFinalPage) {
               /* Handle continue action */

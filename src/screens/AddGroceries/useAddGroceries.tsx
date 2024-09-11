@@ -8,6 +8,7 @@ import { RouteProp } from '@/navigation/types';
 import { useBoundStore } from '@/store';
 import { parseMetrics, scaleAmount } from '@/utils/igredientsUtil';
 import { getRecipeServings } from '@/database/api/recipes';
+import { translate } from '@/core';
 
 const useAddGroceries = () => {
   const route = useRoute<RouteProp<Routes.AddGroceries>>();
@@ -87,7 +88,7 @@ const useAddGroceries = () => {
       setIsLoading(false);
     } catch (error) {
       console.error('Error adding groceries', error);
-      showErrorMessage('Error adding groceries');
+      showErrorMessage(translate('add_groceries.error_adding_groceries'));
       setIsLoading(false);
     }
   };

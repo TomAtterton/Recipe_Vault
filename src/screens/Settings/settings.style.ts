@@ -17,6 +17,12 @@ export const stylesheet = createStyleSheet(() => ({
     marginTop: 40,
     gap: 20,
   },
+  bottomContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginBottom: 40,
+    gap: 20,
+  },
   backButton: {
     position: 'absolute',
     top: 0,

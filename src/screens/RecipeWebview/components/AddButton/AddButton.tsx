@@ -3,6 +3,7 @@ import { stylesheet } from './addButton.style';
 import React from 'react';
 import { useStyles } from 'react-native-unistyles';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
+import { translate } from '@/core';
 
 interface Props {
   handleAddRecipe: () => void;
@@ -17,7 +18,7 @@ const AddButton = ({ handleAddRecipe }: Props) => {
       entering={SlideInDown.duration(800)}
       style={styles.recipeButton}
       onPress={handleAddRecipe}
-      title={'Add Recipe'}
+      title={translate('recipe_webview.add_recipe')}
     />
   );
 };

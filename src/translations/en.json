@@ -5,6 +5,164 @@
     "clear_history": "Clear all History",
     "history": "History"
   },
+  "onboarding": {
+    "welcome_message": "Welcome to recipe vault, where you can store all your favourite recipes locally and securely!",
+    "explore_message": "Dive into your personal library and explore! Easily search and filter your favourite recipes on your device!",
+    "plan_message": "Plan and shop with ease! Schedule meals for the week & add ingredients directly to your shopping list.",
+    "share_message": "Share your recipes and meal plans with up to 2 friends using our syncing feature and shared cloud vault."
+  },
+  "recipe_webview": {
+    "add_recipe": "Add Recipe"
+  },
+  "add_groceries": {
+    "title": "Add to groceries",
+    "select_all": "Select All /",
+    "deselect_all": "Deselect All",
+    "error_adding_groceries": "Error adding groceries",
+    "save_button": "Save"
+  },
+  "credits": {
+    "title": "Credits.",
+    "mingcute": "Icons provided by",
+    "freepik": "Assets provided by",
+    "special_thanks": "Special thanks to all contributors and open-source projects that made this app possible."
+  },
+  "chip_list_header": {
+    "add_new_item": "Add new item",
+    "item_exists": "Item already exists",
+    "new_item_placeholder": "New Item"
+  },
+  "delete_recipe": {
+    "success_message": "Recipe deleted successfully",
+    "error_message": "Failed to delete recipe"
+  },
+  "loading_screen": {
+    "loading_message": "Cooking up your recipe"
+  },
+  "recipe_details": {
+    "error_fetching_details": "Error fetching recipe details"
+  },
+  "recipe_detail": {
+    "update_success": "Recipe updated successfully",
+    "update_error": "Error updating recipe"
+  },
+  "manage_group_users": {
+    "title": "Manage Vault Users.",
+    "vault_title": "Vault: "
+  },
+  "recipe_settings": {
+    "title": "Recipe Settings.",
+    "manage_categories": "Manage Categories",
+    "manage_tags": "Manage Tags"
+  },
+  "sync_settings": {
+    "title": "Cloud Sync Settings.",
+    "current_vault": "Current Vault.",
+    "vault_status": "Vault Status:",
+    "upgrade_to_pro": "Upgrade to pro",
+    "advanced_sync_settings": "Advanced Sync Settings",
+    "enable_cloud_vault": "Enable Cloud Vault",
+    "enable_sync": "Enable Sync",
+    "account_settings": "Account Settings"
+  },
+  "app_settings": {
+    "title": "App Settings.",
+    "app_version": "App Version",
+    "show_onboarding": "Show Onboarding",
+    "credits": "Credits"
+  },
+  "advance_sync_settings": {
+    "title": "Advance Sync Settings.",
+    "current_vault": "Current Vault.",
+    "sync_push": "Sync Push",
+    "sync_pull": "Sync Pull",
+    "reset_last_synced": "Reset last synced",
+    "has_not_synced": "has not synced"
+  },
+  "groceries": {
+    "empty_message": "No Groceries make sure to add some groceries to your list or choose a different list.",
+    "choose_list_button": "Choose Grocery List",
+    "add_button": "Add Grocery",
+    "edit_placeholder": "Edit Grocery",
+    "add_placeholder": "Add Grocery"
+  },
+  "database_settings": {
+    "title": "Vault Settings.",
+    "current_vault": "Current Vault:",
+    "synced_to_cloud": "Synced to Cloud:",
+    "add_vault_button": "+ Create or Join a Vault",
+    "switch_vault": "Switch Vault",
+    "share_vault": "Share Vault",
+    "advanced_vault_settings": "Advanced Vault Settings",
+    "add_vault_bottom_sheet_title": "Add a Vault",
+    "create_vault": "Create a New Vault",
+    "join_vault": "Join a Vault",
+    "switch_vault_bottom_sheet_title": "Switch Vault",
+    "cloud_vaults": "Cloud Vaults",
+    "local_vault": "Local Vault"
+  },
+  "recipe_header_content": {
+    "prep_time": "Prep",
+    "cook_time": "Cook",
+    "source": "Source.",
+    "notes": "Notes."
+  },
+  "info_label_button": {
+    "copy_success": "Copied to clipboard"
+  },
+  "grocery_list": {
+    "error_updating_reminder": "Error updating reminder"
+  },
+  "recipe": {
+    "add_success": "Recipe added successfully"
+  },
+  "recipe_detection": {
+    "error_parsing_recipe": "Error parsing recipe",
+    "no_recipe_detected": "No recipe detected"
+  },
+  "sync": {
+    "error_pull_sync": "Error pull syncing data"
+  },
+  "tags": {
+    "error_adding": "Error adding tags",
+    "error_deleting": "Error deleting tags"
+  },
+  "select_grocery_list": {
+    "title": "Choose which reminders list you would like to link with",
+    "no_list": "No available reminder lists",
+    "create_new_list_button": "Create a new list",
+    "save_button": "Save"
+  },
+  "help": {
+    "title": "Help.",
+    "privacy": "Privacy",
+    "terms_conditions": "Terms and Conditions",
+    "contact_us": "Contact Us",
+    "mail_template": "Hi,\n\nI'm reaching out for help with Recipe Vault. Here's my issue:\n\n[Please describe your issue here]"
+  },
+  "calendar_picker": {
+    "title": "Add to meal plan!",
+    "date": "Date:",
+    "chow_moments": "Chow Moments:",
+    "dinner": "Dinner",
+    "lunch": "Lunch",
+    "breakfast": "Breakfast",
+    "save_button": "Save to meal plan",
+    "success_message": "Meal plan added successfully",
+    "error_message": "Something went wrong"
+  },
+  "categories": {
+    "error_adding": "Error adding category",
+    "error_deleting": "Error deleting category"
+  },
+  "image_picker": {
+    "camera_permission_denied": "Permission to access camera was denied, please enable it in settings",
+    "library_permission_denied": "Permission to access library was denied, please enable it in settings",
+    "error_picking_image": "Error picking image",
+    "no_image_selected": "No image selected",
+    "error_cropping_image": "Error cropping image",
+    "error_setting_image": "Setting image failed"
+  },
   "default": {
     "cancel": "cancel",
     "delete": "delete",
@@ -13,7 +171,48 @@
     "error_title": "Error",
     "ok": "ok",
     "see_all": "See All",
-    "continue": "Continue"
+    "continue": "Continue",
+    "skip": "Skip",
+    "save": "Save"
+  },
+  "purchase_screen": {
+    "title": "Upgrade to pro vault",
+    "sync_feature": "Sync unlimited recipes to the cloud.",
+    "share_feature": "Share your pro vault with up to 2 friends and family.",
+    "support_feature": "Help support the development of Recipe Vault.",
+    "life_time_purchase": "Life Time \n Purchase",
+    "upgrade_button": "Upgrade vault",
+    "continue_free_button": "Continue with free vault",
+    "login_button": "Login to upgrade"
+  },
+  "welcome_onboarding": {
+    "title": "Welcome to Your Recipe Vault!",
+    "subtitle": "Start by creating a cloud vault to sync your recipes with friends and family, or join an existing one to discover and contribute. Let’s get cooking!",
+    "create_button": "Create a cloud vault",
+    "join_button": "Join a cloud vault",
+    "logout": "Logout"
+  },
+  "hour_minute_picker": {
+    "hours": "Hours",
+    "minutes": "Mins",
+    "save_button": "Save"
+  },
+  "general_settings": {
+    "title": "Settings.",
+    "general": "General",
+    "recipes": "Recipes",
+    "vaults": "Vaults",
+    "cloud_sync": "Cloud Sync",
+    "help": "Help",
+    "support_app": "Support App",
+    "review_app": "Review App"
+  },
+  "profile": {
+    "title": "Off to a great start!",
+    "subtitle": "Now enter a username to get started. This will be visible to others in your shared vault.",
+    "placeholder": "Enter username",
+    "button": "Continue",
+    "error_message": "Please use only letters for your username. Special characters are not allowed."
   },
   "empty": {
     "no_results": "No results found."
@@ -94,6 +293,7 @@
     "copy": {
       "button": "Paste as New Content",
       "message": "The content has been copied to your clipboard.",
+      "add_existing": "Add to Existing Content",
       "title": "Content Copied!"
     },
     "delete_account": {
@@ -116,6 +316,11 @@
       "title": "Delete Cloud Vault: {{currentDatabaseName}}",
       "message": "\nAre you sure you want to delete your cloud data?\n\n You cannot reverse this! Any Purchases made will be lost."
     }
+  },
+  "small_horizontal_card": {
+    "delete": "Delete",
+    "error_deleting_meal_plan": "Something went wrong",
+    "for_text": "{{title}} for"
   },
   "advance_settings": {
     "title": "Advance Database Settings.",

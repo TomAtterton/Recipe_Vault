@@ -13,6 +13,7 @@ import { stylesheet } from './proPlan.style';
 import { checkIfPro } from '@/services/pro';
 import { useBoundStore } from '@/store';
 import ChefOk from '../../../assets/svgs/chef_ok.svg';
+import { translate } from '@/core';
 
 const PurchaseScreen = () => {
   const { navigate, goBack } = useNavigation();
@@ -57,38 +58,34 @@ const PurchaseScreen = () => {
 
   return (
     <View style={styles.container}>
-      <ChefOk
-        height={height / 4}
-        width={width}
-        style={{
-          alignSelf: 'center',
-        }}
-      />
+      <ChefOk height={height / 4} width={width} style={styles.headerImage} />
       <Typography variant={'displaySmall'} style={styles.title}>
-        Upgrade to pro vault
+        {translate('purchase_screen.title')}
       </Typography>
       <View style={styles.contentContainer}>
         <View style={styles.itemContainer}>
           <Icon name={'cloud'} size={32} color={theme.colors.onBackground} />
           <Typography variant={'bodyMediumItalic'} style={styles.itemText}>
-            Sync unlimited recipes to the cloud.
+            {translate('purchase_screen.sync_feature')}
           </Typography>
         </View>
         <View style={styles.itemContainer}>
           <Icon name={'people'} size={32} color={theme.colors.onBackground} />
           <Typography variant={'bodyMediumItalic'} style={styles.itemText}>
-            Share your pro vault with up to 2 friends and family.
+            {translate('purchase_screen.share_feature')}
           </Typography>
         </View>
         <View style={styles.itemContainer}>
           <Icon name={'ufo-flying'} size={32} color={theme.colors.onBackground} />
           <Typography variant={'bodyMediumItalic'} style={styles.itemText}>
-            Help support the development of Recipe Vault.
+            {translate('purchase_screen.support_feature')}
           </Typography>
         </View>
       </View>
       <View style={styles.lifeTimePurchase}>
-        <Typography variant={'bodyMediumItalic'}>{'Life Time \n Purchase'}</Typography>
+        <Typography variant={'bodyMediumItalic'}>
+          {translate('purchase_screen.life_time_purchase')}
+        </Typography>
         <View style={styles.divider} />
         <Typography variant={'bodyMediumItalic'} style={styles.price}>
           {price}
@@ -97,15 +94,15 @@ const PurchaseScreen = () => {
       {!isLoggedIn ? (
         <>
           <PrimaryButton
-            title={'Upgrade vault'}
+            title={translate('purchase_screen.upgrade_button')}
             onPress={handlePurchase}
             isLoading={isLoading}
             style={styles.proButton}
           />
-          <LabelButton title={'Continue with free vault'} onPress={goBack} />
+          <LabelButton title={translate('purchase_screen.continue_free_button')} onPress={goBack} />
         </>
       ) : (
-        <PrimaryButton title={'Login to upgrade'} onPress={goBack} />
+        <PrimaryButton title={translate('purchase_screen.login_button')} onPress={goBack} />
       )}
       <ConfettiCannon
         ref={confettiRef}

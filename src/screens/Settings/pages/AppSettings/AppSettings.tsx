@@ -9,6 +9,7 @@ import InfoLabelButton from '@/components/buttons/InfoLabelButton';
 import expoConstants from 'expo-constants';
 import { Routes } from '@/navigation/Routes';
 import SettingsButton from '@/components/buttons/SettingsButton';
+import { translate } from '@/core';
 
 const AppSettings = () => {
   const { styles } = useStyles(stylesheet);
@@ -22,17 +23,21 @@ const AppSettings = () => {
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
 
       <View style={styles.container}>
-        <Typography variant={'titleItalicLarge'}>App Settings.</Typography>
+        <Typography variant={'titleItalicLarge'}>{translate('app_settings.title')}</Typography>
         <InfoLabelButton
-          title={'App Version'}
+          title={translate('app_settings.app_version')}
           buttonTitle={`${expoConstants.expoConfig?.version}`}
         />
         <SettingsButton
-          title={'Show Onboarding'}
+          title={translate('app_settings.show_onboarding')}
           onPress={handleShowOnboarding}
           iconSource={'hand'}
         />
-        <SettingsButton title={'Credits'} onPress={handleShowCredits} iconSource={'info-border'} />
+        <SettingsButton
+          title={translate('app_settings.credits')}
+          onPress={handleShowCredits}
+          iconSource={'info-border'}
+        />
       </View>
     </SafeAreaView>
   );

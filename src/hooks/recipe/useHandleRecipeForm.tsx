@@ -75,7 +75,7 @@ const useHandleRecipeForm = ({
       onClearForm();
     } catch (e) {
       // @ts-ignore
-      showErrorMessage(e?.message || 'Something went wrong', 3000);
+      showErrorMessage(e?.message || translate('default.error_message'), 3000);
     } finally {
       scrollViewRef.current?.scrollTo({ y: 0, animated: true });
     }

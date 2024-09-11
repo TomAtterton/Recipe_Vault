@@ -22,18 +22,31 @@ const AdvanceSyncSettings = () => {
     <SafeAreaView style={styles.container}>
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
       <View style={styles.container}>
-        <Typography variant={'titleItalicLarge'}>Advance Sync Settings.</Typography>
-        <InfoLabelButton title={'Current Vault.'} buttonTitle={profile?.groupName} />
+        <Typography variant={'titleItalicLarge'}>
+          {translate('advance_sync_settings.title')}
+        </Typography>
+        <InfoLabelButton
+          title={translate('advance_sync_settings.current_vault')}
+          buttonTitle={profile?.groupName}
+        />
         <InfoLabelButton title={translate('settings.group_id')} buttonTitle={profile?.groupId} />
         {/*<InfoLabelButton title={translate('settings.user_id')} buttonTitle={profile?.id} />*/}
         <InfoLabelButton
           title={translate('settings.database.last_synced')}
-          buttonTitle={lastSynced || 'has not synced'}
+          buttonTitle={lastSynced || translate('advance_sync_settings.has_not_synced')}
         />
-        <SettingsButton title={'Sync Push'} onPress={syncPush} iconSource={'cloud'} />
-        <SettingsButton title={'Sync Pull'} onPress={() => syncPull(true)} iconSource={'cloud'} />
         <SettingsButton
-          title={'Reset last synced'}
+          title={translate('advance_sync_settings.sync_push')}
+          onPress={syncPush}
+          iconSource={'cloud'}
+        />
+        <SettingsButton
+          title={translate('advance_sync_settings.sync_pull')}
+          onPress={() => syncPull(true)}
+          iconSource={'cloud'}
+        />
+        <SettingsButton
+          title={translate('advance_sync_settings.reset_last_synced')}
           onPress={() => setLastSynced(undefined)}
           iconSource={'cloud'}
         />

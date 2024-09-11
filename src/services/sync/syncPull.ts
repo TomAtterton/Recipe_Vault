@@ -4,6 +4,7 @@ import { useBoundStore } from '@/store';
 import { syncDelete } from '@/services/sync/syncDelete';
 import { showErrorMessage } from '@/utils/promptUtils';
 import { getLastSynced } from '@/services/sync/utils';
+import { translate } from '@/core';
 
 export const TABLE_NAMES = [
   'profile',
@@ -25,7 +26,7 @@ type TableName = (typeof TABLE_NAMES)[number];
 interface GenericRecord {
   id: string;
 
-  [key: string]: any; // Add specific properties for your records here
+  [key: string]: any;
 }
 
 /**
@@ -53,8 +54,7 @@ export const syncPull = async (forceAll?: boolean): Promise<void> => {
     useBoundStore.getState()?.setLastSynced(new Date().toISOString());
   } catch (e) {
     console.error('syncPull error', e);
-    // @ts-ignore
-    showErrorMessage('Error pull syncing data', e.message);
+    showErrorMessage(translate('sync.error_pull_sync'));
     throw e;
   }
 };

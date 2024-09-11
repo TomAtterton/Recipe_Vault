@@ -4,6 +4,7 @@ import { Reminder } from 'expo-calendar';
 import { updateGroceryItem, updateGroceryList, useBoundStore } from '@/store';
 import { showErrorMessage } from '@/utils/promptUtils';
 import { useFocusEffect } from '@react-navigation/native';
+import { translate } from '@/core';
 
 const useGroceryList = () => {
   const groceryListId = useBoundStore((state) => state.groceryId);
@@ -53,7 +54,7 @@ const useGroceryList = () => {
       await updateReminder(details, shouldComplete);
       await handleRefresh(false);
     } catch (e) {
-      showErrorMessage('Error updating reminder');
+      showErrorMessage(translate('grocery_list.error_updating_reminder'));
       console.log('error', e);
     }
   };
@@ -88,4 +89,5 @@ const useGroceryList = () => {
     onCompleted: handleCompleted,
   };
 };
+
 export default useGroceryList;
