@@ -69,14 +69,10 @@ export const injectedJavaScript = `
 const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
 
 export const onHandleGoogleSearch = (url: string) => {
-  console.log('url', url);
-
   if (!urlRegex.test(url)) {
     url = 'https://www.google.com/search?q=' + encodeURIComponent(url);
   } else if (!url.startsWith('http') && !url.startsWith('https')) {
     url = 'https://' + url;
   }
-  console.log('url', url);
-
   return url;
 };

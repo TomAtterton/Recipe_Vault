@@ -1,0 +1,22 @@
+appId: com.tomatterton.recipeapp
+---
+- clearState
+- launchApp
+- tapOn:
+    point: 25%, 92%
+- waitForAnimationToEnd:
+      timeout: 5000
+- tapOn:
+    point: 40%, 92%
+- waitForAnimationToEnd:
+      timeout: 5000
+- tapOn:
+    point: 55%, 92%
+- waitForAnimationToEnd:
+      timeout: 5000
+- assertVisible: "Continue"
+- tapOn: "Continue"
+- waitForAnimationToEnd:
+      timeout: 5000
+- assertVisible: "Login to create a Cloud Vault!"
+- tapOn: Continue with local vault
