@@ -13,6 +13,7 @@ i18n.use(initReactI18next).init({
   ns: [defaultNS],
   fallbackLng: 'en',
   defaultNS,
+  compatibilityJSON: 'v3',
   interpolation: {
     escapeValue: false,
   },
