@@ -39,7 +39,8 @@ export const stylesheet = createStyleSheet((theme) => ({
     paddingBottom: 40,
   },
   listHeaderContainer: {
-    paddingVertical: 8,
+    paddingTop: 40,
+    paddingBottom: 8,
     paddingHorizontal: 16,
   },
   input: {

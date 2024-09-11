@@ -34,21 +34,24 @@ const ChipList = ({
   onUpdate,
 }: Props) => {
   const { styles } = useStyles(stylesheet);
-  const handleDelete =
-    onDelete &&
-    ((item: ChipItemType) => {
-      Alert.alert(
-        `Delete item`,
-        `\nAre you sure you want to delete ${item.name} ?\n\n This will remove it from all recipes.`,
-        [
-          {
-            text: translate('default.cancel'),
-            style: 'cancel',
-          },
-          { text: translate('default.ok'), style: 'destructive', onPress: () => onDelete(item) },
-        ],
-      );
-    });
+  const handleDelete = useCallback(
+    () =>
+      onDelete &&
+      ((item: ChipItemType) => {
+        Alert.alert(
+          translate('chip_list.delete_item_title'),
+          translate('chip_list.delete_item_message', { itemName: item.name }), // Localized delete confirmation message
+          [
+            {
+              text: translate('default.cancel'),
+              style: 'cancel',
+            },
+            { text: translate('default.ok'), style: 'destructive', onPress: () => onDelete(item) },
+          ],
+        );
+      }),
+    [onDelete],
+  );
 
   const renderSelectItem = useCallback(
     ({ item }: { item: ChipItemType }) => (
@@ -60,19 +63,20 @@ const ChipList = ({
         onDeleteItem={handleDelete}
       />
     ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [hideSelection, selectedItems],
+    [handleDelete, hideSelection, onSelect, selectedItems],
   );
 
   const onRenderCategoryHeader = useCallback(
     () => <ChipListHeader itemsRef={chipListRef} items={data} onUpdateItem={onUpdate} />,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [chipListRef, data],
+    [chipListRef, data, onUpdate],
   );
 
+  const flatListRef = React.useRef<FlatList>(null);
+
   return (
-    <BottomSheet bottomSheetRef={chipListRef} snapPoints={['80%']}>
+    <BottomSheet bottomSheetRef={chipListRef} snapPoints={['80%']} scrollRef={flatListRef}>
       <FlatList
+        ref={flatListRef}
         nestedScrollEnabled
         keyExtractor={keyExtractor}
         ListHeaderComponent={onRenderCategoryHeader}

@@ -9,12 +9,12 @@ interface Props {
 
 const ManageTagsContainer = ({ manageTagsRef }: Props) => {
   const { data: tags, onUpdateTags, onDeleteTags } = useUpdateTags();
-
+  const alphabeticallySortedTags = tags.sort((a, b) => a.name.localeCompare(b.name));
   return (
     <ChipList
       hideSelection={true}
       chipListRef={manageTagsRef}
-      data={tags}
+      data={alphabeticallySortedTags}
       onDelete={onDeleteTags}
       onUpdate={onUpdateTags}
     />

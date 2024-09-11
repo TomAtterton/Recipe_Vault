@@ -10,11 +10,13 @@ interface Props {
 const ManageCategoriesContainer = ({ manageCategoriesRef }: Props) => {
   const { data: categories, onUpdateCategory, onDeleteCategory } = useUpdateCategories();
 
+  const alphabeticallySortedCategories = categories.sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <ChipList
       hideSelection={true}
       chipListRef={manageCategoriesRef}
-      data={categories}
+      data={alphabeticallySortedCategories}
       onDelete={onDeleteCategory}
       onUpdate={onUpdateCategory}
     />

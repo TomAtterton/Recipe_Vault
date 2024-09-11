@@ -14,6 +14,10 @@
   "recipe_webview": {
     "add_recipe": "Add Recipe"
   },
+  "chip_list": {
+    "delete_item_title": "Delete item",
+    "delete_item_message": "\nAre you sure you want to delete {{itemName}} ?\n\nThis will remove it from all recipes."
+  },
   "add_groceries": {
     "title": "Add to groceries",
     "select_all": "Select All /",
