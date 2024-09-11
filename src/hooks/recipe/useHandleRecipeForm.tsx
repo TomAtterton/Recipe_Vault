@@ -7,18 +7,18 @@ import { useCallback } from 'react';
 import {
   transformDefaultValues,
   recipeFormSchema,
-  parseSectionData,
   RecipeFormType,
+  parseSectionData,
 } from '@/utils/recipeFormUtil';
 
 import { RecipeDetailType } from '@/types';
 import { onUpdateRecipeProps } from '@/components/RecipeForm/RecipeForm';
-import { showErrorMessage } from '@/utils/promptUtils';
-import { setScannedImage } from '@/store';
 import { translate } from '@/core';
 import Animated, { useAnimatedRef } from 'react-native-reanimated';
 import { SubmitErrorHandler } from 'react-hook-form/dist/types/form';
 import useHandleFormData from '@/hooks/recipe/useHandleFormData';
+import { setScannedImage } from '@/store';
+import { showErrorMessage } from '@/utils/promptUtils';
 
 const useHandleRecipeForm = ({
   data,
@@ -47,8 +47,6 @@ const useHandleRecipeForm = ({
   const { onClearForm } = useHandleFormData({
     setValue,
     reset,
-    formDefaultValues: control._defaultValues,
-    data,
     clearErrors,
   });
 
