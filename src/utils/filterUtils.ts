@@ -42,7 +42,7 @@ export const generateFilterSelect = (
   } else {
     // Handle rating filter
     if (rating !== null) {
-      conditions.push(`recipes.rating = ${rating}`);
+      conditions.push(`recipes.rating >= ${rating}`);
     }
   }
 
