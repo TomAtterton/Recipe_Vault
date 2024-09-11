@@ -1,5 +1,3 @@
-// src/utils/imageUtils.ts
-
 import {
   ImagePickerOptions,
   ImagePickerResult,
@@ -16,6 +14,7 @@ import { showErrorMessage } from '@/utils/promptUtils';
 import { cropImage } from '../../modules/expo-image-cropper';
 import { UIImagePickerPreferredAssetRepresentationMode } from 'expo-image-picker/src/ImagePicker.types';
 import { useBoundStore } from '@/store';
+import { translate } from '@/core';
 
 const defaultImageOptions: ImagePickerOptions = {
   mediaTypes: MediaTypeOptions.Images,
@@ -48,7 +47,7 @@ const handleImageSelection = async (result: ImagePickerResult | string, isTempor
 
     return base64Image;
   } else {
-    throw new Error('No image selected');
+    throw new Error(translate('image_picker.no_image_selected'));
   }
 };
 
@@ -57,7 +56,7 @@ export const onOpenImageCropper = async (imageUri: string, isTemporary: boolean)
     const { filePath } = await cropImage({ uri: imageUri, options: { isTemporary } });
     return handleResult(filePath);
   } catch (e) {
-    console.log('Error cropping image', e);
+    console.log(translate('image_picker.error_cropping_image'), e);
     return imageUri;
   }
 };
@@ -88,7 +87,7 @@ export const onPickImageFromLibrary = async (isTemporary: boolean) => {
     const hasPermission = await checkAndRequestPermissions(
       requestMediaLibraryPermissionsAsync,
       getMediaLibraryPermissionsAsync,
-      'Permission to access library was denied, please enable it in settings',
+      translate('image_picker.library_permission_denied'),
     );
 
     if (!hasPermission) return;
@@ -100,7 +99,7 @@ export const onPickImageFromLibrary = async (isTemporary: boolean) => {
     if (errorCode === 'E_PICKER_CANCELLED' || !errorCode) {
       return;
     }
-    showErrorMessage('Error picking image');
+    showErrorMessage(translate('image_picker.error_picking_image'));
   }
 };
 
@@ -109,7 +108,7 @@ export const onPickImageFromCamera = async (isTemporary: boolean) => {
     const hasPermission = await checkAndRequestPermissions(
       requestCameraPermissionsAsync,
       getCameraPermissionsAsync,
-      'Permission to access camera was denied, please enable it in settings',
+      translate('image_picker.camera_permission_denied'),
     );
 
     if (!hasPermission) return;
@@ -121,7 +120,7 @@ export const onPickImageFromCamera = async (isTemporary: boolean) => {
     if (errorCode === 'E_PICKER_CANCELLED' || !errorCode) {
       return;
     }
-    showErrorMessage('Error picking image');
+    showErrorMessage(translate('image_picker.error_picking_image'));
   }
 };
 const handleResult = async (result: ImagePickerResult | string) => {
@@ -131,8 +130,8 @@ const handleResult = async (result: ImagePickerResult | string) => {
     }
     return result?.assets?.[0].uri || '';
   } catch (e) {
-    console.log('Error setting image', e);
-    throw new Error('Setting image failed');
+    console.log(translate('image_picker.error_setting_image'), e);
+    throw new Error(translate('image_picker.error_setting_image'));
   }
 };
 

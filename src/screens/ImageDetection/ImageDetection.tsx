@@ -11,6 +11,7 @@ import NavBarButton from '@/components/buttons/NavBarButton';
 import { stylesheet } from './imageDetection.style';
 import { generateRecipe } from '@/services/textRecognition';
 import { navigateToAddRecipe } from '@/navigation/helper';
+import { translate } from '@/core';
 
 const ImageDetection = () => {
   const [image, setImage] = useState<string | undefined | null>(null);
@@ -31,7 +32,7 @@ const ImageDetection = () => {
 
         setParsedRecipe(data);
 
-        showSuccessMessage('Text detected from image');
+        showSuccessMessage(translate('image_detection.success'));
 
         return navigateToAddRecipe({
           navigation,
@@ -46,7 +47,7 @@ const ImageDetection = () => {
         shouldReplace: true,
       });
     } catch (error) {
-      showErrorMessage('Error detecting text from image');
+      showErrorMessage(translate('image_detection.error'));
       console.log('Error detecting text from image', error);
     } finally {
       setIsLoading(false);
@@ -63,14 +64,14 @@ const ImageDetection = () => {
       />
       <View style={styles.bottomContainer}>
         <PrimaryButton
-          title={'Generate Recipe'}
+          title={translate('image_detection.generate')}
           onPress={handleDetect}
           isLoading={isLoading}
           disabled={!image}
         />
         {parsedRecipe && (
           <PrimaryButton
-            title={'Continue'}
+            title={translate('default.continue')}
             onPress={handleDetect}
             isLoading={isLoading}
             disabled={!image}

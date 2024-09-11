@@ -3,6 +3,7 @@ import styles from './loadingScreen.style';
 import React from 'react';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
+import { translate } from '@/core';
 
 const LoadingScreen = () => {
   const {
@@ -11,7 +12,7 @@ const LoadingScreen = () => {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Typography variant={'displaySmall'} style={styles.text}>
-        Cooking up your recipe
+        {translate('loading_screen.loading_message')}
       </Typography>
       <ActivityIndicator animating />
     </View>

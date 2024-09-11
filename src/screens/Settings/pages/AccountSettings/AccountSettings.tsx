@@ -41,7 +41,7 @@ const AccountSettings = () => {
               const { error } = await onDeleteUser();
 
               if (error) {
-                throw new Error(translate('error.delete_account.error_message'));
+                throw new Error(translate('prompt.delete_account.error_message'));
               }
 
               await onSignOut();
@@ -53,7 +53,7 @@ const AccountSettings = () => {
                 currentDatabaseName: Env.SQLITE_DB_NAME,
               });
             } catch (error) {
-              showErrorMessage(translate('error.default.error_title'));
+              showErrorMessage(translate('default.error_message'));
               console.log('Error deleting account', error);
             } finally {
               setIsLoading(false);
@@ -68,18 +68,18 @@ const AccountSettings = () => {
     <SafeAreaView style={styles.container}>
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
       <View style={styles.container}>
-        <Typography variant={'titleItalicLarge'}>Account Settings.</Typography>
-        <InfoLabelButton title={'Name:'} buttonTitle={name} />
-        <InfoLabelButton title={'Email:'} buttonTitle={email} />
+        <Typography variant={'titleItalicLarge'}>{translate('account_settings.title')}</Typography>
+        <InfoLabelButton title={translate('account_settings.name')} buttonTitle={name} />
+        <InfoLabelButton title={translate('account_settings.email')} buttonTitle={email} />
         <View style={styles.dangerZoneContainer}>
           <Typography variant={'titleLarge'} style={styles.dangerZoneTitle}>
-            Danger Zone:
+            {translate('account_settings.danger_zone')}
           </Typography>
           <Typography variant={'bodyMedium'}>
-            Having trouble with the app? Try these options:
+            {translate('account_settings.danger_zone_description')}
           </Typography>
           <OutlineButton
-            title={'Delete Account'}
+            title={translate('account_settings.delete_account')}
             onPress={handleDeleteAccount}
             style={styles.deleteButton}
             isLoading={isLoading}

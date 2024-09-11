@@ -50,6 +50,7 @@
     "convert": "^5.3.0",
     "cross-env": "^7.0.3",
     "date-fns": "^3.6.0",
+    "eslint-plugin-i18next": "^6.0.9",
     "eslint-plugin-react-compiler": "experimental",
     "expo": "^51.0.32",
     "expo-apple-authentication": "^6.4.2",

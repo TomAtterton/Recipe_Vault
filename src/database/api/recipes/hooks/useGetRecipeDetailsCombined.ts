@@ -20,6 +20,7 @@ import {
   TTagsDatabase,
 } from '@/database/types/recipes';
 import { showErrorMessage } from '@/utils/promptUtils';
+import { translate } from '@/core';
 
 const useGetRecipeDetailsCombined = ({ id }: { id?: string | null }) => {
   const [recipeData, setRecipeData] = useState<RecipeDetailType>();
@@ -65,8 +66,8 @@ const useGetRecipeDetailsCombined = ({ id }: { id?: string | null }) => {
           );
         });
       } catch (error) {
-        showErrorMessage('Error fetching recipe details');
-        console.log('Error fetching recipe details', error);
+        showErrorMessage(translate('recipe_details.error_fetching_details'));
+        console.log(translate('recipe_details.error_fetching_details'), error);
       }
     };
 
@@ -80,6 +81,7 @@ const useGetRecipeDetailsCombined = ({ id }: { id?: string | null }) => {
     refetch: () => {},
   };
 };
+
 export const transformData = (
   recipe: TRecipeDetailsDatabase,
   categories: TCategoriesDatabase,

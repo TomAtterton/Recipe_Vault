@@ -15,6 +15,7 @@ import { RecipeDetailType } from '@/types';
 import { openURL } from 'expo-linking';
 import useRecipeDetail from '@/hooks/recipe/useRecipeDetail';
 import debounce from 'lodash.debounce';
+import { translate } from '@/core';
 
 interface Props {
   id: string;
@@ -66,10 +67,14 @@ const RecipeHeaderContent = ({ id }: Props) => {
   return (
     <View style={styles.container} pointerEvents={'box-none'}>
       <View style={styles.contentContainer} pointerEvents={'box-none'}>
-        {/*// @ts-ignore*/}
-        {hasPrepTime && <TimeContainer time={prepTime} title={'Prep'} />}
-        {/*// @ts-ignore*/}
-        {hasCookTime && <TimeContainer time={cookTime} title={'Cook'} />}
+        {hasPrepTime && (
+          /*// @ts-ignore*/
+          <TimeContainer time={prepTime} title={translate('recipe_header_content.prep_time')} />
+        )}
+        {hasCookTime && (
+          /*// @ts-ignore*/
+          <TimeContainer time={cookTime} title={translate('recipe_header_content.cook_time')} />
+        )}
         <View style={styles.buttonContainer} pointerEvents={'box-none'}>
           <IconButton
             iconSource={'shopping-cart-add'}
@@ -101,7 +106,7 @@ const RecipeHeaderContent = ({ id }: Props) => {
           <View style={styles.infoContainer}>
             {!!source && (
               <InfoLabelButton
-                title={'Source.'}
+                title={translate('recipe_header_content.source')}
                 buttonTitle={source}
                 onPress={() => {
                   openURL(source);
@@ -110,7 +115,9 @@ const RecipeHeaderContent = ({ id }: Props) => {
             )}
             {!!note && (
               <>
-                <Typography variant={'titleSmall'}>Notes.</Typography>
+                <Typography variant={'titleSmall'}>
+                  {translate('recipe_header_content.notes')}
+                </Typography>
                 <Typography style={styles.notes} variant={'titleSmall'}>
                   {note}
                 </Typography>

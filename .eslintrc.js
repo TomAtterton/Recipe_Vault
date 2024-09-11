@@ -1,13 +1,14 @@
 const path = require('path');
 
 module.exports = {
-  extends: ['@react-native-community', 'plugin:prettier/recommended'],
+  extends: ['@react-native-community', 'plugin:prettier/recommended', 'plugin:i18next/recommended'],
   plugins: [
     '@typescript-eslint',
     'unused-imports',
     'react-native-unistyles',
     'eslint-plugin-react-compiler',
     'jest', // Add jest plugin here
+    'i18next',
   ],
   env: {
     'jest/globals': true, // Add jest environment here
@@ -20,6 +21,7 @@ module.exports = {
   rules: {
     'react-native-unistyles/no-unused-styles': 'warn',
     'react-compiler/react-compiler': 'warn',
+
     // Define Prettier rules once
     'prettier/prettier': [
       'error',

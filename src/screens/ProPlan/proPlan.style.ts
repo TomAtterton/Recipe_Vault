@@ -7,6 +7,9 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     paddingBottom: miniRuntime.insets.bottom,
     marginHorizontal: 20,
   },
+  headerImage: {
+    alignSelf: 'center',
+  },
   title: {
     marginVertical: 16,
     textAlign: 'center',

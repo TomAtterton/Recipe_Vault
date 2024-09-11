@@ -23,7 +23,7 @@ const useHandleCopyPaste = ({ onCallback, setValue, value, formId }: Props) => {
           style: 'default',
         },
         {
-          text: 'Add to Existing Content',
+          text: translate('prompt.copy.add_existing'),
           onPress: () => handleAddContent(content, value, setValue),
           style: 'default',
         },

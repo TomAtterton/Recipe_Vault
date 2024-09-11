@@ -16,6 +16,7 @@ import NavBarButton from '@/components/buttons/NavBarButton';
 import useUserId from '@/hooks/common/useUserId';
 import { createProfileGroup } from '@/services/profileGroup';
 import ChefShare from '../../../assets/svgs/chef_share.svg';
+import { translate } from '@/core';
 
 const JoinVault = () => {
   const userId = useUserId();
@@ -74,25 +75,17 @@ const JoinVault = () => {
   const { height, width } = useWindowDimensions();
   return (
     <View style={styles.container}>
-      <ChefShare
-        height={height / 4}
-        width={width}
-        style={{
-          alignSelf: 'center',
-        }}
-      />
+      <ChefShare height={height / 4} width={width} style={styles.headerImage} />
       <Typography variant={'titleLarge'} style={styles.title}>
-        {'Join Cloud Vault'}
+        {translate('join_vault.title')}
       </Typography>
       <Typography style={styles.subtitle} variant={'bodyMediumItalic'}>
-        {
-          'Have a vault code? Enter it here to join a cloud vault and explore a world of recipes with up to two friends or family. If you don’t have one, consider creating your own vault!'
-        }
+        {translate('join_vault.description')}
       </Typography>
       <FormInput
         value={groupId}
         onChange={handleTextChange}
-        placeholder={'Enter Vault Code'}
+        placeholder={translate('join_vault.placeholder')}
         multiline={false}
         containerStyle={styles.input}
         maxLength={40}
@@ -103,7 +96,7 @@ const JoinVault = () => {
         <PrimaryButton
           isLoading={isLoading}
           style={styles.button}
-          title={'Join Vault'}
+          title={translate('join_vault.button')}
           disabled={isLoading || groupId.length === 0}
           onPress={handleUpdateProfile}
         />

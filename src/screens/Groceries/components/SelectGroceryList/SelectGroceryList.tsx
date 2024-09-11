@@ -9,6 +9,7 @@ import { stylesheet } from './selectGroceryList.style';
 import { setGroceryId, useBoundStore } from '@/store';
 import Typography from '@/components/Typography';
 import { openURL } from 'expo-linking';
+import { translate } from '@/core';
 
 interface Props {
   onClose: () => void;
@@ -68,17 +69,18 @@ const SelectGroceryList = ({ onClose }: Props) => {
   const renderListEmptyComponent = useCallback(() => {
     return (
       <View style={styles.emptyContainer}>
-        <Typography variant={'titleMedium'}>No available reminder lists</Typography>
-        <OutlineButton title={'Create a new list'} onPress={handleOpenSettings} />
+        <Typography variant={'titleMedium'}>{translate('select_grocery_list.no_list')}</Typography>
+        <OutlineButton
+          title={translate('select_grocery_list.create_new_list_button')}
+          onPress={handleOpenSettings}
+        />
       </View>
     );
   }, [styles.emptyContainer, handleOpenSettings]);
 
   return (
     <View style={styles.container}>
-      <Typography variant={'titleMedium'}>
-        Choose which reminders list you would like to link with
-      </Typography>
+      <Typography variant={'titleMedium'}>{translate('select_grocery_list.title')}</Typography>
       <FlatList
         style={styles.list}
         nestedScrollEnabled={true}
@@ -89,7 +91,7 @@ const SelectGroceryList = ({ onClose }: Props) => {
       />
       {allReminders?.length > 0 && (
         <OutlineButton
-          title={'save'}
+          title={translate('select_grocery_list.save_button')}
           onPress={handleSave}
           disabled={!selectedGroceryId}
           style={styles.button}

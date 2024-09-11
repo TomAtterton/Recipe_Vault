@@ -10,6 +10,7 @@ import { useRef } from 'react';
 import { BottomSheetRef } from '@/components/BottomSheet';
 import ManageCategoriesContainer from '@/components/ManageCategoriesContainer/ManageCategoriesContainer';
 import ManageTagsContainer from '@/components/ManageTagsContainer';
+import { translate } from '@/core';
 
 const RecipeSettings = () => {
   const manageCategoriesRef = useRef<BottomSheetRef>(null);
@@ -31,16 +32,16 @@ const RecipeSettings = () => {
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
       <View style={styles.container}>
         <Typography variant={'titleItalicLarge'} style={styles.title}>
-          Recipe Settings.
+          {translate('recipe_settings.title')}
         </Typography>
 
         <SettingsButton
-          title={'Manage Categories'}
+          title={translate('recipe_settings.manage_categories')}
           onPress={handleManageCategories}
           iconSource={'pencil-add'}
         />
         <SettingsButton
-          title={'Manage Tags'}
+          title={translate('recipe_settings.manage_tags')}
           onPress={handleManageTags}
           iconSource={'pencil-add'}
         />

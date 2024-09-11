@@ -12,6 +12,7 @@ import Icon from '@/components/Icon';
 import { IconName } from '@/components/Icon/types';
 import Image from '@/components/Image';
 import { showErrorMessage } from '@/utils/promptUtils';
+import { translate } from '@/core';
 
 interface Props {
   item: MealPlanType;
@@ -31,8 +32,8 @@ const SmallHorizontalCard = ({ item }: Props) => {
       try {
         await onDeleteMealPlan({ id });
       } catch (e) {
-        showErrorMessage('Something went wrong');
-        console.log('Error deleting meal plan', e);
+        showErrorMessage(translate('small_horizontal_card.error_deleting_meal_plan'));
+        console.log(translate('small_horizontal_card.error_deleting_meal_plan'), e);
       }
     },
     [onDeleteMealPlan],
@@ -59,7 +60,7 @@ const SmallHorizontalCard = ({ item }: Props) => {
       actions={[
         {
           id: 'delete',
-          title: 'Delete',
+          title: translate('small_horizontal_card.delete'),
           attributes: {
             destructive: true,
           },
@@ -86,7 +87,9 @@ const SmallHorizontalCard = ({ item }: Props) => {
         style={styles.itemContent}
       >
         <Image style={styles.image} source={{ uri: item?.image }} />
-        <Typography numberOfLines={2} variant={'bodyMedium'}>{`${item.title} for `}</Typography>
+        <Typography numberOfLines={2} variant={'bodyMedium'}>
+          {translate('small_horizontal_card.for_text', { title: item.title })}
+        </Typography>
         <View style={styles.metaContainer}>
           <Icon name={icon} size={18} color={colors.primary} />
           <Typography style={styles.metaTitle}>{item.entryType}</Typography>

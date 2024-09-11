@@ -43,11 +43,17 @@ const SyncSettings = () => {
     <SafeAreaView style={styles.container}>
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
       <View style={styles.container}>
-        <Typography variant={'titleItalicLarge'}>Cloud Sync Settings.</Typography>
+        <Typography variant={'titleItalicLarge'}>{translate('sync_settings.title')}</Typography>
         {syncEnabled && (
           <>
-            <InfoLabelButton title={'Current Vault.'} buttonTitle={groupName} />
-            <InfoLabelButton title={'Vault Status:'} buttonTitle={databaseStatus} />
+            <InfoLabelButton
+              title={translate('sync_settings.current_vault')}
+              buttonTitle={groupName}
+            />
+            <InfoLabelButton
+              title={translate('sync_settings.vault_status')}
+              buttonTitle={databaseStatus}
+            />
           </>
         )}
 
@@ -55,13 +61,13 @@ const SyncSettings = () => {
           <>
             {databaseStatus === 'free' && (
               <SettingsButton
-                title={'Upgrade to pro'}
+                title={translate('sync_settings.upgrade_to_pro')}
                 onPress={handleProNavigation}
                 iconSource={'ufo-flying'}
               />
             )}
             <SettingsButton
-              title={'Advanced Sync Settings'}
+              title={translate('sync_settings.advanced_sync_settings')}
               iconSource={'cog'}
               onPress={() => navigate(Routes.AdvanceSyncSettings)}
             />
@@ -75,7 +81,11 @@ const SyncSettings = () => {
         ) : (
           <SettingsButton
             style={styles.enableSyncButton}
-            title={isLoggedIn ? 'Enable Cloud Vault' : 'Enable Sync'}
+            title={
+              isLoggedIn
+                ? translate('sync_settings.enable_cloud_vault')
+                : translate('sync_settings.enable_sync')
+            }
             onPress={() => {
               if (!isLoggedIn) {
                 navigate(Routes.Login, {
@@ -97,7 +107,7 @@ const SyncSettings = () => {
         )}
         {isLoggedIn && (
           <SettingsButton
-            title={'Account Settings'}
+            title={translate('sync_settings.account_settings')}
             iconSource={'info'}
             onPress={() => navigate(Routes.AccountSettings)}
           />

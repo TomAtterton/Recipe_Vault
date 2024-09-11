@@ -7,6 +7,7 @@ import { stylesheet } from './infoLabelButton.style';
 import { IconName } from '@/components/Icon/types';
 import * as Clipboard from 'expo-clipboard';
 import { showSuccessMessage } from '@/utils/promptUtils';
+import { translate } from '@/core';
 
 interface Props extends PressableProps {
   style?: StyleProp<ViewStyle>;
@@ -37,7 +38,7 @@ const InfoLabelButton = ({
     try {
       // copy to clipboard if no onPress is provided
       !!buttonTitle && (await Clipboard.setStringAsync(buttonTitle || ''));
-      showSuccessMessage('Copied to clipboard');
+      showSuccessMessage(translate('info_label_button.copy_success')); // Localized success message
     } catch (error) {
       // swallow error
       console.log('Error copying to clipboard', error);

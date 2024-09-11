@@ -3,21 +3,21 @@ import { Linking, ScrollView, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import Typography from '@/components/Typography';
 import BackButton from '@/components/BackButton';
+import { translate } from '@/core';
 
 const creditsData = [
   {
-    description: 'Icons provided by',
+    description: translate('credits.mingcute'),
     name: 'Mingcute',
     url: 'https://www.mingcute.com',
   },
   {
-    description: 'Assets provided by',
+    description: translate('credits.freepik'),
     name: 'Freepik',
     url: 'https://www.freepik.com',
   },
   {
-    description:
-      'Special thanks to all contributors and open-source projects that made this app possible.',
+    description: translate('credits.special_thanks'),
     name: '',
     url: '',
   },
@@ -30,7 +30,7 @@ const Credits = () => {
     <View style={styles.container}>
       <ScrollView style={styles.contentContainer}>
         <Typography variant={'titleItalicLarge'} style={styles.title}>
-          Credits.
+          {translate('credits.title')}
         </Typography>
         {creditsData.map((credit, index) => (
           <Typography key={index} variant={'bodyMediumItalic'} style={styles.creditText}>

@@ -10,6 +10,7 @@ import PrimaryButton from '@/components/buttons/PrimaryButton';
 import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './hourMinutePicker.style';
+import { translate } from '@/core';
 
 interface Props {
   control: controlType;
@@ -126,7 +127,9 @@ const HourMinutePicker = ({ control, name, title, description, containerStyle }:
               {renderHourItems}
             </Picker>
             <View style={styles.labelContainer}>
-              <Typography style={styles.labelText}>Hours</Typography>
+              <Typography style={styles.labelText}>
+                {translate('hour_minute_picker.hours')}
+              </Typography>
             </View>
 
             <Picker
@@ -138,10 +141,16 @@ const HourMinutePicker = ({ control, name, title, description, containerStyle }:
               {renderMinuteItems}
             </Picker>
             <View style={styles.labelContainer}>
-              <Typography style={styles.labelText}>Mins</Typography>
+              <Typography style={styles.labelText}>
+                {translate('hour_minute_picker.minutes')}
+              </Typography>
             </View>
           </View>
-          <PrimaryButton style={styles.saveButton} onPress={handleSavePress} title={'Save'} />
+          <PrimaryButton
+            style={styles.saveButton}
+            onPress={handleSavePress}
+            title={translate('hour_minute_picker.save_button')}
+          />
         </View>
       </BottomSheet>
     </View>

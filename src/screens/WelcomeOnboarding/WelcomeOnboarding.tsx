@@ -11,6 +11,7 @@ import { useKeyboardForm } from '@/hooks/common/useKeyboardForm';
 import LabelButton from '@/components/buttons/LabelButton';
 import { onSignOut } from '@/services/auth';
 import NavBarButton from '@/components/buttons/NavBarButton';
+import { translate } from '@/core';
 
 const WelcomeOnboarding = () => {
   const { reset, goBack, navigate } = useNavigation();
@@ -39,28 +40,26 @@ const WelcomeOnboarding = () => {
       <View style={styles.titleContainer}>
         <Icon name={'cloud'} size={100} color={theme.colors.onBackground} />
         <Typography variant={'titleLarge'} style={styles.title}>
-          {'Welcome to Your Recipe Vault!'}
+          {translate('welcome_onboarding.title')}
         </Typography>
         <Typography style={styles.subtitle} variant={'bodyMediumItalic'}>
-          {
-            'Start by creating a cloud vault to sync your recipes with friends and family, or join an existing one to discover and contribute. Let’s get cooking!'
-          }
+          {translate('welcome_onboarding.subtitle')}
         </Typography>
       </View>
 
       <View style={styles.buttonContainer}>
         <PrimaryButton
           style={styles.button}
-          title={'Create a cloud vault'}
+          title={translate('welcome_onboarding.create_button')}
           onPress={handleSharedVault}
         />
         <PrimaryButton
           style={styles.button}
-          title={'Join a cloud vault'}
+          title={translate('welcome_onboarding.join_button')}
           onPress={handleJoinVault}
         />
 
-        <LabelButton title={'logout'} onPress={handleLogout} />
+        <LabelButton title={translate('welcome_onboarding.logout')} onPress={handleLogout} />
       </View>
       <NavBarButton
         iconSource={'arrow-left'}
