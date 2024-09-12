@@ -1,18 +1,21 @@
 import React from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { ingredientDescription, ingredientsParsed } from '@/utils/ingredientParseUtil';
 import { useMemo } from 'react';
 import { parseRecipeTextToMarkdown } from '@/utils/instructionParseUtil';
 import { Ingredient } from '@/types';
 import { MenuView } from '@react-native-menu/menu';
+import Typography from '@/components/Typography';
+import { useBoundStore } from '@/store';
 
 interface Props {
   text: string;
   ingredients: Ingredient[];
+  initialServings: number;
 }
 
-const MarkdownText = ({ text, ingredients }: Props) => {
+const MarkdownText = ({ text, ingredients, initialServings }: Props) => {
   const parsedIngredients = useMemo(() => ingredientsParsed(ingredients), [ingredients]);
   const markdownText = useMemo(
     () => parseRecipeTextToMarkdown(text, parsedIngredients),
@@ -20,31 +23,38 @@ const MarkdownText = ({ text, ingredients }: Props) => {
   );
   const { styles } = useStyles(stylesheet);
 
+  const currentServings = useBoundStore((state) => state.currentServings);
+  const recipeUnit = useBoundStore((state) => state.currentRecipeUnit);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.contentContainer}>
+      <Text>
         {markdownText.split(/(\*\*.*?\*\*)/).map((fragment, index) => {
           if (fragment.startsWith('**')) {
             const ingredient = fragment.slice(2, -2);
-            const description = ingredientDescription(ingredient, ingredients);
+
+            const description = ingredientDescription(
+              ingredient,
+              ingredients,
+              initialServings,
+              currentServings,
+              recipeUnit,
+            );
+
             const MenuWrapper = description ? MenuView : View;
 
             return (
-              <MenuWrapper
-                key={index}
-                actions={[{ id: `${index}`, title: description || '' }]}
-                style={styles.strongContainer}
-              >
+              <MenuWrapper key={index} actions={[{ id: `${index}`, title: description || '' }]}>
                 <View>
-                  <Text style={styles.strong}>{ingredient}</Text>
+                  <Typography style={styles.strong}>{ingredient}</Typography>
                 </View>
               </MenuWrapper>
             );
           } else {
             return (
-              <Text key={index} style={styles.body} lineBreakStrategyIOS={'none'}>
+              <Typography key={index} style={styles.body} lineBreakStrategyIOS={'none'}>
                 {fragment}
-              </Text>
+              </Typography>
             );
           }
         })}
@@ -55,23 +65,16 @@ const MarkdownText = ({ text, ingredients }: Props) => {
 
 const stylesheet = createStyleSheet((theme) => ({
   container: {
-    flex: 1,
-    paddingLeft: 12,
-    flexGrow: 1,
-  },
-  contentContainer: {
-    ...theme.fonts.bodyMedium,
+    paddingHorizontal: 12,
   },
 
   body: {
     color: theme.colors.onBackground,
   },
-  strongContainer: {
-    marginTop: -3,
-  },
   strong: {
     ...theme.fonts.bodyMedium,
     color: theme.colors.primary,
+    top: 2.6,
   },
 }));
 

@@ -1,12 +1,71 @@
 import convert from 'convert';
 import { parseIngredient } from 'parse-ingredient';
 
-const unitsSet = new Set(['tbsp', 'tsp', 'tablespoons', 'teaspoons', 'tablespoon', 'teaspoon']);
+export type RecipeUnit = 'metric' | 'imperial' | 'original';
 
-export const parseMetrics = ({ note, isMetric }: { note: string; isMetric: boolean }): any | {} => {
+const spoonSet = new Set([
+  'tbsp.',
+  'tsp.',
+  'tbsp',
+  'tsp',
+  'tablespoons',
+  'teaspoons',
+  'tablespoon',
+  'teaspoon',
+]);
+
+const imperialSet = new Set([
+  'cup',
+  'cups',
+  'pint',
+  'pints',
+  'quart',
+  'quarts',
+  'gallon',
+  'gallons',
+  'ounce',
+  'ounces',
+  'pound',
+  'pounds',
+  'c',
+  'pt',
+  'qt',
+  'gal',
+  'oz',
+  'lb',
+]);
+
+const metricSet = new Set([
+  'ml',
+  'mL',
+  'milliliters',
+  'millilitres',
+  'milliliter',
+  'millilitre',
+  'l',
+  'L',
+  'liters',
+  'litres',
+  'liter',
+  'litre',
+  'g',
+  'gram',
+  'grams',
+  'kg',
+  'kilogram',
+  'kilograms',
+]);
+
+export const parseMetrics = ({
+  note,
+  recipeUnit,
+}: {
+  note: string;
+  recipeUnit: RecipeUnit;
+}): any | {} => {
   const parsedIngredient = note ? parseIngredient(note)[0] : null;
-  if (!parsedIngredient) return {};
 
+  if (!parsedIngredient) return {};
   const { quantity, unitOfMeasure, description } = parsedIngredient;
   if (quantity && unitOfMeasure) {
     try {
@@ -15,14 +74,26 @@ export const parseMetrics = ({ note, isMetric }: { note: string; isMetric: boole
         unit: unitOfMeasure,
       };
 
-      if (!unitsSet.has(unitOfMeasure)) {
-        value = convert(quantity, unitOfMeasure as any).to(
-          'best',
-          isMetric ? 'metric' : 'imperial',
-        );
+      if (recipeUnit === 'original') {
+        return {
+          ...parsedIngredient,
+          description,
+          quantity,
+          unitOfMeasure,
+        };
       }
 
-      if (unitOfMeasure === 'cup') {
+      const isImperial = recipeUnit === 'imperial';
+
+      const hasTablespoon = spoonSet.has(unitOfMeasure);
+      const isImperialUnit = imperialSet.has(unitOfMeasure);
+      const isMetricUnit = metricSet.has(unitOfMeasure);
+      if (!hasTablespoon && (isImperial ? !isImperialUnit : !isMetricUnit)) {
+        value = convert(quantity, unitOfMeasure as any).to('best', recipeUnit);
+      }
+
+      // Convert cup to grams over ml and l
+      if (recipeUnit === 'metric' && unitOfMeasure === 'cup') {
         value = convertCupToGram(description, quantity) || value;
       }
 

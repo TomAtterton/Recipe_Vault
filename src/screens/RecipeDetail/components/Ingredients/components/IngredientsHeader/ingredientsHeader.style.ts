@@ -5,16 +5,18 @@ export const stylesheet = createStyleSheet((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 8,
+    marginTop: 12,
+    marginBottom: 12,
   },
-  systemContainer: {
+  menuView: {
     flexDirection: 'row',
     gap: 8,
-  },
-  systemButton: {
-    borderRadius: 16,
-    height: 32,
-    paddingHorizontal: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: theme.colors.onBackground,
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 8,
   },
   servingsContainer: {
     flexDirection: 'row',

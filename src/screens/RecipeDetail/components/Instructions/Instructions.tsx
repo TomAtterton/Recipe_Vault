@@ -11,6 +11,7 @@ import MarkdownText from '@/screens/RecipeDetail/components/Instructions/Markdow
 interface InstructionsProps {
   recipeId: string;
   ingredients: Ingredient[];
+  initialServings: number;
 }
 
 type StepInstruction =
@@ -24,6 +25,7 @@ const keyExtractor = (_: StepInstruction, index: number) => index.toString();
 const Instructions: React.FC<InstructionsProps> = ({
   recipeId,
   ingredients,
+  initialServings,
 }: InstructionsProps) => {
   const { instructions: data } = useGetRecipeInstructions(recipeId);
 
@@ -65,7 +67,11 @@ const Instructions: React.FC<InstructionsProps> = ({
         <Typography variant={'titleMedium'} style={styles.stepTitle}>
           {`${item?.step}.`}
         </Typography>
-        <MarkdownText text={item?.text} ingredients={ingredients} />
+        <MarkdownText
+          text={item?.text}
+          ingredients={ingredients}
+          initialServings={initialServings}
+        />
       </View>
     );
   };

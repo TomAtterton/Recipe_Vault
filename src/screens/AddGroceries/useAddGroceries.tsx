@@ -18,6 +18,8 @@ const useAddGroceries = () => {
 
   const { navigate } = useNavigation();
   const currentServings = useBoundStore((state) => state.currentServings);
+  const recipeUnit = useBoundStore((state) => state.currentRecipeUnit);
+
   const getParsedIngredients = useCallback(async () => {
     const ingredients = data || [];
     const initialServing = await getRecipeServings(id);
@@ -26,7 +28,7 @@ const useAddGroceries = () => {
 
       const { description, quantity, unitOfMeasure } = parseMetrics({
         note: nameWithoutParentheses,
-        isMetric: true,
+        recipeUnit,
       });
       const amount = scaleAmount(quantity, currentServings, initialServing || 1);
 
@@ -35,7 +37,7 @@ const useAddGroceries = () => {
         isSelected: true,
       };
     });
-  }, [currentServings, data, id]);
+  }, [currentServings, data, id, recipeUnit]);
 
   const [ingredients, setIngredients] = useState<
     {

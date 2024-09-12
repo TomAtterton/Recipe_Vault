@@ -1,5 +1,6 @@
 import { parseIngredient, Ingredient as ParseIngredient } from 'parse-ingredient';
 import { Ingredient } from '@/types';
+import { parseMetrics, RecipeUnit, scaleAmount } from '@/utils/ingredientsUtil';
 
 const wordsToRemove: string[] = [
   'and',
@@ -46,14 +47,14 @@ const wordsToRemove: string[] = [
   'shredded',
   'fresh',
   'frozen',
-  // Add more preparation words here
 ];
+
 const wordsToRemoveRegex = new RegExp('\\b(' + wordsToRemove.join('|') + ')\\b', 'gi');
 
 export const parseIngredientName = (ingredient: string): string[] => {
   const { description }: ParseIngredient = parseIngredient(ingredient)[0];
 
-  const cleanedDescription: string = description
+  const cleanedDescription = description
     .replace(wordsToRemoveRegex, '')
     .replace(/,/g, '')
     .replace(/[^a-zA-Z\s'’\-éáíúóàèçñüöäåøßâêîôûäëïüöæœŒ]/g, '') // Allow alphabet characters, spaces, apostrophes, hyphens, and specific accented characters like 'é', 'á', etc., and 'saké'
@@ -63,17 +64,35 @@ export const parseIngredientName = (ingredient: string): string[] => {
 };
 
 export const ingredientsParsed = (ingredients: Ingredient[]): string[] => {
-  const parsedIngredients: string[] = [];
-  ingredients.forEach((ingredient) => {
+  return ingredients.reduce<string[]>((acc, ingredient) => {
     const ingredientText = ingredient?.text;
-    if (!ingredientText) return;
-    parsedIngredients.push(...parseIngredientName(ingredient?.text));
-  });
-
-  return parsedIngredients;
+    if (ingredientText) {
+      acc.push(...parseIngredientName(ingredientText)); // Only one loop with reduce
+    }
+    return acc;
+  }, []);
 };
 
-export const ingredientDescription = (ingredientKeyword: string, ingredients: Ingredient[]) => {
-  const ingredient = ingredients.find((_) => _.text.toLowerCase().includes(ingredientKeyword));
-  return ingredient?.text;
+export const ingredientDescription = (
+  ingredientKeyword: string,
+  ingredients: Ingredient[],
+  initialServings: number,
+  servings: number,
+  recipeUnit: RecipeUnit,
+): string | undefined => {
+  const lowerCaseKeyword = ingredientKeyword.toLowerCase();
+  const ingredient = ingredients.find(({ text }) => text.toLowerCase().includes(lowerCaseKeyword));
+
+  if (!ingredient || !ingredient.text) {
+    return undefined;
+  }
+
+  const { description, quantity, unitOfMeasure } = parseMetrics({
+    note: ingredient.text,
+    recipeUnit,
+  });
+
+  const amount = scaleAmount(quantity || 1, servings, initialServings);
+
+  return `${amount} ${unitOfMeasure ? `${unitOfMeasure} ` : ''}${description || ''}`;
 };

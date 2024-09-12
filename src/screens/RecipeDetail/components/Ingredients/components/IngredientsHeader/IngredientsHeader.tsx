@@ -8,18 +8,16 @@ import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './ingredientsHeader.style';
 import LabelButton from '@/components/buttons/LabelButton';
 import { useBoundStore } from '@/store';
+import { MenuView } from '@react-native-menu/menu';
+import { RecipeUnit } from '@/utils/ingredientsUtil';
 
-const IngredientHeader = ({
-  isMetric,
-  setIsMetric,
-}: {
-  isMetric: boolean;
-  setIsMetric: (isMetric: boolean) => void;
-}) => {
+const IngredientHeader = () => {
   const { styles, theme } = useStyles(stylesheet);
+  const recipeUnit = useBoundStore((state) => state.currentRecipeUnit);
 
   const currentServings = useBoundStore((state) => state.currentServings);
   const setServings = useBoundStore((state) => state.setCurrentServings);
+  const setRecipeUnit = useBoundStore((state) => state.setCurrentRecipeUnit);
 
   const handleUpdateServing = (shouldMinus: boolean) => {
     setServings(shouldMinus ? Math.max(1, currentServings - 1) : currentServings + 1);
@@ -27,29 +25,23 @@ const IngredientHeader = ({
 
   return (
     <View style={styles.headerContainer}>
-      <View style={styles.systemContainer}>
-        <LabelButton
-          title={'Metric'}
-          style={[
-            styles.systemButton,
-            {
-              backgroundColor: isMetric ? theme.colors.primary : 'transparent',
-            },
+      <View>
+        <MenuView
+          actions={[
+            { id: 'metric', title: 'Metric' },
+            { id: 'original', title: 'Original' },
+            { id: 'imperial', title: 'Imperial' },
           ]}
-          labelStyle={{ color: isMetric ? theme.colors.background : theme.colors.onBackground }}
-          onPress={() => setIsMetric(true)}
-        />
-        <LabelButton
-          title={'Imperial'}
-          style={[
-            styles.systemButton,
-            {
-              backgroundColor: !isMetric ? theme.colors.primary : 'transparent',
-            },
-          ]}
-          labelStyle={{ color: !isMetric ? theme.colors.background : theme.colors.onBackground }}
-          onPress={() => setIsMetric(false)}
-        />
+          onPressAction={({ nativeEvent }) => {
+            const event = nativeEvent?.event as RecipeUnit;
+            if (!event) return;
+            setRecipeUnit(event);
+          }}
+          style={styles.menuView}
+        >
+          <Icon name={'fork-spoon'} size={16} color={theme.colors.onBackground} />
+          <LabelButton title={recipeUnit} labelStyle={{ color: theme.colors.primary }} />
+        </MenuView>
       </View>
       <View style={styles.servingsContainer}>
         <IconButton

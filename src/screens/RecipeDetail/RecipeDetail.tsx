@@ -49,7 +49,7 @@ const RecipeDetail = () => {
     <View style={styles.container}>
       <RecipeHeader recipeId={id} image={image} isAnimated={false} />
       <Ingredients recipeId={id} data={data} initialServings={servings} />
-      <Instructions recipeId={id} ingredients={data} />
+      <Instructions recipeId={id} ingredients={data} initialServings={servings} />
       <View pointerEvents={'box-none'} style={styles.navBar}>
         <NavBarButton iconSource={'arrow-left'} onPress={goBack} />
         <EditButton id={id} />
@@ -83,7 +83,7 @@ const RecipeDetail = () => {
         <Ingredients recipeId={id} data={data} initialServings={servings} />
       </Tabs.Tab>
       <Tabs.Tab name="Instructions" label={'Instructions'} key={'instructions'}>
-        <Instructions recipeId={id} ingredients={data} />
+        <Instructions recipeId={id} ingredients={data} initialServings={servings} />
       </Tabs.Tab>
     </Tabs.Container>
   );

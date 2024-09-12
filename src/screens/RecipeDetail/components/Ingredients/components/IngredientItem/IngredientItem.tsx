@@ -7,29 +7,23 @@ import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './ingredientItem.style';
 import { useBoundStore } from '@/store';
 
-const IngredientItem = ({
-  text,
-  isMetric,
-  initialServings,
-}: {
-  text: string;
-  isMetric: boolean;
-  initialServings: number;
-}) => {
+const IngredientItem = ({ text, initialServings }: { text: string; initialServings: number }) => {
   const currentServings = useBoundStore((state) => state.currentServings);
+  const recipeUnit = useBoundStore((state) => state.currentRecipeUnit);
+
+  const {
+    styles,
+    theme: { colors },
+  } = useStyles(stylesheet);
 
   const { description, quantity, unitOfMeasure } = useMemo(
     () =>
       parseMetrics({
         note: text,
-        isMetric: isMetric,
+        recipeUnit,
       }) || {},
-    [text, isMetric],
+    [text, recipeUnit],
   );
-  const {
-    styles,
-    theme: { colors },
-  } = useStyles(stylesheet);
 
   const amount = useMemo(() => {
     return scaleAmount(quantity, currentServings, initialServings);

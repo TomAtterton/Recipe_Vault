@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Tabs } from 'react-native-collapsible-tab-view';
 import { FlatList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
@@ -19,11 +19,9 @@ interface IngredientsProps {
 }
 
 const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data, initialServings }) => {
-  const [isMetric, setIsMetric] = useState<boolean>(true);
-
   const setServings = useBoundStore((state) => state.setCurrentServings);
-  const { styles, breakpoint } = useStyles(stylesheet);
 
+  const { styles, breakpoint } = useStyles(stylesheet);
   useFocusEffect(
     useCallback(() => {
       const fetchServings = async () => {
@@ -36,10 +34,7 @@ const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data, initialServin
     }, [recipeId, setServings]),
   );
 
-  const handleRenderHeader = useMemo(
-    () => <IngredientHeader isMetric={isMetric} setIsMetric={setIsMetric} />,
-    [isMetric],
-  );
+  const handleRenderHeader = useMemo(() => <IngredientHeader />, []);
 
   const handleRenderIngredient = useCallback(
     ({ item }: { item: string | Ingredient }) => {
@@ -50,15 +45,9 @@ const Ingredients: React.FC<IngredientsProps> = ({ recipeId, data, initialServin
           </Typography>
         );
       }
-      return (
-        <IngredientItem
-          text={item?.text || ''}
-          initialServings={initialServings || 1}
-          isMetric={isMetric}
-        />
-      );
+      return <IngredientItem text={item?.text || ''} initialServings={initialServings || 1} />;
     },
-    [initialServings, isMetric, styles.sectionHeader],
+    [initialServings, styles.sectionHeader],
   );
 
   const sections = useMemo(
