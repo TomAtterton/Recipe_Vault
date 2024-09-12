@@ -10,6 +10,7 @@ import { setGroceryId, useBoundStore } from '@/store';
 import Typography from '@/components/Typography';
 import { openURL } from 'expo-linking';
 import { translate } from '@/core';
+import AddButton from '@/components/buttons/AddButton';
 
 interface Props {
   onClose: () => void;
@@ -88,6 +89,17 @@ const SelectGroceryList = ({ onClose }: Props) => {
         data={allReminders}
         renderItem={handleRenderItem}
         ListEmptyComponent={renderListEmptyComponent}
+        ListFooterComponent={() => {
+          if (allReminders?.length === 0) {
+            return null;
+          }
+          return (
+            <AddButton
+              title={translate('select_grocery_list.create_new_list_button')}
+              onPress={handleOpenSettings}
+            />
+          );
+        }}
       />
       {allReminders?.length > 0 && (
         <OutlineButton

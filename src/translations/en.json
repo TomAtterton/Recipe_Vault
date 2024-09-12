@@ -84,11 +84,18 @@
     "has_not_synced": "has not synced"
   },
   "groceries": {
+    "title": "Groceries List",
     "empty_message": "No Groceries make sure to add some groceries to your list or choose a different list.",
     "choose_list_button": "Choose Grocery List",
     "add_button": "Add Grocery",
     "edit_placeholder": "Edit Grocery",
-    "add_placeholder": "Add Grocery"
+    "add_placeholder": "Add Grocery",
+    "info_bottom_sheet": {
+      "title": "Grocery List Info",
+      "description": "Effortlessly manage your grocery lists and add ingredients from your favorite recipes. Share with others and let Apple Reminders handle the rest!",
+      "share": "Share Grocery List",
+      "learn_more": "Learn More"
+    }
   },
   "database_settings": {
     "title": "Vault Settings.",
