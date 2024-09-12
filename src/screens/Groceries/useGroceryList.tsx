@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import { createReminder, getReminders, updateReminder } from '@/utils/reminderUtils';
+import {
+  createReminder,
+  getReminders,
+  updateReminder,
+  requestReminderPermission,
+} from '@/utils/reminderUtils';
 import { Reminder } from 'expo-calendar';
 import { updateGroceryItem, updateGroceryList, useBoundStore } from '@/store';
 import { showErrorMessage } from '@/utils/promptUtils';
@@ -12,13 +17,20 @@ const useGroceryList = () => {
   const data = useBoundStore((state) => state.groceryList);
   const [isLoading, setIsLoading] = useState(false);
 
+  const hasReminderPermission = useBoundStore((state) => state.hasReminderPermission);
+
   const handleRefresh = useCallback(async (shouldLoad: boolean) => {
     try {
       shouldLoad && setIsLoading(true);
-      const reminderResponse = await getReminders();
-      updateGroceryList(reminderResponse);
+      const hasPermission = await requestReminderPermission(); // Ensure permission
+      if (hasPermission) {
+        const reminderResponse = await getReminders();
+        updateGroceryList(reminderResponse);
+      } else {
+        showErrorMessage(translate('groceries.permission_denied'));
+      }
     } catch (e) {
-      console.log('error', e);
+      console.log('Error refreshing reminders:', e);
     } finally {
       setTimeout(() => {
         shouldLoad && setIsLoading(false);
@@ -35,8 +47,13 @@ const useGroceryList = () => {
   const fetchList = useCallback(async () => {
     try {
       setIsLoading(true);
-      const reminderResponse = await getReminders();
-      updateGroceryList(reminderResponse);
+      const hasPermission = await requestReminderPermission(); // Ensure permission
+      if (hasPermission) {
+        const reminderResponse = await getReminders();
+        updateGroceryList(reminderResponse);
+      }
+    } catch (e) {
+      console.log('Error fetching reminders:', e);
     } finally {
       setTimeout(() => {
         setIsLoading(false);
@@ -55,16 +72,23 @@ const useGroceryList = () => {
       await handleRefresh(false);
     } catch (e) {
       showErrorMessage(translate('grocery_list.error_updating_reminder'));
-      console.log('error', e);
+      console.log('Error updating reminder:', e);
     }
   };
 
   const handleAdd = async (value: string) => {
     if (value) {
-      await createReminder({
-        title: value,
-      });
-      await handleRefresh(false);
+      try {
+        const hasPermission = await requestReminderPermission(); // Ensure permission
+        if (hasPermission) {
+          await createReminder({ title: value });
+          await handleRefresh(false);
+        } else {
+          showErrorMessage(translate('groceries.permission_denied'));
+        }
+      } catch (e) {
+        console.log('Error adding reminder:', e);
+      }
     }
   };
 
@@ -87,6 +111,7 @@ const useGroceryList = () => {
     onAdd: handleAdd,
     onRefresh: () => handleRefresh(true),
     onCompleted: handleCompleted,
+    hasDeniedPermission: !hasReminderPermission,
   };
 };
 

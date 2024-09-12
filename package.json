@@ -182,6 +182,7 @@
     }
   },
   "patchedDependencies": {
-    "expo-config-plugin-ios-share-extension@0.0.4": "patches/expo-config-plugin-ios-share-extension@0.0.4.patch"
+    "expo-config-plugin-ios-share-extension@0.0.4": "patches/expo-config-plugin-ios-share-extension@0.0.4.patch",
+    "expo-calendar@13.0.5": "patches/expo-calendar@13.0.5.patch"
   }
 }

@@ -1,9 +1,17 @@
 import { createStyleSheet } from 'react-native-unistyles';
 
-export const stylesheet = createStyleSheet(() => ({
+export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
     flex: 1,
+    paddingTop: miniRuntime.insets.top,
   },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 20,
+    alignItems: 'center',
+  },
+  leftHeaderContent: { flexDirection: 'row', alignItems: 'center' },
   navButton: {
     alignSelf: 'flex-end',
   },
@@ -39,6 +47,19 @@ export const stylesheet = createStyleSheet(() => ({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    gap: 20,
+  },
+  infoContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: miniRuntime.insets.bottom,
+  },
+  infoDescription: {
+    marginVertical: 10,
+    opacity: 0.8,
+    textAlign: 'center',
+  },
+  infoBottomContent: {
+    marginTop: 20,
     gap: 20,
   },
 }));
