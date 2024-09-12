@@ -1,7 +1,7 @@
 import { FlatList, View, AppState } from 'react-native';
 import CheckBox from '@/components/CheckBox';
 import OutlineButton from '@/components/buttons/OutlineButton';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { Reminder } from 'expo-calendar';
 import { getAllReminders } from '@/utils/reminderUtils';
 import { useStyles } from 'react-native-unistyles';
@@ -11,12 +11,15 @@ import Typography from '@/components/Typography';
 import { openURL } from 'expo-linking';
 import { translate } from '@/core';
 import AddButton from '@/components/buttons/AddButton';
+import BottomSheet from '@/components/BottomSheet';
+import { TrueSheet } from '@lodev09/react-native-true-sheet';
 
 interface Props {
   onClose: () => void;
+  bottomSheetRef: React.RefObject<TrueSheet>;
 }
 
-const SelectGroceryList = ({ onClose }: Props) => {
+const SelectGroceryList = ({ bottomSheetRef, onClose }: Props) => {
   const [allReminders, setAllReminders] = useState<Reminder[]>([]);
   const groceryListId = useBoundStore((state) => state.groceryId);
   const [selectedGroceryId, setSelectedReminder] = useState<string | null | undefined>(
@@ -25,19 +28,23 @@ const SelectGroceryList = ({ onClose }: Props) => {
 
   const { styles } = useStyles(stylesheet);
 
+  const handleSelectReminder = useCallback((id: string | undefined) => {
+    setSelectedReminder(id);
+  }, []);
+
   const handleRenderItem = useCallback(
     ({ item }: { item: Reminder }) => (
       <CheckBox
         isSelected={selectedGroceryId === item.id}
-        onPress={() => setSelectedReminder(item?.id)}
+        onPress={() => handleSelectReminder(item?.id)}
         label={item.title}
       />
     ),
-    [selectedGroceryId],
+    [selectedGroceryId, handleSelectReminder],
   );
 
   const handleSave = () => {
-    selectedGroceryId && setGroceryId(selectedGroceryId);
+    if (selectedGroceryId) setGroceryId(selectedGroceryId);
     onClose();
   };
 
@@ -46,6 +53,7 @@ const SelectGroceryList = ({ onClose }: Props) => {
   }, []);
 
   const appState = useRef(AppState.currentState);
+
   useEffect(() => {
     const subscription = AppState.addEventListener('change', async (nextAppState) => {
       if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
@@ -55,20 +63,13 @@ const SelectGroceryList = ({ onClose }: Props) => {
 
       appState.current = nextAppState;
     });
-
-    const fetchReminders = async () => {
-      const reminders = await getAllReminders();
-      setAllReminders(reminders || []);
-    };
-    fetchReminders();
-
     return () => {
       subscription.remove();
     };
   }, []);
 
-  const renderListEmptyComponent = useCallback(() => {
-    return (
+  const renderListEmptyComponent = useMemo(
+    () => (
       <View style={styles.emptyContainer}>
         <Typography variant={'titleMedium'}>{translate('select_grocery_list.no_list')}</Typography>
         <OutlineButton
@@ -76,40 +77,63 @@ const SelectGroceryList = ({ onClose }: Props) => {
           onPress={handleOpenSettings}
         />
       </View>
-    );
-  }, [styles.emptyContainer, handleOpenSettings]);
+    ),
+    [styles.emptyContainer, handleOpenSettings],
+  );
+
+  const ListFooterComponent = useMemo(
+    () =>
+      allReminders?.length > 0 ? (
+        <AddButton
+          title={translate('select_grocery_list.create_new_list_button')}
+          onPress={handleOpenSettings}
+        />
+      ) : null,
+    [allReminders, handleOpenSettings],
+  );
 
   return (
-    <View style={styles.container}>
-      <Typography variant={'titleMedium'}>{translate('select_grocery_list.title')}</Typography>
-      <FlatList
-        style={styles.list}
-        nestedScrollEnabled={true}
-        contentContainerStyle={styles.listContentContainer}
-        data={allReminders}
-        renderItem={handleRenderItem}
-        ListEmptyComponent={renderListEmptyComponent}
-        ListFooterComponent={() => {
-          if (allReminders?.length === 0) {
-            return null;
-          }
-          return (
-            <AddButton
-              title={translate('select_grocery_list.create_new_list_button')}
-              onPress={handleOpenSettings}
-            />
-          );
-        }}
-      />
-      {allReminders?.length > 0 && (
-        <OutlineButton
-          title={translate('select_grocery_list.save_button')}
-          onPress={handleSave}
-          disabled={!selectedGroceryId}
-          style={styles.button}
+    <BottomSheet
+      bottomSheetRef={bottomSheetRef}
+      snapPoints={['80%']}
+      onPresent={async () => {
+        try {
+          const reminders = await getAllReminders();
+          setAllReminders(reminders || []);
+        } catch (error) {
+          console.log('Error fetching reminders:', error);
+        }
+      }}
+    >
+      <View style={styles.container}>
+        <Typography variant={'titleMedium'}>{translate('select_grocery_list.title')}</Typography>
+        <FlatList
+          keyExtractor={(item, index) => item?.id || `${index}}`}
+          style={styles.list}
+          nestedScrollEnabled={true}
+          contentContainerStyle={styles.listContentContainer}
+          data={allReminders}
+          renderItem={handleRenderItem}
+          initialNumToRender={10}
+          getItemLayout={(data, index) => ({
+            length: 50,
+            offset: 50 * index,
+            index,
+          })}
+          ListEmptyComponent={renderListEmptyComponent}
+          ListFooterComponent={ListFooterComponent}
         />
-      )}
-    </View>
+        {allReminders?.length > 0 && (
+          <OutlineButton
+            title={translate('select_grocery_list.save_button')}
+            onPress={handleSave}
+            disabled={!selectedGroceryId}
+            style={styles.button}
+          />
+        )}
+      </View>
+    </BottomSheet>
   );
 };
+
 export default SelectGroceryList;

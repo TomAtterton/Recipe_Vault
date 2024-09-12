@@ -1,0 +1,142 @@
+diff --git a/ios/CalendarModule.swift b/ios/CalendarModule.swift
+index 96cb1b74f636871b048c6b3bc666b86b08ff87a0..c7ac3022334dde6bbf78ecb49e30a5f6b5f95f61 100644
+--- a/ios/CalendarModule.swift
++++ b/ios/CalendarModule.swift
+@@ -21,8 +21,8 @@ public class CalendarModule: Module {
+     AsyncFunction("getCalendarsAsync") { (type: CalendarEntity?) -> [[String: Any?]] in
+       var calendars: [EKCalendar]
+       if type == nil {
+-        try checkCalendarPermissions()
+-        try checkRemindersPermissions()
++//        try checkCalendarPermissions()
++//        try checkRemindersPermissions()
+ 
+         let eventCalendars = eventStore.calendars(for: .event)
+         let reminderCalendars = eventStore.calendars(for: .reminder)
+@@ -31,7 +31,7 @@ public class CalendarModule: Module {
+         try checkCalendarPermissions()
+         calendars = eventStore.calendars(for: .event)
+       } else if type == .reminder {
+-        try checkRemindersPermissions()
++//        try checkRemindersPermissions()
+         calendars = eventStore.calendars(for: .reminder)
+       } else {
+         throw InvalidCalendarEntityException(type?.rawValue)
+@@ -49,14 +49,14 @@ public class CalendarModule: Module {
+     }
+ 
+     AsyncFunction("saveCalendarAsync") { (details: CalendarRecord) -> String in
+-      switch details.entityType {
+-      case .event:
+-        try checkCalendarPermissions()
+-      case .reminder:
+-        try checkRemindersPermissions()
+-      case .none:
+-        break
+-      }
++//      switch details.entityType {
++//      case .event:
++//        try checkCalendarPermissions()
++////      case .reminder:
++////        try checkRemindersPermissions()
++//      case .none:
++//        break
++//      }
+ 
+       let calendar = try getCalendar(from: details)
+       try eventStore.saveCalendar(calendar, commit: true)
+@@ -182,8 +182,8 @@ public class CalendarModule: Module {
+       return serialize(attendees: attendees)
+     }
+ 
+-    AsyncFunction("getRemindersAsync") { (startDateStr: String, endDateStr: String, calendarIds: [String?], status: String?, promise: Promise) in
+-      try checkRemindersPermissions()
++    AsyncFunction("getRemindersAsync") { (startDateStr: String?, endDateStr: String?, calendarIds: [String?], status: String?, promise: Promise) in
++//      try checkRemindersPermissions()
+       var reminderCalendars = [EKCalendar]()
+       let startDate = parse(date: startDateStr)
+       let endDate = parse(date: endDateStr)
+@@ -199,18 +199,26 @@ public class CalendarModule: Module {
+         reminderCalendars = deviceCalendars
+       }
+ 
+-      let predicate = try createPredicate(for: reminderCalendars, start: startDate, end: endDate, status: status)
+-      eventStore.fetchReminders(matching: predicate) { [promise] reminders in
+-        if let reminders {
+-          promise.resolve(serialize(reminders: reminders))
++        var predicate: NSPredicate
++        if let start = startDate, let end = endDate {
++            predicate = try createPredicate(for: reminderCalendars, start: start, end: end, status: status)
+         } else {
+-          promise.resolve([])
++            predicate = eventStore.predicateForReminders(in: reminderCalendars)
+         }
+-      }
++
++        eventStore.fetchReminders(matching: predicate) { [promise] reminders in
++            if let reminders = reminders {
++                promise.resolve(serialize(reminders: reminders))
++            } else {
++                promise.resolve([])
++            }
++        }
++
+     }
+ 
++
+     AsyncFunction("getReminderByIdAsync") { (reminderId: String) -> [String: Any?]  in
+-      try checkRemindersPermissions()
++//      try checkRemindersPermissions()
+       let reminder = eventStore.calendarItem(withIdentifier: reminderId) as? EKReminder
+ 
+       guard let reminder else {
+@@ -221,7 +229,7 @@ public class CalendarModule: Module {
+ 
+     // swiftlint:disable:next closure_body_length
+     AsyncFunction("saveReminderAsync") { (details: Reminder) -> String  in
+-      try checkRemindersPermissions()
++//      try checkRemindersPermissions()
+       let reminder = try getReminder(from: details)
+       let startDate = parse(date: details.startDate)
+       let dueDate = parse(date: details.dueDate)
+@@ -277,7 +285,7 @@ public class CalendarModule: Module {
+     }
+ 
+     AsyncFunction("deleteReminderAsync") { (reminderId: String) in
+-      try checkRemindersPermissions()
++//      try checkRemindersPermissions()
+       guard let reminder = eventStore.calendarItem(withIdentifier: reminderId) as? EKReminder else {
+         throw ReminderNotFoundException(reminderId)
+       }
+@@ -321,12 +329,25 @@ public class CalendarModule: Module {
+       )
+     }
+ 
+-    AsyncFunction("requestRemindersPermissionsAsync") { (promise: Promise) in
+-      appContext?.permissions?.askForPermission(
+-        usingRequesterClass: RemindersPermissionRequester.self,
+-        resolve: promise.resolver,
+-        reject: promise.legacyRejecter)
+-    }
++      AsyncFunction("requestRemindersPermissionsAsync") { (promise: Promise) in
++        let eventStore = EKEventStore()
++
++        eventStore.requestAccess(to: .reminder) { (granted, error) in
++          if let error = error {
++            // Reject the promise if there's an error, with the appropriate format
++            promise.reject("E_REMINDER_PERMISSION", "Error requesting reminder permissions")
++          } else {
++            // Return a dictionary similar to what Expo would return
++            let status = granted ? "granted" : "denied"
++            let response: [String: Any] = [
++              "status": status,
++              "canAskAgain": !granted,  // Assuming if it's denied, we can ask again
++              "granted": granted
++            ]
++            promise.resolve(response)
++          }
++        }
++      }
+   }
+ 
+   private func initializePermittedEntities() {

@@ -90,6 +90,9 @@
     "add_button": "Add Grocery",
     "edit_placeholder": "Edit Grocery",
     "add_placeholder": "Add Grocery",
+    "permission_denied": "Reminder permissions are required to manage your grocery list. Please enable them in your device settings.",
+    "enable_permissions": "Enable Permissions",
+    "enable_permissions_message": "Reminder permissions are required to manage your grocery list. Please enable them in your device settings.",
     "info_bottom_sheet": {
       "title": "Grocery List Info",
       "description": "Effortlessly manage your grocery lists and add ingredients from your favorite recipes. Share with others and let Apple Reminders handle the rest!",

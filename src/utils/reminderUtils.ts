@@ -8,16 +8,13 @@ import {
   createReminderAsync,
 } from 'expo-calendar';
 import { useBoundStore } from '@/store';
-import { Alert } from 'react-native';
 
 export const requestReminderPermission = async () => {
   try {
-    const { status, canAskAgain } = await requestRemindersPermissionsAsync();
+    const { status } = await requestRemindersPermissionsAsync();
 
-    if (status === 'denied' && !canAskAgain) {
-      Alert.alert('Permission Denied', 'You need to enable reminder permissions in settings');
-    }
-
+    const isGranted = status === 'granted';
+    useBoundStore.getState().setHasReminderPermission(isGranted);
     return status === 'granted';
   } catch (error) {
     console.log('Error requesting reminder permission', error);
@@ -28,7 +25,6 @@ export const requestReminderPermission = async () => {
 export const getAllReminders = async () => {
   try {
     const hasPermission = await requestReminderPermission();
-
     if (!hasPermission) return;
 
     return getCalendarsAsync(EntityTypes.REMINDER);

@@ -59,8 +59,7 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     textAlign: 'center',
   },
   infoBottomContent: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    marginTop: 20,
     gap: 20,
   },
 }));

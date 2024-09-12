@@ -49,6 +49,7 @@ export const useBoundStore = create<
         currentDatabaseName: state.currentDatabaseName,
         darkMode: state.darkMode,
         databaseStatus: state.databaseStatus,
+        hasReminderPermission: state.hasReminderPermission,
       }),
     },
   ),

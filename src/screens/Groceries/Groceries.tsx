@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { FlatList, useWindowDimensions, View, Linking } from 'react-native';
 import useGroceryList from './useGroceryList';
 import { Reminder } from 'expo-calendar';
@@ -17,7 +17,6 @@ import NavBarButton from '@/components/buttons/NavBarButton';
 import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 import OutlineButton from '@/components/buttons/OutlineButton';
 import Shimmer from '@/components/Shimmer';
-import { requestReminderPermission } from '@/utils/reminderUtils';
 import { useFloatingInput } from '@/providers/FloatingInputProvider';
 import { translate } from '@/core';
 
@@ -29,14 +28,15 @@ const mockReminder: Reminder = {
 };
 
 const loadingArray: Reminder[] = Array.from({ length: 8 }, () => mockReminder);
-
+// exp+recipeapp://expo-development-client/?url=http%3A%2F%2F192.168.1.144%3A8081
 const Groceries = () => {
   const { showInput } = useFloatingInput();
-  const { data, onAdd, onEdit, onRefresh, onCompleted, isLoading } = useGroceryList();
+  const { hasDeniedPermission, data, onAdd, onEdit, onRefresh, onCompleted, isLoading } =
+    useGroceryList();
   const groceryListId = useBoundStore((state) => state.groceryId);
   const scrollViewRef = useRef(null);
   const bottomSheetRef = useRef<BottomSheetRef>(null);
-  const infoSheetRef = useRef<BottomSheetRef>(null); // Info Bottom Sheet Ref
+  const infoSheetRef = useRef<BottomSheetRef>(null);
 
   const tabBarHeight = useBottomTabBarHeight();
   const { styles, theme } = useStyles(stylesheet);
@@ -44,10 +44,6 @@ const Groceries = () => {
   const { width } = useWindowDimensions();
 
   const listData = useMemo(() => (isLoading ? loadingArray : data), [data, isLoading]);
-
-  useEffect(() => {
-    requestReminderPermission();
-  }, []);
 
   const handleShowGrocerySelection = () => {
     bottomSheetRef.current?.present();
@@ -87,17 +83,33 @@ const Groceries = () => {
   const handleEmptyComponent = useCallback(() => {
     return (
       <View style={[styles.emptyContainer]}>
-        <Icon name={'shopping-cart'} size={40} color={theme.colors.onBackground} />
-        <Typography variant={'titleMedium'} style={styles.emptyTitle}>
-          {translate('groceries.empty_message')}
-        </Typography>
-        <OutlineButton
-          title={translate('groceries.choose_list_button')}
-          onPress={handleShowGrocerySelection}
+        <Icon
+          name={hasDeniedPermission ? 'alert' : 'shopping-cart'}
+          size={40}
+          color={theme.colors.onBackground}
         />
+        <Typography variant={'titleMedium'} style={styles.emptyTitle}>
+          {translate(
+            hasDeniedPermission
+              ? 'groceries.enable_permissions_message'
+              : 'groceries.empty_message',
+          )}
+        </Typography>
+
+        {hasDeniedPermission ? (
+          <OutlineButton
+            title={translate('groceries.enable_permissions')}
+            onPress={() => handleOpenLink('app-settings:')}
+          />
+        ) : (
+          <OutlineButton
+            title={translate('groceries.choose_list_button')}
+            onPress={handleShowGrocerySelection}
+          />
+        )}
       </View>
     );
-  }, [styles.emptyContainer, styles.emptyTitle, theme.colors.onBackground]);
+  }, [hasDeniedPermission, styles.emptyContainer, styles.emptyTitle, theme.colors.onBackground]);
 
   const handleReminderItem = useCallback(
     ({ item }: { item: Reminder }) => {
@@ -172,14 +184,15 @@ const Groceries = () => {
         </BlurView>
       )}
 
-      <BottomSheet bottomSheetRef={bottomSheetRef} snapPoints={['80%']}>
-        <SelectGroceryList onClose={() => bottomSheetRef.current?.dismiss()} />
-      </BottomSheet>
+      <SelectGroceryList
+        bottomSheetRef={bottomSheetRef}
+        onClose={() => bottomSheetRef.current?.dismiss()}
+      />
 
       <BottomSheet
         bottomSheetRef={infoSheetRef}
         title={translate('groceries.info_bottom_sheet.title')}
-        snapPoints={['40%']}
+        snapPoints={['50%']}
         style={styles.infoContainer}
       >
         <Typography variant="bodyMedium" style={styles.infoDescription}>
