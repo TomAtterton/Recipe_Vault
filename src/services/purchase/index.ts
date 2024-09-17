@@ -8,13 +8,13 @@ import { getUserId } from '@/hooks/common/useUserId';
 
 export const PurchaseCancelError = Purchases.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR;
 
-const supportAppDescription = {
+export const supportAppDescription = {
   recipetier1tip: '☕ Fuel my caffeine addiction',
   recipetier2tip: "📚 Help me buy a book I'll never finish",
   recipetier3tip: '🍕 Treat me to a slice of fancy pizza',
   recipetier4tip: '💻 Chip in for my dream laptop',
 };
-type SupportAppDescriptionKey = keyof typeof supportAppDescription;
+export type SupportAppDescriptionKey = keyof typeof supportAppDescription;
 
 function isSupportAppDescriptionKey(key: string | undefined): key is SupportAppDescriptionKey {
   return key !== undefined && key in supportAppDescription;

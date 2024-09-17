@@ -1,23 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, TouchableOpacity, ActivityIndicator, useWindowDimensions } from 'react-native';
+import { View, ActivityIndicator, useWindowDimensions, TouchableOpacity } from 'react-native';
 import {
   fetchProducts,
-  PurchaseCancelError,
   purchaseProduct,
   PurchaseProduct,
+  supportAppDescription,
+  SupportAppDescriptionKey,
 } from '@/services/purchase';
 import { useStyles } from 'react-native-unistyles';
 import Typography from '@/components/Typography';
 import { stylesheet } from './supportApp.style';
 import { translate } from '@/core';
-import { showErrorMessage } from '@/utils/promptUtils';
 import ChefOk from '../../../assets/svgs/chef_fire.svg';
 import ConfettiCannon from 'react-native-confetti-cannon';
+import PrimaryButton from '@/components/buttons/PrimaryButton';
 
 const SupportApp = () => {
   const { styles } = useStyles(stylesheet);
   const [products, setProducts] = useState<PurchaseProduct[]>([]);
-  const [hasMadePurchase, setHasMadePurchase] = useState(false); // New state to track if a purchase has been made
+  const [selectedOption, setSelectedOption] = useState<SupportAppDescriptionKey>('recipetier1tip');
+  const [hasMadePurchase, setHasMadePurchase] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const confettiRef = useRef<ConfettiCannon>(null);
 
@@ -33,7 +35,7 @@ const SupportApp = () => {
       setIsLoading(true);
       await purchaseProduct(option.product);
       confettiRef?.current?.start();
-      setHasMadePurchase(true); // Set purchaseMade to true after a successful purchase
+      setHasMadePurchase(true);
     } catch (error) {
       // @ts-ignore
       if (error?.code !== PurchaseCancelError) {
@@ -44,11 +46,12 @@ const SupportApp = () => {
       setIsLoading(false);
     }
   };
+
   const { height, width } = useWindowDimensions();
 
   const renderContent = () => {
     if (isLoading) {
-      return <ActivityIndicator />;
+      return <ActivityIndicator style={styles.loadingContainer} />;
     }
     if (hasMadePurchase) {
       return (
@@ -61,18 +64,34 @@ const SupportApp = () => {
         />
       );
     } else if (products.length > 0) {
-      return products.map((option) => (
-        <TouchableOpacity
-          key={option.id}
-          style={styles.button}
-          onPress={() => handlePurchase(option)}
-        >
-          <Typography variant={'bodyMediumItalic'} style={styles.name}>
-            {option.name}
+      return (
+        <>
+          <Typography variant={'bodyMediumItalic'} style={styles.description}>
+            {translate('support_app.description')}
           </Typography>
-          <Typography variant={'bodyLarge'}>{option.amount}</Typography>
-        </TouchableOpacity>
-      ));
+          <View style={styles.contentContainer}>
+            <View style={styles.pricesContainer}>
+              {products.map((option) => (
+                <TouchableOpacity
+                  key={option.id}
+                  style={[
+                    styles.tipButton,
+                    selectedOption === option.id && styles.selectedTipButton,
+                  ]}
+                  onPress={() => setSelectedOption(option.id as SupportAppDescriptionKey)}
+                >
+                  <View style={styles.tipDetails}>
+                    <Typography variant={'bodyLarge'}>{option.amount}</Typography>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+            <Typography variant={'bodyMediumItalic'} style={styles.name}>
+              {supportAppDescription[selectedOption]}
+            </Typography>
+          </View>
+        </>
+      );
     } else {
       return (
         <View>
@@ -91,6 +110,19 @@ const SupportApp = () => {
       </Typography>
 
       {renderContent()}
+
+      {selectedOption && (
+        <PrimaryButton
+          style={styles.purchaseButton}
+          onPress={() => {
+            const selectedProduct = products.find((p) => p.id === selectedOption);
+            if (selectedProduct) handlePurchase(selectedProduct);
+          }}
+          title={translate('support_app.purchase_button')}
+          isLoading={isLoading}
+        />
+      )}
+
       <ConfettiCannon
         ref={confettiRef}
         count={100}

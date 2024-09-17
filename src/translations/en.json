@@ -289,7 +289,9 @@
   },
   "support_app": {
     "title": "Support the App",
-    "thank_you": "Thank you for supporting the app!"
+    "description": "By giving a tip. This will help me continue to improve the app and add new features.",
+    "thank_you": "Thank you for supporting the app!",
+    "purchase_button": "Give Tip"
   },
   "prompt": {
     "switch_vault": {

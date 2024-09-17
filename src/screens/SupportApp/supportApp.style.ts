@@ -1,36 +1,57 @@
 import { createStyleSheet } from 'react-native-unistyles';
 
-export const stylesheet = createStyleSheet(() => ({
+export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    gap: 8,
-    justifyContent: 'center',
   },
   title: {
-    position: 'absolute',
-    top: 8,
     alignSelf: 'center',
   },
-  button: {
+  description: {
+    opacity: 0.6,
+    textAlign: 'center',
+    paddingTop: 12,
+  },
+  contentContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  pricesContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap', // Enables wrapping to the next line
     justifyContent: 'space-between',
+    marginVertical: 20,
+  },
+  tipButton: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 12,
     paddingVertical: 8,
-    paddingHorizontal: 8,
     borderRadius: 10,
+    borderWidth: 0.5,
+    borderColor: theme.colors.border, // Default border color for unselected
+    backgroundColor: theme.colors.background, // Default background
+  },
+  selectedTipButton: {
+    borderColor: theme.colors.primary, // Highlight selected item by changing border color
+  },
+  tipDetails: {
+    alignItems: 'center',
   },
   name: {
-    flex: 1,
+    textAlign: 'center',
   },
-
+  purchaseButton: {
+    marginBottom: miniRuntime.insets.bottom + 20,
+  },
   thankYouText: {
     textAlign: 'center',
   },
-  thankYouGif: {
-    width: 200,
-    height: 200,
-    alignSelf: 'center',
-    marginTop: 10,
-    borderRadius: 10,
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 }));
