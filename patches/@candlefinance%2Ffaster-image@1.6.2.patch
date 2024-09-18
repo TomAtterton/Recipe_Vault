@@ -1,0 +1,16 @@
+diff --git a/ios/NukeUI/LazyImageView.swift b/ios/NukeUI/LazyImageView.swift
+index 84fd056190f1c197b24dcd55c7761d2ba2b0fbbc..e2df9bd9f72c55a1e62a12436154b88e60af5546 100644
+--- a/ios/NukeUI/LazyImageView.swift
++++ b/ios/NukeUI/LazyImageView.swift
+@@ -404,7 +404,10 @@ public final class LazyImageView: _PlatformBaseView {
+             failureView = nil
+             return
+         }
+-        failureView = _PlatformImageView(image: failureImage)
++        let imageView = _PlatformImageView(image: failureImage)
++        imageView.contentMode = .scaleAspectFill  // Add this line
++        imageView.clipsToBounds = true            // Add this line to ensure any overflow is clipped
++        failureView = imageView
+     }
+ 
+     private func setFailureView(_ oldView: _PlatformBaseView?, _ newView: _PlatformBaseView?) {
