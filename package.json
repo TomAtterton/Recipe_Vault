@@ -183,6 +183,7 @@
   },
   "patchedDependencies": {
     "expo-config-plugin-ios-share-extension@0.0.4": "patches/expo-config-plugin-ios-share-extension@0.0.4.patch",
-    "expo-calendar@13.0.5": "patches/expo-calendar@13.0.5.patch"
+    "expo-calendar@13.0.5": "patches/expo-calendar@13.0.5.patch",
+    "@candlefinance/faster-image@1.6.2": "patches/@candlefinance%2Ffaster-image@1.6.2.patch"
   }
 }

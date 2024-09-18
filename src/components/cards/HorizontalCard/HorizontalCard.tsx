@@ -36,7 +36,7 @@ const HorizontalCard = ({ name, rating, performTime, image, onPress = () => {} }
           {name}
         </Typography>
         <View style={styles.metaContainer}>
-          {!!performTime && (
+          {!!performTime && performTime !== '0 minutes' && (
             <View style={styles.cookTimeContainer}>
               <Icon name={'clock'} color={theme.colors.primary} size={16} />
               <Typography style={styles.metaTitle} variant={'titleMedium'} numberOfLines={1}>
