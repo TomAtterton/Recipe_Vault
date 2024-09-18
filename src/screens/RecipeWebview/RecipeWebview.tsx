@@ -76,7 +76,7 @@ const RecipeWebview = ({
           onMessage={handleMessage}
           injectedJavaScript={injectedJavaScript}
           injectedJavaScriptForMainFrameOnly={false}
-          webviewDebuggingEnabled={true}
+          webviewDebuggingEnabled={__DEV__}
           allowsInlineMediaPlayback={false}
           allowsAirPlayForMediaPlayback={false}
           startInLoadingState

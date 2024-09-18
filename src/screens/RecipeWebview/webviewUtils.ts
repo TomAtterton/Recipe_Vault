@@ -2,68 +2,71 @@
  * This injectedJavaScript is used to extract recipe data from a webpage.
  */
 export const injectedJavaScript = `
-  (function() {
+(function() {
   const scripts = document.querySelectorAll('script[type="application/ld+json"]');
-  let foundRecipe = false;
   let jsonData = null;
-  for (let i = 0; i < scripts.length; i++) {
-    const script = scripts[i];
+  
+  const isRecipeType = (data) => {
+    if (!data || typeof data !== 'object') return false;
+    const types = Array.isArray(data['@type']) ? data['@type'] : [data['@type']];
+    return types.some(type => type?.toLowerCase() === 'recipe');
+  };
+
+  const parseJsonSafely = (scriptContent) => {
     try {
-      if (!script?.textContent) {
-        continue;
-      }
-      const parseData = JSON.parse(script.textContent);
-
-      jsonData = Array.isArray(parseData) ? parseData[0] : parseData;
-
-      if (parseData['@graph']) {
-        const graph = parseData['@graph'];
-        const graphRecipe = graph.find((item) => item['@type']?.toLowerCase() === 'recipe');
-        if (graphRecipe) {
-          jsonData = { ...parseData, ...graphRecipe };
-        }
-      }
-
-
-      const isRecipeType = () => {
-        if (Array.isArray(jsonData['@type'])) {
-          return jsonData['@type'].includes('Recipe');
-
-        }
-        return jsonData?.['@type']?.toLowerCase() === 'recipe';
-      };
-
-      if (isRecipeType() && jsonData['recipeIngredient'] && Array.isArray(jsonData['recipeIngredient'])){
-      
-        foundRecipe = true;
-        break; // Exit loop if recipe is found
-      }
+      return JSON.parse(scriptContent);
     } catch (error) {
-      window.ReactNativeWebView.postMessage(error);
-      // JSON parsing error, continue to the next script tag
-      continue;
+      console.error('Error parsing JSON:', error.message);
+      return null;
     }
+  };
+
+  const findRecipeInGraph = (graph) => {
+    return graph.find(item => isRecipeType(item));
+  };
+
+  const validateRecipe = (recipe) => {
+    return recipe && 
+           isRecipeType(recipe) && 
+           Array.isArray(recipe.recipeIngredient) &&
+           recipe.recipeIngredient.length > 0;
+  };
+
+  let foundRecipe = false;
+
+  for (const script of scripts) {
+    if (!script?.textContent?.trim()) continue;
+    
+    const parsedData = parseJsonSafely(script.textContent);
+    if (!parsedData) continue;
+
+    const dataArray = Array.isArray(parsedData) ? parsedData : [parsedData];
+
+    for (const item of dataArray) {
+      if (item['@graph'] && Array.isArray(item['@graph'])) {
+        const graphRecipe = findRecipeInGraph(item['@graph']);
+        if (graphRecipe) {
+          jsonData = { ...item, ...graphRecipe };
+        }
+      } else if (isRecipeType(item)) {
+        jsonData = item;
+      }
+
+      if (validateRecipe(jsonData)) {
+        foundRecipe = true;
+        break;
+      }
+    }
+
+    if (foundRecipe) break;
   }
 
-  // if (!foundRecipe) {
-  //   const itempropElements = document.querySelectorAll(
-  //     '[itemprop="name"], [itemprop="recipeIngredient"]'
-  //   );
-  //
-  //   for (const element of itempropElements) {
-  //     if (element.textContent.trim() !== '') {
-  //       foundRecipe = true;
-  //       break; // Exit loop if recipe information is found
-  //     }
-  //   }
-  // }
-
   if (foundRecipe) {
-    window.ReactNativeWebView.postMessage(jsonData ? JSON.stringify(jsonData) : 'containsRecipe');
+    window.ReactNativeWebView.postMessage(JSON.stringify(jsonData));
   } else {
     window.ReactNativeWebView.postMessage('doesNotContainRecipe');
   }
-  })();
+})();
 `;
 
 const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
