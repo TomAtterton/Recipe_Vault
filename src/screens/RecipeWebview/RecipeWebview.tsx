@@ -12,6 +12,7 @@ import useHandleUrl from '@/screens/RecipeWebview/hooks/useHandleUrl';
 import useHandleDetection from '@/screens/RecipeWebview/hooks/useHandleDetection';
 import useHandleBookmark from '@/screens/RecipeWebview/hooks/useHandleBookmark';
 import stylesheet from './recipeWebview.style';
+import { useSharedValue } from 'react-native-reanimated';
 
 const DEFAULT_URL = 'https://www.google.com/';
 
@@ -47,6 +48,8 @@ const RecipeWebview = ({
 
   const tabBarHeight = useBottomTabBarHeight();
 
+  const loadingProgress = useSharedValue(0);
+
   return (
     <>
       <View
@@ -66,6 +69,7 @@ const RecipeWebview = ({
           setShowBookmark={setShowBookmark}
           isBackEnabled={isBackEnabled?.current}
           isForwardEnabled={isForwardEnabled?.current}
+          loadingProgress={loadingProgress}
         />
         <WebView
           ref={webViewRef}
@@ -77,6 +81,9 @@ const RecipeWebview = ({
           webviewDebuggingEnabled={__DEV__}
           allowsInlineMediaPlayback={false}
           allowsAirPlayForMediaPlayback={false}
+          onLoadProgress={({ nativeEvent }) => {
+            loadingProgress.value = nativeEvent.progress * 100;
+          }}
           startInLoadingState
           renderLoading={() => (
             <View style={styles.loading}>

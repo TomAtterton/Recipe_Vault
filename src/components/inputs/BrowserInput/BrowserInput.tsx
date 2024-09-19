@@ -1,8 +1,13 @@
-import { TouchableOpacity, View } from 'react-native';
+import { Share, TouchableOpacity, View } from 'react-native';
 import React, { useCallback, useMemo } from 'react';
 import WebView from 'react-native-webview';
 import { ICON_SIZE, stylesheet } from './browserInput.style';
-import Animated, { SlideInRight } from 'react-native-reanimated';
+import Animated, {
+  SharedValue,
+  SlideInRight,
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import IconButton from '@/components/buttons/IconButton';
@@ -19,6 +24,7 @@ interface Props {
   setShowBookmark: (show: boolean) => void;
   isBackEnabled: boolean;
   isForwardEnabled: boolean;
+  loadingProgress: SharedValue<number>;
 }
 
 const AnimatedButton = Animated.createAnimatedComponent(LabelButton);
@@ -32,6 +38,7 @@ const BrowserBar = ({
   setShowBookmark,
   isBackEnabled,
   isForwardEnabled,
+  loadingProgress,
 }: Props) => {
   const { styles, theme } = useStyles(stylesheet);
 
@@ -56,6 +63,26 @@ const BrowserBar = ({
   }, [url]);
 
   const { showInput } = useFloatingInput();
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      width: `${loadingProgress.value}%`,
+      opacity:
+        loadingProgress.value === 100
+          ? withTiming(0, {
+              duration: 500,
+            })
+          : 1,
+      ...styles.loadingBar,
+    };
+  }, [loadingProgress.value]);
+
+  const handleSend = () => {
+    Share.share({
+      message: url,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
@@ -105,6 +132,7 @@ const BrowserBar = ({
               {titleUrl}
             </Typography>
           </TouchableOpacity>
+          <Animated.View style={animatedStyle} />
           <IconButton
             disabled={!isForwardEnabled}
             iconSource={'arrow-right'}
@@ -119,7 +147,7 @@ const BrowserBar = ({
             onPress={webviewRef.current?.reload}
           />
         </View>
-        {isFocused && (
+        {isFocused ? (
           <AnimatedButton
             entering={SlideInRight}
             style={styles.cancelButton}
@@ -128,10 +156,17 @@ const BrowserBar = ({
             }}
             title={translate('default.cancel')}
           />
+        ) : (
+          <IconButton
+            style={styles.shareButton}
+            iconSource={'send'}
+            buttonSize={'small'}
+            iconSize={ICON_SIZE}
+            onPress={handleSend}
+          />
         )}
       </View>
     </View>
   );
 };
-
 export default BrowserBar;
