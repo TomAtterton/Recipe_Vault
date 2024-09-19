@@ -41,7 +41,19 @@ export const stylesheet = createStyleSheet((theme, { insets: { top } }) => ({
     borderRadius: 10,
     backgroundColor: theme.colors.background,
   },
+  loadingBar: {
+    position: 'absolute',
+    bottom: 2,
+    left: 4,
+    right: 4,
+    backgroundColor: theme.colors.primary,
+    height: 2,
+  },
   cancelButton: {
+    paddingLeft: 8,
+  },
+  shareButton: {
+    paddingTop: 8,
     paddingLeft: 8,
   },
 }));

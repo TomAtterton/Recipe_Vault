@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import WebView from 'react-native-webview';
 
@@ -12,6 +12,9 @@ import useHandleUrl from '@/screens/RecipeWebview/hooks/useHandleUrl';
 import useHandleDetection from '@/screens/RecipeWebview/hooks/useHandleDetection';
 import useHandleBookmark from '@/screens/RecipeWebview/hooks/useHandleBookmark';
 import stylesheet from './recipeWebview.style';
+import { useSharedValue } from 'react-native-reanimated';
+
+const DEFAULT_URL = 'https://www.google.com/';
 
 const RecipeWebview = ({
   route,
@@ -22,14 +25,10 @@ const RecipeWebview = ({
     };
   };
 }) => {
-  const {
-    uri,
-    setUri,
-    webViewRef,
-    isBackEnabled,
-    isForwardEnabled,
-    handleWebViewNavigationStateChange,
-  } = useHandleUrl(route.params?.url);
+  const [uri, setUri] = useState(route.params?.url || DEFAULT_URL);
+
+  const { webViewRef, isBackEnabled, isForwardEnabled, handleWebViewNavigationStateChange } =
+    useHandleUrl(setUri);
 
   const { handleMessage, recipeDetected, handleAddRecipe } = useHandleDetection(uri);
 
@@ -48,6 +47,8 @@ const RecipeWebview = ({
   } = useStyles(stylesheet);
 
   const tabBarHeight = useBottomTabBarHeight();
+
+  const loadingProgress = useSharedValue(0);
 
   return (
     <>
@@ -68,6 +69,7 @@ const RecipeWebview = ({
           setShowBookmark={setShowBookmark}
           isBackEnabled={isBackEnabled?.current}
           isForwardEnabled={isForwardEnabled?.current}
+          loadingProgress={loadingProgress}
         />
         <WebView
           ref={webViewRef}
@@ -79,6 +81,9 @@ const RecipeWebview = ({
           webviewDebuggingEnabled={__DEV__}
           allowsInlineMediaPlayback={false}
           allowsAirPlayForMediaPlayback={false}
+          onLoadProgress={({ nativeEvent }) => {
+            loadingProgress.value = nativeEvent.progress * 100;
+          }}
           startInLoadingState
           renderLoading={() => (
             <View style={styles.loading}>
