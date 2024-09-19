@@ -1,15 +1,12 @@
 import { WebViewNavigation } from 'react-native-webview/src/WebViewTypes';
-import { addHistory } from '@/store';
 import { injectedJavaScript } from '@/screens/RecipeWebview/webviewUtils';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import WebView from 'react-native-webview';
+import { addHistory } from '@/store';
 
-const DEFAULT_URL = 'https://google.com/';
-
-const useHandleUrl = (routeUrl?: string) => {
-  const [uri, setUri] = useState(routeUrl || DEFAULT_URL);
-
+const useHandleUrl = (setUri: (uri: string) => void) => {
   const webViewRef = useRef<WebView>(null);
+  const oldUri = useRef<string | undefined>();
   const isBackEnabled = useRef(false);
   const isForwardEnabled = useRef(false);
 
@@ -20,7 +17,7 @@ const useHandleUrl = (routeUrl?: string) => {
       return;
     }
 
-    if (navigationType !== 'backforward' && url !== uri) {
+    if (!navigationType && url !== oldUri.current) {
       addHistory({ name: title || url, url });
     }
 
@@ -33,14 +30,12 @@ const useHandleUrl = (routeUrl?: string) => {
 
     if (!url) return;
 
-    if (url === uri) return;
-
+    if (url === oldUri.current) return;
+    oldUri.current = url;
     setUri(url);
   };
 
   return {
-    uri,
-    setUri,
     webViewRef,
     isBackEnabled,
     isForwardEnabled,

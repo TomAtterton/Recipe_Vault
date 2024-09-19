@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { addBookmark, addHistory, onEditBookmark } from '@/store';
+import { addBookmark, onEditBookmark } from '@/store';
 import { useFloatingInput } from '@/providers/FloatingInputProvider';
 
 const useHandleBookmark = (uri: string, setUri: (value: string) => void) => {
@@ -8,7 +8,6 @@ const useHandleBookmark = (uri: string, setUri: (value: string) => void) => {
   const handleLinkPress = (item: string) => {
     setShowBookmark(false);
     setUri(item);
-    addHistory({ name: item, url: item });
   };
 
   const { showInput } = useFloatingInput();

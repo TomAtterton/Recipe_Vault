@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import WebView from 'react-native-webview';
 
@@ -13,6 +13,8 @@ import useHandleDetection from '@/screens/RecipeWebview/hooks/useHandleDetection
 import useHandleBookmark from '@/screens/RecipeWebview/hooks/useHandleBookmark';
 import stylesheet from './recipeWebview.style';
 
+const DEFAULT_URL = 'https://www.google.com/';
+
 const RecipeWebview = ({
   route,
 }: {
@@ -22,14 +24,10 @@ const RecipeWebview = ({
     };
   };
 }) => {
-  const {
-    uri,
-    setUri,
-    webViewRef,
-    isBackEnabled,
-    isForwardEnabled,
-    handleWebViewNavigationStateChange,
-  } = useHandleUrl(route.params?.url);
+  const [uri, setUri] = useState(route.params?.url || DEFAULT_URL);
+
+  const { webViewRef, isBackEnabled, isForwardEnabled, handleWebViewNavigationStateChange } =
+    useHandleUrl(setUri);
 
   const { handleMessage, recipeDetected, handleAddRecipe } = useHandleDetection(uri);
 
