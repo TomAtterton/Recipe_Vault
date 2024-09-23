@@ -1,9 +1,8 @@
 import { createStyleSheet } from 'react-native-unistyles';
 
-export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
+export const stylesheet = createStyleSheet(() => ({
   container: {
-    // Flex isn't calculated correctly with bottom sheet so we do caluclations based on 80% screen height with top insets and 20 padding
-    height: miniRuntime.screen.height * 0.8 - miniRuntime.insets.top - 20,
+    flex: 1,
     paddingHorizontal: 20,
   },
   list: {

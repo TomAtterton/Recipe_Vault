@@ -12,14 +12,22 @@ export const stylesheet = createStyleSheet(({ colors }, { screen }) => ({
     paddingVertical: 20,
   },
   contentContainer: {
-    flexDirection: 'row',
+    flexDirection: {
+      xs: 'row',
+      sm: 'column',
+      md: 'column',
+      lg: 'column',
+      xl: 'column',
+    },
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 16,
     paddingLeft: 20,
   },
+  timesContainer: {
+    flexDirection: 'row',
+    gap: 16,
+  },
   buttonContainer: {
-    flex: 1,
     justifyContent: 'flex-end',
     flexDirection: 'row',
   },
@@ -45,7 +53,13 @@ export const stylesheet = createStyleSheet(({ colors }, { screen }) => ({
   },
   infoButton: {
     position: 'absolute',
-    right: 20,
+    right: {
+      xs: 20,
+      sm: 0,
+      md: 0,
+      lg: 0,
+      xl: 0,
+    },
   },
   infoContainer: {
     gap: 16,

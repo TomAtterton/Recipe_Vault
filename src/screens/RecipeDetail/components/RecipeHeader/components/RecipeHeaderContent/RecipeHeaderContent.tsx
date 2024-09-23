@@ -71,14 +71,16 @@ const RecipeHeaderContent = ({ id }: Props) => {
   return (
     <View style={styles.container} pointerEvents={'box-none'}>
       <View style={styles.contentContainer} pointerEvents={'box-none'}>
-        {hasPrepTime && (
-          /*// @ts-ignore*/
-          <TimeContainer time={prepTime} title={translate('recipe_header_content.prep_time')} />
-        )}
-        {hasCookTime && (
-          /*// @ts-ignore*/
-          <TimeContainer time={cookTime} title={translate('recipe_header_content.cook_time')} />
-        )}
+        <View style={styles.timesContainer}>
+          {hasPrepTime && (
+            /*// @ts-ignore*/
+            <TimeContainer time={prepTime} title={translate('recipe_header_content.prep_time')} />
+          )}
+          {hasCookTime && (
+            /*// @ts-ignore*/
+            <TimeContainer time={cookTime} title={translate('recipe_header_content.cook_time')} />
+          )}
+        </View>
         <View style={styles.buttonContainer} pointerEvents={'box-none'}>
           <IconButton
             iconSource={'fork-knife'}
