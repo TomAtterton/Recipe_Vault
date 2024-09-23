@@ -1,62 +1,16 @@
 import convert from 'convert';
-import { parseIngredient } from 'parse-ingredient';
+import { parseIngredient, UnitOfMeasure } from 'parse-ingredient';
+import { useBoundStore } from '@/store';
+import {
+  conversionTableToGrams,
+  imperialSet,
+  metricSet,
+  spoonSet,
+} from '@/services/parser/ingredients/staticData';
 
 export type RecipeUnit = 'metric' | 'imperial' | 'original';
 
-const spoonSet = new Set([
-  'tbsp.',
-  'tsp.',
-  'tbsp',
-  'tsp',
-  'tablespoons',
-  'teaspoons',
-  'tablespoon',
-  'teaspoon',
-]);
-
-const imperialSet = new Set([
-  'cup',
-  'cups',
-  'pint',
-  'pints',
-  'quart',
-  'quarts',
-  'gallon',
-  'gallons',
-  'ounce',
-  'ounces',
-  'pound',
-  'pounds',
-  'c',
-  'pt',
-  'qt',
-  'gal',
-  'oz',
-  'lb',
-]);
-
-const metricSet = new Set([
-  'ml',
-  'mL',
-  'milliliters',
-  'millilitres',
-  'milliliter',
-  'millilitre',
-  'l',
-  'L',
-  'liters',
-  'litres',
-  'liter',
-  'litre',
-  'g',
-  'gram',
-  'grams',
-  'kg',
-  'kilogram',
-  'kilograms',
-]);
-
-export const parseMetrics = ({
+export const parseIngredientMetrics = ({
   note,
   recipeUnit,
 }: {
@@ -144,12 +98,6 @@ export const scaleAmount = (amount: number, servings: number, initialServings: n
   }
 };
 
-interface ConversionTable {
-  [key: string]: {
-    cup: number;
-  };
-}
-
 interface ConvertedIngredient {
   quantity: number;
   unit: string;
@@ -174,63 +122,33 @@ const convertCupToGram = (ingredientName: string, quantity: number): ConvertedIn
   return null;
 };
 
-const conversionTableToGrams: ConversionTable = {
-  butter: { cup: 227 },
-  'brown sugar': { cup: 198 },
-  'powdered sugar': { cup: 113 },
-  sugar: { cup: 198 },
-  'whole wheat flour': { cup: 156 },
-  flour: { cup: 142 },
-  vanilla: { cup: 208 },
-  milk: { cup: 240 },
-  cornstarch: { cup: 125 },
-  'olive oil': { cup: 216 },
-  yogurt: { cup: 230 },
-  oil: { cup: 198 },
-  water: { cup: 237 },
-  cocoa: { cup: 85 },
-  cornmeal: { cup: 138 },
-  'granulated sugar': { cup: 200 },
-  honey: { cup: 340 },
-  'maple syrup': { cup: 320 },
-  'brown rice': { cup: 195 },
-  quinoa: { cup: 185 },
-  pasta: { cup: 200 },
-  'rolled oats': { cup: 90 },
-  'almond flour': { cup: 96 },
-  'ground cinnamon': { cup: 120 },
-  'snap pea': { cup: 98 },
-  salt: { cup: 273 },
-  'baking powder': { cup: 192 },
-  'baking soda': { cup: 220 },
-  cinnamon: { cup: 126 },
-  nutmeg: { cup: 116 },
-  'cocoa powder': { cup: 85 },
-  'cayenne pepper': { cup: 93 },
-  'black pepper': { cup: 143 },
-  'white sugar': { cup: 200 },
-  'brown rice flour': { cup: 156 },
-  'coconut flour': { cup: 96 },
-  'potato starch': { cup: 160 },
-  'tapioca flour': { cup: 120 },
-  'almond meal': { cup: 96 },
-  'coconut oil': { cup: 216 },
-  'peanut butter': { cup: 258 },
-  'sesame oil': { cup: 216 },
-  molasse: { cup: 336 },
-  'corn syrup': { cup: 320 },
-  'flaxseed meal': { cup: 88 },
-  'sunflower seed': { cup: 128 },
-  'chia seed': { cup: 168 },
-  'cumin seed': { cup: 121 },
-  'mustard seed': { cup: 120 },
-  'poppy seed': { cup: 128 },
-  'quinoa flour': { cup: 130 },
-  'amaranth flour': { cup: 120 },
-  'buckwheat flour': { cup: 128 },
-  'millet flour': { cup: 120 },
-  'teff flour': { cup: 128 },
-  'almond butter': { cup: 258 },
-  'cashew butter': { cup: 254 },
-  'pecan butter': { cup: 260 },
+export const onFormatIngredientAmount = (amount: string, unitOfMeasure: UnitOfMeasure) => {
+  if (!amount && !unitOfMeasure) return '';
+  if (!amount) return unitOfMeasure;
+  if (!unitOfMeasure) return amount;
+  return `${amount} ${unitOfMeasure}`;
+};
+
+/**
+ *  Formats an ingredient string based on the current servings and recipe unit
+ */
+export const formatIngredient = (
+  ingredient: string,
+  initialServings: number,
+  servings?: number,
+  recipeUnit?: RecipeUnit,
+): string => {
+  const currentServings = servings || useBoundStore.getState().currentServings;
+  const currentRecipeUnit = recipeUnit || useBoundStore.getState().currentRecipeUnit;
+
+  const { description, quantity, unitOfMeasure } = parseIngredientMetrics({
+    note: ingredient,
+    recipeUnit: currentRecipeUnit,
+  });
+
+  const amount = scaleAmount(quantity, currentServings, initialServings);
+
+  const formattedAmount = onFormatIngredientAmount(amount, unitOfMeasure);
+
+  return formattedAmount ? `${formattedAmount} ${description}` : description;
 };

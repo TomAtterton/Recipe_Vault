@@ -1,11 +1,15 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 
-import { parseMetrics, scaleAmount } from '@/utils/ingredientsUtil';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './ingredientItem.style';
 import { useBoundStore } from '@/store';
+import {
+  onFormatIngredientAmount,
+  parseIngredientMetrics,
+  scaleAmount,
+} from '@/services/parser/ingredients/ingredientParser';
 
 const IngredientItem = ({ text, initialServings }: { text: string; initialServings: number }) => {
   const currentServings = useBoundStore((state) => state.currentServings);
@@ -18,23 +22,17 @@ const IngredientItem = ({ text, initialServings }: { text: string; initialServin
 
   const { description, quantity, unitOfMeasure } = useMemo(
     () =>
-      parseMetrics({
+      parseIngredientMetrics({
         note: text,
         recipeUnit,
       }) || {},
     [text, recipeUnit],
   );
 
-  const amount = useMemo(() => {
-    return scaleAmount(quantity, currentServings, initialServings);
-  }, [quantity, currentServings, initialServings]);
-
   const formattedAmount = useMemo(() => {
-    if (!amount && !unitOfMeasure) return '';
-    if (!amount) return unitOfMeasure;
-    if (!unitOfMeasure) return amount;
-    return `${amount} ${unitOfMeasure}`;
-  }, [amount, unitOfMeasure]);
+    const scaledAmount = scaleAmount(quantity, currentServings, initialServings);
+    return onFormatIngredientAmount(scaledAmount, unitOfMeasure);
+  }, [quantity, currentServings, initialServings, unitOfMeasure]);
 
   return (
     <View style={styles.container}>

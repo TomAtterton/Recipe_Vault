@@ -33,4 +33,5 @@ export enum Routes {
   JoinVault = 'JoinVault',
   Credits = 'Credits',
   AdvanceVaultSettings = 'AdvanceVaultSettings',
+  CookingOverview = 'CookingOverview',
 }

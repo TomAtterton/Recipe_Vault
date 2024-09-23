@@ -1,6 +1,6 @@
 import { StateCreator } from 'zustand';
 import { sliceResetFns } from '@/store/helper';
-import { RecipeUnit } from '@/utils/ingredientsUtil';
+import { RecipeUnit } from '@/services/parser/ingredients/ingredientParser';
 
 export type CurrentRecipeSlice = {
   currentRecipeUnit: RecipeUnit;

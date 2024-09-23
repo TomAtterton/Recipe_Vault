@@ -25,6 +25,10 @@ export type RootStackParamList = RecipeDetailStackParamList &
     [Routes.AccountSettings]: undefined;
     [Routes.AppSettings]: undefined;
     [Routes.RecipeSettings]: undefined;
+    [Routes.CookingOverview]: {
+      id: string;
+      initialServings: number;
+    };
     [Routes.SyncSettings]: undefined;
     [Routes.AdvanceSyncSettings]: undefined;
     [Routes.CreateVault]: undefined;

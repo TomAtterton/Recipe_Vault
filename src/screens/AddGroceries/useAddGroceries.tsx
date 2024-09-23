@@ -6,7 +6,10 @@ import { showErrorMessage } from '@/utils/promptUtils';
 import useGetRecipeIngredients from '@/database/api/recipes/hooks/useGetRecipeIngredients';
 import { RouteProp } from '@/navigation/types';
 import { useBoundStore } from '@/store';
-import { parseMetrics, scaleAmount } from '@/utils/ingredientsUtil';
+import {
+  parseIngredientMetrics,
+  scaleAmount,
+} from '@/services/parser/ingredients/ingredientParser';
 import { getRecipeServings } from '@/database/api/recipes';
 import { translate } from '@/core';
 
@@ -26,7 +29,7 @@ const useAddGroceries = () => {
     return ingredients.map((ingredient) => {
       const nameWithoutParentheses = ingredient.text.replace(/\(.*?\)/g, '').trim();
 
-      const { description, quantity, unitOfMeasure } = parseMetrics({
+      const { description, quantity, unitOfMeasure } = parseIngredientMetrics({
         note: nameWithoutParentheses,
         recipeUnit,
       });

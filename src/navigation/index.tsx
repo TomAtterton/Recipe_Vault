@@ -30,6 +30,7 @@ import ManageGroupUsers from '@/screens/Settings/pages/ManageGroupUsers';
 import WelcomeOnboarding from '@/screens/WelcomeOnboarding';
 import Credits from '@/screens/Credits';
 import AdvanceDatabaseSettings from '@/screens/Settings/pages/DatabaseSettings/AdvanceDatabaseSettings';
+import CookingOverview from '@/screens/CookingOverview';
 
 const Stack = createNativeStackNavigator();
 
@@ -86,7 +87,15 @@ export const RootNavigator = () => {
           navigationBarHidden: true,
         }}
       />
-
+      <Stack.Screen
+        name={Routes.CookingOverview}
+        component={CookingOverview}
+        options={{
+          headerShown: false,
+          presentation: 'containedModal',
+          navigationBarHidden: true,
+        }}
+      />
       <Stack.Screen
         key={Routes.Settings}
         name={Routes.Settings}

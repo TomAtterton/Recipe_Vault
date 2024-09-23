@@ -9,7 +9,6 @@ export const stylesheet = createStyleSheet(({ colors }, { screen }) => ({
       lg: 0,
       xl: 0,
     },
-    paddingHorizontal: 20,
     paddingVertical: 20,
   },
   contentContainer: {
@@ -17,6 +16,7 @@ export const stylesheet = createStyleSheet(({ colors }, { screen }) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 16,
+    paddingLeft: 20,
   },
   buttonContainer: {
     flex: 1,
@@ -45,7 +45,7 @@ export const stylesheet = createStyleSheet(({ colors }, { screen }) => ({
   },
   infoButton: {
     position: 'absolute',
-    right: 0,
+    right: 20,
   },
   infoContainer: {
     gap: 16,

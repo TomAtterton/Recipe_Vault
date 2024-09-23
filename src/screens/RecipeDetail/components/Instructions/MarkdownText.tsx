@@ -1,44 +1,41 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import { Text, View } from 'react-native';
-import { ingredientDescription, ingredientsParsed } from '@/utils/ingredientParseUtil';
-import { useMemo } from 'react';
-import { parseRecipeTextToMarkdown } from '@/utils/instructionParseUtil';
-import { Ingredient } from '@/types';
+import { View } from 'react-native';
 import { MenuView } from '@react-native-menu/menu';
 import Typography from '@/components/Typography';
-import { useBoundStore } from '@/store';
+import { parseIngredientToMarkdown } from '@/services/parser/ingredients/markdownParser';
+import { Ingredient } from '@/types';
+import { ingredientDescription } from './helper';
 
 interface Props {
   text: string;
+  sanitizedIngredients: string[];
   ingredients: Ingredient[];
   initialServings: number;
 }
 
-const MarkdownText = ({ text, ingredients, initialServings }: Props) => {
-  const parsedIngredients = useMemo(() => ingredientsParsed(ingredients), [ingredients]);
+const MarkdownText = ({ text, sanitizedIngredients, ingredients, initialServings }: Props) => {
   const markdownText = useMemo(
-    () => parseRecipeTextToMarkdown(text, parsedIngredients),
-    [text, parsedIngredients],
+    () => parseIngredientToMarkdown(text, sanitizedIngredients),
+    [text, sanitizedIngredients],
   );
+
   const { styles } = useStyles(stylesheet);
 
-  const currentServings = useBoundStore((state) => state.currentServings);
-  const recipeUnit = useBoundStore((state) => state.currentRecipeUnit);
+  const defaultVariant = 'titleMedium';
 
   return (
     <View style={styles.container}>
-      <Text>
-        {markdownText.split(/(\*\*.*?\*\*)/).map((fragment, index) => {
+      <Typography>
+        {markdownText.split(/(\*\*.*?\*\*|~~.*?~~|\^\^.*?\^\^)/).map((fragment, index) => {
           if (fragment.startsWith('**')) {
-            const ingredient = fragment.slice(2, -2);
+            // Ingredient handling
+            const ingredientKeyword = fragment.slice(2, -2);
 
             const description = ingredientDescription(
-              ingredient,
+              ingredientKeyword,
               ingredients,
               initialServings,
-              currentServings,
-              recipeUnit,
             );
 
             const MenuWrapper = description ? MenuView : View;
@@ -46,19 +43,48 @@ const MarkdownText = ({ text, ingredients, initialServings }: Props) => {
             return (
               <MenuWrapper key={index} actions={[{ id: `${index}`, title: description || '' }]}>
                 <View>
-                  <Typography style={styles.strong}>{ingredient}</Typography>
+                  <Typography variant={defaultVariant} style={[styles.strong, styles.base]}>
+                    {ingredientKeyword}
+                  </Typography>
                 </View>
               </MenuWrapper>
             );
+          } else if (fragment.startsWith('~~')) {
+            // Time handling
+            const timeValue = fragment.slice(2, -2);
+
+            return (
+              <Typography variant={defaultVariant} key={index} style={[styles.time, styles.base]}>
+                {timeValue}
+              </Typography>
+            );
+          } else if (fragment.startsWith('^^')) {
+            // Temperature handling
+            const tempValue = fragment.slice(2, -2);
+
+            return (
+              <Typography
+                variant={defaultVariant}
+                key={index}
+                style={[styles.temperature, styles.base]}
+              >
+                {tempValue}
+              </Typography>
+            );
           } else {
             return (
-              <Typography key={index} style={styles.body} lineBreakStrategyIOS={'none'}>
+              <Typography
+                variant={defaultVariant}
+                key={index}
+                style={[styles.body, styles.base]}
+                lineBreakStrategyIOS={'none'}
+              >
                 {fragment}
               </Typography>
             );
           }
         })}
-      </Text>
+      </Typography>
     </View>
   );
 };
@@ -67,14 +93,20 @@ const stylesheet = createStyleSheet((theme) => ({
   container: {
     paddingHorizontal: 12,
   },
-
+  base: {},
   body: {
     color: theme.colors.onBackground,
   },
   strong: {
-    ...theme.fonts.bodyMedium,
     color: theme.colors.primary,
     top: 2.6,
+  },
+  time: {
+    color: theme.colors.time,
+    fontStyle: 'italic',
+  },
+  temperature: {
+    color: theme.colors.temperature,
   },
 }));
 

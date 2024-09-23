@@ -64,6 +64,10 @@ const RecipeHeaderContent = ({ id }: Props) => {
   const hasPrepTime = useMemo(() => !!prepTime && !hasZeroOnly(prepTime), [prepTime]);
   const hasCookTime = useMemo(() => !!cookTime && !hasZeroOnly(cookTime), [cookTime]);
 
+  const handleOpenCookingMode = () => {
+    navigate(Routes.CookingOverview, { id, initialServings: data?.servings || 1 });
+  };
+
   return (
     <View style={styles.container} pointerEvents={'box-none'}>
       <View style={styles.contentContainer} pointerEvents={'box-none'}>
@@ -76,6 +80,11 @@ const RecipeHeaderContent = ({ id }: Props) => {
           <TimeContainer time={cookTime} title={translate('recipe_header_content.cook_time')} />
         )}
         <View style={styles.buttonContainer} pointerEvents={'box-none'}>
+          <IconButton
+            iconSource={'fork-knife'}
+            buttonSize={'medium'}
+            onPress={handleOpenCookingMode}
+          />
           <IconButton
             iconSource={'shopping-cart-add'}
             buttonSize={'medium'}
