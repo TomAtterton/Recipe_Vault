@@ -1,9 +1,9 @@
 import React from 'react';
-import { Linking, ScrollView, View } from 'react-native';
+import { Linking, ScrollView } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import Typography from '@/components/Typography';
-import BackButton from '@/components/BackButton';
 import { translate } from '@/core';
+import SettingsContainer from '@/components/SettingsContainer';
 
 const creditsData = [
   {
@@ -27,11 +27,8 @@ const Credits = () => {
   const { styles } = useStyles(stylesheet);
 
   return (
-    <View style={styles.container}>
+    <SettingsContainer title={translate('credits.title')}>
       <ScrollView style={styles.contentContainer}>
-        <Typography variant={'titleItalicLarge'} style={styles.title}>
-          {translate('credits.title')}
-        </Typography>
         {creditsData.map((credit, index) => (
           <Typography key={index} variant={'bodyMediumItalic'} style={styles.creditText}>
             {`${credit.description} `}
@@ -48,20 +45,14 @@ const Credits = () => {
           </Typography>
         ))}
       </ScrollView>
-      <BackButton />
-    </View>
+    </SettingsContainer>
   );
 };
 
-const stylesheet = createStyleSheet((theme, miniRuntime) => ({
-  container: {
-    flex: 1,
-    paddingTop: miniRuntime.insets.top + 60,
-  },
+const stylesheet = createStyleSheet((theme) => ({
   contentContainer: {
     flex: 1,
     paddingTop: 20,
-    paddingHorizontal: 20,
   },
   title: {
     marginBottom: 20,
