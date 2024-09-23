@@ -25,6 +25,9 @@ export const darkColors = {
   success: 'rgba(0, 100, 0, 1)',
   white: 'rgba(239, 224, 213, 1)',
   update: 'rgba(29, 30, 60, 1)',
+  //
+  time: 'rgba(133, 193, 233, 1)',
+  temperature: 'rgba(231, 76, 60, 1)',
 };
 
 export const lightColors = {
@@ -54,4 +57,7 @@ export const lightColors = {
   success: 'rgba(0, 100, 0, 1)',
   white: 'rgba(239, 224, 213, 1)',
   update: 'rgba(29, 30, 60, 1)',
+
+  time: 'rgba(133, 193, 233, 1)',
+  temperature: 'rgba(231, 76, 60, 1)',
 };

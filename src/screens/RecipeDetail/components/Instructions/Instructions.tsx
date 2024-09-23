@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Tabs } from 'react-native-collapsible-tab-view';
 import { Ingredient, Instruction } from '@/types';
 import useGetRecipeInstructions from '@/database/api/recipes/hooks/useGetRecipeInstructions';
@@ -7,6 +7,7 @@ import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import { FlatList, View } from 'react-native';
 import MarkdownText from '@/screens/RecipeDetail/components/Instructions/MarkdownText';
+import { flattenSanitizeIngredients } from '@/services/parser/ingredients/ingredientsParser';
 
 interface InstructionsProps {
   recipeId: string;
@@ -53,28 +54,44 @@ const Instructions: React.FC<InstructionsProps> = ({
 
   const { styles, breakpoint } = useStyles(stylesheet);
 
-  const handleRenderInstruction = ({ item }: { item: StepInstruction }) => {
-    if (typeof item === 'string') {
-      return (
-        <Typography variant={'titleItalicLarge'} style={styles.sectionHeader}>
-          {item}
-        </Typography>
-      );
-    }
+  const sanitizedIngredients = useMemo(
+    () => flattenSanitizeIngredients(ingredients),
+    [ingredients],
+  );
 
-    return (
-      <View style={styles.stepContainer}>
-        <Typography variant={'titleMedium'} style={styles.stepTitle}>
-          {`${item?.step}.`}
-        </Typography>
-        <MarkdownText
-          text={item?.text}
-          ingredients={ingredients}
-          initialServings={initialServings}
-        />
-      </View>
-    );
-  };
+  const handleRenderInstruction = useCallback(
+    ({ item }: { item: StepInstruction }) => {
+      if (typeof item === 'string') {
+        return (
+          <Typography variant={'titleItalicLarge'} style={styles.sectionHeader}>
+            {item}
+          </Typography>
+        );
+      }
+
+      return (
+        <View style={styles.stepContainer}>
+          <Typography variant={'titleMedium'} style={styles.stepTitle}>
+            {`${item?.step}.`}
+          </Typography>
+          <MarkdownText
+            text={item?.text}
+            sanitizedIngredients={sanitizedIngredients}
+            ingredients={ingredients}
+            initialServings={initialServings}
+          />
+        </View>
+      );
+    },
+    [
+      styles.stepContainer,
+      styles.stepTitle,
+      styles.sectionHeader,
+      sanitizedIngredients,
+      ingredients,
+      initialServings,
+    ],
+  );
 
   const isiPad = breakpoint === 'xl' || breakpoint === 'lg' || breakpoint === 'md';
   const ListComponent = isiPad ? FlatList : Tabs.FlatList;

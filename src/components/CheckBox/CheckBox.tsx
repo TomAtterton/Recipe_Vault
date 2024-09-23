@@ -11,11 +11,12 @@ interface Props {
   label?: string;
   isSelected: boolean;
   onPress: () => void;
+  numberOfLines?: number;
 }
 
 const SIZE = 40;
 
-const CheckBox = ({ style, size = SIZE, label, isSelected, onPress }: Props) => {
+const CheckBox = ({ style, size = SIZE, label, isSelected, onPress, numberOfLines = 1 }: Props) => {
   const { styles, theme } = useStyles(stylesheet);
   const selectedSize = size * 0.5;
 
@@ -41,7 +42,7 @@ const CheckBox = ({ style, size = SIZE, label, isSelected, onPress }: Props) => 
         </View>
       </SquircleDynamicContainer>
       {!!label && (
-        <Typography style={styles.title} variant="titleMedium" numberOfLines={1}>
+        <Typography style={styles.title} variant="titleMedium" numberOfLines={numberOfLines}>
           {label}
         </Typography>
       )}

@@ -31,6 +31,11 @@
     "freepik": "Assets provided by",
     "special_thanks": "Special thanks to all contributors and open-source projects that made this app possible."
   },
+  "cooking_overview": {
+    "ingredients": "Ingredients",
+    "current_step": "Current Step",
+    "all_ingredients": "All Ingredients"
+  },
   "chip_list_header": {
     "add_new_item": "Add new item",
     "item_exists": "Item already exists",

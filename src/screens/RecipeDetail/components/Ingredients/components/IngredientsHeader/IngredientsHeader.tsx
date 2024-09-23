@@ -9,7 +9,7 @@ import { stylesheet } from './ingredientsHeader.style';
 import LabelButton from '@/components/buttons/LabelButton';
 import { useBoundStore } from '@/store';
 import { MenuView } from '@react-native-menu/menu';
-import { RecipeUnit } from '@/utils/ingredientsUtil';
+import { RecipeUnit } from '@/services/parser/ingredients/ingredientParser';
 
 const IngredientHeader = () => {
   const { styles, theme } = useStyles(stylesheet);
