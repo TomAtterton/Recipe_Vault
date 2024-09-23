@@ -113,7 +113,6 @@ const BrowserBar = ({
             style={styles.title}
             onPress={() => {
               setShowBookmark(true);
-              console.log('input', url);
               showInput &&
                 showInput({
                   placeholder: 'Enter URL',

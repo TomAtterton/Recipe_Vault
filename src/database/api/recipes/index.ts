@@ -115,7 +115,6 @@ export const updateRelatedTable = async ({
   recipe_id: string;
 }) => {
   if (data && data.length === 0) return;
-  console.log('test');
   try {
     const group_id = useBoundStore.getState().profile.groupId;
     const currentTimestamp = new Date().toISOString();
