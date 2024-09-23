@@ -14,8 +14,10 @@ import { styleSheet } from './ingredientBottomSheet.style';
 import useIngredientBottomSheetAnimations from './useIngredientBottomSheetAnimations';
 import { formatIngredient } from '@/services/parser/ingredients/ingredientParser';
 import { filterIngredientsForCurrentStep } from '@/services/parser/ingredients/ingredientsParser';
+import type { SharedValue } from 'react-native-reanimated/src/commonTypes';
 
 interface Props {
+  sheetHeight: SharedValue<number>;
   ingredients: Ingredient[];
   instructions: Instruction[];
   parsedIngredients: string[];
@@ -29,6 +31,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const keyExtractor = (item: string, index: number) => `${item}-${index}`;
 
 const IngredientBottomSheet = ({
+  sheetHeight,
   ingredients,
   parsedIngredients,
   currentStep,
@@ -40,6 +43,16 @@ const IngredientBottomSheet = ({
 
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [ingredientsFormat, setIngredientsFormat] = useState<'currentStep' | 'all'>('currentStep');
+
+  const {
+    animatedBackdropStyle,
+    animatedPaginationStyle,
+    animatedSheetStyle,
+    animatedIngredientStyle,
+    animatedMenuViewStyle,
+    gestures,
+    handleDismiss,
+  } = useIngredientBottomSheetAnimations(sheetHeight);
 
   const scaledIngredients = useMemo(() => {
     return ingredients.map((item) => formatIngredient(item.text, initialServings));
@@ -76,16 +89,6 @@ const IngredientBottomSheet = ({
     ),
     [selectedIngredients, styles.checkBox],
   );
-
-  const {
-    animatedBackdropStyle,
-    animatedPaginationStyle,
-    animatedSheetStyle,
-    animatedIngredientStyle,
-    animatedMenuViewStyle,
-    gestures,
-    handleDismiss,
-  } = useIngredientBottomSheetAnimations();
 
   return (
     <>

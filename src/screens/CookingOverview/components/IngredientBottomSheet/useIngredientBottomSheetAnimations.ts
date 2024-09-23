@@ -1,15 +1,13 @@
-import { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { interpolate, useAnimatedStyle, withTiming, SharedValue } from 'react-native-reanimated';
 import { Directions, Gesture } from 'react-native-gesture-handler';
 import { useWindowDimensions } from 'react-native';
 
-const useIngredientBottomSheetAnimations = () => {
+const useIngredientBottomSheetAnimations = (sheetHeight: SharedValue<number>) => {
   const { height: screenHeight, width: screenWidth } = useWindowDimensions();
 
   const MIN_SHEET_HEIGHT = screenHeight * 0.1;
   const MID_SHEET_HEIGHT = screenHeight * 0.4;
   const MAX_SHEET_HEIGHT = screenHeight * 0.8;
-
-  const sheetHeight = useSharedValue(MIN_SHEET_HEIGHT);
 
   const animatedSheetStyle = useAnimatedStyle(() => {
     return {
