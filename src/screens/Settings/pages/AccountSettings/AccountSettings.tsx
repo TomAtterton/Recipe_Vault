@@ -1,22 +1,20 @@
-import { SafeAreaView, View, Alert } from 'react-native';
+import { View, Alert } from 'react-native';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import * as React from 'react';
 import { setResetDatabase, setResetProfile, useBoundStore } from '@/store';
 import InfoLabelButton from '@/components/buttons/InfoLabelButton';
 import { translate } from '@/core';
-import NavBarButton from '@/components/buttons/NavBarButton';
-import { useNavigation } from '@react-navigation/native';
 import { stylesheet } from './accountSettings.style';
 import OutlineButton from '@/components/buttons/OutlineButton';
 import { onOpenDatabase } from '@/database';
 import { Env } from '@/core/env';
 import { onDeleteUser, onSignOut } from '@/services/auth';
 import { showErrorMessage } from '@/utils/promptUtils';
+import SettingsContainer from '@/components/SettingsContainer';
 
 const AccountSettings = () => {
   const { styles } = useStyles(stylesheet);
-  const { goBack } = useNavigation();
 
   const name = useBoundStore((state) => state.profile.name);
   const email = useBoundStore((state) => state.profile.email);
@@ -65,28 +63,24 @@ const AccountSettings = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
-      <View style={styles.container}>
-        <Typography variant={'titleItalicLarge'}>{translate('account_settings.title')}</Typography>
-        <InfoLabelButton title={translate('account_settings.name')} buttonTitle={name} />
-        <InfoLabelButton title={translate('account_settings.email')} buttonTitle={email} />
-        <View style={styles.dangerZoneContainer}>
-          <Typography variant={'titleLarge'} style={styles.dangerZoneTitle}>
-            {translate('account_settings.danger_zone')}
-          </Typography>
-          <Typography variant={'bodyMedium'}>
-            {translate('account_settings.danger_zone_description')}
-          </Typography>
-          <OutlineButton
-            title={translate('account_settings.delete_account')}
-            onPress={handleDeleteAccount}
-            style={styles.deleteButton}
-            isLoading={isLoading}
-          />
-        </View>
+    <SettingsContainer title={translate('account_settings.title')}>
+      <InfoLabelButton title={translate('account_settings.name')} buttonTitle={name} />
+      <InfoLabelButton title={translate('account_settings.email')} buttonTitle={email} />
+      <View style={styles.dangerZoneContainer}>
+        <Typography variant={'titleLarge'} style={styles.dangerZoneTitle}>
+          {translate('account_settings.danger_zone')}
+        </Typography>
+        <Typography variant={'bodyMedium'}>
+          {translate('account_settings.danger_zone_description')}
+        </Typography>
+        <OutlineButton
+          title={translate('account_settings.delete_account')}
+          onPress={handleDeleteAccount}
+          style={styles.deleteButton}
+          isLoading={isLoading}
+        />
       </View>
-    </SafeAreaView>
+    </SettingsContainer>
   );
 };
 

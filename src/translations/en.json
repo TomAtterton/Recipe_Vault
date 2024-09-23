@@ -75,7 +75,7 @@
     "account_settings": "Account Settings"
   },
   "app_settings": {
-    "title": "App Settings.",
+    "title": "General Settings.",
     "app_version": "App Version",
     "show_onboarding": "Show Onboarding",
     "credits": "Credits"
@@ -109,7 +109,7 @@
     "title": "Vault Settings.",
     "current_vault": "Current Vault:",
     "synced_to_cloud": "Synced to Cloud:",
-    "add_vault_button": "+ Create or Join a Vault",
+    "add_vault_button": "Create or Join a Vault",
     "switch_vault": "Switch Vault",
     "share_vault": "Share Vault",
     "advanced_vault_settings": "Advanced Vault Settings",
@@ -344,7 +344,7 @@
     "for_text": "{{title}} for"
   },
   "advance_settings": {
-    "title": "Advance Database Settings.",
+    "title": "Advance Vault Settings.",
     "danger_zone": "Danger Zone",
     "danger_zone_description": "Having trouble with your database? Be careful with these settings. This action is irreversible.",
     "clear_all_recipes": "Clear All Recipes",

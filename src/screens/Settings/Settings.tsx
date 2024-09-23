@@ -7,7 +7,6 @@ import { stylesheet } from '@/screens/Settings/settings.style';
 import SettingsButton from '@/components/buttons/SettingsButton';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
-import Typography from '@/components/Typography';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { requestReview } from 'expo-store-review';
 import SupportApp from '@/screens/SupportApp';
@@ -40,7 +39,6 @@ const Settings = () => {
     >
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
       <View style={styles.contentContainer}>
-        <Typography variant={'titleItalicLarge'}>{translate('app_settings.title')}</Typography>
         <SettingsButton
           title={translate('general_settings.general')}
           onPress={() => navigate(Routes.AppSettings)}

@@ -1,10 +1,9 @@
-import { SafeAreaView, Share, TouchableOpacity, View } from 'react-native';
+import { Share, TouchableOpacity, View } from 'react-native';
 import Typography from '@/components/Typography';
 import { useStyles } from 'react-native-unistyles';
 import SettingsButton from '@/components/buttons/SettingsButton';
 import * as React from 'react';
 import InfoLabelButton from '@/components/buttons/InfoLabelButton';
-import NavBarButton from '@/components/buttons/NavBarButton';
 import { useNavigation } from '@react-navigation/native';
 import { stylesheet } from '@/screens/Settings/pages/DatabaseSettings/databaseSettings.style';
 import { Routes } from '@/navigation/Routes';
@@ -14,13 +13,14 @@ import { Env } from '@/core/env';
 import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 import { useRef } from 'react';
 import useIsLoggedIn from '@/hooks/common/useIsLoggedIn';
-import LabelButton from '@/components/buttons/LabelButton';
 import Icon from '@/components/Icon';
 import { translate } from '@/core';
+import AddButton from '@/components/buttons/AddButton';
+import SettingsContainer from '@/components/SettingsContainer';
 
 const DatabaseSettingsScreen = () => {
   const { styles } = useStyles(stylesheet);
-  const { goBack, navigate } = useNavigation();
+  const { navigate } = useNavigation();
 
   const createJoinBottomSheetRef = useRef<BottomSheetRef>(null);
   const manageVaultBottomSheetRef = useRef<BottomSheetRef>(null);
@@ -52,49 +52,43 @@ const DatabaseSettingsScreen = () => {
   const isLocalVault = currentGroupId === Env.TEST_GROUP_ID;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <NavBarButton style={styles.backButton} iconSource="arrow-left" onPress={goBack} />
-      <View style={styles.container}>
-        <Typography variant="titleLarge">{translate('database_settings.title')}</Typography>
-        <InfoLabelButton
-          title={translate('database_settings.current_vault')}
-          buttonTitle={databaseName}
+    <SettingsContainer title={translate('database_settings.title')}>
+      <InfoLabelButton
+        title={translate('database_settings.current_vault')}
+        buttonTitle={databaseName}
+        onPress={() => manageVaultBottomSheetRef.current?.present()}
+        iconSource={isLocalVault ? 'vault' : 'cloud'}
+      />
+      {availableGroups && availableGroups.length < 3 && (
+        <AddButton
+          style={styles.addVaultButton}
+          title={translate('database_settings.add_vault_button')}
+          onPress={handleCreateOrJoinVault}
         />
-        <InfoLabelButton
-          title={translate('database_settings.synced_to_cloud')}
-          buttonTitle={isLocalVault ? 'false' : 'true'}
+      )}
+      <View style={styles.vaultsContainer}>
+        <SettingsButton
+          title={translate('database_settings.switch_vault')}
+          onPress={() => manageVaultBottomSheetRef.current?.present()}
+          iconSource="vault"
         />
-        {availableGroups && availableGroups.length < 3 && (
-          <LabelButton
-            style={styles.addVaultButton}
-            title={translate('database_settings.add_vault_button')}
-            onPress={handleCreateOrJoinVault}
+        {!isLocalVault && (
+          <SettingsButton
+            title={translate('database_settings.share_vault')}
+            onPress={async () => {
+              await Share.share({
+                title: 'Share database code with a friend',
+                message: currentGroupId || '',
+              });
+            }}
+            iconSource="paper-plane"
           />
         )}
-        <View style={styles.vaultsContainer}>
-          <SettingsButton
-            title={translate('database_settings.switch_vault')}
-            onPress={() => manageVaultBottomSheetRef.current?.present()}
-            iconSource="vault"
-          />
-          {!isLocalVault && (
-            <SettingsButton
-              title={translate('database_settings.share_vault')}
-              onPress={async () => {
-                await Share.share({
-                  title: 'Share database code with a friend',
-                  message: currentGroupId || '',
-                });
-              }}
-              iconSource="paper-plane"
-            />
-          )}
-          <SettingsButton
-            title={translate('database_settings.advanced_vault_settings')}
-            onPress={() => navigate(Routes.AdvanceVaultSettings)}
-            iconSource="cog"
-          />
-        </View>
+        <SettingsButton
+          title={translate('database_settings.advanced_vault_settings')}
+          onPress={() => navigate(Routes.AdvanceVaultSettings)}
+          iconSource="cog"
+        />
       </View>
       <BottomSheet
         bottomSheetRef={createJoinBottomSheetRef}
@@ -157,7 +151,7 @@ const DatabaseSettingsScreen = () => {
           </TouchableOpacity>
         </View>
       </BottomSheet>
-    </SafeAreaView>
+    </SettingsContainer>
   );
 };
 

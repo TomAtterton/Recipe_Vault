@@ -1,4 +1,4 @@
-import { Alert, SafeAreaView, View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { translate } from '@/core';
 import { database, onDeleteDatabase, onOpenDatabase } from '@/database';
 import { showErrorMessage, showSuccessMessage } from '@/utils/promptUtils';
@@ -7,12 +7,11 @@ import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from '@/screens/Settings/pages/DatabaseSettings/databaseSettings.style';
 import Typography from '@/components/Typography';
 import SettingsButton from '@/components/buttons/SettingsButton';
-import NavBarButton from '@/components/buttons/NavBarButton';
 import * as React from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { onDeleteGroup } from '@/services/group';
 import { setResetDatabase, updateProfile, useBoundStore } from '@/store';
 import { Env } from '@/core/env';
+import SettingsContainer from '@/components/SettingsContainer';
 
 const AdvanceDatabaseSettings = () => {
   const handleResetDatabase = async () => {
@@ -117,40 +116,35 @@ const AdvanceDatabaseSettings = () => {
   };
 
   const { styles } = useStyles(stylesheet);
-  const { goBack } = useNavigation();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
-      <View style={styles.container}>
-        <Typography variant={'titleLarge'}>{translate('advance_settings.title')}</Typography>
-        <View style={styles.dangerZoneContainer}>
-          <Typography variant={'titleLarge'} style={styles.dangerZoneTitle}>
-            {translate('advance_settings.danger_zone')}
-          </Typography>
-          <Typography variant={'bodyMedium'}>
-            {translate('advance_settings.danger_zone_description')}
-          </Typography>
+    <SettingsContainer title={translate('advance_settings.title')}>
+      <View style={styles.dangerZoneContainer}>
+        <Typography variant={'titleLarge'} style={styles.dangerZoneTitle}>
+          {translate('advance_settings.danger_zone')}
+        </Typography>
+        <Typography variant={'bodyMedium'}>
+          {translate('advance_settings.danger_zone_description')}
+        </Typography>
+        <SettingsButton
+          title={translate('advance_settings.clear_all_recipes')}
+          onPress={handleClearDatabase}
+          iconSource={'bin'}
+        />
+        <SettingsButton
+          title={translate('advance_settings.delete_reset_vault')}
+          onPress={handleResetDatabase}
+          iconSource={'bin'}
+        />
+        {currentGroupId !== Env.TEST_GROUP_ID && (
           <SettingsButton
-            title={translate('advance_settings.clear_all_recipes')}
-            onPress={handleClearDatabase}
+            title={translate('advance_settings.delete_cloud_vault')}
+            onPress={handleDeleteCloudVault}
             iconSource={'bin'}
           />
-          <SettingsButton
-            title={translate('advance_settings.delete_reset_vault')}
-            onPress={handleResetDatabase}
-            iconSource={'bin'}
-          />
-          {currentGroupId !== Env.TEST_GROUP_ID && (
-            <SettingsButton
-              title={translate('advance_settings.delete_cloud_vault')}
-              onPress={handleDeleteCloudVault}
-              iconSource={'bin'}
-            />
-          )}
-        </View>
+        )}
       </View>
-    </SafeAreaView>
+    </SettingsContainer>
   );
 };
 

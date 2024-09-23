@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useBoundStore } from '@/store';
-import { SafeAreaView, View } from 'react-native';
+import { View } from 'react-native';
 import Typography from '@/components/Typography';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import * as React from 'react';
-import NavBarButton from '@/components/buttons/NavBarButton';
-import { useNavigation } from '@react-navigation/native';
 import { getProfileGroupsWithId } from '@/services/profileGroup';
 import { translate } from '@/core';
+import SettingsContainer from '@/components/SettingsContainer';
 
 type User = {
   id?: string | null;
@@ -23,7 +22,6 @@ const ManageGroupUsers = () => {
   const userId = useBoundStore((state) => state.session?.user.id);
   const groupId = useBoundStore((state) => state.profile.groupId);
   const { styles } = useStyles(stylesheet);
-  const { goBack } = useNavigation();
   useEffect(() => {
     getProfileGroupsWithId({ groupId }).then((_) => {
       setGroupName(_.groupName);
@@ -32,26 +30,20 @@ const ManageGroupUsers = () => {
   }, [groupId, userId]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
-      <View style={styles.container}>
-        <Typography variant={'titleItalicLarge'}>
-          {translate('manage_group_users.title')}
-        </Typography>
-        <Typography
-          style={styles.title}
-          variant={'titleMedium'}
-        >{`${translate('manage_group_users.vault_title')}${groupName}`}</Typography>
-        <View>
-          {users?.map((user) => (
-            <View key={user.id} style={styles.item}>
-              <Typography>{user.name}</Typography>
-              <Typography>{user.groupRole}</Typography>
-            </View>
-          ))}
-        </View>
+    <SettingsContainer title={translate('manage_group_users.title')}>
+      <Typography
+        style={styles.title}
+        variant={'titleMedium'}
+      >{`${translate('manage_group_users.vault_title')}${groupName}`}</Typography>
+      <View>
+        {users?.map((user) => (
+          <View key={user.id} style={styles.item}>
+            <Typography>{user.name}</Typography>
+            <Typography>{user.groupRole}</Typography>
+          </View>
+        ))}
       </View>
-    </SafeAreaView>
+    </SettingsContainer>
   );
 };
 
