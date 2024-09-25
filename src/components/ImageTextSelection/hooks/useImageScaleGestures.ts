@@ -1,37 +1,60 @@
+import { useWindowDimensions } from 'react-native';
+import { SharedValue, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { Gesture } from 'react-native-gesture-handler';
-import { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { clamp } from '@/components/ImageZoom/utils/clamp';
 
-import { clamp } from '../utils/clamp';
-import { type ImageZoomUseGesturesProps } from '../types';
+const minScale = 1;
+const maxScale = 5;
 
-export const useGestures = ({ center, minScale = 1, maxScale = 5 }: ImageZoomUseGesturesProps) => {
+interface Props {
+  isSelecting: SharedValue<number>;
+  scaledImageHeight: number;
+  imageUri: string;
+}
+
+const useImageScaleGestures = ({ isSelecting, scaledImageHeight }: Props) => {
+  const { width } = useWindowDimensions();
+
   const scale = useSharedValue(1);
   const initialFocal = { x: useSharedValue(0), y: useSharedValue(0) };
   const focal = { x: useSharedValue(0), y: useSharedValue(0) };
   const translate = { x: useSharedValue(0), y: useSharedValue(0) };
   const lastTranslate = { x: useSharedValue(0), y: useSharedValue(0) };
+  const lastScale = useSharedValue(1); // Store the last scale
+  const center = { x: width / 2, y: scaledImageHeight / 2 };
 
   const panGesture = Gesture.Pan()
     .onStart(() => {
+      if (isSelecting.value === 1) {
+        return;
+      }
       // On start of the gesture, set translate to last known values
       translate.x.value = lastTranslate.x.value;
       translate.y.value = lastTranslate.y.value;
     })
     .onUpdate((event) => {
+      if (isSelecting.value === 1) {
+        return;
+      }
+
       // Update the translate values based on the gesture movement
       translate.x.value = lastTranslate.x.value + event.translationX;
       translate.y.value = lastTranslate.y.value + event.translationY;
     })
     .onEnd(() => {
+      if (isSelecting.value === 1) {
+        return;
+      }
       // On end of the gesture, store the last translation values
       lastTranslate.x.value = translate.x.value;
       lastTranslate.y.value = translate.y.value;
     });
 
-  const lastScale = useSharedValue(1); // Store the last scale
-
   const pinchGesture = Gesture.Pinch()
     .onStart((event) => {
+      if (isSelecting.value === 1) {
+        return;
+      }
       // Store the initial focal point when the gesture starts
       initialFocal.x.value = event.focalX;
       initialFocal.y.value = event.focalY;
@@ -40,6 +63,9 @@ export const useGestures = ({ center, minScale = 1, maxScale = 5 }: ImageZoomUse
       scale.value = lastScale.value;
     })
     .onUpdate((event) => {
+      if (isSelecting.value === 1) {
+        return;
+      }
       // Update the scale value based on the gesture
       scale.value = clamp(lastScale.value * event.scale, minScale, maxScale);
 
@@ -48,6 +74,9 @@ export const useGestures = ({ center, minScale = 1, maxScale = 5 }: ImageZoomUse
       focal.y.value = (center.y - initialFocal.y.value) * (scale.value - 1);
     })
     .onEnd(() => {
+      if (isSelecting.value === 1) {
+        return;
+      }
       // Store the last scale value when the gesture ends
       lastScale.value = scale.value;
     });
@@ -62,7 +91,11 @@ export const useGestures = ({ center, minScale = 1, maxScale = 5 }: ImageZoomUse
     ],
   }));
 
-  const gestures = Gesture.Simultaneous(pinchGesture, panGesture);
-
-  return { gestures, animatedStyle };
+  return {
+    animatedStyle,
+    panGesture,
+    pinchGesture,
+  };
 };
+
+export default useImageScaleGestures;

@@ -16,6 +16,8 @@ export type IconName =
   | 'minus'
   | 'people'
   | 'plus'
+  | 'select'
+  | 'close-circle'
   | 'filter'
   | 'search'
   | 'bookmark-add'

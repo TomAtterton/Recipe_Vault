@@ -34,4 +34,5 @@ export enum Routes {
   Credits = 'Credits',
   AdvanceVaultSettings = 'AdvanceVaultSettings',
   CookingOverview = 'CookingOverview',
+  ImageTextSelection = 'ImageTextSelection',
 }

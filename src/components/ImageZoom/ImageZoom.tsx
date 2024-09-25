@@ -23,6 +23,7 @@ const ImageZoom: React.FC<ImageZoomProps> = ({
   style = {},
 }) => {
   const { center, onImageLayout } = useImageLayout({ onLayout });
+
   const { animatedStyle, gestures } = useGestures({
     center,
     minScale,

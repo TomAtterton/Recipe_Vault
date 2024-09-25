@@ -3,49 +3,86 @@ import Foundation
 import MLKitTextRecognition
 import MLKitVision
 
+
+
+
+
 public class ExpoVisionModule: Module {
+    
+    
+    struct Result {
+        let text: String
+        let boundingBox: CGRect
+    }
+
+ private func encodeResult(result: [TextBlock]) -> [[String:Any]?] {
+        result.compactMap { currentBlock in
+            return [
+                "text": currentBlock.text,
+                "boundingBox": [
+                    "x": currentBlock.frame.origin.x,
+                    "y": currentBlock.frame.origin.y,
+                    "width": currentBlock.frame.size.width,
+                    "height": currentBlock.frame.size.height
+                ],
+                "lines": currentBlock.lines.compactMap { line in
+                    return line.text
+                }
+            ]
+        }
+    }
+
+    enum ExpoVisionError: String {
+      case fileNotFound = "ERR_FILE_NOT_FOUND"
+      case imageLoadFailed = "ERR_IMAGE_LOAD_FAILED"
+      // Add more as needed
+    }
+    
+    
+    
+    
   public func definition() -> ModuleDefinition {
     Name("ExpoVision")
 
-    AsyncFunction("fetchTextFromImage") { (filePath: String, promise: Promise) in
+      AsyncFunction("fetchTextFromImage") { (filePath: String, promise: Promise) in
 
-        guard FileManager.default.fileExists(atPath: URL(fileURLWithPath: filePath).path) else {
-            promise.reject(NSError(domain: "ExpoVision", code: 1, userInfo: [NSLocalizedDescriptionKey: "File does not exist at path."]))
-            return
-        }
-      // Load the image from the file path
-      guard let image = UIImage(contentsOfFile: filePath) else {
-        promise.reject(NSError(domain: "ExpoVision", code: 2, userInfo: [NSLocalizedDescriptionKey: "Failed to load image from file path."]))
-        return
-      }
-
-        // Convert UIImage to MLImage
-        guard let mlImage = MLImage(image: image) else {
-          promise.reject("ERR_IMAGE_NOT_FOUND", "Issue converting image")
+        guard FileManager.default.fileExists(atPath: filePath) else {
+          promise.reject("ERR_FILE_NOT_FOUND", "File does not exist at path.")
           return
         }
 
-        let options = TextRecognizerOptions() /// same thing as `TextRecognizerOptions.init()`
+        guard let image = UIImage(contentsOfFile: filePath) else {
+          promise.reject("ERR_IMAGE_LOAD_FAILED", "Failed to load image from file path.")
+          return
+        }
 
-      // Initialize the text recognizer with default options (multi-language support)
+        let mlImage = VisionImage(image: image)
+        mlImage.orientation = image.imageOrientation
+          
+        let options = TextRecognizerOptions()
         let textRecognizer = TextRecognizer.textRecognizer(options: options)
 
-      // Process the image
-      textRecognizer.process(mlImage) { result, error in
-        if let error = error {
-          promise.reject(error)
-          return
-        }
+        textRecognizer.process(mlImage) { result, error in
+          if let error = error {
+            promise.reject("ERR_TEXT_RECOGNITION_FAILED", error.localizedDescription)
+            return
+          }
 
-        guard let result = result else {
-          promise.reject(NSError(domain: "ExpoVision", code: 3, userInfo: [NSLocalizedDescriptionKey: "Text recognition failed."]))
-          return
-        }
+          guard let result = result else {
+            promise.reject("ERR_TEXT_RECOGNITION_FAILED", "Text recognition failed.")
+            return
+          }
 
-        // Extract recognized text
-        let recognizedText = result.text
-        promise.resolve(recognizedText)
+          let recognizedText = result.text
+          let encodedBlocks = self.encodeResult(result: result.blocks)
+            
+          let response: [String: Any] = [
+            "text": recognizedText,
+            "blocks": encodedBlocks
+          ]
+            
+          promise.resolve(response)
+        }
       }
-    }
   }
 }
