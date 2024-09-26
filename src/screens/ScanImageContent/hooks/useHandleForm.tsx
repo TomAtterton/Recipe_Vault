@@ -10,10 +10,11 @@ interface Props {
   id?: string | null;
   formId: keyof RecipeFormType;
   isEditing?: boolean;
+  isNested?: boolean;
   value: string;
 }
 
-const useHandleForm = ({ id, formId, isEditing, value }: Props) => {
+const useHandleForm = ({ id, formId, isEditing, isNested, value }: Props) => {
   const navigation = useNavigation();
   const setScannedRecipe = useBoundStore((state) => state.setScannedRecipe);
 
@@ -28,8 +29,8 @@ const useHandleForm = ({ id, formId, isEditing, value }: Props) => {
         params: { id },
       });
     }
-    return navigateToAddRecipe({ navigation, params: { id } });
-  }, [formId, id, isEditing, navigation, setScannedRecipe, value]);
+    return navigateToAddRecipe({ navigation, params: { id, isNested } });
+  }, [formId, id, isEditing, isNested, navigation, setScannedRecipe, value]);
 
   return {
     handleSave,

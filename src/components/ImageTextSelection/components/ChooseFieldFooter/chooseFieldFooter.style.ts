@@ -9,9 +9,8 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     paddingHorizontal: 20,
-    gap: 16,
     paddingTop: 20,
-    paddingBottom: miniRuntime.insets.bottom + 20,
+    paddingBottom: miniRuntime.insets.bottom,
   },
   menuContainer: {
     flexDirection: 'row',
@@ -39,23 +38,5 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   },
   title: {
     color: theme.colors.primary,
-  },
-  description: {
-    color: theme.colors.onBackground80,
-    textAlign: 'center',
-  },
-  cancelButton: {
-    position: 'absolute',
-    left: 20,
-    bottom: miniRuntime.insets.bottom,
-  },
-  addButton: {
-    width: '80%',
-    alignSelf: 'center',
-  },
-  editButton: {
-    position: 'absolute',
-    top: 30,
-    right: 20,
   },
 }));

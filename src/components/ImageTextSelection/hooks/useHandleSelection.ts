@@ -17,7 +17,6 @@ interface Props {
   selectedBoundingBoxColors: BoundingBoxColors;
   setSelectedBlocks: Dispatch<SetStateAction<SelectedBox[]>>;
   currentSelection: FieldSelection | undefined;
-  setCurrentSelection: (value: FieldSelection | undefined) => void;
   handleResetBoundingBox: () => void;
 }
 
@@ -30,14 +29,8 @@ const useHandleSelection = ({
   selectedBoundingBoxColors,
   setSelectedBlocks,
   currentSelection,
-  setCurrentSelection,
   handleResetBoundingBox,
 }: Props) => {
-  const handleCancel = () => {
-    handleResetBoundingBox();
-    setCurrentSelection(undefined);
-  };
-
   const handleAdd = () => {
     const selected = scaledBlock.filter((block) =>
       isBlockInsideBoundingBox(block, {
@@ -75,7 +68,7 @@ const useHandleSelection = ({
           return [
             ...prev,
             {
-              title: currentSelection as string,
+              title: currentSelection,
               color: selectedBoundingBoxColors[currentSelection],
               boundingBoxes: selected.map((block) => ({
                 text: block.text,
@@ -90,21 +83,18 @@ const useHandleSelection = ({
       });
     }
 
-    setCurrentSelection(undefined);
     handleResetBoundingBox();
   };
 
-  const isBlockInsideBoundingBox = (blockBox: ScaledBlock, selectionBox: BoundingBox) => {
-    return !(
+  const isBlockInsideBoundingBox = (blockBox: ScaledBlock, selectionBox: BoundingBox) =>
+    !(
       blockBox.x > selectionBox.x + selectionBox.width ||
       blockBox.x + blockBox.width < selectionBox.x ||
       blockBox.y > selectionBox.y + selectionBox.height ||
       blockBox.y + blockBox.height < selectionBox.y
     );
-  };
 
   return {
-    handleCancel,
     handleAdd,
   };
 };

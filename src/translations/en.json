@@ -302,7 +302,10 @@
     "servings": "Servings",
     "prepTime": "Prep Time",
     "cookTime": "Cook Time",
-    "remove": "Remove"
+    "remove": "Remove",
+    "onboarding_title": "Well Hello There!",
+    "onboarding_description": "To get started, just tap and drag to select the text you want to extract.\n\nThen add the selection to the recipe by tapping the green button.\n\nDon't forget to select the type of field you are adding! \uD83E\uDD73",
+    "onboarding_button": "Got it!"
   },
   "mealplan": {
     "add_success": "Meal plan created successfully"

@@ -54,6 +54,7 @@ const RecipeForm = ({
   const { handleScanLiveText } = useScanImageParser({
     id,
     isEditing,
+    isNested,
   });
 
   const handleDeleteRecipe = () => {

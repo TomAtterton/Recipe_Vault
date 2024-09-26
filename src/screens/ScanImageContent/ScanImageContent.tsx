@@ -24,7 +24,7 @@ import { stylesheet } from './scanImageContent.style';
 
 const ScanImageContainer = () => {
   const {
-    params: { id, value: currentValue, formId, isEditing },
+    params: { id, value: currentValue, formId, isEditing, isNested },
   } = useRoute<RouteProp<Routes.ScanImageContent>>();
   const [value, setValue] = useState<string>(currentValue);
   const [showFullScreen, setShowFullScreen] = useState(false);
@@ -36,7 +36,7 @@ const ScanImageContainer = () => {
   const translateY = useSharedValue(height * 2);
   const { top } = useSafeAreaInsets();
 
-  const { handleSave } = useHandleForm({ id, formId, isEditing, value });
+  const { handleSave } = useHandleForm({ id, formId, isEditing, isNested, value });
 
   useHandleCopyPaste({
     onCallback: () => {

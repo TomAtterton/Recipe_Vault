@@ -50,6 +50,7 @@ export type RootStackParamList = RecipeDetailStackParamList &
       value: string;
       formId?: keyof RecipeFormType;
       isEditing?: boolean;
+      isNested?: boolean;
     };
   };
 

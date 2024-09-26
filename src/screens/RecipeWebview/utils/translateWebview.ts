@@ -104,7 +104,7 @@ const convertImage = (
   }
 };
 
-const convertRecipeYield = (recipeYield?: string | number | string[]): number => {
+export const convertRecipeYield = (recipeYield?: string | number | string[]): number => {
   if (typeof recipeYield === 'number') {
     return recipeYield;
   } else if (typeof recipeYield === 'string') {

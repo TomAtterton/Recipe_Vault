@@ -4,7 +4,15 @@ import { RecipeFormType } from '@/utils/recipeFormUtil';
 import { useCallback, useEffect } from 'react';
 import { setScannedImage } from '@/store';
 
-const useScanImageParser = ({ isEditing, id }: { id?: string | null; isEditing?: boolean }) => {
+const useScanImageParser = ({
+  isEditing,
+  id,
+  isNested,
+}: {
+  id?: string | null;
+  isEditing?: boolean;
+  isNested?: boolean;
+}) => {
   const navigation = useNavigation();
 
   // Clear scanned image on mount
@@ -18,10 +26,11 @@ const useScanImageParser = ({ isEditing, id }: { id?: string | null; isEditing?:
         id,
         value,
         isEditing,
+        isNested,
         formId,
       });
     },
-    [id, isEditing, navigation],
+    [id, isEditing, isNested, navigation],
   );
 
   return {

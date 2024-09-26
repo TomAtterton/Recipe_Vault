@@ -4,19 +4,16 @@ import Typography from '@/components/Typography';
 import React from 'react';
 import { useStyles } from 'react-native-unistyles';
 import { BoundingBoxColors, FieldSelection } from '@/components/ImageTextSelection/types';
-import OutlineButton from '@/components/buttons/OutlineButton';
 import Icon from '@/components/Icon';
 import IconButton from '@/components/buttons/IconButton';
 import { stylesheet } from './chooseFieldFooter.style';
 import { translate } from '@/core';
 
 interface Props {
-  onAdd: () => void;
   setCurrentSelection: (selection: FieldSelection) => void;
   currentSelection?: FieldSelection;
   selectedBoundingBoxColors: BoundingBoxColors;
-  onCancel: () => void;
-  onGenerateRecipe: () => void;
+  onRemoveSelected: (title: FieldSelection) => void;
 }
 
 const menuActions = [
@@ -47,21 +44,12 @@ const menuActions = [
 ];
 
 const ChooseFieldFooter = ({
-  onAdd,
-  onGenerateRecipe,
   setCurrentSelection,
   currentSelection,
   selectedBoundingBoxColors,
-  onCancel,
+  onRemoveSelected,
 }: Props) => {
   const { styles, theme } = useStyles(stylesheet);
-
-  const handleAdd = () => {
-    if (currentSelection) {
-      return onAdd();
-    }
-    onGenerateRecipe();
-  };
 
   return (
     <View style={styles.buttonContainer}>
@@ -94,43 +82,11 @@ const ChooseFieldFooter = ({
         {currentSelection && (
           <IconButton
             iconSource={'close-circle'}
-            onPress={onCancel}
+            onPress={() => onRemoveSelected(currentSelection)}
             iconColor={theme.colors.onBackground}
           />
         )}
       </View>
-      <Typography style={styles.description} variant={'bodyMediumItalic'}>
-        {currentSelection
-          ? translate('image_text_selection.choose_field_description')
-          : translate('image_text_selection.generate_recipe_description')}
-      </Typography>
-      <OutlineButton
-        style={styles.addButton}
-        title={
-          currentSelection
-            ? translate('image_text_selection.add_selection')
-            : translate('image_text_selection.generate_recipe')
-        }
-        onPress={handleAdd}
-      />
-      {/*{currentSelection && (*/}
-      {/*  <MenuView*/}
-      {/*    actions={[*/}
-      {/*      {*/}
-      {/*        id: 'remove',*/}
-      {/*        title: translate('image_text_selection.remove'),*/}
-      {/*      },*/}
-      {/*    ]}*/}
-      {/*    onPressAction={({ nativeEvent }) => {*/}
-      {/*      const event = nativeEvent?.event;*/}
-      {/*      if (!event) return;*/}
-      {/*      onRemoveSelected(currentSelection);*/}
-      {/*    }}*/}
-      {/*    style={styles.editButton}*/}
-      {/*  >*/}
-      {/*    <Icon name={'pencil'} color={theme.colors.primary} size={20} />*/}
-      {/*  </MenuView>*/}
-      {/*)}*/}
     </View>
   );
 };

@@ -1,11 +1,14 @@
 import { Ingredient, Instruction } from '@/types';
-import { convertTimeToString } from '@/screens/RecipeWebview/utils/translateWebview';
+import {
+  convertRecipeYield,
+  convertTimeToString,
+} from '@/screens/RecipeWebview/utils/translateWebview';
 import { randomUUID } from 'expo-crypto';
 import { getUserId } from '@/hooks/common/useUserId';
 import { Env } from '@/core/env';
 import { navigateToAddRecipe } from '@/navigation/helper';
 import { useNavigation } from '@react-navigation/native';
-import { SelectedBox } from '@/components/ImageTextSelection/types';
+import { BoundingBox, SelectedBox } from '@/components/ImageTextSelection/types';
 
 const useHandleSubmit = (selectedBlocks: SelectedBox[]) => {
   const navigation = useNavigation();
@@ -14,6 +17,7 @@ const useHandleSubmit = (selectedBlocks: SelectedBox[]) => {
     let title = '';
     let prepTime = '';
     let cookTime = '';
+    let servings = 0;
     let ingredients: Ingredient[] = [];
     let instructions: Instruction[] = [];
 
@@ -26,6 +30,10 @@ const useHandleSubmit = (selectedBlocks: SelectedBox[]) => {
           const prepTimeText = block.boundingBoxes.map((box) => box.text).join(' ');
           prepTime = convertTimeToString(prepTimeText);
           break;
+        case 'servings':
+          const servingsText = block.boundingBoxes.map((box) => box.text).join(' ');
+          servings = convertRecipeYield(servingsText);
+          break;
         case 'cooktime':
           const cookTimeText = block.boundingBoxes.map((box) => box.text).join(' ');
           cookTime = convertTimeToString(cookTimeText);
@@ -34,17 +42,12 @@ const useHandleSubmit = (selectedBlocks: SelectedBox[]) => {
           ingredients = block.boundingBoxes.map((box) => ({
             id: randomUUID(),
             text: box?.text?.trim() || '',
-            title: '', // Always empty as you specified
+            title: '',
             type: 'ingredient',
           }));
           break;
         case 'instructions':
-          instructions = block.boundingBoxes.map((box) => ({
-            id: randomUUID(),
-            text: box?.text?.trim() || '',
-            title: '', // Always empty as you specified
-            type: 'ingredient',
-          }));
+          instructions = orderAndGroupInstructions(block.boundingBoxes);
           break;
         default:
           break;
@@ -62,7 +65,7 @@ const useHandleSubmit = (selectedBlocks: SelectedBox[]) => {
       dateAdded: '',
       dateUpdated: '',
       lastMade: '',
-      servings: 0,
+      servings: servings,
       recipeTags: [],
       recipeCategory: [],
       recipeIngredient: ingredients,
@@ -82,3 +85,68 @@ const useHandleSubmit = (selectedBlocks: SelectedBox[]) => {
 };
 
 export default useHandleSubmit;
+
+const orderAndGroupInstructions = (boundingBoxes: BoundingBox[]): Instruction[] => {
+  let currentText = '';
+  let currentNumber = null;
+  let instructions: Instruction[] = [];
+
+  const punctuationRegex = /[.!?]$/; // Regex to detect the end of a sentence
+  const numberRegex = /^\d+\s/; // Regex to detect leading numbers (e.g., 1, 2, 3)
+
+  boundingBoxes.forEach((box) => {
+    const text = box.text?.trim();
+    if (!text) return;
+
+    // Check for a leading number
+    const match = text.match(numberRegex);
+    if (match) {
+      if (currentText) {
+        // Push the current instruction before starting a new one
+        instructions.push({
+          id: randomUUID(),
+          text: currentText.trim(),
+          title: '',
+          type: 'ingredient',
+        });
+        currentText = ''; // Reset current text
+      }
+      currentNumber = match[0]; // Store the number for potential ordering later
+      currentText += text; // Start the new instruction with the number
+    } else {
+      currentText += ` ${text}`; // Continue appending to current instruction
+    }
+
+    // If the text ends with punctuation, push the current instruction
+    if (punctuationRegex.test(text)) {
+      instructions.push({
+        id: randomUUID(),
+        text: currentText.trim(),
+        title: '',
+        type: 'ingredient',
+      });
+      currentText = ''; // Reset after pushing
+    }
+  });
+
+  // Push any remaining text as the final instruction
+  if (currentText) {
+    instructions.push({
+      id: randomUUID(),
+      text: currentText.trim(),
+      title: '',
+      type: 'ingredient',
+    });
+  }
+
+  // If numbers were found, sort the instructions based on them
+  if (currentNumber) {
+    instructions.sort((a, b) => {
+      const numA = parseInt(a.text.match(numberRegex)?.[0] || '0', 10);
+      const numB = parseInt(b.text.match(numberRegex)?.[0] || '0', 10);
+      return numA - numB;
+    });
+  }
+
+  return instructions;
+};
