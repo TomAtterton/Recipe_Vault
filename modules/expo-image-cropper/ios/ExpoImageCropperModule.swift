@@ -20,24 +20,6 @@ struct ExpoError: Error, LocalizedError {
 struct CropOptions: Record {
     @Field
     var isTemporary: Bool?
-//    var aspectRatioPreset: TOCropViewControllerAspectRatioPreset?
-//    var customAspectRatio: CGSize?
-//    var customAspectRatioName: String?
-//    var aspectRatioLockDimensionSwapEnabled: Bool?
-//    var aspectRatioLockEnabled: Bool?
-//    var resetAspectRatioEnabled: Bool?
-//    var toolbarPosition: TOCropViewControllerToolbarPosition?
-//    var rotateClockwiseButtonHidden: Bool?
-//    var rotateButtonsHidden: Bool?
-//    var resetButtonHidden: Bool?
-//    var aspectRatioPickerButtonHidden: Bool?
-//    var doneButtonHidden: Bool?
-//    var cancelButtonHidden: Bool?
-//    var doneButtonTitle: String?
-//    var cancelButtonTitle: String?
-//    var showOnlyIcons: Bool?
-//    var showCancelConfirmationDialog: Bool?
-//    var reverseContentLayout: Bool?
 }
 
 
@@ -136,22 +118,27 @@ class CroppingViewControllerDelegate: NSObject, TOCropViewControllerDelegate {
     }
 
     private func saveImageToDocuments(image: UIImage) throws -> URL {
-        guard let imageData = image.jpegData(compressionQuality: 1.0) else {
+        let imageData: Data?
+
+        if options?.isTemporary ?? false {
+            // Use PNG for temporary storage to retain highest quality
+            imageData = image.pngData()
+        } else {
+            // Use JPEG for non-temporary storage
+            imageData = image.jpegData(compressionQuality: 1.0)
+        }
+
+        guard let data = imageData else {
             throw ExpoError(errorCode: 5, message: "Failed to convert cropped image to data.")
         }
 
-        guard let options = options else {
-            throw ExpoError(errorCode: 59, message: "Options not provided.")
-        }
-
-        let directoryURL = options.isTemporary ?? false ? FileManager.default.temporaryDirectory : FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-
+        let directoryURL = options?.isTemporary ?? false ? FileManager.default.temporaryDirectory : FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let filename = UUID().uuidString
-        let fileURL = directoryURL.appendingPathComponent("\(filename).jpeg")
-
+        let fileExtension = options?.isTemporary ?? false ? "png" : "jpeg"
+        let fileURL = directoryURL.appendingPathComponent("\(filename).\(fileExtension)")
 
         do {
-            try imageData.write(to: fileURL)
+            try data.write(to: fileURL)
         } catch {
             throw ExpoError(errorCode: 6, message: "Failed to save cropped image.")
         }
@@ -170,10 +157,20 @@ class CroppingViewControllerDelegate: NSObject, TOCropViewControllerDelegate {
 
             // Attempt to convert the image to a base64 string
             let base64Image: String
-            if let jpegData = image.jpegData(compressionQuality: 1.0) {
-                base64Image = "data:image/jpeg;base64," + jpegData.base64EncodedString()
+            if options?.isTemporary ?? false {
+                // Handle PNG base64 encoding
+                if let pngData = image.pngData() {
+                    base64Image = "data:image/png;base64," + pngData.base64EncodedString()
+                } else {
+                    base64Image = ""  // Provide a default value if conversion fails
+                }
             } else {
-                base64Image = ""  // Provide a default value if conversion fails
+                // Handle JPEG base64 encoding
+                if let jpegData = image.jpegData(compressionQuality: 1.0) {
+                    base64Image = "data:image/jpeg;base64," + jpegData.base64EncodedString()
+                } else {
+                    base64Image = ""  // Provide a default value if conversion fails
+                }
             }
 
             let result: [String: Any] = [
@@ -198,7 +195,5 @@ class CroppingViewControllerDelegate: NSObject, TOCropViewControllerDelegate {
 
         cropViewController.presentingViewController?.dismiss(animated: true, completion: nil)
     }
-
-
 
 }
