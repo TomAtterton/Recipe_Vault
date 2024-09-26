@@ -6,7 +6,7 @@ import RecipeDetail from 'src/screens/RecipeDetail';
 import { Routes } from '@/navigation/Routes';
 import { RecipeDetailType } from '@/types';
 import { RecipeFormType } from '@/utils/recipeFormUtil';
-import ScanImageContent from '@/screens/ScanImageContent';
+import RecipeTextInputContainer from 'src/screens/RecipeTextInputContainer';
 
 export type RecipeDetailStackParamList = {
   [Routes.RecipeDetails]: { id: string; image: string | null; servings: number };
@@ -14,7 +14,7 @@ export type RecipeDetailStackParamList = {
     id?: string | null;
     data?: RecipeDetailType;
   };
-  [Routes.ScanImageContent]: {
+  [Routes.RecipeTextInputContainer]: {
     id?: string | null;
     value: string;
     formId: keyof RecipeFormType;
@@ -44,8 +44,8 @@ export const RecipeDetailNavigator = () => {
         }}
       />
       <Stack.Screen
-        name={Routes.ScanImageContent}
-        component={ScanImageContent}
+        name={Routes.RecipeTextInputContainer}
+        component={RecipeTextInputContainer}
         options={{
           headerShown: false,
           presentation: 'containedModal',

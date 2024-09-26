@@ -26,7 +26,7 @@ export enum Routes {
   RecipeDetailStack = 'RecipeDetailStack',
   RecipeDetectionStack = 'RecipeDetectionStack',
   Search = 'Search',
-  ScanImageContent = 'ScanImageContent',
+  RecipeTextInputContainer = 'RecipeTextInputContainer',
   ProPlan = 'ProPlan',
   ImageDetection = 'ImageDetection',
   CreateVault = 'CreateVault',

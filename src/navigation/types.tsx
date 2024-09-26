@@ -45,7 +45,7 @@ export type RootStackParamList = RecipeDetailStackParamList &
     };
     [Routes.RecipeDetailStack]: NavigatorScreenParams<RecipeDetailStackParamList>;
     [Routes.RecipeDetectionStack]: NavigatorScreenParams<RecipeDetectionStackParamList>;
-    [Routes.ScanImageContent]: {
+    [Routes.RecipeTextInputContainer]: {
       id?: string | null;
       value: string;
       formId?: keyof RecipeFormType;

@@ -5,8 +5,8 @@ import { useCallback, useEffect } from 'react';
 import { setScannedImage } from '@/store';
 
 const useScanImageParser = ({
-  isEditing,
   id,
+  isEditing,
   isNested,
 }: {
   id?: string | null;
@@ -15,14 +15,13 @@ const useScanImageParser = ({
 }) => {
   const navigation = useNavigation();
 
-  // Clear scanned image on mount
   useEffect(() => {
     setScannedImage('');
   }, []);
 
   const handleScanLiveText = useCallback(
     (formId: keyof RecipeFormType, value: string) => {
-      navigation.navigate(Routes.ScanImageContent, {
+      navigation.navigate(Routes.RecipeTextInputContainer, {
         id,
         value,
         isEditing,

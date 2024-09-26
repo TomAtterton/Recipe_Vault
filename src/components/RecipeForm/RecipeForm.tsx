@@ -7,7 +7,7 @@ import { RecipeDetailType } from '@/types';
 import { Alert, View } from 'react-native';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import { useStyles } from 'react-native-unistyles';
-import { useScrollToTop } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import ControlledInput from '@/components/inputs/ControlledInput';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import RatingContainer from '@/components/RecipeForm/components/RatingContainer';
@@ -17,11 +17,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import useEditFloatingInput from '@/components/RecipeForm/hooks/useEditFloatingInput';
 import { useMemo } from 'react';
-import EditButton from '@/components/RecipeForm/components/EditButton';
 import EditableSectionList from './components/EditableSectionList';
 import ControlledCategoryContainer from '@/components/RecipeForm/components/ControlledCategoryContainer';
 import ControlledTagContainer from '@/components/RecipeForm/components/ControlledTagContainer';
 import { NestableScrollContainer } from '@/components/DraggableFlatList';
+import { Routes } from '@/navigation/Routes';
+import EditButton from '@/components/RecipeForm/components/EditButton';
 
 export type onUpdateRecipeProps = ({
   updateValues,
@@ -74,6 +75,8 @@ const RecipeForm = ({
   const { styles } = useStyles(stylesheet);
   const { top } = useSafeAreaInsets();
   const tabBarHeight = useBottomTabBarHeight();
+
+  const navigation = useNavigation();
 
   // @ts-ignore
   useScrollToTop(scrollViewRef);
@@ -188,7 +191,17 @@ const RecipeForm = ({
             {isEditing && <NavBarButton iconSource={'bin'} onPress={handleDeleteRecipe} />}
           </>
         ) : (
-          <EditButton onPress={onClearForm} />
+          <View style={styles.headerNav}>
+            <NavBarButton
+              iconSource={'photo'}
+              onPress={() => {
+                navigation.navigate(Routes.RecipeDetectionStack, {
+                  screen: Routes.ImageDetection,
+                });
+              }}
+            />
+            <EditButton onPress={onClearForm} />
+          </View>
         )}
       </View>
     </View>

@@ -1,6 +1,13 @@
 import * as React from 'react';
 
-import { StyleProp, TextInputProps, TouchableOpacity, View, ViewStyle } from 'react-native';
+import {
+  StyleProp,
+  TextInput,
+  TextInputProps,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { useCallback, useMemo, useState } from 'react';
 import { controlNameType, RecipeFormType } from '@/utils/recipeFormUtil';
 import { stylesheet } from './formInput.style';
@@ -11,6 +18,7 @@ import IconButton from '@/components/buttons/IconButton';
 
 // @ts-ignore
 interface FormInputs extends TextInputProps {
+  formRef?: React.RefObject<TextInput>;
   onChange?: (text: string) => void;
   name?: controlNameType;
   errorMessage?: string;
@@ -21,6 +29,7 @@ interface FormInputs extends TextInputProps {
 }
 
 const FormInput = ({
+  formRef,
   label,
   name,
   value,
@@ -79,7 +88,7 @@ const FormInput = ({
         ]}
       >
         <Input
-          ref={inputRef}
+          ref={formRef || inputRef}
           selectionColor={theme.colors.primary}
           cursorColor={theme.colors.primary}
           autoCapitalize="sentences"

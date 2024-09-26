@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
-import { parseTextToData } from '@/screens/ScanImageContent/scanImageUtil';
 import { Routes } from '@/navigation/Routes';
 import { useNavigation } from '@react-navigation/native';
 import { RecipeFormType } from '@/utils/recipeFormUtil';
 import { useBoundStore } from '@/store';
 import { navigateToAddRecipe } from '@/navigation/helper';
+import { parseTextToData } from '@/screens/RecipeTextInputContainer/recipeFormUtil';
 
 interface Props {
   id?: string | null;

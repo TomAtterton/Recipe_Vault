@@ -13,6 +13,7 @@ import { translate } from '@/core';
 import { navigateToAddRecipe } from '@/navigation/helper';
 import { generateRecipe } from '@/services/textRecognition';
 import { Routes } from '@/navigation/Routes';
+import { checkIfPro } from '@/services/pro';
 
 const ImageDetection = () => {
   const [image, setImage] = useState<string | undefined | null>(null);
@@ -27,6 +28,14 @@ const ImageDetection = () => {
   const handleGenerateAI = async () => {
     try {
       setIsLoading(true);
+
+      const isPro = await checkIfPro();
+
+      if (!isPro) {
+        navigation.navigate(Routes.ProPlan);
+        return;
+      }
+
       if (!parsedRecipe) {
         const removeFilePrefix = image?.replace('file:/', '');
         const { text } = await fetchTextFromImage(removeFilePrefix!);
@@ -52,7 +61,7 @@ const ImageDetection = () => {
       setIsLoading(false);
     }
   };
-  const handleScanImageContent = async () => {
+  const handleRecipeTextInputContainer = async () => {
     try {
       setIsLoading(true);
       const removeFilePrefix = image?.replace('file:/', '');
@@ -85,7 +94,7 @@ const ImageDetection = () => {
       <View style={styles.bottomContainer}>
         <PrimaryButton
           title={translate('image_detection.generate')}
-          onPress={handleScanImageContent}
+          onPress={handleRecipeTextInputContainer}
           isLoading={isLoading}
           disabled={!image}
         />
