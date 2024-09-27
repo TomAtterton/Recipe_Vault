@@ -1,7 +1,6 @@
 import { useWindowDimensions } from 'react-native';
 import { SharedValue, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { Gesture } from 'react-native-gesture-handler';
-import { clamp } from '@/components/ImageZoom/utils/clamp';
 
 const minScale = 1;
 const maxScale = 5;
@@ -11,6 +10,12 @@ interface Props {
   scaledImageHeight: number;
   imageUri: string;
 }
+
+export const clamp = (value: number, min: number, max: number): number => {
+  'worklet';
+
+  return Math.min(Math.max(min, value), max);
+};
 
 const useImageScaleGestures = ({ isSelecting, scaledImageHeight }: Props) => {
   const { width } = useWindowDimensions();
