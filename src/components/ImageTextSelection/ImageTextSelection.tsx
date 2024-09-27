@@ -129,10 +129,9 @@ const ImageTextSelection = ({}: Props) => {
 
     return {
       transform: [
-        { translateX: boundingBoxX.value + boundingBoxWidth.value - 30 }, // Move the button to the right of the bounding box
-        { translateY: boundingBoxY.value + boundingBoxHeight.value + 5 }, // Align it vertically with the bounding box
+        { translateX: boundingBoxX.value + boundingBoxWidth.value - 30 },
+        { translateY: boundingBoxY.value + boundingBoxHeight.value + 5 },
       ],
-
       opacity,
     };
   });
