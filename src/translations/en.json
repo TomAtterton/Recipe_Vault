@@ -277,7 +277,8 @@
     "success": "Text detected from image",
     "error": "Error detecting text from image",
     "generate": "Scan Recipe",
-    "generate_ai": "Scan Recipe with AI (pro)"
+    "generate_ai": "Scan Recipe with AI (pro)",
+    "instructions": "Upload a recipe image and then choose how to process it."
   },
   "login": {
     "test_login_title": "Test Login",

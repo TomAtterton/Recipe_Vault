@@ -14,6 +14,7 @@ import { navigateToAddRecipe } from '@/navigation/helper';
 import { generateRecipe } from '@/services/textRecognition';
 import { Routes } from '@/navigation/Routes';
 import { checkIfPro } from '@/services/pro';
+import Typography from '@/components/Typography';
 
 const ImageDetection = () => {
   const [image, setImage] = useState<string | undefined | null>(null);
@@ -91,6 +92,9 @@ const ImageDetection = () => {
         onSelectImage={setImage}
         isTemporary={true}
       />
+      <Typography variant={'bodyMediumItalic'} style={styles.instructions}>
+        {translate('image_detection.instructions')}
+      </Typography>
       <View style={styles.bottomContainer}>
         <PrimaryButton
           title={translate('image_detection.generate')}

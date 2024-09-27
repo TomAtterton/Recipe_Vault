@@ -7,7 +7,6 @@ import useImageScaleGestures from '@/components/ImageTextSelection/hooks/useImag
 import Animated, { interpolate, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import {
   Block,
-  BoundingBoxColors,
   FieldSelection,
   ScaledBlock,
   SelectedBox,
@@ -33,15 +32,6 @@ interface Props {
 
 const AnimatedButton = Animated.createAnimatedComponent(TouchableOpacity);
 
-const selectedBoundingBoxColors: BoundingBoxColors = {
-  title: 'red',
-  prepTime: 'green',
-  cookTime: 'blue',
-  servings: 'yellow',
-  instructions: 'purple',
-  ingredients: 'orange',
-};
-
 const ImageTextSelection = ({}: Props) => {
   const { params } = useRoute<RecipeDetectionRouteProp<Routes.ImageTextSelection>>();
   const { imageUri, blocks } = params || {};
@@ -57,7 +47,26 @@ const ImageTextSelection = ({}: Props) => {
 
   const [selectedBlocks, setSelectedBlocks] = useState<SelectedBox[]>([]);
 
-  const { styles } = useStyles(stylesheet);
+  const { styles, theme } = useStyles(stylesheet);
+
+  const selectedBoundingBoxColors = useMemo(
+    () => ({
+      title: theme.colors.selectTitle,
+      prepTime: theme.colors.selectPrepTime,
+      cookTime: theme.colors.selectCookTime,
+      servings: theme.colors.selectServings,
+      instructions: theme.colors.selectInstructions,
+      ingredients: theme.colors.selectIngredients,
+    }),
+    [
+      theme.colors.selectCookTime,
+      theme.colors.selectIngredients,
+      theme.colors.selectInstructions,
+      theme.colors.selectPrepTime,
+      theme.colors.selectServings,
+      theme.colors.selectTitle,
+    ],
+  );
 
   const [currentSelection, setCurrentSelection] = useState<FieldSelection | undefined>('title');
   const [showOnboarding, setShowOnboarding] = useState(true);
@@ -152,7 +161,7 @@ const ImageTextSelection = ({}: Props) => {
               y={boundingBoxY}
               width={boundingBoxWidth}
               height={boundingBoxHeight}
-              color="rgba(0, 0, 255, 0.1)"
+              color={theme.colors.selectionBorder}
               style="fill"
               r={5}
             />
@@ -162,7 +171,7 @@ const ImageTextSelection = ({}: Props) => {
               y={boundingBoxY}
               width={boundingBoxWidth}
               height={boundingBoxHeight}
-              color="rgba(0, 0, 255, 0.5)"
+              color={theme.colors.selection}
               style="stroke"
               strokeWidth={3}
               r={5}
@@ -212,12 +221,14 @@ const ImageTextSelection = ({}: Props) => {
           </View>
         </Animated.View>
       )}
-      <OutlineButton
-        style={styles.generateRecipeButton}
-        title={translate('image_text_selection.generate_recipe')}
-        onPress={handleSubmit}
-      />
-      <BackButton />
+      <View style={styles.headerContainer}>
+        <BackButton style={styles.backButton} />
+        <OutlineButton
+          style={styles.generateRecipeButton}
+          title={translate('image_text_selection.generate_recipe')}
+          onPress={handleSubmit}
+        />
+      </View>
     </View>
   );
 };

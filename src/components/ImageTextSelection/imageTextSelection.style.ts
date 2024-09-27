@@ -1,6 +1,6 @@
 import { createStyleSheet } from 'react-native-unistyles';
 
-export const stylesheet = createStyleSheet((_, miniRuntime) => ({
+export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   container: {
     flex: 1,
     paddingTop: miniRuntime.insets.top + 60,
@@ -10,14 +10,27 @@ export const stylesheet = createStyleSheet((_, miniRuntime) => ({
   },
   selectionButton: {
     position: 'absolute',
-    backgroundColor: 'rgba(0, 128, 0, 0.8)', // Green background
+    backgroundColor: theme.colors.selectButton,
     padding: 5,
     borderRadius: 10,
     zIndex: 1,
   },
+  headerContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: theme.colors.background60,
+    height: miniRuntime.insets.top + 60,
+  },
+  backButton: {
+    position: 'absolute',
+    bottom: 4,
+    left: 0,
+  },
   generateRecipeButton: {
     position: 'absolute',
-    top: miniRuntime.insets.top + 5,
+    bottom: 8,
     right: 20,
   },
   onboardingContainer: {
@@ -26,12 +39,12 @@ export const stylesheet = createStyleSheet((_, miniRuntime) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: theme.colors.black60,
     justifyContent: 'center',
     alignItems: 'center',
   },
   onboardingContent: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: theme.colors.black60,
     paddingVertical: 25,
     paddingHorizontal: 30,
     borderRadius: 12,
