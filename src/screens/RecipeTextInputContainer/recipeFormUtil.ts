@@ -2,7 +2,7 @@ import { randomUUID } from 'expo-crypto';
 import { Ingredient, Instruction } from '@/types';
 import { DraggableListItem, RecipeFormType } from '@/utils/recipeFormUtil';
 
-export type ScanImageDataType = string | Ingredient[] | Instruction[];
+export type RecipeTextPasteDataType = string | Ingredient[] | Instruction[];
 
 export const formatText = (text: string): string =>
   text
@@ -18,9 +18,6 @@ export const formatText = (text: string): string =>
 export const parseTextToData = (id: keyof RecipeFormType, value: string) => {
   const formatValue = formatText(value);
   switch (id) {
-    case 'title':
-    case 'description':
-      return formatValue as string;
     case 'recipeIngredient': {
       const newIngredients = formatValue
         .split('\n')

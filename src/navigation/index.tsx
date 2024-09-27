@@ -12,7 +12,7 @@ import Splashscreen from '@/screens/Splashscreen';
 import Search from '@/screens/Search';
 import Profile from '@/screens/Profile';
 import AddGroceries from '@/screens/AddGroceries';
-import ScanImageContent from '@/screens/ScanImageContent';
+import RecipeTextInputContainer from 'src/screens/RecipeTextInputContainer';
 import DatabaseSettings from '@/screens/Settings/pages/DatabaseSettings';
 import Onboarding from '@/screens/Onboarding';
 import SyncSettings from '@/screens/Settings/pages/SyncSettings';
@@ -196,8 +196,8 @@ export const RootNavigator = () => {
         }}
       />
       <Stack.Screen
-        name={Routes.ScanImageContent}
-        component={ScanImageContent}
+        name={Routes.RecipeTextInputContainer}
+        component={RecipeTextInputContainer}
         options={{
           headerShown: false,
           presentation: 'containedModal',

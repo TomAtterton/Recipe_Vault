@@ -7,10 +7,10 @@ import RecipeSchedule from 'src/screens/MealPlan';
 import Groceries from 'src/screens/Groceries';
 import { TabBar } from '@/navigation/TabBar';
 import AddRecipe from '@/screens/AddRecipe';
-import { ScanImageDataType } from '@/screens/ScanImageContent/scanImageUtil';
 import { RecipeDetailType } from '@/types';
 import { useCallback } from 'react';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs/src/types';
+import { RecipeTextPasteDataType } from '@/screens/RecipeTextInputContainer/recipeFormUtil';
 
 export type TabParamList = {
   [Routes.Home]: undefined;
@@ -20,7 +20,7 @@ export type TabParamList = {
     id?: string | null;
     scanContent?: {
       data: {
-        [key: string]: ScanImageDataType;
+        [key: string]: RecipeTextPasteDataType;
       };
     };
     isNested?: boolean;

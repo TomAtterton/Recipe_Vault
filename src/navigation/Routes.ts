@@ -26,7 +26,7 @@ export enum Routes {
   RecipeDetailStack = 'RecipeDetailStack',
   RecipeDetectionStack = 'RecipeDetectionStack',
   Search = 'Search',
-  ScanImageContent = 'ScanImageContent',
+  RecipeTextInputContainer = 'RecipeTextInputContainer',
   ProPlan = 'ProPlan',
   ImageDetection = 'ImageDetection',
   CreateVault = 'CreateVault',
@@ -34,4 +34,5 @@ export enum Routes {
   Credits = 'Credits',
   AdvanceVaultSettings = 'AdvanceVaultSettings',
   CookingOverview = 'CookingOverview',
+  ImageTextSelection = 'ImageTextSelection',
 }

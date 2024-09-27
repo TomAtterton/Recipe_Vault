@@ -19,7 +19,7 @@ import { translate } from '@/core';
 const defaultImageOptions: ImagePickerOptions = {
   mediaTypes: MediaTypeOptions.Images,
   allowsMultipleSelection: false,
-  quality: 0.8,
+  quality: 1,
   preferredAssetRepresentationMode: UIImagePickerPreferredAssetRepresentationMode.Current,
 };
 
@@ -42,7 +42,7 @@ const handleImageSelection = async (result: ImagePickerResult | string, isTempor
     const shouldSync = useBoundStore.getState().shouldSync;
 
     if (shouldSync) {
-      return await handleManipulationResult(filePath, height, width);
+      return await handleManipulationResult(filePath, height, width, isTemporary);
     }
 
     return base64Image;
@@ -135,7 +135,16 @@ const handleResult = async (result: ImagePickerResult | string) => {
   }
 };
 
-const handleManipulationResult = async (imageUri: string, height: number, width: number) => {
+const handleManipulationResult = async (
+  imageUri: string,
+  height: number,
+  width: number,
+  isTemporary: boolean,
+) => {
+  if (isTemporary) {
+    return imageUri;
+  }
+
   // Calculate aspect ratio
   const aspectRatio = width / height;
   let newWidth = width;

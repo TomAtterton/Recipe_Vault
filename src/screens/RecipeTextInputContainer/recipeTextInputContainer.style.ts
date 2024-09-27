@@ -7,7 +7,9 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     paddingTop: miniRuntime.insets.top,
     paddingBottom: miniRuntime.insets.bottom,
   },
-  input: {},
+  input: {
+    flex: 1,
+  },
   saveButton: {
     marginTop: 20,
     marginBottom: 8,

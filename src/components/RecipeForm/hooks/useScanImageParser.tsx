@@ -4,24 +4,32 @@ import { RecipeFormType } from '@/utils/recipeFormUtil';
 import { useCallback, useEffect } from 'react';
 import { setScannedImage } from '@/store';
 
-const useScanImageParser = ({ isEditing, id }: { id?: string | null; isEditing?: boolean }) => {
+const useScanImageParser = ({
+  id,
+  isEditing,
+  isNested,
+}: {
+  id?: string | null;
+  isEditing?: boolean;
+  isNested?: boolean;
+}) => {
   const navigation = useNavigation();
 
-  // Clear scanned image on mount
   useEffect(() => {
     setScannedImage('');
   }, []);
 
   const handleScanLiveText = useCallback(
     (formId: keyof RecipeFormType, value: string) => {
-      navigation.navigate(Routes.ScanImageContent, {
+      navigation.navigate(Routes.RecipeTextInputContainer, {
         id,
         value,
         isEditing,
+        isNested,
         formId,
       });
     },
-    [id, isEditing, navigation],
+    [id, isEditing, isNested, navigation],
   );
 
   return {

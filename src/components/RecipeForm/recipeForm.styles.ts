@@ -39,4 +39,9 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
   button: {
     marginTop: 32,
   },
+  headerNav: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
 }));

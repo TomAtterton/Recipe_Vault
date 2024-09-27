@@ -104,7 +104,7 @@ const convertImage = (
   }
 };
 
-const convertRecipeYield = (recipeYield?: string | number | string[]): number => {
+export const convertRecipeYield = (recipeYield?: string | number | string[]): number => {
   if (typeof recipeYield === 'number') {
     return recipeYield;
   } else if (typeof recipeYield === 'string') {
@@ -126,6 +126,15 @@ export const convertTimeToString = (time?: string | number): string => {
       const timePattern = /PT(?:(\d+)H)?(?:(\d+)M)?/;
       const [, hours, minutes] = time.match(timePattern) ?? [];
       return formatTime(parseInt(hours || '0', 10), parseInt(minutes || '0', 10));
+    } else if (typeof time === 'string') {
+      const numberPattern = /(\d+)\s*(minutes?|hours?)/i;
+      const match = time.match(numberPattern);
+      if (match) {
+        const value = parseInt(match[1], 10);
+        const unit = match[2].toLowerCase();
+        return `${value} ${unit}`;
+      }
+      return '0 minutes';
     } else {
       const date = new Date(time);
       return formatTime(date.getUTCHours(), date.getUTCMinutes());

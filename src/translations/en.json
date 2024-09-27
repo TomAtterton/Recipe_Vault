@@ -276,7 +276,9 @@
   "image_detection": {
     "success": "Text detected from image",
     "error": "Error detecting text from image",
-    "generate": "Generate Recipe"
+    "generate": "Scan Recipe",
+    "generate_ai": "Scan Recipe with AI (pro)",
+    "instructions": "Upload a recipe image and then choose how to process it."
   },
   "login": {
     "test_login_title": "Test Login",
@@ -288,6 +290,23 @@
     "loginWith": "Login with",
     "or": "or",
     "button": "Continue with local vault"
+  },
+  "image_text_selection": {
+    "generate_recipe_description": "Choose a field and start highlighting the text. Tap ‘Generate Recipe’ when you’re ready!",
+    "choose_field_description": "Adjust your selection by dragging or resizing. Tap ‘Add Selection’ when you’re ready!",
+    "add_selection": "Add Selection",
+    "generate_recipe": "Generate Recipe",
+    "choose_field": "Choose Field",
+    "title": "Title",
+    "ingredients": "Ingredients",
+    "instructions": "Instructions",
+    "servings": "Servings",
+    "prepTime": "Prep Time",
+    "cookTime": "Cook Time",
+    "remove": "Remove",
+    "onboarding_title": "Well Hello There!",
+    "onboarding_description": "To get started, just tap and drag to select the text you want to extract.\n\nThen add the selection to the recipe by tapping the green button.\n\nDon't forget to select the type of field you are adding! \uD83E\uDD73",
+    "onboarding_button": "Got it!"
   },
   "mealplan": {
     "add_success": "Meal plan created successfully"

@@ -5,6 +5,9 @@ import { Routes } from '@/navigation/Routes';
 import { RecipeDetailType } from '@/types';
 import AddRecipe from '@/screens/AddRecipe';
 import ImageDetection from '@/screens/ImageDetection';
+import ImageTextSelection from '@/components/ImageTextSelection';
+import { Block } from '@/components/ImageTextSelection/types';
+import type { RouteProp as NRouteProp } from '@react-navigation/core/lib/typescript/src/types';
 
 export type RecipeDetectionStackParamList = {
   [Routes.AddRecipe]: {
@@ -14,7 +17,16 @@ export type RecipeDetectionStackParamList = {
     data?: RecipeDetailType;
   };
   [Routes.ImageDetection]: undefined;
+  [Routes.ImageTextSelection]: {
+    imageUri: string;
+    blocks: Block[];
+  };
 };
+
+export type RecipeDetectionRouteProp<T extends keyof RecipeDetectionStackParamList> = NRouteProp<
+  RecipeDetectionStackParamList,
+  T
+>;
 
 const Stack = createNativeStackNavigator<RecipeDetectionStackParamList>();
 
@@ -32,6 +44,14 @@ export const RecipeDetectionNavigator = () => {
       <Stack.Screen
         name={Routes.ImageDetection}
         component={ImageDetection}
+        options={{
+          headerShown: false,
+          navigationBarHidden: true,
+        }}
+      />
+      <Stack.Screen
+        name={Routes.ImageTextSelection}
+        component={ImageTextSelection}
         options={{
           headerShown: false,
           navigationBarHidden: true,

@@ -16,6 +16,9 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     height: 300,
     width: '100%',
   },
+  instructions: {
+    textAlign: 'center',
+  },
   backButton: {
     position: 'absolute',
     top: miniRuntime.insets.top + 20,
