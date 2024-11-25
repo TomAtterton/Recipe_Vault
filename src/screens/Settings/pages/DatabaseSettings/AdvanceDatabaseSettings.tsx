@@ -2,7 +2,7 @@ import { Alert, View } from 'react-native';
 import { translate } from '@/core';
 import { database, onDeleteDatabase, onOpenDatabase } from '@/database';
 import { showErrorMessage, showSuccessMessage } from '@/utils/promptUtils';
-import { deleteDatabaseAsync } from 'expo-sqlite/next';
+import { deleteDatabaseAsync } from 'expo-sqlite';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from '@/screens/Settings/pages/DatabaseSettings/databaseSettings.style';
 import Typography from '@/components/Typography';
@@ -14,6 +14,9 @@ import { Env } from '@/core/env';
 import SettingsContainer from '@/components/SettingsContainer';
 
 const AdvanceDatabaseSettings = () => {
+  const currentGroupId = useBoundStore((state) => state.profile.groupId);
+  const currentDatabaseName = useBoundStore((state) => state.currentDatabaseName);
+
   const handleResetDatabase = async () => {
     try {
       Alert.alert(
@@ -27,15 +30,17 @@ const AdvanceDatabaseSettings = () => {
           {
             text: translate('default.ok'),
             onPress: async () => {
-              if (database?.databaseName) {
-                await database.closeAsync();
-                await deleteDatabaseAsync(database?.databaseName);
-                await onOpenDatabase({
-                  currentDatabaseName: database.databaseName,
-                  shouldClose: false,
-                });
-                showSuccessMessage(translate('prompt.clear_database.success_message')); // Update this if you want a specific message
+              console.log('database', database);
+              if (!database) {
+                return;
               }
+              await database.closeAsync();
+              await deleteDatabaseAsync(currentDatabaseName);
+              await onOpenDatabase({
+                currentDatabaseName: currentDatabaseName,
+                shouldClose: false,
+              });
+              showSuccessMessage(translate('prompt.clear_database.success_message')); // Update this if you want a specific message
             },
           },
         ],
@@ -71,9 +76,6 @@ const AdvanceDatabaseSettings = () => {
     }
   };
 
-  const currentGroupId = useBoundStore((state) => state.profile.groupId);
-  const currentDatabaseName = useBoundStore((state) => state.currentDatabaseName);
-
   const handleDeleteCloudVault = async () => {
     try {
       Alert.alert(
@@ -87,24 +89,25 @@ const AdvanceDatabaseSettings = () => {
           {
             text: translate('default.ok'),
             onPress: async () => {
-              if (database?.databaseName) {
-                await onDeleteGroup({ groupId: currentGroupId });
-                await database.closeAsync();
-                await deleteDatabaseAsync(database?.databaseName);
-
-                updateProfile({
-                  groupId: Env.TEST_GROUP_ID,
-                  groupName: Env.SQLITE_DB_NAME,
-                  groupRole: 'read_write',
-                });
-                setResetDatabase();
-                await onOpenDatabase({
-                  currentDatabaseName: Env.SQLITE_DB_NAME,
-                  shouldClose: false,
-                });
-
-                showSuccessMessage(translate('advance_settings.success.deleting_vault'));
+              if (!database) {
+                return;
               }
+              await onDeleteGroup({ groupId: currentGroupId });
+              await database.closeAsync();
+              await deleteDatabaseAsync(currentDatabaseName);
+
+              updateProfile({
+                groupId: Env.TEST_GROUP_ID,
+                groupName: Env.SQLITE_DB_NAME,
+                groupRole: 'read_write',
+              });
+              setResetDatabase();
+              await onOpenDatabase({
+                currentDatabaseName: Env.SQLITE_DB_NAME,
+                shouldClose: false,
+              });
+
+              showSuccessMessage(translate('advance_settings.success.deleting_vault'));
             },
           },
         ],

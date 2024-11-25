@@ -1,6 +1,6 @@
 import { useBoundStore } from '@/store';
 import { randomUUID } from 'expo-crypto';
-import { SQLiteBindParams } from 'expo-sqlite/next';
+import { SQLiteBindParams } from 'expo-sqlite';
 import { database } from '@/database';
 
 export const sqlExecute = async (sql: string, parameters?: any[]): Promise<any> => {

@@ -8,14 +8,15 @@ import React from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { handleMail } from '@/utils/mailUtils';
 
-const ErrorScreen = ({ error, resetError }: { error: Error; resetError: () => void }) => {
+const ErrorScreen = ({ error, resetError }: { error: unknown; resetError: () => void }) => {
   const { styles } = useStyles(stylesheet);
 
   const handleReport = () =>
     handleMail({
       headerText:
         'Hello,\n      \n      I would like to report an issue with Recipe Vault. Here are the details:',
-      errorMessage: error?.message,
+      // @ts-ignore
+      errorMessage: error?.message || 'No error message',
     });
 
   return (
@@ -25,6 +26,7 @@ const ErrorScreen = ({ error, resetError }: { error: Error; resetError: () => vo
       <Typography
         numberOfLines={5}
         variant={'bodyMediumItalic'}
+        // @ts-ignore
       >{`Error: ${error?.message}`}</Typography>
       <PrimaryButton title={'Reload'} onPress={resetError} />
       <LabelButton title={'Report'} onPress={handleReport} />

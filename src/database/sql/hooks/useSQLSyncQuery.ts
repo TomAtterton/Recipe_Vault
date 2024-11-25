@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { SQLiteBindParams } from 'expo-sqlite/next';
-import { addDatabaseChangeListener } from 'expo-sqlite/next';
+import { SQLiteBindParams } from 'expo-sqlite';
+import { addDatabaseChangeListener } from 'expo-sqlite';
 import { database } from '@/database';
 import { useFocusEffect } from '@react-navigation/native';
 

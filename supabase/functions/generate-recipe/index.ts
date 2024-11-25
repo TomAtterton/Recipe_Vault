@@ -21,7 +21,7 @@ Deno.serve(async (req: Request) => {
       return new Response('Missing query', { status: 400 });
     }
 
-    const isPro = await checkIfPro(req);
+    const isPro = await checkIfPremium(req);
 
     if (!isPro) {
       throw new Error('You do not have access to pro features');
@@ -37,11 +37,11 @@ Deno.serve(async (req: Request) => {
       performTime: response.performTime || '',
       servings: response.servings || 0,
       recipeInstructions: response.instructions || [],
-      recipeIngredients: response.ingredients || [],
+      recipeIngredients: response.ingredients || []
     };
 
     return new Response(JSON.stringify(formattedResponse), {
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' }
     });
   } catch (error) {
     console.log('Error generating recipe', error);
@@ -90,12 +90,12 @@ const requestWithOpenAi = async (query: string) => {
       messages: [
         {
           role: 'user',
-          content: `${prompt} ${query}`,
-        },
+          content: `${prompt} ${query}`
+        }
       ],
       response_format: { type: 'json_object' },
       model: openAIModel,
-      stream: false,
+      stream: false
     });
 
     return JSON.parse(chatCompletion.choices[0]?.message?.content) || {};
@@ -104,33 +104,27 @@ const requestWithOpenAi = async (query: string) => {
   }
 };
 
-const checkIfPro = async (req) => {
+export const checkIfPremium = async (req) => {
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
-    global: { headers: { Authorization: req.headers.get('Authorization')! } },
+    global: { headers: { Authorization: req.headers.get('Authorization')! } }
   });
 
   const { error: user_error, data: userData } = await supabaseClient.auth.getUser();
-
   if (user_error) throw new Error('There was an issue getting the user data');
 
+  const userId = userData?.user?.id;
+  if (!userId) return false;
+
   const { data: profile, error: profile_error } = await supabaseClient
-    .from('profile_groups')
-    .select('group_id')
-    .eq('profile_id', userData.user.id || '');
+    .from('profile')
+    .select('access_level')
+    .eq('id', userId);
 
-  if (profile_error) throw new Error('There was an issue getting the profile data');
-  if (!profile || profile.length === 0) return false;
+  if (profile_error) throw new Error('Error fetching profile');
 
-  const groupId = profile[0].group_id;
+  const accessLevel = profile?.[0]?.access_level;
 
-  const { data: proVaults, error: pro_vaults_error } = await supabaseClient
-    .from('pro_vaults')
-    .select('*')
-    .eq('group_id', groupId || '');
-
-  if (pro_vaults_error) throw new Error('There was an issue getting the pro vaults data');
-
-  return proVaults && proVaults.length > 0;
+  return accessLevel === 'premium';
 };

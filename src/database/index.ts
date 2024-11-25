@@ -1,4 +1,4 @@
-import { openDatabaseAsync, SQLiteDatabase, SQLiteOpenOptions } from 'expo-sqlite/next';
+import { openDatabaseAsync, SQLiteDatabase, SQLiteOpenOptions } from 'expo-sqlite';
 import { useBoundStore } from '@/store';
 import { Env } from '@/core/env';
 import { sqlInsert } from '@/database/sql';
@@ -23,7 +23,7 @@ export const setDatabase = (db: SQLiteDatabase | undefined) => {
   database = db;
 };
 
-const DATABASE_VERSION = 3;
+const DATABASE_VERSION = 4;
 
 const initDatabase = async (db: SQLiteDatabase) => {
   // Always set these PRAGMA statements for each session

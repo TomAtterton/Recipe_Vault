@@ -11,9 +11,9 @@ import { Routes } from '@/navigation/Routes';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { stylesheet } from './proPlan.style';
 import { checkIfPro } from '@/services/pro';
-import { useBoundStore } from '@/store';
 import ChefOk from '../../../assets/svgs/chef_ok.svg';
 import { translate } from '@/core';
+import useIsLoggedIn from '@/hooks/common/useIsLoggedIn';
 
 const PurchaseScreen = () => {
   const { navigate, goBack } = useNavigation();
@@ -32,7 +32,12 @@ const PurchaseScreen = () => {
     navigate(Routes.Help);
   };
 
-  const isLoggedIn = useBoundStore((state) => state.session?.user);
+  const handleLogin = () => {
+    goBack();
+    navigate(Routes.Login, { showSkip: false });
+  };
+
+  const isLoggedIn = useIsLoggedIn();
 
   const handlePurchase = async () => {
     try {
@@ -91,7 +96,7 @@ const PurchaseScreen = () => {
           {price}
         </Typography>
       </View>
-      {!isLoggedIn ? (
+      {isLoggedIn ? (
         <>
           <PrimaryButton
             title={translate('purchase_screen.upgrade_button')}
@@ -102,7 +107,7 @@ const PurchaseScreen = () => {
           <LabelButton title={translate('purchase_screen.continue_free_button')} onPress={goBack} />
         </>
       ) : (
-        <PrimaryButton title={translate('purchase_screen.login_button')} onPress={goBack} />
+        <PrimaryButton title={translate('purchase_screen.login_button')} onPress={handleLogin} />
       )}
       <ConfettiCannon
         ref={confettiRef}

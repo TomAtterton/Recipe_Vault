@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import ImagePicker from '@/components/ImagePicker';
-import { useState } from 'react';
 import { useStyles } from 'react-native-unistyles';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import { useNavigation } from '@react-navigation/native';
@@ -13,8 +12,8 @@ import { translate } from '@/core';
 import { navigateToAddRecipe } from '@/navigation/helper';
 import { generateRecipe } from '@/services/textRecognition';
 import { Routes } from '@/navigation/Routes';
-import { checkIfPro } from '@/services/pro';
 import Typography from '@/components/Typography';
+import useHasPremium from '@/services/pro/useHasPremium';
 
 const ImageDetection = () => {
   const [image, setImage] = useState<string | undefined | null>(null);
@@ -26,13 +25,13 @@ const ImageDetection = () => {
 
   const navigation = useNavigation();
 
+  const hasPremium = useHasPremium();
+
   const handleGenerateAI = async () => {
     try {
       setIsLoading(true);
 
-      const isPro = await checkIfPro();
-
-      if (!isPro) {
+      if (!hasPremium) {
         navigation.navigate(Routes.ProPlan);
         return;
       }
@@ -102,12 +101,14 @@ const ImageDetection = () => {
           isLoading={isLoading}
           disabled={!image}
         />
-        <PrimaryButton
-          title={translate('image_detection.generate_ai')}
-          onPress={handleGenerateAI}
-          isLoading={isLoading}
-          disabled={!image}
-        />
+        {hasPremium && (
+          <PrimaryButton
+            title={translate('image_detection.generate_ai')}
+            onPress={handleGenerateAI}
+            isLoading={isLoading}
+            disabled={!image}
+          />
+        )}
       </View>
       <NavBarButton
         style={styles.backButton}

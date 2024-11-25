@@ -4,6 +4,7 @@ export const createProfileTable = `
     created_at TEXT,
     updated_at TEXT,
     name TEXT,
+    access_level TEXT,
     is_modified INTEGER
   )
 `;

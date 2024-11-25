@@ -40,7 +40,7 @@ const App = () => {
       error,
       resetError,
     }: {
-      error: Error;
+      error: unknown;
       componentStack: string;
       eventId: string;
       resetError(): void;

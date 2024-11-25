@@ -1,6 +1,6 @@
 import React from 'react';
 import Typography from '@/components/Typography';
-import { Pressable, PressableProps, StyleProp, View, ViewStyle } from 'react-native';
+import { Pressable, PressableProps, StyleProp, TextStyle, View, ViewStyle } from 'react-native';
 import Icon from '@/components/Icon';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './infoLabelButton.style';
@@ -11,7 +11,7 @@ import { translate } from '@/core';
 
 interface Props extends PressableProps {
   style?: StyleProp<ViewStyle>;
-  buttonTitleStyle?: StyleProp<ViewStyle>;
+  buttonTitleStyle?: StyleProp<TextStyle>;
   title: string;
   buttonTitle?: string | null;
   iconSource?: IconName;

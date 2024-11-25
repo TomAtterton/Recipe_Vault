@@ -1,4 +1,4 @@
-import { addDatabaseChangeListener } from 'expo-sqlite/next';
+import { addDatabaseChangeListener } from 'expo-sqlite';
 import { useEffect } from 'react';
 
 let listener: any;

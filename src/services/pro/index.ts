@@ -2,6 +2,30 @@ import { supabase } from '@/services';
 import { useBoundStore } from '@/store';
 import { getRecipeCount } from '@/database/api/recipes';
 
+/**
+ * Check if user has premium to access features like AI
+ */
+export const checkIfPremium = async () => {
+  const userId = useBoundStore.getState().session?.user.id;
+  if (!userId) {
+    return false;
+  }
+
+  const { data, error } = await supabase.from('profile').select('access_level').eq('id', userId);
+
+  if (error) {
+    throw new Error('Error fetching profile');
+  }
+
+  const accessLevel = data?.[0]?.access_level;
+
+  return accessLevel === 'premium';
+};
+
+/**
+ * Check if user has pro vault
+ */
+
 export const checkIfPro = async () => {
   try {
     const groupId = useBoundStore.getState().profile.groupId;
