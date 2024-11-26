@@ -1,0 +1,99 @@
+diff --git a/node_modules/expo-calendar/build/Calendar.d.ts b/node_modules/expo-calendar/build/Calendar.d.ts
+index acdb19a..8da1cff 100644
+--- a/node_modules/expo-calendar/build/Calendar.d.ts
++++ b/node_modules/expo-calendar/build/Calendar.d.ts
+@@ -763,7 +763,7 @@ export declare function deleteAttendeeAsync(id: string): Promise<void>;
+  * @return A promise which fulfils with an array of [`Reminder`](#reminder) objects matching the search criteria.
+  * @platform ios
+  */
+-export declare function getRemindersAsync(calendarIds: (string | null)[], status: ReminderStatus | null, startDate: Date, endDate: Date): Promise<Reminder[]>;
++export declare function getRemindersAsync(calendarIds: (string | null)[], status: ReminderStatus | null, startDate: Date | null, endDate: Date | null): Promise<Reminder[]>;
+ /**
+  * Returns a specific reminder selected by ID.
+  * @param id ID of the reminder to return.
+diff --git a/node_modules/expo-calendar/build/Calendar.js b/node_modules/expo-calendar/build/Calendar.js
+index 644d933..04e1f31 100644
+--- a/node_modules/expo-calendar/build/Calendar.js
++++ b/node_modules/expo-calendar/build/Calendar.js
+@@ -461,7 +461,7 @@ export async function getRemindersAsync(calendarIds, status, startDate, endDate)
+     if (!calendarIds || !calendarIds.length) {
+         throw new Error('getRemindersAsync must be called with a non-empty array of calendarIds to search');
+     }
+-    return ExpoCalendar.getRemindersAsync(stringifyIfDate(startDate) || null, stringifyIfDate(endDate) || null, calendarIds, status || null);
++    return ExpoCalendar.getRemindersAsync(startDate && stringifyIfDate(startDate) || null, startDate && stringifyIfDate(endDate) || null, calendarIds, status || null);
+ }
+ // @needsAudit
+ /**
+diff --git a/node_modules/expo-calendar/ios/CalendarModule.swift b/node_modules/expo-calendar/ios/CalendarModule.swift
+index 9219837..a7a13d1 100644
+--- a/node_modules/expo-calendar/ios/CalendarModule.swift
++++ b/node_modules/expo-calendar/ios/CalendarModule.swift
+@@ -156,7 +156,7 @@ public class CalendarModule: Module {
+       return serialize(attendees: attendees)
+     }
+ 
+-    AsyncFunction("getRemindersAsync") { (startDateStr: String, endDateStr: String, calendarIds: [String?], status: String?, promise: Promise) in
++    AsyncFunction("getRemindersAsync") { (startDateStr: String?, endDateStr: String?, calendarIds: [String?], status: String?, promise: Promise) in
+       try checkRemindersPermissions()
+       var reminderCalendars = [EKCalendar]()
+       let startDate = parse(date: startDateStr)
+diff --git a/node_modules/expo-calendar/src/Calendar.ts b/node_modules/expo-calendar/src/Calendar.ts
+index 1d9783f..b0b173b 100644
+--- a/node_modules/expo-calendar/src/Calendar.ts
++++ b/node_modules/expo-calendar/src/Calendar.ts
+@@ -7,7 +7,7 @@ export {
+   PermissionResponse,
+   PermissionStatus,
+   PermissionHookOptions,
+-  PermissionExpiration,
++  PermissionExpiration
+ } from 'expo-modules-core';
+ 
+ // @needsAudit
+@@ -948,7 +948,7 @@ export async function createEventAsync(
+ 
+   const newDetails = {
+     ...details,
+-    calendarId,
++    calendarId
+   };
+ 
+   return ExpoCalendar.saveEventAsync(stringifyDateValues(newDetails), {});
+@@ -1140,8 +1140,8 @@ export async function deleteAttendeeAsync(id: string): Promise<void> {
+ export async function getRemindersAsync(
+   calendarIds: (string | null)[],
+   status: ReminderStatus | null,
+-  startDate: Date,
+-  endDate: Date
++  startDate: Date | null,
++  endDate: Date | null
+ ): Promise<Reminder[]> {
+   if (!ExpoCalendar.getRemindersAsync) {
+     throw new UnavailabilityError('Calendar', 'getRemindersAsync');
+@@ -1206,7 +1206,7 @@ export async function createReminderAsync(
+   const { id, ...details } = reminder;
+   const newDetails = {
+     ...details,
+-    calendarId: calendarId === null ? undefined : calendarId,
++    calendarId: calendarId === null ? undefined : calendarId
+   };
+   return ExpoCalendar.saveReminderAsync(stringifyDateValues(newDetails));
+ }
+@@ -1381,7 +1381,7 @@ export async function requestRemindersPermissionsAsync(): Promise<PermissionResp
+  */
+ export const useCalendarPermissions = createPermissionHook({
+   getMethod: getCalendarPermissionsAsync,
+-  requestMethod: requestCalendarPermissionsAsync,
++  requestMethod: requestCalendarPermissionsAsync
+ });
+ 
+ // @needsAudit
+@@ -1397,7 +1397,7 @@ export const useCalendarPermissions = createPermissionHook({
+  */
+ export const useRemindersPermissions = createPermissionHook({
+   getMethod: getRemindersPermissionsAsync,
+-  requestMethod: requestRemindersPermissionsAsync,
++  requestMethod: requestRemindersPermissionsAsync
+ });
+ 
+ // @docsMissing
