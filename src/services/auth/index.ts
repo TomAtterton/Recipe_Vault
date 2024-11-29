@@ -2,17 +2,25 @@ import { supabase } from '@/services';
 import { Env } from '@/core/env';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { translate } from '@/core';
-import { setResetDatabase, setResetProfile } from '@/store';
-import { onOpenDatabase } from '@/database';
+import { setResetProfile } from '@/store';
+import { onResetToDefaultDatabase } from '@/database';
 import { showErrorMessage } from '@/utils/promptUtils';
 
-export const onSignOut = async () => supabase.auth.signOut();
+export const onSignOut = async () => {
+  try {
+    await supabase.auth.signOut();
+    setResetProfile();
+  } catch (error) {
+    showErrorMessage(translate('error_messages.default'), 3000);
+    console.log('Error signing out', error);
+    throw error;
+  }
+};
 
 export const onDisconnect = async () => {
   try {
     setResetProfile();
-    setResetDatabase();
-    await onOpenDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
+    await onResetToDefaultDatabase({});
   } catch (error) {
     showErrorMessage(translate('error_messages.default'), 3000);
     console.log('Error disconnecting account', error);

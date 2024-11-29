@@ -1,5 +1,5 @@
 import { GestureDetector } from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
+import Animated, { SharedValue } from 'react-native-reanimated';
 import { FlatList, Pressable, View } from 'react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useStyles } from 'react-native-unistyles';
@@ -14,7 +14,6 @@ import { styleSheet } from './ingredientBottomSheet.style';
 import useIngredientBottomSheetAnimations from './useIngredientBottomSheetAnimations';
 import { formatIngredient } from '@/services/parser/ingredients/ingredientParser';
 import { filterIngredientsForCurrentStep } from '@/services/parser/ingredients/ingredientsParser';
-import type { SharedValue } from 'react-native-reanimated/src/commonTypes';
 
 interface Props {
   sheetHeight: SharedValue<number>;

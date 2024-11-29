@@ -2,8 +2,7 @@ import * as React from 'react';
 import { View } from 'react-native';
 
 import NavBarButton from '@/components/buttons/NavBarButton';
-import { useStyles } from 'react-native-unistyles';
-import { stylesheet } from '@/screens/Settings/settings.style';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import SettingsButton from '@/components/buttons/SettingsButton';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
@@ -13,6 +12,10 @@ import SupportApp from '@/screens/SupportApp';
 import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
 import { useRef } from 'react';
 import { translate } from '@/core';
+import useHasPremium from '@/services/pro/useHasPremium';
+import Avatar from '@/components/Avatar';
+import LabelButton from '@/components/buttons/LabelButton';
+import useIsLoggedIn from '@/hooks/common/useIsLoggedIn';
 
 const Settings = () => {
   const { styles } = useStyles(stylesheet);
@@ -20,13 +23,12 @@ const Settings = () => {
   const { navigate, goBack } = useNavigation();
   const { top } = useSafeAreaInsets();
   const bottomSheetRef = useRef<BottomSheetRef>(null);
-
   const handleSupportApp = () => {
     bottomSheetRef.current?.present();
   };
-  const handleSyncDatabase = async () => {
-    navigate(Routes.SyncSettings);
-  };
+
+  const hasPremium = useHasPremium();
+  const isLoggedIn = useIsLoggedIn();
 
   return (
     <View
@@ -39,27 +41,25 @@ const Settings = () => {
     >
       <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
       <View style={styles.contentContainer}>
+        <Avatar />
+        {!hasPremium && (
+          <SettingsButton
+            style={styles.upgradeButton}
+            title={translate('general_settings.upgrade_account')}
+            onPress={() => navigate(Routes.ProPlan)}
+            iconSource={'celebrate'}
+          />
+        )}
         <SettingsButton
           title={translate('general_settings.general')}
           onPress={() => navigate(Routes.AppSettings)}
           iconSource={'settings'}
         />
         <SettingsButton
-          title={translate('general_settings.recipes')}
-          onPress={() => navigate(Routes.RecipeSettings)}
-          iconSource={'hamburger'}
-        />
-        <SettingsButton
           title={translate('general_settings.vaults')}
           onPress={() => navigate(Routes.DatabaseSettings)}
           iconSource={'safe'}
         />
-        <SettingsButton
-          title={translate('general_settings.cloud_sync')}
-          onPress={handleSyncDatabase}
-          iconSource={'cloud'}
-        />
-
         <SettingsButton
           title={translate('general_settings.help')}
           onPress={() => navigate(Routes.Help)}
@@ -76,6 +76,12 @@ const Settings = () => {
             onPress={requestReview}
             iconSource={'appstore'}
           />
+          {isLoggedIn && (
+            <LabelButton
+              title={'logout'}
+              onPress={() => navigate(Routes.Login, { showSkip: false })}
+            />
+          )}
           <BottomSheet bottomSheetRef={bottomSheetRef} snapPoints={['50%']}>
             <SupportApp />
           </BottomSheet>
@@ -84,5 +90,32 @@ const Settings = () => {
     </View>
   );
 };
+
+const stylesheet = createStyleSheet(() => ({
+  container: {
+    flex: 1,
+  },
+  contentContainer: {
+    flex: 1,
+    flexGrow: 1,
+    paddingHorizontal: 20,
+    paddingTop: 32,
+    gap: 20,
+  },
+  upgradeButton: {
+    marginBottom: 40,
+  },
+  bottomContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginBottom: 40,
+    gap: 20,
+  },
+  backButton: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+}));
 
 export default Settings;

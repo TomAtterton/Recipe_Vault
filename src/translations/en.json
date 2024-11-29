@@ -114,11 +114,15 @@
     "share_vault": "Share Vault",
     "advanced_vault_settings": "Advanced Vault Settings",
     "add_vault_bottom_sheet_title": "Add a Vault",
+    "enable_cloud_vault": "Upgrade to Cloud Vault",
     "create_vault": "Create a New Vault",
     "join_vault": "Join a Vault",
     "switch_vault_bottom_sheet_title": "Switch Vault",
     "cloud_vaults": "Cloud Vaults",
-    "local_vault": "Local Vault"
+    "local_vault": "Local Vault",
+    "unlock_premium_features": "Unlock cool features with Premium",
+    "other_vaults": "Other Vaults:",
+    "login_to_sync": "Log in to sync your databases with the cloud."
   },
   "recipe_header_content": {
     "prep_time": "Prep",
@@ -192,16 +196,18 @@
     "see_all": "See All",
     "continue": "Continue",
     "skip": "Skip",
-    "save": "Save"
+    "save": "Save",
+    "premium": "Premium",
+    "free": "Free"
   },
   "purchase_screen": {
-    "title": "Upgrade to pro vault",
+    "title": "Upgrade to premium",
     "sync_feature": "Sync unlimited recipes to the cloud.",
-    "share_feature": "Share your pro vault with up to 2 friends and family.",
+    "share_feature": "Share your cloud vaults with up to 2 friends and family.",
     "support_feature": "Help support the development of Recipe Vault.",
     "life_time_purchase": "Life Time \n Purchase",
-    "upgrade_button": "Upgrade vault",
-    "continue_free_button": "Continue with free vault",
+    "upgrade_button": "Upgrade account",
+    "continue_free_button": "Continue with free for now",
     "login_button": "Login to upgrade"
   },
   "welcome_onboarding": {
@@ -217,10 +223,11 @@
     "save_button": "Save"
   },
   "general_settings": {
+    "upgrade_account": "Upgrade to premium",
     "title": "Settings.",
     "general": "General",
     "recipes": "Recipes",
-    "vaults": "Vaults",
+    "vaults": "Recipe Vaults",
     "cloud_sync": "Cloud Sync",
     "help": "Help",
     "support_app": "Support App",
@@ -283,7 +290,7 @@
   "login": {
     "test_login_title": "Test Login",
     "title": "Login to create a Cloud Vault!",
-    "feature1": "Sync recipes to the cloud",
+    "feature1": "Sync 5 recipes to the cloud",
     "feature2": "Share your vault with up to 2 friends and family",
     "feature3": "Join shared vaults of other users",
     "feature4": "Plan your meals with friends",
@@ -363,23 +370,46 @@
     "for_text": "{{title}} for"
   },
   "advance_settings": {
-    "title": "Advance Vault Settings.",
+    "title": "Advanced Vault Settings.",
     "danger_zone": "Danger Zone",
     "danger_zone_description": "Having trouble with your database? Be careful with these settings. This action is irreversible.",
     "clear_all_recipes": "Clear All Recipes",
     "delete_reset_vault": "Delete & Reset Vault",
     "delete_cloud_vault": "Delete Cloud Vault",
+    "leave_cloud_vault": "Leave Cloud Vault",
+    "vault_type": "Vault Type",
+    "local_vault": "Local Vault",
+    "cloud_vault": "Cloud Vault",
+    "shared_vault": "Shared Vault",
+    "enable_cloud_vault": "Upgrade to Cloud Vault",
     "success": {
-      "deleting_vault": "Your vault has been deleted."
+      "deleting_vault": "Your vault has been deleted.",
+      "leaving_vault": "You have successfully left the cloud vault."
     },
     "errors": {
-      "deleting_vault": "There was an issue deleting your vault."
+      "deleting_vault": "There was an issue deleting your vault.",
+      "leaving_vault": "There was an issue leaving the cloud vault."
     }
+  },
+  "migrate_to_cloud": {
+    "title": "Elevate Your Recipe Vault!",
+    "modal_title": "Time to Level Up Your Vault!",
+    "premium_message": "🍳 Wow, your vault is brimming with {{numberOfRecipes}} recipes! Upgrade to Premium to securely migrate them all to the cloud and share your culinary masterpieces.",
+    "modal_message": "Hey there, Chef! Ready to take your recipes to the cloud? Let's sprinkle some magic and make your vault accessible anywhere!",
+    "save_message": "Save your recipes securely in the cloud to access them from anywhere and share them with fellow foodies.",
+    "vault_name_placeholder": "Pick a cloud vault name",
+    "save_button": "Save to Cloud",
+    "upgrade_button": "Upgrade to Premium",
+    "learn_more_button": "Learn About Premium Benefits",
+    "continue_button": "Continue with Local Vault",
+    "error_invalid_vault_name": "Please use only letters for your vault name. Numbers and special characters are not allowed.",
+    "error_migration_failed": "Migration failed. Please try again."
   },
   "account_settings": {
     "title": "Account Settings.",
     "name": "Name",
     "email": "Email",
+    "status": "Status",
     "danger_zone": "Danger Zone",
     "danger_zone_description": "Be careful with these settings. This action is irreversible.",
     "delete_account": "Delete Account"
@@ -387,8 +417,8 @@
   "limitation": {
     "title": "Why the limitation ?",
     "description1": "Our goal is to give everyone a taste by offering 5 recipe slots for free, you can explore the benefits of cloud syncing and see how it fits into your cooking routine.",
-    "description2": "If you find that 5 slots aren’t enough, you can always upgrade to our Pro Vault at a later point.",
-    "button": "Learn more about pro vaults"
+    "description2": "If you find that 5 slots aren’t enough, you can always upgrade to premium at a later point.",
+    "button": "Learn more about premium"
   },
   "settings": {
     "about": "About",
@@ -402,6 +432,7 @@
     "group_id": "Group ID:",
     "group_name": "Group Name",
     "logout": "Logout",
+    "login": "Login",
     "user_id": "User ID:",
     "version": "Version:"
   }

@@ -26,6 +26,7 @@ export const stylesheet = createStyleSheet((theme) => ({
     borderWidth: 1,
     borderRadius: 8,
   },
+  buttonContainer: { flex: 1 },
   addVaultButton: {
     marginBottom: 20,
   },

@@ -1,5 +1,5 @@
 import { openDatabaseAsync, SQLiteDatabase, SQLiteOpenOptions } from 'expo-sqlite';
-import { useBoundStore } from '@/store';
+import { setResetDatabase, useBoundStore } from '@/store';
 import { Env } from '@/core/env';
 import { sqlInsert } from '@/database/sql';
 import {
@@ -23,7 +23,7 @@ export const setDatabase = (db: SQLiteDatabase | undefined) => {
   database = db;
 };
 
-const DATABASE_VERSION = 4;
+const DATABASE_VERSION = 9;
 
 const initDatabase = async (db: SQLiteDatabase) => {
   // Always set these PRAGMA statements for each session
@@ -33,6 +33,7 @@ const initDatabase = async (db: SQLiteDatabase) => {
   let { user_version: currentDbVersion } = await db.getFirstAsync<{ user_version: number }>(
     'PRAGMA user_version',
   );
+  const shouldSync = useBoundStore.getState().shouldSync;
 
   if (currentDbVersion >= DATABASE_VERSION) {
     return;
@@ -40,10 +41,10 @@ const initDatabase = async (db: SQLiteDatabase) => {
 
   await createTables(db);
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
-  const shouldSync = useBoundStore.getState().shouldSync;
+  // const shouldSync = useBoundStore.getState().shouldSync;
 
   if (!shouldSync) {
-    const initialGroupId = Env.TEST_GROUP_ID;
+    const initialGroupId = Env.LOCAL_GROUP_ID;
     const initialGroup = await database?.getFirstAsync<{
       id: string;
     }>(`SELECT id FROM groups WHERE id = '${initialGroupId}'`);
@@ -76,6 +77,31 @@ const createTables = async (db?: SQLiteDatabase) => {
   }
 };
 
+export const onResetToDefaultDatabase = async ({
+  shouldResetDatabase = true,
+  shouldClose = true,
+}: {
+  shouldResetDatabase?: boolean;
+  shouldClose?: boolean;
+}) => {
+  try {
+    if (shouldResetDatabase) {
+      //  First we clear local storage and reset to default
+      setResetDatabase();
+    }
+
+    //  TODO should we change this as it will store double data right ?
+    // Then we open the default database
+    await onOpenDatabase({
+      currentDatabaseName: Env.SQLITE_DB_NAME,
+      shouldClose,
+    });
+  } catch (e) {
+    console.log('error resetting database', e);
+    throw e;
+  }
+};
+
 export const onOpenDatabase = async ({
   currentDatabaseName,
   shouldClose = true,
@@ -99,6 +125,7 @@ export const onOpenDatabase = async ({
     });
 
     setDatabase(newDatabase);
+
     await initDatabase(newDatabase);
   } catch (e) {
     console.log('error opening database', e);

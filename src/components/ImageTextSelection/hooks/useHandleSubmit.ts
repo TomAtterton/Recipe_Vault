@@ -5,7 +5,6 @@ import {
 } from '@/screens/RecipeWebview/utils/translateWebview';
 import { randomUUID } from 'expo-crypto';
 import { getUserId } from '@/hooks/common/useUserId';
-import { Env } from '@/core/env';
 import { navigateToAddRecipe } from '@/navigation/helper';
 import { useNavigation } from '@react-navigation/native';
 import { BoundingBox, SelectedBox } from '@/components/ImageTextSelection/types';
@@ -56,7 +55,7 @@ const useHandleSubmit = (selectedBlocks: SelectedBox[]) => {
 
     const recipeObject = {
       id: randomUUID(),
-      userId: getUserId() || Env.TEST_USER_ID,
+      userId: getUserId(),
       name: title,
       prepTime: prepTime,
       performTime: cookTime,

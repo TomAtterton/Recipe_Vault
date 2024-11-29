@@ -78,19 +78,25 @@ export type Database = {
       }
       groups: {
         Row: {
+          access_level: string
           created_at: string | null
+          created_by: string | null
           id: string
           name: string
           updated_at: string | null
         }
         Insert: {
+          access_level?: string
           created_at?: string | null
+          created_by?: string | null
           id?: string
           name: string
           updated_at?: string | null
         }
         Update: {
+          access_level?: string
           created_at?: string | null
+          created_by?: string | null
           id?: string
           name?: string
           updated_at?: string | null

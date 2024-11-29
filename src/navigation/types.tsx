@@ -19,9 +19,17 @@ export type RootStackParamList = RecipeDetailStackParamList &
     [Routes.Credits]: undefined;
     [Routes.Privacy]: undefined;
     [Routes.Help]: undefined;
-    [Routes.AdvanceVaultSettings]: undefined;
+    [Routes.AdvanceVaultSettings]: {
+      id: string;
+      name: string;
+      isShared: boolean;
+    };
     [Routes.Onboarding]: undefined;
     [Routes.DatabaseSettings]: undefined;
+    [Routes.MigrateToCloud]: undefined;
+    [Routes.MigrateToCloudModal]: {
+      isModal: boolean;
+    };
     [Routes.AccountSettings]: undefined;
     [Routes.AppSettings]: undefined;
     [Routes.RecipeSettings]: undefined;

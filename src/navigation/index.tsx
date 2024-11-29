@@ -15,7 +15,7 @@ import AddGroceries from '@/screens/AddGroceries';
 import RecipeTextInputContainer from 'src/screens/RecipeTextInputContainer';
 import DatabaseSettings from '@/screens/Settings/pages/DatabaseSettings';
 import Onboarding from '@/screens/Onboarding';
-import SyncSettings from '@/screens/Settings/pages/SyncSettings';
+// import /SyncSettings from '@/screens/Settings/pages/SyncSettings';
 import AppSettings from '@/screens/Settings/pages/AppSettings';
 import Privacy from '@/screens/Privacy';
 import Help from '@/screens/Help';
@@ -31,6 +31,7 @@ import WelcomeOnboarding from '@/screens/WelcomeOnboarding';
 import Credits from '@/screens/Credits';
 import AdvanceDatabaseSettings from '@/screens/Settings/pages/DatabaseSettings/AdvanceDatabaseSettings';
 import CookingOverview from '@/screens/CookingOverview';
+import MigrateToCloud from '@/screens/MigrateToCloud';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +53,18 @@ export const RootNavigator = () => {
       />
       <Stack.Screen name={Routes.Login} component={Login} options={defaultOptions} />
       <Stack.Screen name={Routes.Profile} component={Profile} options={defaultOptions} />
+      <Stack.Screen
+        name={Routes.MigrateToCloud}
+        component={MigrateToCloud}
+        options={defaultOptions}
+      />
+      <Stack.Screen
+        name={Routes.MigrateToCloudModal}
+        component={MigrateToCloud}
+        options={{
+          presentation: 'modal',
+        }}
+      />
       <Stack.Screen
         name={Routes.WelcomeOnboarding}
         component={WelcomeOnboarding}
@@ -168,15 +181,15 @@ export const RootNavigator = () => {
           navigationBarHidden: true,
         }}
       />
-      <Stack.Screen
-        key={Routes.SyncSettings}
-        name={Routes.SyncSettings}
-        component={SyncSettings}
-        options={{
-          headerShown: false,
-          navigationBarHidden: true,
-        }}
-      />
+      {/*<Stack.Screen*/}
+      {/*  key={Routes.SyncSettings}*/}
+      {/*  name={Routes.SyncSettings}*/}
+      {/*  component={SyncSettings}*/}
+      {/*  options={{*/}
+      {/*    headerShown: false,*/}
+      {/*    navigationBarHidden: true,*/}
+      {/*  }}*/}
+      {/*/>*/}
       <Stack.Screen
         key={Routes.Privacy}
         name={Routes.Privacy}

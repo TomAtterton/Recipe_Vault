@@ -35,4 +35,6 @@ export enum Routes {
   AdvanceVaultSettings = 'AdvanceVaultSettings',
   CookingOverview = 'CookingOverview',
   ImageTextSelection = 'ImageTextSelection',
+  MigrateToCloud = 'MigrateToCloud',
+  MigrateToCloudModal = 'MigrateToCloudModal',
 }

@@ -4,6 +4,8 @@ export const createGroupsTable = `
     created_at TEXT,
     updated_at TEXT,
     name TEXT,
-    is_modified INTEGER
+    is_modified INTEGER,
+    created_by TEXT,
+    access_level TEXT
   );
 `;
