@@ -6,6 +6,8 @@ export type AppSlice = {
   setHasOnboarded: (hasOnboarded: boolean) => void;
   darkMode: boolean;
   setDarkMode: (darkMode: boolean) => void;
+  invitationCode: string | undefined;
+  setInvitationCode: (invitationCode: string | undefined) => void;
   hasReminderPermission: boolean;
   setHasReminderPermission: (hasReminderPermission: boolean) => void;
   hasSeenMigrationPrompt: boolean;
@@ -17,6 +19,7 @@ const initialAppState = {
   darkMode: true,
   hasReminderPermission: false,
   hasSeenMigrationPrompt: false,
+  invitationCode: undefined,
 };
 
 export const createAppSlice: StateCreator<AppSlice, [], [], AppSlice> = (set) => {
@@ -27,5 +30,6 @@ export const createAppSlice: StateCreator<AppSlice, [], [], AppSlice> = (set) =>
     setDarkMode: (darkMode) => set({ darkMode }),
     setHasReminderPermission: (hasReminderPermission) => set({ hasReminderPermission }),
     setHasSeenMigrationPrompt: (hasSeenMigrationPrompt) => set({ hasSeenMigrationPrompt }),
+    setInvitationCode: (invitationCode) => set({ invitationCode }),
   };
 };

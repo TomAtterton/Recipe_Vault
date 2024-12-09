@@ -103,6 +103,41 @@ export type Database = {
         }
         Relationships: []
       }
+      invitations: {
+        Row: {
+          created_at: string
+          group_id: string | null
+          id: number
+          invitation_code: string | null
+          max_redeem: number | null
+          redeem_count: number | null
+        }
+        Insert: {
+          created_at?: string
+          group_id?: string | null
+          id?: number
+          invitation_code?: string | null
+          max_redeem?: number | null
+          redeem_count?: number | null
+        }
+        Update: {
+          created_at?: string
+          group_id?: string | null
+          id?: number
+          invitation_code?: string | null
+          max_redeem?: number | null
+          redeem_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invitations_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mealplans: {
         Row: {
           created_at: string | null

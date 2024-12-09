@@ -1,14 +1,13 @@
-import { FlatList, View } from 'react-native';
+import { ActivityIndicator, FlatList, View } from 'react-native';
 import Typography from '@/components/Typography';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import SettingsButton from '@/components/buttons/SettingsButton';
 import * as React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
 import { useBoundStore } from '@/store';
 import useHandleSwitchDatabase from './useHandleSwitchDatabase';
 import { Env } from '@/core/env';
-import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
+import { BottomSheetRef } from '@/components/BottomSheet';
 import { useMemo, useRef, useState } from 'react';
 import useIsLoggedIn from '@/hooks/common/useIsLoggedIn';
 import AddButton from '@/components/buttons/AddButton';
@@ -16,16 +15,16 @@ import SettingsContainer from '@/components/SettingsContainer';
 import useHasPremium from '@/services/pro/useHasPremium';
 import OutlineButton from '@/components/buttons/OutlineButton';
 import LabelButton from '@/components/buttons/LabelButton';
-import DatabaseSettingsOptions from '@/screens/Settings/pages/DatabaseSettings/DatabaseSettingsOptions';
-import DatabaseSettingsItem from '@/screens/Settings/pages/DatabaseSettings/DatabaseSettingsItem';
+import DatabaseSettingsOptions from './DatabaseSettingsOptions';
+import DatabaseSettingsItem from './DatabaseSettingsItem';
 import { DatabaseObject } from '@/types';
-import { translate } from '@/core'; // Ensure you have the translate function imported
+import { translate } from '@/core';
+import useHandleInvite from '@/hooks/common/useHandleInvitation';
 
 const DatabaseSettingsScreen = () => {
   const { styles } = useStyles(stylesheet);
   const { navigate } = useNavigation();
 
-  const createJoinBottomSheetRef = useRef<BottomSheetRef>(null);
   const vaultOptionsBottomSheetRef = useRef<BottomSheetRef>(null);
 
   const currentGroupId = useBoundStore((state) => state.profile.groupId);
@@ -37,24 +36,17 @@ const DatabaseSettingsScreen = () => {
   const [selectedVault, setSelectedVault] = useState<DatabaseObject | undefined>();
 
   const navigateToCreateVault = () => {
-    createJoinBottomSheetRef.current?.dismiss();
     navigate(Routes.CreateVault);
-  };
-
-  const navigateToJoinVault = () => {
-    createJoinBottomSheetRef.current?.dismiss();
-    navigate(Routes.JoinVault);
   };
 
   const handleCreateOrJoinVault = () => {
     if (isLoggedIn) {
-      createJoinBottomSheetRef.current?.present();
+      navigateToCreateVault();
     } else {
       navigate(Routes.Login, { showSkip: false });
     }
   };
 
-  // Prepare data for current vault and available vaults
   const currentVaultData = useMemo(
     () => availableGroups.find((group) => group.id === currentGroupId),
     [currentGroupId, availableGroups],
@@ -70,8 +62,11 @@ const DatabaseSettingsScreen = () => {
     vaultOptionsBottomSheetRef.current?.present();
   };
 
+  const { onInviteToVault, isLoading } = useHandleInvite();
+  const handleShare = (id: string, name: string) => onInviteToVault(id, name);
+
   const renderItem = ({ item }: { item: DatabaseObject | undefined }) => (
-    <DatabaseSettingsItem item={item} onPress={handleItemPress} />
+    <DatabaseSettingsItem item={item} onPress={handleItemPress} onShare={handleShare} />
   );
 
   const handleUpgradeToCloudVault = () => {
@@ -88,109 +83,99 @@ const DatabaseSettingsScreen = () => {
   const isCurrentSharedVault = currentVaultData?.isShared;
 
   return (
-    <SettingsContainer title={translate('database_settings.title')}>
-      <View style={styles.contentContainer}>
-        <View style={styles.currentVaultContainer}>
-          <Typography variant="titleMedium" style={styles.vaultTitle}>
-            {translate('database_settings.current_vault')}
-          </Typography>
-          {currentVaultData && (
-            <DatabaseSettingsItem item={currentVaultData} onPress={handleItemPress} />
-          )}
-
-          {isLocalVault && (
-            <LabelButton
-              title={translate('database_settings.enable_cloud_vault')}
-              onPress={handleUpgradeToCloudVault}
-              style={styles.migrationLabelButton}
-            />
-          )}
-
-          {currentVaultData?.id !== Env.LOCAL_GROUP_ID && !hasPremium && !isCurrentSharedVault && (
-            <LabelButton
-              title={translate('database_settings.unlock_premium_features')}
-              onPress={() => navigate(Routes.ProPlan)}
-              style={styles.migrationLabelButton}
-            />
-          )}
-        </View>
-
-        {/* Other Vaults Section */}
-        {availableVaults.length > 0 && (
-          <View style={styles.otherVaultsContainer}>
+    <>
+      <SettingsContainer title={translate('database_settings.title')}>
+        <View style={styles.contentContainer}>
+          <View style={styles.currentVaultContainer}>
             <Typography variant="titleMedium" style={styles.vaultTitle}>
-              {translate('database_settings.other_vaults')}
+              {translate('database_settings.current_vault')}
             </Typography>
-            <FlatList
-              data={availableVaults}
-              keyExtractor={(item) => item.id}
-              renderItem={renderItem}
-              contentContainerStyle={styles.flatListContent}
+            {currentVaultData && (
+              <DatabaseSettingsItem
+                item={currentVaultData}
+                onPress={handleItemPress}
+                onShare={handleShare}
+              />
+            )}
+
+            {isLocalVault && (
+              <LabelButton
+                title={translate('database_settings.enable_cloud_vault')}
+                onPress={handleUpgradeToCloudVault}
+                style={styles.migrationLabelButton}
+              />
+            )}
+
+            {currentVaultData?.id !== Env.LOCAL_GROUP_ID &&
+              !hasPremium &&
+              !isCurrentSharedVault && (
+                <LabelButton
+                  title={translate('database_settings.unlock_premium_features')}
+                  onPress={() => navigate(Routes.ProPlan)}
+                  style={styles.migrationLabelButton}
+                />
+              )}
+          </View>
+
+          {/* Other Vaults Section */}
+          {availableVaults.length > 0 && (
+            <View style={styles.otherVaultsContainer}>
+              <Typography variant="titleMedium" style={styles.vaultTitle}>
+                {translate('database_settings.other_vaults')}
+              </Typography>
+              <FlatList
+                data={availableVaults}
+                keyExtractor={(item) => item.id}
+                renderItem={renderItem}
+                contentContainerStyle={styles.flatListContent}
+              />
+            </View>
+          )}
+          {!hasMaxDatabases && (
+            <View style={styles.createVaultButtonContainer}>
+              <AddButton
+                style={styles.addVaultButton}
+                title={translate('database_settings.add_vault_button')}
+                onPress={handleCreateOrJoinVault}
+              />
+            </View>
+          )}
+          <DatabaseSettingsOptions
+            vaultOptionsBottomSheetRef={vaultOptionsBottomSheetRef}
+            selectedVault={selectedVault}
+            currentGroupId={currentGroupId}
+            handleSwitchDatabase={handleSwitchDatabase}
+            onShare={handleShare}
+          />
+        </View>
+        {!isLoggedIn && (
+          <View style={styles.footer}>
+            <Typography style={styles.footerText}>
+              {translate('database_settings.login_to_sync')}
+            </Typography>
+            <OutlineButton
+              title={translate('settings.login')}
+              onPress={() => navigate(Routes.Login, { showSkip: false })}
+              style={styles.footerButton}
             />
           </View>
         )}
-        {!hasMaxDatabases && (
-          <View style={styles.createVaultButtonContainer}>
-            <AddButton
-              style={styles.addVaultButton}
-              title={translate('database_settings.add_vault_button')}
-              onPress={handleCreateOrJoinVault}
+
+        {isLoggedIn && !hasPremium && (
+          <View style={styles.footer}>
+            <Typography style={styles.footerText}>
+              {translate('database_settings.unlock_premium_features')}
+            </Typography>
+            <OutlineButton
+              title={translate('general_settings.upgrade_account')}
+              onPress={() => navigate(Routes.ProPlan)}
+              style={styles.footerButton}
             />
           </View>
         )}
-
-        {/* Bottom Sheets */}
-        <BottomSheet
-          bottomSheetRef={createJoinBottomSheetRef}
-          title={translate('database_settings.add_vault_bottom_sheet_title')}
-        >
-          <View style={styles.bottomSheetContainer}>
-            <SettingsButton
-              iconSource="cloud"
-              title={translate('database_settings.create_vault')}
-              onPress={navigateToCreateVault}
-            />
-            <SettingsButton
-              iconSource="cloud"
-              title={translate('database_settings.join_vault')}
-              onPress={navigateToJoinVault}
-            />
-          </View>
-        </BottomSheet>
-
-        <DatabaseSettingsOptions
-          vaultOptionsBottomSheetRef={vaultOptionsBottomSheetRef}
-          selectedVault={selectedVault}
-          currentGroupId={currentGroupId}
-          handleSwitchDatabase={handleSwitchDatabase}
-        />
-      </View>
-      {!isLoggedIn && (
-        <View style={styles.footer}>
-          <Typography style={styles.footerText}>
-            {translate('database_settings.login_to_sync')}
-          </Typography>
-          <OutlineButton
-            title={translate('settings.login')}
-            onPress={() => navigate(Routes.Login, { showSkip: false })}
-            style={styles.footerButton}
-          />
-        </View>
-      )}
-
-      {isLoggedIn && !hasPremium && (
-        <View style={styles.footer}>
-          <Typography style={styles.footerText}>
-            {translate('database_settings.unlock_premium_features')}
-          </Typography>
-          <OutlineButton
-            title={translate('general_settings.upgrade_account')}
-            onPress={() => navigate(Routes.ProPlan)}
-            style={styles.footerButton}
-          />
-        </View>
-      )}
-    </SettingsContainer>
+      </SettingsContainer>
+      {isLoading && <ActivityIndicator style={styles.activityIndicator} />}
+    </>
   );
 };
 
@@ -220,12 +205,6 @@ const stylesheet = createStyleSheet((theme) => ({
     paddingHorizontal: 20,
     paddingBottom: 20,
   },
-  bottomSheetContainer: {
-    flex: 1,
-    gap: 16,
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
   footer: {
     padding: 20,
     borderTopWidth: 1,
@@ -241,6 +220,14 @@ const stylesheet = createStyleSheet((theme) => ({
   },
   migrationLabelButton: {
     marginTop: 10,
+  },
+  activityIndicator: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 }));
 

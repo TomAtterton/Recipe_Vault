@@ -22,7 +22,7 @@ const EditRecipe = ({}) => {
 
   const { onDeleteRecipe } = useDeleteRecipe();
 
-  const handleDeleteRecipe = () => onDeleteRecipe({ id, previousImage: data?.image || '' });
+  const handleDeleteRecipe = () => onDeleteRecipe({ id });
 
   return data ? (
     <RecipeForm

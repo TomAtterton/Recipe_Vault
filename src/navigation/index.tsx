@@ -6,7 +6,6 @@ import { TabNavigator } from './tabNavigator';
 import { RecipeDetailNavigator } from '@/navigation/recipeDetailNavigator';
 import { Routes } from '@/navigation/Routes';
 import Settings from '@/screens/Settings';
-import useHandleShare from '@/hooks/common/useHandleShare';
 import Login from '@/screens/Login';
 import Splashscreen from '@/screens/Splashscreen';
 import Search from '@/screens/Search';
@@ -15,7 +14,6 @@ import AddGroceries from '@/screens/AddGroceries';
 import RecipeTextInputContainer from 'src/screens/RecipeTextInputContainer';
 import DatabaseSettings from '@/screens/Settings/pages/DatabaseSettings';
 import Onboarding from '@/screens/Onboarding';
-// import /SyncSettings from '@/screens/Settings/pages/SyncSettings';
 import AppSettings from '@/screens/Settings/pages/AppSettings';
 import Privacy from '@/screens/Privacy';
 import Help from '@/screens/Help';
@@ -40,7 +38,6 @@ const defaultOptions = {
 };
 
 export const RootNavigator = () => {
-  useHandleShare();
   return (
     <Stack.Navigator initialRouteName={Routes.Splashscreen} screenOptions={defaultOptions}>
       <Stack.Screen name={Routes.Splashscreen} component={Splashscreen} options={defaultOptions} />
@@ -181,15 +178,7 @@ export const RootNavigator = () => {
           navigationBarHidden: true,
         }}
       />
-      {/*<Stack.Screen*/}
-      {/*  key={Routes.SyncSettings}*/}
-      {/*  name={Routes.SyncSettings}*/}
-      {/*  component={SyncSettings}*/}
-      {/*  options={{*/}
-      {/*    headerShown: false,*/}
-      {/*    navigationBarHidden: true,*/}
-      {/*  }}*/}
-      {/*/>*/}
+
       <Stack.Screen
         key={Routes.Privacy}
         name={Routes.Privacy}

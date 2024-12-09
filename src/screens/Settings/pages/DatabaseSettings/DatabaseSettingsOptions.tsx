@@ -1,5 +1,5 @@
 import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
-import { Share, View } from 'react-native';
+import { View } from 'react-native';
 import Typography from '@/components/Typography';
 import { Env } from '@/core/env';
 import SettingsButton from '@/components/buttons/SettingsButton';
@@ -14,11 +14,13 @@ const DatabaseSettingsOptions = ({
   selectedVault,
   currentGroupId,
   handleSwitchDatabase,
+  onShare,
 }: {
   vaultOptionsBottomSheetRef: React.RefObject<BottomSheetRef>;
   selectedVault?: DatabaseObject;
   currentGroupId: string;
   handleSwitchDatabase: (id: string) => Promise<void>;
+  onShare: (id: string, name: string) => void;
 }) => {
   const { navigate } = useNavigation();
   const { styles } = useStyles(stylesheet);
@@ -69,10 +71,7 @@ const DatabaseSettingsOptions = ({
             title="Share this Vault"
             onPress={async () => {
               vaultOptionsBottomSheetRef.current?.dismiss();
-              await Share.share({
-                title: 'Share this vault with a friend',
-                message: `Vault ID: ${selectedVault?.id || ''}`,
-              });
+              selectedVault?.id && onShare(selectedVault.id, selectedVault.name);
             }}
             iconSource="paper-plane"
           />

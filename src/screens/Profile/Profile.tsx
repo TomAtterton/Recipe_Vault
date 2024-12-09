@@ -19,6 +19,7 @@ const Profile = () => {
   const { styles } = useStyles(stylesheet);
 
   const userId = useBoundStore((state) => state.session?.user.id);
+  const invitationCode = useBoundStore((state) => state.invitationCode);
 
   const [name, setName] = React.useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -49,6 +50,21 @@ const Profile = () => {
           routes: [{ name: Routes.WelcomeOnboarding }],
         });
       } else {
+        if (invitationCode) {
+          reset({
+            index: 0,
+            routes: [
+              { name: Routes.TabStack },
+              {
+                name: Routes.JoinVault,
+                params: {
+                  invitationCode,
+                },
+              },
+            ],
+          });
+          return;
+        }
         reset({
           index: 0,
           routes: [{ name: Routes.TabStack }],

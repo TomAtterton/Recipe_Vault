@@ -105,11 +105,15 @@
       "learn_more": "Learn More"
     }
   },
+  "share_app": {
+    "title": "Share the App.",
+    "message": "Share Recipe Vault with your friends and family to discover and contribute to a world of recipes."
+  },
   "database_settings": {
     "title": "Vault Settings.",
     "current_vault": "Current Vault:",
     "synced_to_cloud": "Synced to Cloud:",
-    "add_vault_button": "Create or Join a Vault",
+    "add_vault_button": "Create a new Vault",
     "switch_vault": "Switch Vault",
     "share_vault": "Share Vault",
     "advanced_vault_settings": "Advanced Vault Settings",
@@ -247,7 +251,8 @@
     "placeholder": "Enter Vault Code",
     "button": "Join Vault",
     "description": "Have a vault code? Enter it here to join a cloud vault and explore a world of recipes with up to two friends or family. If you don’t have one, consider creating your own vault!",
-    "title": "Join a Vault"
+    "title": "Join a Vault",
+    "invited_description": "You have been invited to join the {{vaultName}} vault! Ready to explore?"
   },
   "filter": {
     "title": "Filter Options",

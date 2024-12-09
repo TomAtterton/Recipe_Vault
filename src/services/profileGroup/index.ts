@@ -1,7 +1,7 @@
 import { supabase } from '@/services';
 import { randomUUID } from 'expo-crypto';
 
-const MAX_GROUP_SIZE = 2;
+const MAX_GROUP_SIZE = 3;
 
 const checkProfileGroupSize = async ({ groupId }: { groupId: string }) => {
   try {

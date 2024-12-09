@@ -23,7 +23,7 @@ const WelcomeOnboarding = () => {
   };
 
   const handleJoinVault = () => {
-    navigate(Routes.JoinVault);
+    navigate(Routes.JoinVault, {});
   };
 
   const handleLogout = () => {

@@ -30,20 +30,15 @@ const Avatar = ({}) => {
     }
   };
 
-  const vaultTitle = useMemo(() => {
-    return (
-      translate('database_settings.current_vault') +
-      ' ' +
-      (vaultName === Env.SQLITE_DB_NAME ? translate('database_settings.local_vault') : vaultName)
-    );
-  }, [vaultName]);
+  const vaultTitle = useMemo(
+    () =>
+      vaultName === Env.SQLITE_DB_NAME ? translate('database_settings.local_vault') : vaultName,
+    [vaultName],
+  );
 
   return (
     <Pressable
-      style={({ pressed }) => [
-        styles.avatarContainer,
-        { opacity: pressed ? 0.7 : 1 }, // Add pressed opacity effect
-      ]}
+      style={({ pressed }) => [styles.avatarContainer, { opacity: pressed ? 0.7 : 1 }]}
       onPress={handlePress}
     >
       <View style={[styles.avatarCircle, { borderColor: theme.colors.onBackground }]}>
@@ -54,9 +49,12 @@ const Avatar = ({}) => {
           <Typography variant={'bodyMediumItalic'} style={styles.avatarName}>
             {name}
           </Typography>
-          <Typography variant={'bodyMediumItalic'} style={styles.vaultName}>
-            {vaultTitle}
-          </Typography>
+          <View style={styles.vaultContainer}>
+            <Icon name={'vault'} size={16} color={theme.colors.onBackground} />
+            <Typography variant={'bodyMediumItalic'} style={styles.vaultName}>
+              {vaultTitle}
+            </Typography>
+          </View>
         </>
       ) : (
         <Typography variant={'bodyMediumItalic'} style={styles.loginText}>
@@ -86,8 +84,14 @@ const stylesheet = createStyleSheet((theme) => ({
     textTransform: 'capitalize',
     color: theme.colors.primary,
   },
-  vaultName: {
+  vaultContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
     marginTop: 8,
+  },
+  vaultName: {
     textAlign: 'center',
     textTransform: 'capitalize',
   },

@@ -20,7 +20,7 @@ export const stylesheet = createStyleSheet((theme) => ({
     marginTop: 20,
   },
   dangerZoneTitle: {
-    color: theme.colors.error,
+    color: theme.colors.primary,
   },
   dangerZoneContainer: {
     flex: 1,

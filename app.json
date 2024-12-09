@@ -20,6 +20,7 @@
       "bundleIdentifier": "com.tomatterton.recipeapp",
       "usesAppleSignIn": true,
       "icon": "./assets/icon.png",
+      "associatedDomains": ["applinks:recipevault.nl"],
       "config": {
         "usesNonExemptEncryption": false
       }

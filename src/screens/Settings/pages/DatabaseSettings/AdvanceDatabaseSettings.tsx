@@ -3,8 +3,7 @@ import { translate } from '@/core';
 import { database, onResetToDefaultDatabase } from '@/database';
 import { showErrorMessage, showSuccessMessage } from '@/utils/promptUtils';
 import { deleteDatabaseAsync } from 'expo-sqlite';
-import { useStyles } from 'react-native-unistyles';
-import { stylesheet } from '@/screens/Settings/pages/DatabaseSettings/databaseSettings.style';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import Typography from '@/components/Typography';
 import * as React from 'react';
 import { onDeleteGroup } from '@/services/group';
@@ -132,6 +131,17 @@ const AdvanceDatabaseSettings = () => {
     </SettingsContainer>
   );
 };
+const stylesheet = createStyleSheet((theme) => ({
+  buttonContainer: { flex: 1 },
+  dangerZoneTitle: {
+    color: theme.colors.primary,
+  },
+  dangerZoneContainer: {
+    paddingTop: 20,
+    gap: 16,
+    paddingBottom: 20,
+  },
+}));
 
 export default AdvanceDatabaseSettings;
 // {/*<SettingsButton*/}

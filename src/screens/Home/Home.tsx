@@ -17,6 +17,7 @@ import CategorySelection from '@/components/CategorySelection';
 import { useFocusEffect } from '@react-navigation/native';
 import { syncWithSupabase } from '@/services/sync';
 import useCheckMigratePrompt from '@/database/hooks/useCheckMigratePrompt';
+import useHandleDeeplinking from '@/hooks/common/useHandleShare';
 
 const Home = () => {
   const {
@@ -35,6 +36,8 @@ const Home = () => {
   const onSearchFocus = useCallback(() => {
     setShowingSearch(true);
   }, []);
+
+  useHandleDeeplinking();
 
   useDatabaseListener();
   // useDatabaseChecker();

@@ -13,18 +13,12 @@ const useDeleteRecipe = () => {
 
   const navigation = useNavigation();
 
-  const onDeleteRecipe = async ({
-    id,
-    previousImage,
-  }: {
-    id?: string | null;
-    previousImage: string;
-  }) => {
+  const onDeleteRecipe = async ({ id }: { id?: string | null }) => {
     try {
       setDeleting(true);
 
       // Perform the actual deletion
-      !!id && deleteImage(id, previousImage);
+      !!id && (await deleteImage(id));
       !!id && (await deleteRecipe({ id }));
       navigation.navigate(Routes.Home);
       syncWithSupabase();

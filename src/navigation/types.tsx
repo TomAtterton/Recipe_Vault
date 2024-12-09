@@ -13,6 +13,7 @@ export type RootStackParamList = RecipeDetailStackParamList &
     [Routes.Settings]: undefined;
     [Routes.Login]: {
       showSkip: boolean;
+      invitationCode?: string;
     };
     [Routes.ProPlan]: undefined;
     [Routes.ImageDetection]: undefined;
@@ -40,7 +41,9 @@ export type RootStackParamList = RecipeDetailStackParamList &
     [Routes.SyncSettings]: undefined;
     [Routes.AdvanceSyncSettings]: undefined;
     [Routes.CreateVault]: undefined;
-    [Routes.JoinVault]: undefined;
+    [Routes.JoinVault]: {
+      invitationCode?: string;
+    };
     [Routes.ManageGroupUsers]: undefined;
     [Routes.AddGroceries]: {
       id?: string | null;
