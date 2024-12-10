@@ -1,8 +1,8 @@
-import { syncPush } from '@/services/sync/syncPush';
-import { syncPull } from '@/services/sync/syncPull';
 import { useBoundStore } from '@/store';
-import { syncDelete } from '@/services/sync/syncDelete';
 import debounce from 'lodash/debounce';
+import { syncPull } from '@/services/sync/syncPull';
+import { syncPush } from '@/services/sync/syncPush';
+import { syncDelete } from '@/services/sync/syncDelete';
 
 let isSyncing = false;
 

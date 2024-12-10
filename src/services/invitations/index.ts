@@ -71,11 +71,10 @@ export const getGroupIdFromInvitation = async ({ invitationCode }: { invitationC
     }
     if (data && data.length > 0) {
       const groupData = data[0];
-      // @ts-ignore
+
       if (!groupData?.group_id) {
         throw new Error('Group ID not found in invitation');
       }
-      // @ts-ignore
       return { groupId: groupData.group_id, name: groupData.name };
     }
 

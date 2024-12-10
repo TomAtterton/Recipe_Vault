@@ -3,8 +3,8 @@ import { Env } from '@/core/env';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { translate } from '@/core';
 import { setResetProfile } from '@/store';
-import { onResetToDefaultDatabase } from '@/database';
 import { showErrorMessage } from '@/utils/promptUtils';
+import { setupDatabase } from '@/utils/databaseUtils';
 
 export const onSignOut = async () => {
   try {
@@ -20,7 +20,7 @@ export const onSignOut = async () => {
 export const onDisconnect = async () => {
   try {
     setResetProfile();
-    await onResetToDefaultDatabase({});
+    await setupDatabase({ databaseName: Env.SQLITE_DB_NAME });
   } catch (error) {
     showErrorMessage(translate('error_messages.default'), 3000);
     console.log('Error disconnecting account', error);

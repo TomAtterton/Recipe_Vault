@@ -1,9 +1,7 @@
 import { translate } from '@/core';
-import { setCurrentDatabaseName, updateProfile, useBoundStore } from '@/store';
+import { updateProfile, useBoundStore } from '@/store';
 import { Env } from '@/core/env';
-import { onOpenDatabase, onResetToDefaultDatabase } from '@/database';
 import { showErrorMessage } from '@/utils/promptUtils';
-import { syncWithSupabase } from '@/services/sync';
 import { Routes } from '@/navigation/Routes';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCallback } from 'react';
@@ -12,6 +10,7 @@ import useUserId from '@/hooks/common/useUserId';
 import { getProfileGroups, getProfileGroupWithUserId } from '@/services/profileGroup';
 import useIsLoggedIn from '@/hooks/common/useIsLoggedIn';
 import { localDatabase } from '@/store/database';
+import { setupDatabase } from '@/utils/databaseUtils';
 
 const useHandleSwitchDatabase = () => {
   const { navigate } = useNavigation();
@@ -72,11 +71,7 @@ const useHandleSwitchDatabase = () => {
             throw new Error('No current database name');
           }
 
-          setCurrentDatabaseName(profileGroupName);
-
-          await onOpenDatabase({ currentDatabaseName: profileGroupName });
-
-          await syncWithSupabase();
+          await setupDatabase({ databaseName: profileGroupName });
         } else {
           navigate(Routes.Login, {
             showSkip: true,
@@ -91,16 +86,7 @@ const useHandleSwitchDatabase = () => {
 
   const handleEnableLocalDatabase = async () => {
     try {
-      // TODO this doesn't seem right why would we switch user id
-      updateProfile({
-        //  TODO this is going to mess things up going back and forth
-        id: Env.LOCAL_USER_ID,
-        groupId: Env.LOCAL_GROUP_ID,
-        groupName: Env.SQLITE_DB_NAME,
-        groupRole: 'read_write',
-      });
-      setSyncEnabled(false);
-      await onResetToDefaultDatabase({ shouldResetDatabase: false });
+      await setupDatabase({ databaseName: Env.SQLITE_DB_NAME });
     } catch (error) {
       console.log('error', error);
       showErrorMessage(translate('default.error_message'));

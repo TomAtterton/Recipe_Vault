@@ -7,12 +7,13 @@ import InfoLabelButton from '@/components/buttons/InfoLabelButton';
 import { translate } from '@/core';
 import { stylesheet } from './accountSettings.style';
 import OutlineButton from '@/components/buttons/OutlineButton';
-import { onResetToDefaultDatabase } from '@/database';
 import { onDeleteUser, onSignOut } from '@/services/auth';
 import { showErrorMessage } from '@/utils/promptUtils';
 import SettingsContainer from '@/components/SettingsContainer';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
+import { setupDatabase } from '@/utils/databaseUtils';
+import { Env } from '@/core/env';
 
 const AccountSettings = () => {
   const { styles } = useStyles(stylesheet);
@@ -44,7 +45,7 @@ const AccountSettings = () => {
               }
               await onSignOut();
 
-              await onResetToDefaultDatabase({});
+              await setupDatabase({ databaseName: Env.SQLITE_DB_NAME });
             } catch (error) {
               showErrorMessage(translate('default.error_message'));
               console.log('Error deleting account', error);

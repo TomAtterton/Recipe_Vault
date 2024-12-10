@@ -44,7 +44,7 @@ const JoinVault = () => {
             return;
           }
           setGroupId(_.groupId);
-          setName(_.name);
+          setName(_.name || '');
         })
         .finally(() => {
           setIsLoading(false);

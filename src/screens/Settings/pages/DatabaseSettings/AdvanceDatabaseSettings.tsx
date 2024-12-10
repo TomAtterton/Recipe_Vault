@@ -1,13 +1,12 @@
 import { Alert, View } from 'react-native';
 import { translate } from '@/core';
-import { database, onResetToDefaultDatabase } from '@/database';
+import { database, onDeleteDatabase } from '@/database';
 import { showErrorMessage, showSuccessMessage } from '@/utils/promptUtils';
 import { deleteDatabaseAsync } from 'expo-sqlite';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import Typography from '@/components/Typography';
 import * as React from 'react';
 import { onDeleteGroup } from '@/services/group';
-import { updateProfile } from '@/store';
 import { Env } from '@/core/env';
 import SettingsContainer from '@/components/SettingsContainer';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -18,6 +17,7 @@ import OutlineButton from '@/components/buttons/OutlineButton';
 import { useMemo, useState } from 'react';
 import { onDeleteProfileGroup } from '@/services/profileGroup';
 import { getUserId } from '@/hooks/common/useUserId';
+import { setupDatabase } from '@/utils/databaseUtils';
 
 const AdvanceDatabaseSettings = () => {
   const route = useRoute<RouteProp<Routes.AdvanceVaultSettings>>();
@@ -56,13 +56,7 @@ const AdvanceDatabaseSettings = () => {
                   await onDeleteGroup({ groupId: currentGroupId });
                 }
 
-                updateProfile({
-                  groupId: Env.LOCAL_GROUP_ID,
-                  groupName: Env.SQLITE_DB_NAME,
-                  groupRole: 'read_write',
-                });
-
-                await onResetToDefaultDatabase({ shouldClose: false });
+                await setupDatabase({ databaseName: Env.SQLITE_DB_NAME, shouldClose: false });
 
                 showSuccessMessage(translate('advance_settings.success.deleting_vault'));
 
@@ -83,6 +77,31 @@ const AdvanceDatabaseSettings = () => {
     } catch (error) {
       console.log('error', error);
       showErrorMessage(translate('advance_settings.errors.deleting_vault'));
+    }
+  };
+
+  const handleClearDatabase = async () => {
+    try {
+      Alert.alert(
+        translate('prompt.clear_database.title'),
+        translate('prompt.clear_database.message'),
+        [
+          {
+            text: translate('default.cancel'),
+            style: 'cancel',
+          },
+          {
+            text: translate('default.ok'),
+            onPress: async () => {
+              await onDeleteDatabase(database);
+              showSuccessMessage(translate('prompt.clear_database.success_message'));
+            },
+          },
+        ],
+      );
+    } catch (error) {
+      console.log('error', error);
+      showErrorMessage(translate('prompt.clear_database.error_message'));
     }
   };
 
@@ -127,6 +146,12 @@ const AdvanceDatabaseSettings = () => {
             isLoading={isLoading}
           />
         )}
+        <OutlineButton
+          title={translate('advance_settings.clear_all_recipes')}
+          onPress={handleClearDatabase}
+          iconSource={'bin'}
+          isLoading={isLoading}
+        />
       </View>
     </SettingsContainer>
   );
@@ -188,27 +213,3 @@ export default AdvanceDatabaseSettings;
 //   }
 // };
 //
-// const handleClearDatabase = async () => {
-//   try {
-//     Alert.alert(
-//       translate('prompt.clear_database.title'),
-//       translate('prompt.clear_database.message'),
-//       [
-//         {
-//           text: translate('default.cancel'),
-//           style: 'cancel',
-//         },
-//         {
-//           text: translate('default.ok'),
-//           onPress: async () => {
-//             await onDeleteDatabase(database);
-//             showSuccessMessage(translate('prompt.clear_database.success_message'));
-//           },
-//         },
-//       ],
-//     );
-//   } catch (error) {
-//     console.log('error', error);
-//     showErrorMessage(translate('prompt.clear_database.error_message'));
-//   }
-// };
