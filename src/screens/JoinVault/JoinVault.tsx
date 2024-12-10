@@ -32,7 +32,7 @@ const JoinVault = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState<string>('');
 
-  const hideTextInput = !!invitationCode;
+  const hideTextInput = !invitationCode;
 
   useEffect(() => {
     if (invitationCode) {
@@ -67,6 +67,7 @@ const JoinVault = () => {
       await createProfileGroup({ userId, groupId });
 
       updateProfile({ groupId, groupName });
+
       await setupDatabase({ databaseName: groupName });
 
       reset({
@@ -99,13 +100,16 @@ const JoinVault = () => {
         </Typography>
 
         <Typography style={styles.subtitle} variant={'bodyMediumItalic'}>
-          {hideTextInput
+          {!hideTextInput
             ? translate('join_vault.invited_description', { vaultName: name })
             : translate('join_vault.description')}
         </Typography>
 
         {hideTextInput && (
           <FormInput
+            style={{
+              flex: 0,
+            }}
             value={groupId}
             onChange={handleTextChange}
             placeholder={translate('join_vault.placeholder')}

@@ -62,6 +62,7 @@ const AccountSettings = () => {
   const handleSignOut = async () => {
     try {
       setIsLoading(true);
+      setupDatabase({ databaseName: Env.SQLITE_DB_NAME });
       await onSignOut();
       navigation.reset({
         index: 0,

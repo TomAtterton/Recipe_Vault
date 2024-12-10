@@ -58,10 +58,10 @@ const OutlineButton = ({
           <Icon style={styles.icon} name={iconSource} size={24} color={theme.colors.primary} />
         )}
         <Typography style={styles.text}>{title}</Typography>
-        {isLoading ? (
-          <ActivityIndicator style={styles.loading} color={theme.colors.onBackground} />
-        ) : null}
       </Pressable>
+      {isLoading ? (
+        <ActivityIndicator style={styles.loading} color={theme.colors.onBackground} />
+      ) : null}
     </SquircleDynamicContainer>
   );
 };

@@ -40,20 +40,14 @@ export const syncPull = async (forceAll?: boolean): Promise<void> => {
   try {
     const lastSynced = getLastSynced(forceAll);
 
-    // Fetch changes for all tables
-    const changes = await Promise.all(
-      TABLE_NAMES.map((tableName) => fetchChanges(tableName, lastSynced)),
-    );
-
-    await database?.withTransactionAsync(async () => {
+    await database?.withExclusiveTransactionAsync(async () => {
       // Update local tables with changes
-      await Promise.all(
-        changes.map((tableChanges, index) =>
-          tableChanges?.length
-            ? updateLocalTable(TABLE_NAMES[index], tableChanges)
-            : Promise.resolve(),
-        ),
-      );
+      for (const tableName of TABLE_NAMES) {
+        const tableChanges = await fetchChanges(tableName, lastSynced);
+        if (tableChanges?.length) {
+          await updateLocalTable(tableName, tableChanges);
+        }
+      }
     });
 
     // Handle deletions and update the sync timestamp
@@ -80,7 +74,8 @@ const updateLocalTable = async (tableName: TableName, records: GenericRecord[]):
 
       const columns = Object.keys(record);
       const placeholders = columns.map(() => '?').join(', ');
-
+      // console.log('tableName', tableName);
+      // console.log('records', records);
       if (existingRecord) {
         const updateSet = columns.map((col) => `${col} = ?`).join(', ');
         await database.runAsync(`UPDATE ${tableName} SET ${updateSet} WHERE id = ?`, [
@@ -95,7 +90,10 @@ const updateLocalTable = async (tableName: TableName, records: GenericRecord[]):
       }
     }
   } catch (e) {
-    console.error('PUSHING Error updating local table:', e);
+    console.error('Pulling Error updating local table:', e);
+    // console.log('tableName', tableName);
+    // console.log('records', records);
+    // console.log('error', e?.message);
   }
 };
 
@@ -105,7 +103,7 @@ const fetchChanges = async (
 ): Promise<GenericRecord[]> => {
   const { groupId = '', id: profileId = '' } = useBoundStore.getState()?.profile || {};
 
-  const query = supabase.from(tableName).select('*').gt('updated_at', last_updated_at);
+  const query = supabase.from(tableName).select('*');
 
   switch (tableName) {
     case 'profile':
@@ -116,9 +114,10 @@ const fetchChanges = async (
       break;
     case 'profile_groups':
       query.eq('profile_id', profileId);
+      query.eq('group_id', groupId);
       break;
     default:
-      query.eq('group_id', groupId);
+      query.eq('group_id', groupId).gt('updated_at', last_updated_at);
       break;
   }
 
