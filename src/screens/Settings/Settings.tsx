@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 
 import NavBarButton from '@/components/buttons/NavBarButton';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -10,13 +10,17 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { requestReview } from 'expo-store-review';
 import SupportApp from '@/screens/SupportApp';
 import BottomSheet, { BottomSheetRef } from '@/components/BottomSheet';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { translate } from '@/core';
 import useHasPremium from '@/services/pro/useHasPremium';
 import Avatar from '@/components/Avatar';
 import LabelButton from '@/components/buttons/LabelButton';
 import useIsLoggedIn from '@/hooks/common/useIsLoggedIn';
 import { onSignOut } from '@/services/auth';
+import { Env } from '@/core/env';
+import { useBoundStore } from '@/store';
+import Icon from '@/components/Icon';
+import Typography from '@/components/Typography';
 
 const Settings = () => {
   const { styles } = useStyles(stylesheet);
@@ -45,6 +49,25 @@ const Settings = () => {
       setIsLoading(false);
     }
   };
+  const vaultName = useBoundStore((state) => state.profile.groupName);
+
+  const vaultTitle = useMemo(
+    () =>
+      vaultName === Env.SQLITE_DB_NAME
+        ? translate('database_settings.local_vault')
+        : vaultName + ' Vault',
+    [vaultName],
+  );
+
+  const handleVaultPress = () => {
+    if (isLoggedIn) {
+      navigate(Routes.DatabaseSettings);
+    } else {
+      navigate(Routes.Login, {
+        showSkip: false,
+      });
+    }
+  };
 
   return (
     <>
@@ -59,6 +82,18 @@ const Settings = () => {
         <NavBarButton style={styles.backButton} iconSource={'arrow-left'} onPress={goBack} />
         <View style={styles.contentContainer}>
           <Avatar />
+          <Pressable
+            onPress={handleVaultPress}
+            style={({ pressed }) => [
+              styles.vaultHighlight,
+              pressed && { backgroundColor: 'rgba(255, 165, 0, 0.2)' },
+            ]}
+          >
+            <Icon name={'vault'} size={16} color="#FFA500" />
+            <Typography variant="bodyMedium" style={styles.vaultText}>
+              {vaultTitle}
+            </Typography>
+          </Pressable>
           {!hasPremium && (
             <SettingsButton
               style={styles.upgradeButton}
@@ -105,7 +140,7 @@ const Settings = () => {
   );
 };
 
-const stylesheet = createStyleSheet(() => ({
+const stylesheet = createStyleSheet((theme) => ({
   container: {
     flex: 1,
   },
@@ -139,6 +174,22 @@ const stylesheet = createStyleSheet(() => ({
     position: 'absolute',
     top: 0,
     left: 0,
+  },
+  vaultHighlight: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    backgroundColor: theme.colors.primary10,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  vaultText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: theme.colors.primary,
+    textTransform: 'capitalize',
   },
 }));
 

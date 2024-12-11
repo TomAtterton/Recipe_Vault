@@ -14,7 +14,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 const AppSettings = () => {
   const navigation = useNavigation();
-  const handleShowOnboarding = () => navigation.navigate(Routes.Onboarding);
+  const handleShowOnboarding = () => navigation.navigate(Routes.Profile);
   const manageCategoriesRef = useRef<BottomSheetRef>(null);
   const manageTagsRef = useRef<BottomSheetRef>(null);
 

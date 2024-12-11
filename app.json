@@ -3,7 +3,6 @@
     "name": "Recipe Vault",
     "description": "Your Personal Recipe Vault: Organize, Save, and Discover Recipes Anytime",
     "slug": "recipeapp",
-    "owner": "Tom Atterton",
     "version": "1.1",
     "runtimeVersion": "1.1",
     "scheme": "recipeapp",

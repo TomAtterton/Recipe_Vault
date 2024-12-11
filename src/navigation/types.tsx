@@ -40,7 +40,9 @@ export type RootStackParamList = RecipeDetailStackParamList &
     };
     [Routes.SyncSettings]: undefined;
     [Routes.AdvanceSyncSettings]: undefined;
-    [Routes.CreateVault]: undefined;
+    [Routes.CreateVault]: {
+      showSkip?: boolean;
+    };
     [Routes.JoinVault]: {
       invitationCode?: string;
     };

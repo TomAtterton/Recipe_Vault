@@ -7,9 +7,11 @@ import { showErrorMessage } from '@/utils/promptUtils';
 export const setupDatabase = async ({
   databaseName,
   shouldClose = true,
+  shouldSync = true,
 }: {
   databaseName: string;
   shouldClose?: boolean;
+  shouldSync?: boolean;
 }) => {
   try {
     if (!databaseName) throw new Error('Database name not provided');
@@ -28,7 +30,7 @@ export const setupDatabase = async ({
     setCurrentDatabaseName(databaseName);
     await onOpenDatabase({ currentDatabaseName: databaseName, shouldClose });
 
-    if (!isLocal) {
+    if (!isLocal && shouldSync) {
       await syncWithSupabase();
     }
   } catch (e) {

@@ -18,8 +18,8 @@ export const TABLE_NAMES = [
   'recipe_instructions',
   'recipe_ingredients',
   //
-  // 'recipe_categories',
-  // 'recipe_tags',
+  'recipe_categories',
+  'recipe_tags',
   //
   'mealplans',
   'deleted_records',

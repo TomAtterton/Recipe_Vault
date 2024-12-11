@@ -20,7 +20,7 @@ export type DatabaseSlice = {
   setDatabases: (databases: DatabaseObject[]) => void;
   //
   shouldSync: boolean;
-  setShouldSync: (shouldSync: boolean) => void; // TODO if we're logged in maybe that's enough to know to sync ?
+  setShouldSync: (shouldSync: boolean) => void;
   //
   lastSynced?: string;
   setLastSynced: (lastSynced?: string) => void;

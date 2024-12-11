@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { Pressable, View } from 'react-native';
+import React from 'react';
+import { Pressable, TouchableOpacity, View } from 'react-native';
 import Typography from '@/components/Typography';
 import Icon from '@/components/Icon';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -8,14 +8,13 @@ import useIsLoggedIn from '@/hooks/common/useIsLoggedIn';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
 import { translate } from '@/core';
-import { Env } from '@/core/env';
+import { Image } from 'expo-image';
 
-const AVATAR_SIZE = 80;
+const AVATAR_SIZE = 100;
 
 const Avatar = ({}) => {
   const { styles, theme } = useStyles(stylesheet);
   const name = useBoundStore((state) => state.profile.name);
-  const vaultName = useBoundStore((state) => state.profile.groupName);
   const isLoggedIn = useIsLoggedIn();
   const navigation = useNavigation();
   const handlePress = () => {
@@ -30,31 +29,30 @@ const Avatar = ({}) => {
     }
   };
 
-  const vaultTitle = useMemo(
-    () =>
-      vaultName === Env.SQLITE_DB_NAME ? translate('database_settings.local_vault') : vaultName,
-    [vaultName],
-  );
-
   return (
     <Pressable
       style={({ pressed }) => [styles.avatarContainer, { opacity: pressed ? 0.7 : 1 }]}
       onPress={handlePress}
     >
       <View style={[styles.avatarCircle, { borderColor: theme.colors.onBackground }]}>
-        <Icon name="profile" size={AVATAR_SIZE / 2} color={theme.colors.primary} />
+        <Image
+          source={require('../../../assets/images/avatar.png')}
+          style={{ width: 80, height: 80 }}
+        />
+        <TouchableOpacity
+          onPress={handlePress}
+          style={styles.cogIconContainer}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Icon name={'cog'} size={20} color={theme.colors.onBackground} />
+        </TouchableOpacity>
       </View>
       {isLoggedIn ? (
         <>
-          <Typography variant={'bodyMediumItalic'} style={styles.avatarName}>
+          {/*// @ts-ignore*/}
+          <Typography variant={'bodyLargeItalic'} style={styles.avatarName}>
             {name}
           </Typography>
-          <View style={styles.vaultContainer}>
-            <Icon name={'vault'} size={16} color={theme.colors.onBackground} />
-            <Typography variant={'bodyMediumItalic'} style={styles.vaultName}>
-              {vaultTitle}
-            </Typography>
-          </View>
         </>
       ) : (
         <Typography variant={'bodyMediumItalic'} style={styles.loginText}>
@@ -68,7 +66,6 @@ const Avatar = ({}) => {
 const stylesheet = createStyleSheet((theme) => ({
   avatarContainer: {
     alignItems: 'center',
-    marginBottom: 24,
   },
   avatarCircle: {
     width: AVATAR_SIZE,
@@ -84,17 +81,17 @@ const stylesheet = createStyleSheet((theme) => ({
     textTransform: 'capitalize',
     color: theme.colors.primary,
   },
-  vaultContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  cogIconContainer: {
+    position: 'absolute',
+    bottom: -5,
+    right: -5,
+    backgroundColor: theme.colors.background,
+    borderRadius: 20,
+    padding: 5,
     justifyContent: 'center',
-    gap: 8,
-    marginTop: 8,
+    alignItems: 'center',
   },
-  vaultName: {
-    textAlign: 'center',
-    textTransform: 'capitalize',
-  },
+
   loginText: {
     marginTop: 8,
     textAlign: 'center',

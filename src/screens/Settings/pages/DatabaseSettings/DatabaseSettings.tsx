@@ -2,13 +2,13 @@ import { ActivityIndicator, FlatList, View } from 'react-native';
 import Typography from '@/components/Typography';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import * as React from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Routes } from '@/navigation/Routes';
 import { useBoundStore } from '@/store';
 import useHandleSwitchDatabase from './useHandleSwitchDatabase';
 import { Env } from '@/core/env';
 import { BottomSheetRef } from '@/components/BottomSheet';
-import { useMemo, useRef, useState } from 'react';
 import useIsLoggedIn from '@/hooks/common/useIsLoggedIn';
 import AddButton from '@/components/buttons/AddButton';
 import SettingsContainer from '@/components/SettingsContainer';
@@ -36,7 +36,7 @@ const DatabaseSettingsScreen = () => {
   const [selectedVault, setSelectedVault] = useState<DatabaseObject | undefined>();
 
   const navigateToCreateVault = () => {
-    navigate(Routes.CreateVault);
+    navigate(Routes.CreateVault, {});
   };
 
   const handleCreateOrJoinVault = () => {
@@ -68,12 +68,11 @@ const DatabaseSettingsScreen = () => {
   const renderItem = ({ item }: { item: DatabaseObject | undefined }) => (
     <DatabaseSettingsItem item={item} onPress={handleItemPress} onShare={handleShare} />
   );
-
   const handleUpgradeToCloudVault = () => {
     vaultOptionsBottomSheetRef.current?.dismiss();
 
     if (isLoggedIn) {
-      navigate(Routes.MigrateToCloud);
+      navigate(hasPremium ? Routes.MigrateToCloud : Routes.ProPlan);
     } else {
       navigate(Routes.Login, { showSkip: false });
     }

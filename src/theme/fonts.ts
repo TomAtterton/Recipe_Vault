@@ -83,6 +83,12 @@ export const fonts = {
     lineHeight: 24,
     letterSpacing: 0,
   },
+  bodyLargeItalic: {
+    fontFamily: 'DMMono-MediumItalic',
+    fontSize: 16,
+    lineHeight: 24,
+    letterSpacing: 0,
+  },
   bodyMedium: {
     fontFamily: 'DMMono-Medium',
     fontSize: 14,

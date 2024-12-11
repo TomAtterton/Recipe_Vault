@@ -238,11 +238,11 @@
     "review_app": "Review App"
   },
   "profile": {
-    "title": "Off to a great start!",
-    "subtitle": "Now enter a username to get started. This will be visible to others in your shared vault.",
-    "placeholder": "Enter username",
-    "button": "Continue",
-    "error_message": "Please use only letters for your username. Special characters are not allowed."
+    "title": "Welcome aboard!",
+    "subtitle": "Pick a username to start personalizing your experience. This name will be visible to others in your shared spaces.",
+    "placeholder": "Choose your username",
+    "button": "Get Started",
+    "error_message": "Usernames can only include letters and numbers. Please avoid special characters."
   },
   "empty": {
     "no_results": "No results found."
@@ -399,7 +399,7 @@
   "migrate_to_cloud": {
     "title": "Elevate Your Recipe Vault!",
     "modal_title": "Time to Level Up Your Vault!",
-    "premium_message": "🍳 Wow, your vault is brimming with {{numberOfRecipes}} recipes! Upgrade to Premium to securely migrate them all to the cloud and share your culinary masterpieces.",
+    "premium_message": "Wow, your vault is brimming with {{numberOfRecipes}} recipes! Upgrade to Premium to securely migrate them all to the cloud and share your culinary masterpieces.",
     "modal_message": "Hey there, Chef! Ready to take your recipes to the cloud? Let's sprinkle some magic and make your vault accessible anywhere!",
     "save_message": "Save your recipes securely in the cloud to access them from anywhere and share them with fellow foodies.",
     "vault_name_placeholder": "Pick a cloud vault name",

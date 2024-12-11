@@ -2,7 +2,7 @@ import { supabase } from '@/services';
 import { Env } from '@/core/env';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { translate } from '@/core';
-import { setResetProfile } from '@/store';
+import { setLastSynced, setResetProfile } from '@/store';
 import { showErrorMessage } from '@/utils/promptUtils';
 import { setupDatabase } from '@/utils/databaseUtils';
 
@@ -10,6 +10,7 @@ export const onSignOut = async () => {
   try {
     await supabase.auth.signOut();
     setResetProfile();
+    setLastSynced(undefined);
   } catch (error) {
     showErrorMessage(translate('error_messages.default'), 3000);
     console.log('Error signing out', error);

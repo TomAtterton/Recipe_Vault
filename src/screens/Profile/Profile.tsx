@@ -1,9 +1,8 @@
-import { View } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Typography from '@/components/Typography';
 import React, { useState } from 'react';
-import { useStyles } from 'react-native-unistyles';
-import { stylesheet } from './profile.style';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import PrimaryButton from '@/components/buttons/PrimaryButton';
 import { useKeyboardForm } from '@/hooks/common/useKeyboardForm';
 import FormInput from '@/components/inputs/FormInput';
@@ -12,6 +11,7 @@ import { showErrorMessage } from '@/utils/promptUtils';
 import { updateProfile } from '@/services/profile';
 import { Routes } from '@/navigation/Routes';
 import { translate } from '@/core';
+import ChefShare from '../../../assets/svgs/chef_cut.svg';
 
 const Profile = () => {
   const { reset } = useNavigation();
@@ -26,7 +26,12 @@ const Profile = () => {
   const [errorMessages, setErrorMessages] = useState<string>('');
 
   const handleTextChange = (newText: string) => {
-    if (errorMessages) setErrorMessages(''); // Clear error messages if any exist
+    const invalidCharacters = /[^a-zA-Z0-9]/;
+    if (invalidCharacters.test(newText)) {
+      setErrorMessages(translate('profile.error_message'));
+    } else {
+      setErrorMessages(''); // Clear error message if the input is valid
+    }
     setName(newText);
   };
 
@@ -47,7 +52,7 @@ const Profile = () => {
       if (!userId) {
         reset({
           index: 0,
-          routes: [{ name: Routes.WelcomeOnboarding }],
+          routes: [{ name: Routes.CreateVault, params: { showSkip: true } }],
         });
       } else {
         if (invitationCode) {
@@ -80,8 +85,12 @@ const Profile = () => {
   };
 
   useKeyboardForm();
+  const { height, width } = useWindowDimensions();
+
   return (
     <View style={styles.container}>
+      <ChefShare height={height / 4} width={width} style={styles.headerImage} />
+
       <Typography variant={'titleLarge'} style={styles.title}>
         {translate('profile.title')}
       </Typography>
@@ -100,10 +109,34 @@ const Profile = () => {
       <PrimaryButton
         title={translate('profile.button')}
         onPress={handleSubmit}
-        disabled={name.length < 3}
+        disabled={name.length < 3 || errorMessages.length > 0}
         isLoading={isLoading}
       />
     </View>
   );
 };
+
+const stylesheet = createStyleSheet((theme, miniRuntime) => ({
+  container: {
+    paddingTop: miniRuntime.insets.top + 40,
+    paddingBottom: miniRuntime.insets.bottom,
+    flex: 1,
+    marginHorizontal: 20,
+  },
+  headerImage: {
+    alignSelf: 'center',
+  },
+  title: {
+    paddingTop: 20,
+    textAlign: 'center',
+  },
+  subtitle: {
+    paddingTop: 20,
+    textAlign: 'center',
+  },
+  input: {
+    marginTop: 40,
+  },
+}));
+
 export default Profile;

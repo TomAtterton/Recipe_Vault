@@ -8,19 +8,20 @@ import FormInput from '@/components/inputs/FormInput';
 import { useKeyboardForm } from '@/hooks/common/useKeyboardForm';
 import NavBarButton from '@/components/buttons/NavBarButton';
 import { showErrorMessage } from '@/utils/promptUtils';
-import useHasPremium from '@/services/pro/useHasPremium';
 import { Routes } from '@/navigation/Routes';
 import ChefMeals from '../../../assets/svgs/chef_meals.svg';
 import LabelButton from '@/components/buttons/LabelButton';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { handleProPlanPurchase } from '@/services/purchase';
 import { migrateLocalDataToSupabase } from '@/database/migration';
-import { updateProfile } from '@/store';
+import { updateProfile, useBoundStore } from '@/store';
 import { setupDatabase } from '@/utils/databaseUtils';
 import { getRecipeCount } from '@/database/api/recipes';
 
 import { translate } from '@/core';
 import type { RouteProp } from '@/navigation/types';
+import { syncPull } from '@/services/sync/syncPull';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const getNumberOfRecipes = async () => {
   try {
@@ -35,8 +36,8 @@ const MigrateToCloud = () => {
   const { params } = useRoute<RouteProp<Routes.MigrateToCloudModal>>();
 
   const isModal = params?.isModal ?? false;
+  const hasPremium = useBoundStore((state) => state.hasPremium);
 
-  const hasPremium = useHasPremium();
   const { reset, goBack, navigate } = useNavigation();
   const { styles } = useStyles(stylesheet);
   const { height, width } = useWindowDimensions();
@@ -84,7 +85,9 @@ const MigrateToCloud = () => {
         groupName: name,
       });
 
-      await setupDatabase({ databaseName: name });
+      await setupDatabase({ databaseName: name, shouldSync: false });
+      //  Sync data after migration
+      await syncPull(true);
     } catch (e) {
       console.error(e);
       throw new Error(translate('migrate_to_cloud.error_migration_failed'));
@@ -108,7 +111,6 @@ const MigrateToCloud = () => {
   const handlePurchase = async () => {
     try {
       setIsLoading(true);
-
       await handleProPlanPurchase(onContactCustomerSupport);
       confettiRef.current?.start();
     } finally {
@@ -124,94 +126,105 @@ const MigrateToCloud = () => {
     ? translate('migrate_to_cloud.modal_message')
     : translate('migrate_to_cloud.save_message');
 
+  const { top } = useSafeAreaInsets();
   return (
-    <View style={styles.container}>
-      <ChefMeals height={height / 4} width={width} style={styles.chefMealImage} />
-      <Typography variant="titleLarge" style={styles.title}>
-        {title}
-      </Typography>
+    <>
+      <View
+        style={[
+          styles.container,
+          {
+            paddingTop: isModal ? top : top + 40,
+          },
+        ]}
+      >
+        <ChefMeals height={height / 4} width={width} style={styles.chefMealImage} />
+        <Typography variant="titleLarge" style={styles.title}>
+          {title}
+        </Typography>
 
-      {numberOfRecipes > 5 && !hasPremium ? (
-        <>
-          <View style={styles.contentContainer}>
-            <Typography style={styles.subtitle} variant="bodyMediumItalic">
-              {translate('migrate_to_cloud.premium_message', { numberOfRecipes })}
-            </Typography>
-          </View>
-          <PrimaryButton
-            title={translate('migrate_to_cloud.upgrade_button')}
-            onPress={handlePurchase}
-            style={styles.button}
-            isLoading={isLoading}
-          />
-          <LabelButton
-            title={translate('migrate_to_cloud.learn_more_button')}
-            onPress={() => navigate(Routes.ProPlan)}
-            style={styles.learnMoreButton}
-          />
-        </>
-      ) : (
-        <>
-          <Typography style={styles.subtitle} variant="bodyMediumItalic">
-            {message}
-          </Typography>
-
-          <FormInput
-            value={vaultName}
-            onChange={handleTextChange}
-            placeholder={translate('migrate_to_cloud.vault_name_placeholder')}
-            containerStyle={styles.input}
-            maxLength={20}
-            errorMessage={errorMessages}
-          />
-          <PrimaryButton
-            isLoading={isLoading}
-            style={styles.button}
-            title={translate('migrate_to_cloud.save_button')}
-            disabled={!vaultName || isLoading}
-            onPress={handleMigrateVault}
-          />
-          {!hasPremium && !isModal && (
+        {numberOfRecipes > 5 && !hasPremium ? (
+          <>
+            <View style={styles.contentContainer}>
+              <Typography style={styles.subtitle} variant="bodyMediumItalic">
+                {translate('migrate_to_cloud.premium_message', { numberOfRecipes })}
+              </Typography>
+            </View>
+            <PrimaryButton
+              title={translate('migrate_to_cloud.upgrade_button')}
+              onPress={handlePurchase}
+              style={styles.button}
+              isLoading={isLoading}
+            />
             <LabelButton
               title={translate('migrate_to_cloud.learn_more_button')}
               onPress={() => navigate(Routes.ProPlan)}
               style={styles.learnMoreButton}
             />
-          )}
-          {isModal && (
-            <LabelButton
-              title={translate('migrate_to_cloud.continue_button')}
-              onPress={goBack}
-              style={styles.learnMoreButton}
+          </>
+        ) : (
+          <>
+            <Typography style={styles.subtitle} variant="bodyMediumItalic">
+              {message}
+            </Typography>
+
+            <FormInput
+              value={vaultName}
+              onChange={handleTextChange}
+              placeholder={translate('migrate_to_cloud.vault_name_placeholder')}
+              containerStyle={styles.input}
+              maxLength={20}
+              errorMessage={errorMessages}
             />
-          )}
-        </>
-      )}
-      {!isModal && (
-        <NavBarButton
-          iconSource="arrow-left"
-          onPress={goBack}
-          disabled={isLoading}
-          style={styles.backButton}
+            <PrimaryButton
+              isLoading={isLoading}
+              style={styles.button}
+              title={translate('migrate_to_cloud.save_button')}
+              disabled={!vaultName || isLoading}
+              onPress={handleMigrateVault}
+            />
+            {!hasPremium && !isModal && (
+              <LabelButton
+                title={translate('migrate_to_cloud.learn_more_button')}
+                onPress={() => navigate(Routes.ProPlan)}
+                style={styles.learnMoreButton}
+              />
+            )}
+            {isModal && (
+              <LabelButton
+                title={translate('migrate_to_cloud.continue_button')}
+                onPress={goBack}
+                style={styles.learnMoreButton}
+              />
+            )}
+          </>
+        )}
+        {!isModal && (
+          <NavBarButton
+            iconSource="arrow-left"
+            onPress={goBack}
+            disabled={isLoading}
+            style={styles.backButton}
+          />
+        )}
+        <ConfettiCannon
+          ref={confettiRef}
+          count={100}
+          origin={{ x: -50, y: 10 }}
+          fadeOut={true}
+          autoStart={false}
+          onAnimationEnd={() => {
+            confettiRef.current?.stop();
+          }}
         />
-      )}
-      <ConfettiCannon
-        ref={confettiRef}
-        count={100}
-        origin={{ x: -50, y: 10 }}
-        fadeOut={true}
-        autoStart={false}
-        onAnimationEnd={() => {
-          confettiRef.current?.stop();
-        }}
-      />
-    </View>
+      </View>
+      {isModal && <NavBarButton style={styles.closeButton} iconSource={'close'} onPress={goBack} />}
+    </>
   );
 };
 
 const stylesheet = createStyleSheet((_, miniRuntime) => ({
   container: {
-    paddingTop: miniRuntime.insets.top + 40,
+    paddingTop: miniRuntime.insets.top,
     flex: 1,
     marginHorizontal: 20,
     marginBottom: miniRuntime.insets.bottom + 20,
@@ -242,6 +255,12 @@ const stylesheet = createStyleSheet((_, miniRuntime) => ({
     top: miniRuntime.insets.top,
     left: 0,
   },
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+  },
+
   learnMoreButton: {
     marginTop: 10,
     alignSelf: 'center',
