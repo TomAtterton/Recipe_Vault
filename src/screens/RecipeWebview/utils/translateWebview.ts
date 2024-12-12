@@ -1,7 +1,6 @@
 import { Ingredient, RecipeDetailType } from '@/types';
 import { randomUUID } from 'expo-crypto';
 import { getUserId } from '@/hooks/common/useUserId';
-import { Env } from '@/core/env';
 import { decode } from 'html-entities';
 
 export const translateWebview = (text: string, url: string): RecipeDetailType => {
@@ -13,7 +12,7 @@ export const translateWebview = (text: string, url: string): RecipeDetailType =>
 
   return {
     id: randomUUID(),
-    userId: userId || Env.TEST_USER_ID,
+    userId: userId,
     description: recipe?.description || '',
     name: recipe?.name || '',
     rating: 0,

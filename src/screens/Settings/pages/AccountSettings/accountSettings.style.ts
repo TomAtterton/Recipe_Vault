@@ -14,6 +14,7 @@ export const stylesheet = createStyleSheet((theme) => ({
     justifyContent: 'flex-end',
     gap: 16,
   },
+  logoutButton: { marginTop: 20 },
   deleteButton: { width: '100%' },
   enableSyncButton: {
     marginTop: 20,

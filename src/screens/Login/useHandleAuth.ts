@@ -5,14 +5,14 @@ import { Routes } from '@/navigation/Routes';
 import { showErrorMessage } from '@/utils/promptUtils';
 import { useState } from 'react';
 import { onAppleAuthSignIn, onTestSignIn } from '@/services/auth';
-import { updateProfile } from '@/store';
+import { updateProfile, useBoundStore } from '@/store';
 import { getProfileGroup } from '@/services/profileGroup';
 import { onError } from '@/utils/errorUtils';
 
 const useHandleAuth = () => {
   const { reset } = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
-
+  const invitationCode = useBoundStore((state) => state.invitationCode);
   const handleUpdateProfile = async (data: { user: User | null; session: Session | null }) => {
     try {
       setIsLoading(true);
@@ -28,6 +28,21 @@ const useHandleAuth = () => {
       });
 
       if (groupId && profileName) {
+        if (invitationCode) {
+          reset({
+            index: 0,
+            routes: [
+              { name: Routes.TabStack },
+              {
+                name: Routes.JoinVault,
+                params: {
+                  invitationCode,
+                },
+              },
+            ],
+          });
+          return;
+        }
         reset({
           index: 0,
           routes: [

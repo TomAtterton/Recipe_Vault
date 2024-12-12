@@ -19,12 +19,12 @@ import LimitationBottomSheet from '@/screens/Login/components/LimitationBottomSh
 import { translate } from '@/core';
 
 const Login = () => {
-  const { onAppleLogin, onTestLogin, isLoading } = useHandleAuth();
   const { styles, theme } = useStyles(stylesheet);
   const { navigate, goBack } = useNavigation();
 
   const { params } = useRoute<RouteProp<Routes.Login>>();
   const showSkip = params?.showSkip;
+  const { onAppleLogin, onTestLogin, isLoading } = useHandleAuth();
 
   const handleSkip = () => navigate(Routes.TabStack);
 

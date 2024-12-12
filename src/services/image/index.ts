@@ -1,25 +1,19 @@
-import { Env } from '@/core/env';
 import { useBoundStore } from '@/store';
 import { supabase } from '@/services';
+import { decode } from 'base64-arraybuffer';
+import * as FileSystem from 'expo-file-system';
 
-const handleCloudinaryRequest = async (endpoint: string, formData: FormData) => {
-  const response = await fetch(
-    `https://api.cloudinary.com/v1_1/${Env.CLOUDINARY_KEY}/${endpoint}`,
-    {
-      method: 'POST',
-      body: formData,
-    },
-  );
+// Helper to get the file path
+const getFilePath = (groupId: string, recipeId: string) => `recipe-vault/${groupId}/${recipeId}`;
 
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(`Cloudinary request failed: ${result.error?.message || 'Unknown error'}`);
-  }
-
-  return result;
-};
-
+/**
+ * Uploads an image to Supabase Storage.
+ *
+ * @param {Object} params
+ * @param {string | null} params.uri - The URI of the local image file.
+ * @param {string} params.recipeId - The unique identifier for the recipe.
+ * @returns {Promise<string | null>} - Returns the public URL of the uploaded image or the original URI if conditions aren't met.
+ */
 export const uploadImage = async ({
   uri,
   recipeId,
@@ -30,6 +24,7 @@ export const uploadImage = async ({
   try {
     const shouldSync = useBoundStore.getState().shouldSync;
 
+    // If we don't need to sync, no uri provided, or uri is already a hosted URL, return it as is
     if (!shouldSync || !uri || uri.includes('https')) {
       return uri;
     }
@@ -40,74 +35,70 @@ export const uploadImage = async ({
     }
 
     if (!recipeId) {
-      throw new Error('Failed to generate or extract a public ID.');
+      throw new Error('Invalid recipe ID.');
     }
 
-    const defaultOptions = {
-      folder: `recipe-vault/${groupId}/`,
-      eager: 'w_400,h_300,c_pad|w_260,h_200,c_crop',
-      invalidate: true,
-      overwrite: true,
-      use_asset_folder_as_public_id_prefix: false,
-    };
+    const filePath = getFilePath(groupId, recipeId);
 
-    const { data, error } = await supabase.functions.invoke('generate-image-signature', {
-      body: JSON.stringify({ public_id: recipeId, ...defaultOptions }),
+    // Read the file from the given URI and encode it as Base64
+    const base64Data = await FileSystem.readAsStringAsync(uri, {
+      encoding: FileSystem.EncodingType.Base64,
     });
+    // Use decode to convert Base64 string to ArrayBuffer
+    const fileData = decode(base64Data);
+    // Upload to Supabase Storage
+    const { error: uploadError } = await supabase.storage
+      .from('photos')
+      .upload(filePath, fileData, {
+        contentType: 'image/webp',
+        upsert: true,
+      });
 
-    if (error || !data?.signature) {
-      throw new Error('Failed to generate image signature.');
+    if (uploadError) {
+      console.error('Supabase upload error:', uploadError);
+      throw new Error('Image upload failed. Please try again.');
     }
 
-    const options = {
-      ...defaultOptions,
-      ...data,
-      file: { uri, type: 'image/*', name: recipeId },
-    };
+    // Retrieve a public URL for the file
+    const { data: publicData } = supabase.storage.from('photos').getPublicUrl(filePath);
+    console.log('publicData', publicData);
 
-    const formData = new FormData();
+    const publicUrl = publicData?.publicUrl + '?timestamp=' + new Date().getTime();
 
-    Object.keys(options).forEach((key) => {
-      formData.append(key, options[key as keyof typeof options]);
-    });
-
-    const result = await handleCloudinaryRequest('image/upload', formData);
-
-    return result.secure_url;
+    return publicUrl || null;
   } catch (err) {
     console.error('Image upload failed:', err);
     throw new Error('Image upload failed. Please try again.');
   }
 };
 
-const extractPublicId = (url: string): string | null => {
-  const regex = /recipe-vault\/[\w-]+\/[\w-]+/;
-  const match = url.match(regex);
-
-  return match ? match[0] : null;
-};
-
-export const deleteImage = async (recipeId: string, previousImage: string): Promise<void> => {
+/**
+ * Deletes an image from Supabase Storage.
+ *
+ * @param {string} recipeId - The unique identifier of the recipe associated with the image.
+ * @param {string} previousImage - The public URL of the previously uploaded image to be deleted.
+ */
+export const deleteImage = async (recipeId: string): Promise<void> => {
   try {
-    const publicId = extractPublicId(previousImage);
+    const groupId = useBoundStore.getState().profile.groupId;
 
-    const { data, error } = await supabase.functions.invoke('generate-image-signature', {
-      body: JSON.stringify({ public_id: publicId }),
-    });
-
-    if (error || !data?.signature) {
-      throw new Error('Failed to generate image delete signature.');
+    if (!groupId) {
+      console.error('No group ID found. Cannot delete the image.');
+      return;
     }
 
-    const formData = new FormData();
-    formData.append('public_id', recipeId);
-    Object.keys(data).forEach((key) => {
-      formData.append(key, data[key as keyof typeof data]);
-    });
+    // Since we know the folder structure, we can reconstruct the file path
+    // If you prefer, you can parse `previousImage` to confirm the structure.
+    const filePath = getFilePath(groupId, recipeId);
 
-    const result = await handleCloudinaryRequest('image/destroy', formData);
+    // Remove the image from storage
+    const { error: removeError } = await supabase.storage.from('photos').remove([filePath]);
 
-    console.log('Image deleted successfully:', result);
+    if (removeError) {
+      console.error('Image delete failed:', removeError);
+    } else {
+      console.log('Image deleted successfully:', filePath);
+    }
   } catch (err) {
     console.error('Image delete failed:', err);
     // Swallow error

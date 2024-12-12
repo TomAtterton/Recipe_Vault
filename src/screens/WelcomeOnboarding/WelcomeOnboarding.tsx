@@ -19,11 +19,11 @@ const WelcomeOnboarding = () => {
   const { styles, theme } = useStyles(stylesheet);
 
   const handleSharedVault = () => {
-    navigate(Routes.CreateVault);
+    navigate(Routes.CreateVault, {});
   };
 
   const handleJoinVault = () => {
-    navigate(Routes.JoinVault);
+    navigate(Routes.JoinVault, {});
   };
 
   const handleLogout = () => {

@@ -9,6 +9,7 @@ import SettingsContainer from '@/components/SettingsContainer';
 
 const Help = () => {
   const { navigate } = useNavigation();
+  const handleShowCredits = () => navigate(Routes.Credits);
 
   const handleContactUs = () =>
     handleMail({
@@ -31,6 +32,11 @@ const Help = () => {
         title={translate('help.contact_us')}
         onPress={handleContactUs}
         iconSource={'paper-plane'}
+      />
+      <SettingsButton
+        title={translate('app_settings.credits')}
+        onPress={handleShowCredits}
+        iconSource={'info-border'}
       />
     </SettingsContainer>
   );

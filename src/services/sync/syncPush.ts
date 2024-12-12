@@ -9,8 +9,8 @@ export const TABLE_NAMES = [
   'categories',
   'recipes',
   'recipe_instructions',
-  'recipe_categories',
   'recipe_ingredients',
+  'recipe_categories',
   'recipe_tags',
   'mealplans',
 ] as const;

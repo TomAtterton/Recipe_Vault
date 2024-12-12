@@ -43,3 +43,9 @@ export type RecipeDetailType = {
   recipeIngredient?: Ingredient[];
   recipeInstructions?: Instruction[];
 };
+export type DatabaseObject = {
+  id: string;
+  name: string;
+  icon: string;
+  isShared: boolean;
+};

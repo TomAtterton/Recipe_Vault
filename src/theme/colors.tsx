@@ -3,6 +3,7 @@ export const darkColors = {
   primary: 'rgba(253, 185, 117, 1)',
   primary80: 'rgba(253, 185, 117, .8)',
   primary60: 'rgba(253, 185, 117, .6)',
+  primary10: 'rgba(253, 185, 117, .1)',
   //
   background: 'rgba(25, 18, 12, 1)',
   background80: 'rgba(25, 18, 12, 0.8)',
@@ -48,6 +49,7 @@ export const lightColors = {
   primary: 'rgba(253, 185, 117, 1)',
   primary80: 'rgba(253, 185, 117, .8)',
   primary60: 'rgba(253, 185, 117, .6)',
+  primary10: 'rgba(253, 185, 117, .1)',
   //
   background: 'rgba(25, 18, 12, 1)',
   background80: 'rgba(25, 18, 12, 0.8)',

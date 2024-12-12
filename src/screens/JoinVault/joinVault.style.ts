@@ -18,6 +18,7 @@ export const stylesheet = createStyleSheet((theme, miniRuntime) => ({
     textAlign: 'center',
   },
   buttonContainer: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
     gap: 20,

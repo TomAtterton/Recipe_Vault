@@ -1,17 +1,27 @@
 import { supabase } from '@/services';
 import { randomUUID } from 'expo-crypto';
+import { useBoundStore } from '@/store';
 
+/**
+ *
+ * @param name
+ * @param userId
+ */
 export const onCreateGroup = async ({ name, userId }: { name: string; userId?: string }) => {
   try {
     const groupId = randomUUID();
 
     const updatedAt = new Date().toISOString();
 
+    const hasPremium = useBoundStore.getState().hasPremium;
+
     const { error: groupError } = await supabase.from('groups').insert([
       {
         id: groupId,
         name,
         updated_at: updatedAt,
+        created_by: userId,
+        access_level: hasPremium ? 'premium' : 'free',
       },
     ]);
 

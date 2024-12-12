@@ -11,12 +11,13 @@ import TrySomethingCarousel from '@/screens/Home/components/TrySomethingCarousel
 import Animated from 'react-native-reanimated';
 import HomeAnimation from '@/screens/Home/homeAnimation';
 import useDatabaseListener from '@/database/hooks/useDatabaseListener';
-import { checkIfPro } from '@/services/pro';
 import { stylesheet } from '@/screens/Home/home.style';
 import { useStyles } from 'react-native-unistyles';
 import CategorySelection from '@/components/CategorySelection';
 import { useFocusEffect } from '@react-navigation/native';
 import { syncWithSupabase } from '@/services/sync';
+import useCheckMigratePrompt from '@/database/hooks/useCheckMigratePrompt';
+import useHandleDeeplinking from '@/hooks/common/useHandleShare';
 
 const Home = () => {
   const {
@@ -36,11 +37,13 @@ const Home = () => {
     setShowingSearch(true);
   }, []);
 
-  useDatabaseListener();
+  useHandleDeeplinking();
 
+  useDatabaseListener();
+  // useDatabaseChecker();
+  useCheckMigratePrompt();
   useFocusEffect(
     useCallback(() => {
-      checkIfPro();
       syncWithSupabase();
     }, []),
   );

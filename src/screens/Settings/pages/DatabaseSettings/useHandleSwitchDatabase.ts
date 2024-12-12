@@ -1,36 +1,49 @@
 import { translate } from '@/core';
-import { setCurrentDatabaseName, setResetDatabase, updateProfile, useBoundStore } from '@/store';
+import { updateProfile, useBoundStore } from '@/store';
 import { Env } from '@/core/env';
-import { onOpenDatabase } from '@/database';
 import { showErrorMessage } from '@/utils/promptUtils';
-import { checkIfPro } from '@/services/pro';
-import { syncWithSupabase } from '@/services/sync';
 import { Routes } from '@/navigation/Routes';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Alert } from 'react-native';
 import useUserId from '@/hooks/common/useUserId';
 import { getProfileGroups, getProfileGroupWithUserId } from '@/services/profileGroup';
+import useIsLoggedIn from '@/hooks/common/useIsLoggedIn';
+import { localDatabase } from '@/store/database';
+import { setupDatabase } from '@/utils/databaseUtils';
 
 const useHandleSwitchDatabase = () => {
   const { navigate } = useNavigation();
 
   const setSyncEnabled = useBoundStore((state) => state.setShouldSync);
+  const databases = useBoundStore((state) => state.databases);
+  const setDatabases = useBoundStore((state) => state.setDatabases);
 
   const userId = useUserId();
-
-  const [groups, setGroups] = useState<{ id: string; name: string }[]>([]);
+  const isLogged = useIsLoggedIn();
 
   useFocusEffect(
     useCallback(() => {
-      getProfileGroups({ userId }).then((_) => {
-        const parsedGroups = _.map((group) => ({
-          id: group.group_id || '',
-          name: group?.groups?.name || '',
-        }));
-        setGroups(parsedGroups);
-      });
-    }, [userId]),
+      const fetchDatabases = async () => {
+        if (!isLogged) {
+          return setDatabases([localDatabase]);
+        }
+        try {
+          const profileGroups = await getProfileGroups({ userId });
+          const parsedGroups = profileGroups.map((group) => ({
+            id: group.group_id || '',
+            name: group?.groups?.name || '',
+            icon: group?.created_by !== userId ? 'people' : 'cloud',
+            isShared: group?.created_by !== userId,
+          }));
+          setDatabases([...parsedGroups, localDatabase]);
+        } catch (_) {
+          setDatabases([localDatabase]);
+        }
+      };
+
+      fetchDatabases();
+    }, [isLogged, setDatabases, userId]),
   );
 
   const handleEnableCloudDatabase = async (id: string) => {
@@ -54,16 +67,11 @@ const useHandleSwitchDatabase = () => {
             groupRole,
           });
 
-          await checkIfPro();
           if (!profileGroupName) {
             throw new Error('No current database name');
           }
 
-          setCurrentDatabaseName(profileGroupName);
-
-          await onOpenDatabase({ currentDatabaseName: profileGroupName });
-
-          await syncWithSupabase();
+          await setupDatabase({ databaseName: profileGroupName });
         } else {
           navigate(Routes.Login, {
             showSkip: true,
@@ -78,16 +86,7 @@ const useHandleSwitchDatabase = () => {
 
   const handleEnableLocalDatabase = async () => {
     try {
-      updateProfile({
-        id: Env.TEST_USER_ID,
-        groupId: Env.TEST_GROUP_ID,
-        groupName: Env.SQLITE_DB_NAME,
-        groupRole: 'read_write',
-      });
-
-      setResetDatabase();
-      setSyncEnabled(false);
-      await onOpenDatabase({ currentDatabaseName: Env.SQLITE_DB_NAME });
+      await setupDatabase({ databaseName: Env.SQLITE_DB_NAME });
     } catch (error) {
       console.log('error', error);
       showErrorMessage(translate('default.error_message'));
@@ -95,7 +94,7 @@ const useHandleSwitchDatabase = () => {
   };
 
   const handleSwitchDatabase = async (id: string) => {
-    const isLocal = id === Env.TEST_GROUP_ID;
+    const isLocal = id === Env.LOCAL_GROUP_ID;
 
     Alert.alert(
       isLocal
@@ -122,7 +121,13 @@ const useHandleSwitchDatabase = () => {
       ],
     );
   };
-  return { handleSwitchDatabase, availableGroups: groups };
+
+  const hasMaxDatabases = databases.length >= 8;
+  return {
+    handleSwitchDatabase,
+    availableGroups: databases || [],
+    hasMaxDatabases,
+  };
 };
 
 export default useHandleSwitchDatabase;

@@ -10,7 +10,6 @@ import { getProPrice, handleProPlanPurchase } from '@/services/purchase';
 import { Routes } from '@/navigation/Routes';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { stylesheet } from './proPlan.style';
-import { checkIfPro } from '@/services/pro';
 import ChefOk from '../../../assets/svgs/chef_ok.svg';
 import { translate } from '@/core';
 import useIsLoggedIn from '@/hooks/common/useIsLoggedIn';
@@ -52,13 +51,6 @@ const PurchaseScreen = () => {
 
   const { styles, theme } = useStyles(stylesheet);
 
-  useEffect(() => {
-    checkIfPro().then((isPro) => {
-      if (isPro) {
-        goBack();
-      }
-    });
-  }, [goBack]);
   const { height, width } = useWindowDimensions();
 
   return (

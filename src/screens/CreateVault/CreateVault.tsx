@@ -1,7 +1,7 @@
 import { useWindowDimensions, View } from 'react-native';
 import { updateProfile } from '@/store';
 import { Routes } from '@/navigation/Routes';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { showErrorMessage } from '@/utils/promptUtils';
 import Typography from '@/components/Typography';
 import React, { useState } from 'react';
@@ -15,10 +15,16 @@ import NavBarButton from '@/components/buttons/NavBarButton';
 import useUserId from '@/hooks/common/useUserId';
 import { onCreateGroup } from '@/services/group';
 import ChefMeals from '../../../assets/svgs/chef_meals.svg';
+import { RouteProp } from '@/navigation/types';
+import LabelButton from '@/components/buttons/LabelButton';
 
 const CreateVault = () => {
   const userId = useUserId();
   const { reset, goBack } = useNavigation();
+
+  const {
+    params: { showSkip },
+  } = useRoute<RouteProp<Routes.CreateVault>>();
 
   const [text, setText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -67,13 +73,27 @@ const CreateVault = () => {
   };
 
   const handleTextChange = (newText: string) => {
-    if (errorMessages) setErrorMessages(''); // Clear error messages if any exist
+    if (newText.match(/[^a-zA-Z]/)) {
+      setErrorMessages(
+        'Vault names can only include letters. Spaces, numbers, and special characters aren’t allowed.',
+      );
+    } else {
+      setErrorMessages('');
+    }
     setText(newText);
   };
 
   useKeyboardForm();
 
   const { height, width } = useWindowDimensions();
+
+  const handleSkip = () => {
+    reset({
+      index: 0,
+      routes: [{ name: Routes.TabStack }],
+    });
+  };
+
   return (
     <View style={styles.container}>
       <ChefMeals height={height / 4} width={width} style={styles.chefMealImage} />
@@ -82,7 +102,7 @@ const CreateVault = () => {
       </Typography>
       <Typography style={styles.subtitle} variant={'bodyMediumItalic'}>
         {
-          'Give your cloud vault a name. This is how it will appear to others when they join. Choose a name that’s easy to remember and reflects the essence of your culinary collection.'
+          'Choose a memorable name for your cloud vault. This will be visible to others when they join, so make it simple and reflective of your culinary collection.'
         }
       </Typography>
       <FormInput
@@ -103,6 +123,7 @@ const CreateVault = () => {
           disabled={isLoading || text.length === 0}
           onPress={handleUpdateProfile}
         />
+        {showSkip && <LabelButton title={'Continue with local vault'} onPress={handleSkip} />}
       </View>
       <NavBarButton
         iconSource={'arrow-left'}

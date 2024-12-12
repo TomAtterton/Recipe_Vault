@@ -2,9 +2,9 @@ import Purchases, { PurchasesStoreProduct } from 'react-native-purchases';
 import { Env } from '@/core/env';
 import { Alert } from 'react-native';
 import { supabase } from '@/services';
-import { useBoundStore } from '@/store';
 import { translate } from '@/core';
 import { getUserId } from '@/hooks/common/useUserId';
+import { useBoundStore } from '@/store';
 
 export const PurchaseCancelError = Purchases.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR;
 
@@ -51,21 +51,31 @@ export const handleProPlanPurchase = async (onContactCustomerSupport: () => void
     if (!product) {
       throw new Error('Product not found');
     }
-    await Purchases.purchaseStoreProduct(product);
-    const groupId = useBoundStore.getState().profile?.groupId;
     const profileId = getUserId();
 
-    const { error } = await supabase.from('pro_vaults').insert({
-      updated_at: new Date().toISOString(),
-      profile_id: profileId,
-      group_id: groupId,
-    });
+    await Purchases.purchaseStoreProduct(product);
 
-    if (error) {
-      throw new Error('Error purchasing pro plan ' + error.message);
+    //  TODO move to cloud function
+    const { error } = await supabase
+      .from('profile')
+      .update({
+        access_level: 'premium',
+      })
+      .eq('id', profileId);
+
+    // we check groups created_by and update the access_level to premium
+    const { error: groupError } = await supabase
+      .from('groups')
+      .update({
+        access_level: 'premium',
+      })
+      .eq('created_by', profileId);
+
+    if (error || groupError) {
+      throw new Error('Error purchasing pro plan ' + error?.message || groupError?.message);
     }
 
-    useBoundStore.getState().setDatabaseStatus('pro');
+    useBoundStore.getState().setHasPremium(true);
 
     return true;
   } catch (error) {
@@ -104,3 +114,5 @@ export const fetchProducts = async () => {
 export const purchaseProduct = async (product: PurchasesStoreProduct) => {
   return Purchases.purchaseStoreProduct(product);
 };
+
+export const restorePurchases = async () => Purchases.restorePurchases();

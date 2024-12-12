@@ -13,15 +13,24 @@ export type RootStackParamList = RecipeDetailStackParamList &
     [Routes.Settings]: undefined;
     [Routes.Login]: {
       showSkip: boolean;
+      invitationCode?: string;
     };
     [Routes.ProPlan]: undefined;
     [Routes.ImageDetection]: undefined;
     [Routes.Credits]: undefined;
     [Routes.Privacy]: undefined;
     [Routes.Help]: undefined;
-    [Routes.AdvanceVaultSettings]: undefined;
+    [Routes.AdvanceVaultSettings]: {
+      id: string;
+      name: string;
+      isShared: boolean;
+    };
     [Routes.Onboarding]: undefined;
     [Routes.DatabaseSettings]: undefined;
+    [Routes.MigrateToCloud]: undefined;
+    [Routes.MigrateToCloudModal]: {
+      isModal: boolean;
+    };
     [Routes.AccountSettings]: undefined;
     [Routes.AppSettings]: undefined;
     [Routes.RecipeSettings]: undefined;
@@ -31,8 +40,12 @@ export type RootStackParamList = RecipeDetailStackParamList &
     };
     [Routes.SyncSettings]: undefined;
     [Routes.AdvanceSyncSettings]: undefined;
-    [Routes.CreateVault]: undefined;
-    [Routes.JoinVault]: undefined;
+    [Routes.CreateVault]: {
+      showSkip?: boolean;
+    };
+    [Routes.JoinVault]: {
+      invitationCode?: string;
+    };
     [Routes.ManageGroupUsers]: undefined;
     [Routes.AddGroceries]: {
       id?: string | null;

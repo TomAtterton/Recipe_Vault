@@ -6,10 +6,7 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*",
-        "./modules/*"
-      ]
+      "@/*": ["./src/*", "./modules/*"]
     },
     "esModuleInterop": true,
     "checkJs": true,
@@ -17,6 +14,7 @@
   },
   "exclude": [
     "supabase",
+    "node_modules",
     "./shared/**",
     "babel.config.js",
     "metro.config.js",

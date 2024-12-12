@@ -1,6 +1,5 @@
 import { randomUUID } from 'expo-crypto';
 import { useBoundStore } from '@/store';
-import { Env } from '@/core/env';
 import { insertRecipe, updateRecipe, updateRelatedTable } from '@/database/api/recipes';
 import { checkMetaDataDuplicates } from '@/database/api/recipes/helpers/postRecipeHelper';
 import useHandlePaywall from '@/hooks/common/useHandlePaywall';
@@ -41,8 +40,8 @@ const usePostUpdateRecipes = () => {
 
       const recipeDetails: TRecipeDatabase = {
         id: recipe_id,
-        group_id: groupId || Env.TEST_GROUP_ID,
-        user_id: userId || Env.TEST_USER_ID,
+        group_id: groupId,
+        user_id: userId,
         name: values.name,
         description: values.description,
         image: imageUrl,

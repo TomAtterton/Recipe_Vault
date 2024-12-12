@@ -4,8 +4,8 @@ import OpenAI from 'https://deno.land/x/openai@v4.53.2/mod.ts';
 // const { GoogleGenerativeAI } = 'npm:@google/generative-ai';
 
 const openAIKey = Deno.env.get('OPENAI_API_KEY');
-
-const geminiKey = Deno.env.get('GEMINI_API_KEY');
+//  TODO does gemini work ?
+// const geminiKey = Deno.env.get('GEMINI_API_KEY');
 
 const openAIModel = 'gpt-4o-mini';
 const geminiAIModel = 'gemini-1.5-flash';
@@ -37,11 +37,11 @@ Deno.serve(async (req: Request) => {
       performTime: response.performTime || '',
       servings: response.servings || 0,
       recipeInstructions: response.instructions || [],
-      recipeIngredients: response.ingredients || []
+      recipeIngredients: response.ingredients || [],
     };
 
     return new Response(JSON.stringify(formattedResponse), {
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
     console.log('Error generating recipe', error);
@@ -90,12 +90,12 @@ const requestWithOpenAi = async (query: string) => {
       messages: [
         {
           role: 'user',
-          content: `${prompt} ${query}`
-        }
+          content: `${prompt} ${query}`,
+        },
       ],
       response_format: { type: 'json_object' },
       model: openAIModel,
-      stream: false
+      stream: false,
     });
 
     return JSON.parse(chatCompletion.choices[0]?.message?.content) || {};
@@ -108,7 +108,7 @@ export const checkIfPremium = async (req) => {
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
-    global: { headers: { Authorization: req.headers.get('Authorization')! } }
+    global: { headers: { Authorization: req.headers.get('Authorization')! } },
   });
 
   const { error: user_error, data: userData } = await supabaseClient.auth.getUser();

@@ -8,13 +8,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useBoundStore } from '@/store';
 import { useStyles } from 'react-native-unistyles';
 import { stylesheet } from './splashscreen.style';
-import { onOpenDatabase } from '@/database';
 import { Image } from 'expo-image';
 import { showErrorMessage } from '@/utils/promptUtils';
 import Typography from '@/components/Typography';
 import expoConstants from 'expo-constants';
 import images from '@/theme/images';
 import { Routes } from '@/navigation/Routes';
+import { setupDatabase } from '@/utils/databaseUtils';
 
 const Splashscreen = () => {
   const hasHydrated = useHydration();
@@ -30,12 +30,13 @@ const Splashscreen = () => {
   }, []);
 
   const currentDatabaseName = useBoundStore((state) => state.currentDatabaseName);
+
   useEffect(() => {
     const onSetup = async () => {
       if (hasHydrated && currentDatabaseName) {
         try {
-          await onOpenDatabase({ currentDatabaseName });
           await hideSplash();
+          await setupDatabase({ databaseName: currentDatabaseName });
         } catch (error) {
           // @ts-ignore
           showErrorMessage(error?.message);

@@ -54,6 +54,7 @@ const useRecipeDetail = ({ id }: { id?: string | null }) => {
           showErrorMessage(translate('recipe_detail.update_error'));
         }
         console.log('Error updating recipe', e);
+        throw e;
       }
     },
     [id, navigation, onSubmit, recipeData],
