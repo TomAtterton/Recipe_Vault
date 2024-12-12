@@ -8,6 +8,7 @@ import * as React from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { useNavigation } from '@react-navigation/native';
 import { DatabaseObject } from '@/types';
+import { translate } from '@/core';
 
 const DatabaseSettingsOptions = ({
   vaultOptionsBottomSheetRef,
@@ -28,22 +29,24 @@ const DatabaseSettingsOptions = ({
   return (
     <BottomSheet
       bottomSheetRef={vaultOptionsBottomSheetRef}
-      title={selectedVault ? selectedVault.name : 'Vault Options'}
+      title={translate('database_settings.manage_vault_title', {
+        name: selectedVault?.name || translate('database_settings.unnamed_vault'),
+      })}
     >
       <View style={styles.bottomSheetContainer}>
         {selectedVault && (
           <Typography variant={'bodyMediumItalic'} style={styles.vaultDescription}>
             {selectedVault?.id === Env.LOCAL_GROUP_ID
-              ? 'This vault is securely stored on your device and not synced to the cloud.'
+              ? translate('database_settings.local_vault_description')
               : selectedVault?.isShared
-                ? 'This vault was shared with you by someone else.'
-                : 'This vault is stored securely in the cloud for easy access.'}
+                ? translate('database_settings.shared_vault_description')
+                : translate('database_settings.personal_vault_description')}
           </Typography>
         )}
 
         {selectedVault && selectedVault.id !== currentGroupId && (
           <SettingsButton
-            title="Switch to this Vault"
+            title={translate('database_settings.use_this_vault')}
             onPress={async () => {
               await handleSwitchDatabase(selectedVault.id);
               vaultOptionsBottomSheetRef.current?.dismiss();
@@ -53,7 +56,7 @@ const DatabaseSettingsOptions = ({
         )}
 
         <SettingsButton
-          title="Advanced Settings"
+          title={translate('database_settings.advanced_vault_settings')}
           onPress={() => {
             vaultOptionsBottomSheetRef.current?.dismiss();
             selectedVault &&
@@ -68,7 +71,7 @@ const DatabaseSettingsOptions = ({
 
         {selectedVault?.id !== Env.LOCAL_GROUP_ID && !selectedVault?.isShared && (
           <SettingsButton
-            title="Share this Vault"
+            title={translate('database_settings.share_vault')}
             onPress={async () => {
               vaultOptionsBottomSheetRef.current?.dismiss();
               selectedVault?.id && onShare(selectedVault.id, selectedVault.name);
@@ -92,5 +95,4 @@ const stylesheet = createStyleSheet(() => ({
     marginBottom: 16,
   },
 }));
-
 export default DatabaseSettingsOptions;

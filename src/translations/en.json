@@ -126,7 +126,14 @@
     "local_vault": "Local Vault",
     "unlock_premium_features": "Unlock cool features with Premium",
     "other_vaults": "Other Vaults:",
-    "login_to_sync": "Log in to sync your databases with the cloud."
+    "login_to_sync": "Log in to sync your databases with the cloud.",
+    "share_vault_title": "Share this Vault",
+    "unnamed_vault": "Unnamed Vault",
+    "local_vault_description": "This vault is saved directly on your device and is not backed up to the cloud.",
+    "shared_vault_description": "This vault was shared with you by someone else. Changes you make will be visible to them.",
+    "personal_vault_description": "This is your personal vault, securely stored in the cloud. You can create more vaults or share this one with others if you like.",
+    "use_this_vault": "Use This Vault",
+    "manage_vault_title": "Manage Vault: {{name}}"
   },
   "recipe_header_content": {
     "prep_time": "Prep",
