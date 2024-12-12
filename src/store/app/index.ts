@@ -12,6 +12,8 @@ export type AppSlice = {
   setHasReminderPermission: (hasReminderPermission: boolean) => void;
   hasSeenMigrationPrompt: boolean;
   setHasSeenMigrationPrompt: (hasSeenMigrationPrompt: boolean) => void;
+  dismissedUpdateVersion: string | undefined;
+  setDismissedUpdateVersion: (dismissedUpdateVersion: string | undefined) => void;
 };
 
 const initialAppState = {
@@ -20,6 +22,7 @@ const initialAppState = {
   hasReminderPermission: false,
   hasSeenMigrationPrompt: false,
   invitationCode: undefined,
+  dismissedUpdateVersion: undefined,
 };
 
 export const createAppSlice: StateCreator<AppSlice, [], [], AppSlice> = (set) => {
@@ -31,5 +34,6 @@ export const createAppSlice: StateCreator<AppSlice, [], [], AppSlice> = (set) =>
     setHasReminderPermission: (hasReminderPermission) => set({ hasReminderPermission }),
     setHasSeenMigrationPrompt: (hasSeenMigrationPrompt) => set({ hasSeenMigrationPrompt }),
     setInvitationCode: (invitationCode) => set({ invitationCode }),
+    setDismissedUpdateVersion: (dismissedUpdateVersion) => set({ dismissedUpdateVersion }),
   };
 };

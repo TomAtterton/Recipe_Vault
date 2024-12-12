@@ -24,6 +24,7 @@ import { toastConfig } from '@/utils/promptUtils';
 import useHandleSession from '@/services/auth/hooks/useHandleSession';
 import { ErrorBoundary } from '@sentry/react-native';
 import ErrorScreen from '@/screens/ErrorScreen';
+import AppstoreUpdateProvider from '@/providers/AppstoreUpdateProvider';
 
 Sentry.init({
   dsn: Env.SENTRY_DSN,
@@ -54,9 +55,11 @@ const App = () => {
         <NavigationContainer theme={darkNavigationTheme}>
           <ErrorBoundary fallback={renderErrorScreen} showDialog={true}>
             <UpdateProvider>
-              <FloatingInputProvider>
-                <RootNavigator />
-              </FloatingInputProvider>
+              <AppstoreUpdateProvider>
+                <FloatingInputProvider>
+                  <RootNavigator />
+                </FloatingInputProvider>
+              </AppstoreUpdateProvider>
             </UpdateProvider>
             <Toast config={toastConfig} />
           </ErrorBoundary>

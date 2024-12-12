@@ -109,6 +109,12 @@
     "title": "Share the App.",
     "message": "Share Recipe Vault with your friends and family to discover and contribute to a world of recipes."
   },
+  "update": {
+    "title": "Update Available.",
+    "message": "A new version of Recipe Vault is available. Update now to access the latest features and improvements.",
+    "update_button": "Update Now",
+    "skip_button": "Skip"
+  },
   "database_settings": {
     "title": "Vault Settings.",
     "current_vault": "Current Vault:",

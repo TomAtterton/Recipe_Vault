@@ -53,6 +53,7 @@ export const useBoundStore = create<
         hasPremium: state.hasPremium,
         hasSeenMigrationPrompt: state.hasSeenMigrationPrompt,
         invitationCode: state.invitationCode,
+        dismissedUpdateVersion: state.dismissedUpdateVersion,
       }),
     },
   ),
