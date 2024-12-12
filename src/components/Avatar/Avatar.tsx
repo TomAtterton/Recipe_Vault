@@ -36,8 +36,9 @@ const Avatar = ({}) => {
     >
       <View style={[styles.avatarCircle, { borderColor: theme.colors.onBackground }]}>
         <Image
-          source={require('../../../assets/images/avatar.png')}
-          style={{ width: 80, height: 80 }}
+          source={require('../../../assets/images/avatar_default.webp')}
+          style={{ width: 80, height: 80, borderRadius: 40 }}
+          contentFit={'contain'}
         />
         <TouchableOpacity
           onPress={handlePress}
