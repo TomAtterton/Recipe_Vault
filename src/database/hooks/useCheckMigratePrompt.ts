@@ -19,7 +19,7 @@ const useCheckMigratePrompt = () => {
         return;
       }
 
-      if (vaultName === Env.SQLITE_DB_NAME) {
+      if (vaultName && vaultName === Env.SQLITE_DB_NAME) {
         setTimeout(() => {
           if (hasPremium) {
             navigate(Routes.MigrateToCloudModal, { isModal: true });
